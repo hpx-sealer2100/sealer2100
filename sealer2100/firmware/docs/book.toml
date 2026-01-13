@@ -1,0 +1,8 @@
+[book]
+title = "HyperMate Firmware"
+description = "Documentation of HyperMate Firmware."
+src = "."
+
+[build]
+build-dir = "mdbook"
+create-missing = false

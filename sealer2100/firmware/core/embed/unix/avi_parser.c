@@ -1,0 +1,1 @@
+../trezorhal/avi_parser.c

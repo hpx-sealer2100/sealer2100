@@ -1,0 +1,12 @@
+//
+//  GDbleTransmit_PrefixHeader.pch
+//  GDbleTransmit
+//
+//  Created by wangan on 2025/6/7.
+//
+
+
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+#endif

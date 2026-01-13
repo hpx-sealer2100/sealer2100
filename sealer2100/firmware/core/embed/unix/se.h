@@ -1,0 +1,1 @@
+../trezorhal/thd89/se.h

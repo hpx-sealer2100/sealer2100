@@ -1,0 +1,9 @@
+{
+    "recentHash" : "7PKCCCdtNLkVsjCR2VKHG1nDxMXdsV9TSj69amCs3X7y",
+    "dest" : "DZv25oNCWFvGXu9tH63BiAXvG94syweGZhbvdN3HxDxT",
+    "amount" : 1000,
+    "bip32_path" : {
+        "change" : false,
+        "addressIndex" : 0
+    }
+}

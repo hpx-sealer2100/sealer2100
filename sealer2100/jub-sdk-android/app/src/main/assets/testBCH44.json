@@ -1,0 +1,48 @@
+{
+  "ver": 2,
+  "p2sh-segwit" : false,
+  "p2sh-multisig" : false,
+  "coin_type":1,
+  "main_path" : "m/44'/145'/0'",
+  "inputs": [
+    {
+      "preHash": "2a2e910f9fb2b04f7f1ddbfb4ab05785250c2b395f572ce591167c8451f0891e",
+      "preIndex": 1,
+      "amount": 123456789,
+      "bip32_path":{
+        "change" :false,
+        "addressIndex":0
+      }
+    },
+    {
+      "preHash": "0fe4fafd846b18fe545bbc2dcb70ecb1290ec0de6219cd2299cd0a1561c8d583",
+      "preIndex": 0,
+      "amount": 10492,
+      "bip32_path":{
+        "change" :true,
+        "addressIndex":0
+      }
+    }
+  ],
+  "outputs": [
+    {
+      "address": "bitcoincash:qpk6lvh2x5xffkcktngnjk7v8n0jrn67wcfjca88ws",
+      "amount": 123412340,
+      "change_address": false,
+      "bip32_path":{
+        "change" :false,
+        "addressIndex":0
+      }
+    },
+    {
+      "address": "bitcoincash:qru79kxhzwqgyhe7t7pwft48fa73j7fl2vwuq6g24y",
+      "amount": 2048,
+      "change_address": false,
+      "bip32_path":{
+        "change" :false,
+        "addressIndex":0
+      }
+    }
+  ],
+  "lock_time": 0
+}

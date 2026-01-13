@@ -1,0 +1,36 @@
+{
+    "main_path" : "m/44'/60'/0'",
+    "chainID_AVAX-C" : 1,
+    "chainID" : 43114,
+    "chainID_Arbitrum" : 42161,
+    "chainID_Fantom" : 250,
+    "chainID_Optimism" : 10,
+    "ETH" : {
+        "nonce" : 103,
+        "gasLimit" : 25200,
+        "gasPriceInWei" : "25000000000",
+        "to" : "0xdde4707e93f75224b839b7a15f7cd149a6e3e00d",
+        "valueInWei" : "100000000000000",
+        "data" : "",
+        "bip32_path" : {
+            "change" : false,
+            "addressIndex" : 0
+        }
+    },
+    "Bytestring" : {
+        "data" : "7ff36ab50000000000000000000000000000000000000000000000270dc1fd063c7c56860000000000000000000000000000000000000000000000000000000000000080000000000000000000000000448ae09ee40e4b755c4590eaee82d1d069bfee91000000000000000000000000000000000000000000000000000000005fbcc40c0000000000000000000000000000000000000000000000000000000000000002000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc20000000000000000000000000d8775f648430679a709e98d2b0cb6250d2887ef",
+        "bip32_path" : {
+            "change" : false,
+            "addressIndex" : 0
+        }
+    },
+    "EIP712" : {
+        "file" : "json//EIP712",
+        "ext" : "json",
+        "metamask_v4_compat" : true,
+        "bip32_path" : {
+            "change" : false,
+            "addressIndex" : 0
+        }
+    }
+}

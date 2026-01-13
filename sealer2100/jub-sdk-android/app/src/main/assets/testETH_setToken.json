@@ -1,0 +1,11 @@
+{
+  "ERC20": {
+    "token_to": "0x9a34416b2077393103e3dd936ff38623b2a2efe7",
+    "token_value": "1000000000000000000"
+  },
+  "ERC20Token": {
+    "contract_address": "0x2c692c119c95c0ab4047d4648907ace21f1ea1cc",
+    "dp": 18,
+    "tokenName": "AOA"
+  }
+}

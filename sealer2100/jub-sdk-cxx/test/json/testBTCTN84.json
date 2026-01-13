@@ -1,0 +1,29 @@
+{
+  "url" : "https://live.blockcypher.com/btc-testnet/tx/ec981a3fc30b4a8cd3132918e86358d8c5ba08983fb272dca55b635d2e0f19f2",
+  "ver" : 2,
+  "p2pkh-segwit" : true,
+  "main_path" : "m/84'/1'/0'",
+  "inputs": [
+    {
+      "preHash": "7a87d28e047091a01054a3d31b1da9c8c4ce59e2008114b078a0886f11307d3a",
+      "preIndex": 1,
+      "amount": 10000,
+      "bip32_path":{
+        "change" :false,
+        "addressIndex":0
+      }
+    }
+  ],
+  "outputs": [
+    {
+      "address": "tb1qs759pf72vc2ptnr5dw4a7qcvylxwlpulqjx0kq",
+      "amount": 9400,
+      "change_address": false,
+      "bip32_path":{
+        "change" :false,
+        "addressIndex":0
+      }
+    }
+  ],
+  "lock_time": 0
+}

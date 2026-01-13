@@ -1,0 +1,359 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3BC37A5A2DF3FA08008D3806 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BC37A592DF3FA08008D3806 /* Foundation.framework */; };
+		565624D72E0166A40099F511 /* GDBLEDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 569A76C22E015A7100953E26 /* GDBLEDevice.m */; };
+		565624D82E0166A40099F511 /* GDBLEInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 569A76C42E015A7100953E26 /* GDBLEInterface.m */; };
+		565624D92E0166A40099F511 /* GDBLEKeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 569A76C62E015A7100953E26 /* GDBLEKeyManager.m */; };
+		565624DA2E0166A40099F511 /* gdbleTransmit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 569A76CA2E015A7100953E26 /* gdbleTransmit.mm */; };
+		565624DB2E0166A40099F511 /* GDbleTransmit_PrefixHeader.pch in Sources */ = {isa = PBXBuildFile; fileRef = 569A76CB2E015A7100953E26 /* GDbleTransmit_PrefixHeader.pch */; };
+		565624DC2E0166A40099F511 /* GDBLETransmitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 569A76CE2E015A7100953E26 /* GDBLETransmitManager.m */; };
+		565624DD2E0166A40099F511 /* GDBLEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 569A76D02E015A7100953E26 /* GDBLEUtils.m */; };
+		565624DE2E0166A40099F511 /* GDQueuePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 569A76D32E015A7100953E26 /* GDQueuePool.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3BC37A272DF26C58008D3806 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		3BC37A292DF26C58008D3806 /* libGDbleTransmit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGDbleTransmit.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BC37A592DF3FA08008D3806 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.4.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		569A76C12E015A7100953E26 /* GDBLEDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GDBLEDevice.h; path = ../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/GDBLEDevice.h; sourceTree = SOURCE_ROOT; };
+		569A76C22E015A7100953E26 /* GDBLEDevice.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GDBLEDevice.m; path = ../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/GDBLEDevice.m; sourceTree = SOURCE_ROOT; };
+		569A76C32E015A7100953E26 /* GDBLEInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GDBLEInterface.h; path = ../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/GDBLEInterface.h; sourceTree = SOURCE_ROOT; };
+		569A76C42E015A7100953E26 /* GDBLEInterface.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GDBLEInterface.m; path = ../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/GDBLEInterface.m; sourceTree = SOURCE_ROOT; };
+		569A76C52E015A7100953E26 /* GDBLEKeyManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GDBLEKeyManager.h; path = ../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/GDBLEKeyManager.h; sourceTree = SOURCE_ROOT; };
+		569A76C62E015A7100953E26 /* GDBLEKeyManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GDBLEKeyManager.m; path = ../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/GDBLEKeyManager.m; sourceTree = SOURCE_ROOT; };
+		569A76C72E015A7100953E26 /* GDBLETemplate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GDBLETemplate.h; path = ../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/GDBLETemplate.h; sourceTree = SOURCE_ROOT; };
+		569A76C82E015A7100953E26 /* GDBLETemplates.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GDBLETemplates.h; path = ../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/GDBLETemplates.h; sourceTree = SOURCE_ROOT; };
+		569A76C92E015A7100953E26 /* gdbleTransmit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gdbleTransmit.h; path = ../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/gdbleTransmit.h; sourceTree = SOURCE_ROOT; };
+		569A76CA2E015A7100953E26 /* gdbleTransmit.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = gdbleTransmit.mm; path = ../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/gdbleTransmit.mm; sourceTree = SOURCE_ROOT; };
+		569A76CB2E015A7100953E26 /* GDbleTransmit_PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GDbleTransmit_PrefixHeader.pch; path = ../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/GDbleTransmit_PrefixHeader.pch; sourceTree = SOURCE_ROOT; };
+		569A76CC2E015A7100953E26 /* gdbleTransmitF.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gdbleTransmitF.h; path = ../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/gdbleTransmitF.h; sourceTree = SOURCE_ROOT; };
+		569A76CD2E015A7100953E26 /* GDBLETransmitManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GDBLETransmitManager.h; path = ../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/GDBLETransmitManager.h; sourceTree = SOURCE_ROOT; };
+		569A76CE2E015A7100953E26 /* GDBLETransmitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GDBLETransmitManager.m; path = ../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/GDBLETransmitManager.m; sourceTree = SOURCE_ROOT; };
+		569A76CF2E015A7100953E26 /* GDBLEUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GDBLEUtils.h; path = ../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/GDBLEUtils.h; sourceTree = SOURCE_ROOT; };
+		569A76D02E015A7100953E26 /* GDBLEUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GDBLEUtils.m; path = ../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/GDBLEUtils.m; sourceTree = SOURCE_ROOT; };
+		569A76D12E015A7100953E26 /* GDErrorCodesAndMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GDErrorCodesAndMacros.h; path = ../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/GDErrorCodesAndMacros.h; sourceTree = SOURCE_ROOT; };
+		569A76D22E015A7100953E26 /* GDQueuePool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GDQueuePool.h; path = ../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/GDQueuePool.h; sourceTree = SOURCE_ROOT; };
+		569A76D32E015A7100953E26 /* GDQueuePool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GDQueuePool.m; path = ../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/GDQueuePool.m; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3BC37A262DF26C58008D3806 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BC37A5A2DF3FA08008D3806 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3BC37A202DF26C58008D3806 = {
+			isa = PBXGroup;
+			children = (
+				569A76C02E015A1A00953E26 /* GDBleTransmit */,
+				3BC37A2A2DF26C58008D3806 /* Products */,
+				3BC37A582DF3FA08008D3806 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		3BC37A2A2DF26C58008D3806 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3BC37A292DF26C58008D3806 /* libGDbleTransmit.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3BC37A582DF3FA08008D3806 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3BC37A592DF3FA08008D3806 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		569A76C02E015A1A00953E26 /* GDBleTransmit */ = {
+			isa = PBXGroup;
+			children = (
+				569A76C12E015A7100953E26 /* GDBLEDevice.h */,
+				569A76C22E015A7100953E26 /* GDBLEDevice.m */,
+				569A76C32E015A7100953E26 /* GDBLEInterface.h */,
+				569A76C42E015A7100953E26 /* GDBLEInterface.m */,
+				569A76C52E015A7100953E26 /* GDBLEKeyManager.h */,
+				569A76C62E015A7100953E26 /* GDBLEKeyManager.m */,
+				569A76C72E015A7100953E26 /* GDBLETemplate.h */,
+				569A76C82E015A7100953E26 /* GDBLETemplates.h */,
+				569A76C92E015A7100953E26 /* gdbleTransmit.h */,
+				569A76CA2E015A7100953E26 /* gdbleTransmit.mm */,
+				569A76CB2E015A7100953E26 /* GDbleTransmit_PrefixHeader.pch */,
+				569A76CC2E015A7100953E26 /* gdbleTransmitF.h */,
+				569A76CD2E015A7100953E26 /* GDBLETransmitManager.h */,
+				569A76CE2E015A7100953E26 /* GDBLETransmitManager.m */,
+				569A76CF2E015A7100953E26 /* GDBLEUtils.h */,
+				569A76D02E015A7100953E26 /* GDBLEUtils.m */,
+				569A76D12E015A7100953E26 /* GDErrorCodesAndMacros.h */,
+				569A76D22E015A7100953E26 /* GDQueuePool.h */,
+				569A76D32E015A7100953E26 /* GDQueuePool.m */,
+			);
+			name = GDBleTransmit;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3BC37A282DF26C58008D3806 /* GDbleTransmit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3BC37A322DF26C58008D3806 /* Build configuration list for PBXNativeTarget "GDbleTransmit" */;
+			buildPhases = (
+				565624D62E01667C0099F511 /* Sources */,
+				3BC37A262DF26C58008D3806 /* Frameworks */,
+				3BC37A272DF26C58008D3806 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GDbleTransmit;
+			productName = GDbleTransmit;
+			productReference = 3BC37A292DF26C58008D3806 /* libGDbleTransmit.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3BC37A212DF26C58008D3806 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1530;
+				TargetAttributes = {
+					3BC37A282DF26C58008D3806 = {
+						CreatedOnToolsVersion = 15.3;
+					};
+				};
+			};
+			buildConfigurationList = 3BC37A242DF26C58008D3806 /* Build configuration list for PBXProject "GDbleTransmit" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3BC37A202DF26C58008D3806;
+			productRefGroup = 3BC37A202DF26C58008D3806;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3BC37A282DF26C58008D3806 /* GDbleTransmit */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		565624D62E01667C0099F511 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				565624D72E0166A40099F511 /* GDBLEDevice.m in Sources */,
+				565624D82E0166A40099F511 /* GDBLEInterface.m in Sources */,
+				565624D92E0166A40099F511 /* GDBLEKeyManager.m in Sources */,
+				565624DA2E0166A40099F511 /* gdbleTransmit.mm in Sources */,
+				565624DB2E0166A40099F511 /* GDbleTransmit_PrefixHeader.pch in Sources */,
+				565624DC2E0166A40099F511 /* GDBLETransmitManager.m in Sources */,
+				565624DD2E0166A40099F511 /* GDBLEUtils.m in Sources */,
+				565624DE2E0166A40099F511 /* GDQueuePool.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		3BC37A302DF26C58008D3806 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		3BC37A312DF26C58008D3806 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3BC37A332DF26C58008D3806 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libstdc++";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/GDbleTransmit_PrefixHeader.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3BC37A342DF26C58008D3806 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libstdc++";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/../../deps/bleNusTransmit/GDbleTransmit/GDbleTransmit/GDbleTransmit_PrefixHeader.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3BC37A242DF26C58008D3806 /* Build configuration list for PBXProject "GDbleTransmit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3BC37A302DF26C58008D3806 /* Debug */,
+				3BC37A312DF26C58008D3806 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3BC37A322DF26C58008D3806 /* Build configuration list for PBXNativeTarget "GDbleTransmit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3BC37A332DF26C58008D3806 /* Debug */,
+				3BC37A342DF26C58008D3806 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3BC37A212DF26C58008D3806 /* Project object */;
+}

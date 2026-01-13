@@ -1,0 +1,11 @@
+{
+  "TransactionType": "Payment",
+  "Fee": "12",
+  "Flags": 0,
+  "Sequence": 32841006,
+  "MaxLedgerVersion": 32841630,
+  "Payment": {
+    "Amount": 1000000,
+    "Destination": "rwgumKP89VhMrJ4dRkGVS4tafRfAmZmKf8"
+  }
+}
