@@ -1,5 +1,4 @@
 # Sealer2100 Open Source Outlook
-[TOC]
 
 ## 🎯 Project Positioning
 Sealer2100 is a hardware product designed for Web3 users. It ensures technical transparency while protecting core commercial value through reasonable licensing restrictions.
