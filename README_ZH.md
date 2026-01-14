@@ -72,3 +72,7 @@ sealer2100-project/
 2. 提供改进建议
 3. 参与代码审查
 4. 分享研究成果
+
+## ☎️ 联系方式
+1. [帮助中心](https://help.sealer2100.com/)
+2. [问题反馈](https://help.sealer2100.com/hc/en-001/requests/new)
