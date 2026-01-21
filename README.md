@@ -81,3 +81,4 @@ Security researchers and academic institutions are welcome to:
 ## ☎️ Contact
 1. [Help Center](https://help.sealer2100.com/)
 2. [Feedback](https://help.sealer2100.com/hc/en-001/requests/new)
+3. [HomePage](https://www.sealer2100.com/)
