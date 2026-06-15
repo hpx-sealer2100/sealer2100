@@ -1,89 +1,72 @@
 /*
  * This file is part of the Trezor project, https://trezor.io/
  *
- * Copyright (c) SatoshiLabs
+ * Copyright (C) 2014 Pavol Rusnak <stick@satoshilabs.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * This library is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __MESSAGES_H__
 #define __MESSAGES_H__
 
-#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
-#include <string.h>
-
-#include <pb.h>
-#include <pb_decode.h>
-#include <pb_encode.h>
 
 #include "messages.pb.h"
+#include "usb.h"
 
-#include "image.h"
-#include "secbool.h"
+// The size of the message header "?##<2 bytes msg_id><4 bytes msg_size>".
+#define MSG_HEADER_SIZE 9
 
-#define USB_TIMEOUT 500
-#define USB_PACKET_SIZE 64
+// Maximum size of an incoming protobuf-encoded message without headers.
+#define MSG_IN_ENCODED_SIZE (18 * 1024)
 
-#define FIRMWARE_UPLOAD_CHUNK_RETRY_COUNT 2
+// Maximum size of a C struct containing a decoded incoming message.
+#define MSG_IN_DECODED_SIZE (18 * 1024)
 
-void send_failure(uint8_t iface_num, FailureType type, const char *text);
-void send_success(uint8_t iface_num, const char *text);
+// Buffer size for outgoing USB packets with headers.
+#define MSG_OUT_BUFFER_SIZE (18 * 1024)
 
-void send_user_abort(uint8_t iface_num, const char *msg);
-bool button_request(uint8_t iface_num);
+// Maximum size of an outgoing protobuf-encoded message without headers.
+// (Continuation packets have a one byte "?" header.)
+#define MSG_OUT_ENCODED_SIZE (MSG_OUT_BUFFER_SIZE - MSG_HEADER_SIZE - ((MSG_OUT_BUFFER_SIZE / USB_PACKET_SIZE) - 1))
 
-secbool msg_parse_header(const uint8_t *buf, uint16_t *msg_id,
-                         uint32_t *msg_size);
+// Maximum size of a C struct containing a decoded outgoing message.
+#define MSG_OUT_DECODED_SIZE (18 * 1024)
 
-void process_msg_Initialize(uint8_t iface_num, uint32_t msg_size, uint8_t *buf,
-                            const vendor_header *const vhdr,
-                            const image_header *const hdr);
-void process_msg_GetFeatures(uint8_t iface_num, uint32_t msg_size, uint8_t *buf,
-                             const vendor_header *const vhdr,
-                             const image_header *const hdr);
-void process_msg_Ping(uint8_t iface_num, uint32_t msg_size, uint8_t *buf);
-void process_msg_Reboot(uint8_t iface_num, uint32_t msg_size, uint8_t *buf);
-void process_msg_FirmwareErase(uint8_t iface_num, uint32_t msg_size,
-                               uint8_t *buf);
-int process_msg_FirmwareUpload(uint8_t iface_num, uint32_t msg_size,
-                               uint8_t *buf);
-int process_msg_WipeDevice(uint8_t iface_num, uint32_t msg_size, uint8_t *buf);
+// Unexpected messages
+#define MSG_UNEXPECT_ID (0xEEEE)
 
-void process_msg_DeviceInfoSettings(uint8_t iface_num, uint32_t msg_size,
-                                    uint8_t *buf);
-void process_msg_GetDeviceInfo(uint8_t iface_num, uint32_t msg_size,
-                               uint8_t *buf);
-void process_msg_ReadSEPublicKey(uint8_t iface_num, uint32_t msg_size,
-                                 uint8_t *buf);
-void process_msg_WriteSEPublicCert(uint8_t iface_num, uint32_t msg_size,
-                                   uint8_t *buf);
-void process_msg_ReadSEPublicCert(uint8_t iface_num, uint32_t msg_size,
-                                  uint8_t *buf);
-void process_msg_SESignMessage(uint8_t iface_num, uint32_t msg_size,
-                               uint8_t *buf);
-void process_msg_SEInitialize(uint8_t iface_num, uint32_t msg_size,
-                               uint8_t *buf);
-void process_msg_SEInitializeDone(uint8_t iface_num, uint32_t msg_size,
-                               uint8_t *buf);
-void process_msg_SEBackToRomBoot(uint8_t iface_num, uint32_t msg_size,
-                                uint8_t *buf);
-void process_msg_SEWipeUserStorage(uint8_t iface_num, uint32_t msg_size,
-                                uint8_t *buf);
-void process_msg_FirmwareEraseBLE(uint8_t iface_num, uint32_t msg_size,
-                                  uint8_t *buf);
+#define msg_read(buf, len) msg_read_common('n', (buf), (len))
+#define msg_write(id, ptr) msg_write_common('n', (id), (ptr))
+const uint8_t *msg_out_data(void);
 
-void process_msg_unknown(uint8_t iface_num, uint32_t msg_size, uint8_t *buf);
+#define protocol_read(id, pb, len, ptr) pb_read_common((id), (pb), (len), (ptr))
+#define protocol_write(id, ptr, pb)     pb_write_common((id), (ptr), (pb))
+
+void msg_read_common(char type, const uint8_t *buf, uint32_t len);
+bool msg_write_common(char type, uint16_t msg_id, const void *msg_ptr);
+
+uint8_t msg_tiny_set(uint8_t set);
+uint8_t msg_is_tiny(void);
+void msg_read_tiny(const uint8_t *buf, int len);
+extern uint8_t msg_tiny[128];
+extern uint16_t msg_tiny_id;
+
+// for pb encode
+size_t pb_write_common(const pb_msgdesc_t *fields, const void *msg_ptr, pb_byte_t *pb);
+bool pb_read_common(const pb_msgdesc_t *fields, const pb_byte_t *pb, size_t pb_len, void *msg_ptr);
 
 #endif

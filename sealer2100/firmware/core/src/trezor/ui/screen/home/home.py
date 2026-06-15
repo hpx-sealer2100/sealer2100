@@ -59,17 +59,18 @@ class HomeScreen(Screen):
                 "icon": "A:/res/hp/ic_shezhi1.png",
                 "action": self.click_setting,
             },
+            # guide
             {
                 "label": i18n.App.guide,
                 "icon": "A:/res/hp/ic_book1.png",
                 "action": self.click_guide,
             },
-            # nft
-            # {
-            #     "label": i18n.App.nft,
-            #     "icon": "A:/res/hp/ic_nft1.png",
-            #     "action": self.click_nft,
-            # },
+            #nft
+            {
+                "label": i18n.App.nft,
+                "icon": "A:/res/hp/ic_nft1.png",
+                "action": self.click_nft,
+            },
         ]
         self.apps: list[Item] = []
         for a in apps:

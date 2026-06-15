@@ -37,6 +37,7 @@ UNKNOWN_TOKEN = EthereumTokenInfo(
 
 
 def token_by_chain_address(chain_id: int, address: bytes) -> EthereumTokenInfo | None:
+    # buildin token
     for addr, symbol, decimal, name in _token_iterator(chain_id):
         if address == addr:
             return EthereumTokenInfo(
@@ -46,8 +47,20 @@ def token_by_chain_address(chain_id: int, address: bytes) -> EthereumTokenInfo |
                 chain_id=chain_id,
                 name=name,
             )
+
+    # try to load from fs
+    from .helpers import get_token_from_fs
+    token = get_token_from_fs(chain_id, address)
+    if token is not UNKNOWN_TOKEN:
+        return token
+
     return UNKNOWN_TOKEN
 
+def is_buildin(chain_id: int, address: bytes) -> bool:
+    for addr, _, _, _ in _token_iterator(chain_id):
+        if address == addr:
+            return True
+    return False
 
 def _token_iterator(chain_id: int) -> Iterator[tuple[bytes, str, int, str]]:
 % for token_chain_id, tokens in group_tokens(erc20).items():

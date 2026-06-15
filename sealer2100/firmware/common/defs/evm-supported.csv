@@ -1,11 +1,202 @@
-chain,symbol,chain_id
-Ethereum,ETH,1,
-BSC,BNB,56,
-Polygon,POL,137,
-AVAX-C,AVAX,43114,
-Arbitrum,ETH,42161,
-Optiminsm,ETH,10,
-Base,ETH,8453,
-Fantom,FTM,250,
-zkSync Era,ETH,324,
-OKTC,OKT,66,
+﻿name,chain_id
+Ethereum,1
+BNB Smart Chain,56
+Base,8453
+Arbitrum One,42161
+Plasma,9745
+Avalanche-C,43114
+Polygon,137
+katana,747474
+Scroll,534352
+Ink,57073
+Mantle,5000
+Cronos,25
+OP,10
+Berachain,80094
+Monad,143
+Flare,14
+Linea,59144
+Gnosis,100
+Rootstock,30
+PulseChain,369
+Sei,1329
+Unichain,130
+Sonic,146
+Bitlayer,200901
+Hedera,295
+Hydration,222222
+Mode,34443
+AILayer,2649
+BOB,60808
+Bifrost Polkadot,996
+Hemi,43111
+Ethereal,5064014
+Fraxtal,252
+Blast,81457
+Filecoin,314
+Kava,2222
+Flow EVM,747
+ENI,173
+Celo,42220
+Etherlink,42793
+Core Blockchain,1116
+Kaia,8217
+Mezo,31612
+zkSync,324
+SagaEVM,5464
+Abstract,2741
+Reya Network,1729
+Soneium,1868
+Botanix,3637
+Zircuit,48900
+Ronin,2020
+XDC Network,50
+opBNB,204
+X Layer,196
+Metis Andromeda,1088
+Rollux,570
+Cronos zkEVM,388
+Conflux eSpace,1030
+Manta Pacific,169
+Immutable zkEVM,13371
+Sophon,50104
+IoTeX Network,4689
+Taiko Alethia,167000
+Fantom Opera,250
+TAC,239
+Astar,592
+Swellchain,1923
+Chiliz Chain,88888
+Morph,2818
+Aurora,1313161554
+ApeChain,33139
+Nibiru cataclysm-1,6900
+Gravity Alpha,1625
+Lisk,1135
+Vision,888888
+Moonbeam,1284
+Wanchain,888
+Canto,7700
+Telos EVM,40
+Xertra,105105
+KUB,96
+Gate Layer,10088
+Boba Network,288
+Dexalot Subnet,432204
+GOAT Network,2345
+Somnia,5031
+Moonriver,1285
+Polynomial,8008
+Polygon zkEVM,1101
+ZetaChain,7000
+Viction,88
+OKXChain,66
+EDU Chain,41923
+Dymension,1100
+Dogechain,2000
+Oasis Sapphire,23294
+Beam,4337
+DFK Chain,53935
+KCC,321
+Fluence,9999999
+BounceBit,6001
+peaq,3338
+Fuse Mainnet,122
+Titan (TKX),18888
+Winr Protocol,777777
+Carbon EVM,9790
+Zilliqa 2,32769
+Lightlink Phoenix,1890
+Hela Official Runtime,8668
+LUKSO Mainnet,42
+Arbitrum Nova,42170
+Oasys Mainnet,248
+Songbird Canary-Network,19
+Meter,82
+Theta,361
+Harmony,1666600000
+Elastos Smart Chain,20
+CoinEx Smart Chain,52
+0G,16661
+ThunderCore,108
+BitTorrent Chain,199
+Odyssey Chain,153153
+Velas EVM,106
+ONUS Chain,1975
+Ultron,1231
+Evmos,9001
+Oasis Emerald,42262
+Lens,232
+Energi,39797
+Superposition,55244
+Ethereum Classic,61
+Superseed,5330
+Energy Web Chain,246
+Corn,21000000
+Huobi ECO Chain,128
+ZKFair,42766
+Neon EVM,245022934
+Ancient8,888888888
+Shape,360
+Matchain,698
+Endurance Smart Chain,648
+Saakuru,7225878
+Nahmii 2,5551
+CrossFi,4158
+Smart Bitcoin Cash,10000
+Godwoken,71402
+Zora,7777777
+Findora,2152
+Mint,185
+Parex,322202
+Sanko,1996
+LoopNetwork,15551
+Genesys,16507
+Redstone,690
+Hydra Chain,4488
+Tomb Chain,6969
+Step Network,1234
+Shiden,336
+Omax,311
+Astar zkEVM,3776
+Doma,97477
+DCHAIN,2716446429837000
+inEVM,2525
+LACHAIN,225
+RARI Chain,1380012617
+MXC zkEVM Moonchain,18686
+Xone,3721
+VinuChain Network,207
+Silicon zkEVM,2355
+Haven1,8811
+JIBCHAIN L1,8899
+Form Network,478
+Planq,7070
+Polkadot,420420419
+GoChain,60
+Darwinia Network,46
+Callisto,820
+Ham,5112
+Swan Chain,254
+Crab Network,44
+ENULS,119
+Degen Chain,666666666
+Ontology,58
+REI Network,47805
+REI Chain,55555
+Bitcichain,1907
+Palm,11297108109
+EOS EVM Network,17777
+Japan Open Chain,81
+MTT Network,6880
+Xphere,20250217
+Kusama,420420418
+Bitgert,32520
+Milkomeda C1 Mainnet,2001
+Expanse Network,2
+ThaiChain,7
+Ubiq,8
+Metadium,11
+Diode Prenet,15
+ThaiChain 2.0 ThaiFi,17
+ELA-DID-Sidechain,22

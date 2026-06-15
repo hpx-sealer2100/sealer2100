@@ -17,319 +17,247 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
 #include <string.h>
 #include <stdio.h>
-
-#include "blake2s.h"
-#include "ed25519-donna/ed25519.h"
 
 #include "common.h"
 #include "flash.h"
 #include "image.h"
+#include "keys.h"
+#include "secbool.h"
+#include "sha2.h"
+#include "log.h"
+#include "ed25519-donna/ed25519.h"
+#include "uart_log.h"
 
-static secbool compute_pubkey(uint8_t sig_m, uint8_t sig_n,
-                              const uint8_t *const *pub, uint8_t sigmask,
-                              ed25519_public_key res) {
-  if (0 == sig_m || 0 == sig_n) return secfalse;
-  if (sig_m > sig_n) return secfalse;
+#define MODULE "image"
 
-  // discard bits higher than sig_n
-  sigmask &= ((1 << sig_n) - 1);
 
-  // remove if number of set bits in sigmask is not equal to sig_m
-  if (__builtin_popcount(sigmask) != sig_m) return secfalse;
+image_type_t image_get_type(const uint8_t* const data) {
+  uint32_t magic = *(uint32_t*)data;
+  if (magic == FIRMWARE_IMAGE_MAGIC) {
+    return IMAGE_TYPE_FIRMWARE;
+  } else if (magic == BLE_IMAGE_MAGIC) {
+    return IMAGE_TYPE_BLE;
+  } else if (magic == SE_IMAGE_MAGIC) {
+    return IMAGE_TYPE_SE;
+  } else if (magic == IRIS_IMAGE_MAGIC) {
+    return IMAGE_TYPE_IRIS;
+  }
+  const image_bootloader_t* const bl = (const image_bootloader_t*)data;
+  if (bl->header.magic == BOOTLOADER_IMAGE_MAGIC) {
+    return IMAGE_TYPE_BOOTLOADER;
+  }
+  return IMAGE_TYPE_UNKNOWN;
+}
 
-  ed25519_public_key keys[sig_m];
-  int j = 0;
-  for (int i = 0; i < sig_n; i++) {
-    if ((1 << i) & sigmask) {
-      memcpy(keys[j], pub[i], 32);
-      j++;
+const char* image_get_desc_name(image_type_t image_type) {
+  if (image_type == IMAGE_TYPE_BOOTLOADER) {
+    return "Bootloader";
+  } else if (image_type == IMAGE_TYPE_FIRMWARE) {
+    return "Firmware";
+  } else if (image_type == IMAGE_TYPE_BLE) {
+    return "Bluetooth";
+  } else if (image_type == IMAGE_TYPE_SE) {
+    return "SE";
+  } else if (image_type == IMAGE_TYPE_IRIS) {
+    return "IRIS";
+  }
+  return "Unknown firmware type";
+}
+
+int image_version_parse(const char *str, image_version_t *version) {
+  uint32_t major = 0, minor = 0, patch = 0;
+  if (memcmp(str, "None", 4) == 0) {
+    version->major = 0;
+    version->minor = 0;
+    version->patch = 0;
+    return 0;
+  }
+  int ret = sscanf(str, "%lu.%lu.%lu", &major, &minor, &patch);
+  if (ret != 3) {
+    return -1;
+  }
+  version->major = major & 0xFF;
+  version->minor = minor & 0xFF;
+  version->patch = patch & 0xFF;
+  return 0;
+}
+void image_version_format(image_version_t version, char str[12]) {
+  // 3*3+2+1
+  // major.minor.patch
+  sprintf(str, "%d.%d.%d", version.major, version.minor, version.patch);
+}
+
+int image_version_compare(image_version_t* const a, image_version_t* const b) {
+    if (a->major < b->major) return -1;
+    if (a->major > b->major) return 1;
+
+    if (a->minor < b->minor) return -1;
+    if (a->minor > b->minor) return 1;
+
+    if (a->patch < b->patch) return -1;
+    if (a->patch > b->patch) return 1;
+    return 0;
+}
+
+secbool load_ble_image_header(const uint8_t *const data,
+                              const uint32_t maxsize, image_header_t *const hdr) {
+  memcpy(&hdr->magic, data, 4);
+  // only use magic and version field
+  if (hdr->magic != BLE_IMAGE_MAGIC) return secfalse;
+  memcpy(&hdr->version, data + 4, 4);
+  return sectrue;
+}
+
+void image_header_hash_update(SHA256_CTX *ctx, const image_header_t * const header) {
+  // `header`: `magic` `version` `header_size` `code_size` `required_sig_count` is be protected
+  size_t protected = offsetof(image_header_t, digest);
+  sha256_Update(ctx, (const uint8_t *)header, protected);
+
+  uint8_t filled[sizeof(image_header_t) - protected];
+  memset(filled, 0x00, sizeof(filled));
+  sha256_Update(ctx, filled, sizeof(filled));
+}
+
+void image_print_header(const image_header_t * const header) {
+  (void)header;
+  LOG_DEBUG(MODULE, "magic: 0x%08x", header->magic);
+  LOG_DEBUG(MODULE, "header_size: 0x%08x", header->header_size);
+  LOG_DEBUG(MODULE, "code_size: 0x%08x", header->code_size);
+  LOG_DEBUG(MODULE, "version: 0x%08x", header->version.value);
+  LOG_DEBUG(MODULE, "required_sig_count: 0x%02x", header->required_sig_count);
+  LOG_HEXDUMP_DEBUG(MODULE, "digest", header->digest, sizeof(header->digest));
+  LOG_DEBUG(MODULE, "sigmask: 0x%08x", header->sig_mask);
+  uart_log_flush();
+  for (int i = 0; i < sizeof(header->sig_mask)*8; i++) {
+    bool present = (header->sig_mask & (1 << i)) != 0;
+    if (present) {
+      char label[17] = {0};
+      snprintf(label, sizeof(label), "[%d] sig", i);
+      LOG_HEXDUMP_DEBUG(MODULE, label, header->sigs[i], IMAGE_SIG_SIZE);
+      uart_log_flush();
     }
   }
-
-  return sectrue * (0 == ed25519_cosi_combine_publickeys(res, keys, sig_m));
 }
 
-secbool load_image_header(const uint8_t *const data, const uint32_t magic,
-                          const uint32_t maxsize, uint8_t key_m, uint8_t key_n,
-                          const uint8_t *const *keys, image_header *const hdr) {
-  memcpy(&hdr->magic, data, 4);
-  if (hdr->magic != magic) return secfalse;
-
-  memcpy(&hdr->hdrlen, data + 4, 4);
-  if (hdr->hdrlen != IMAGE_HEADER_SIZE) return secfalse;
-
-  memcpy(&hdr->expiry, data + 8, 4);
-  // TODO: expiry mechanism needs to be ironed out before production or those
-  // devices won't accept expiring bootloaders (due to boardloader write
-  // protection).
-  if (hdr->expiry != 0) return secfalse;
-
-  memcpy(&hdr->codelen, data + 12, 4);
-  if (hdr->codelen > (maxsize - hdr->hdrlen)) return secfalse;
-  if ((hdr->hdrlen + hdr->codelen) < 4 * 1024) return secfalse;
-  if ((hdr->hdrlen + hdr->codelen) % 512 != 0) return secfalse;
-
-  memcpy(&hdr->version, data + 16, 4);
-  memcpy(&hdr->fix_version, data + 20, 4);
-  memcpy(&hdr->hypermate_version, data + 24, 4);
-
-  memcpy(hdr->hashes, data + 32, 512);
-
-  memcpy(&hdr->sigmask, data + IMAGE_HEADER_SIZE - IMAGE_SIG_SIZE, 1);
-
-  memcpy(hdr->sig, data + IMAGE_HEADER_SIZE - IMAGE_SIG_SIZE + 1,
-         IMAGE_SIG_SIZE - 1);
-
-  // check header signature
-
-  BLAKE2S_CTX ctx;
-  blake2s_Init(&ctx, BLAKE2S_DIGEST_LENGTH);
-  blake2s_Update(&ctx, data, IMAGE_HEADER_SIZE - IMAGE_SIG_SIZE);
-  for (int i = 0; i < IMAGE_SIG_SIZE; i++) {
-    blake2s_Update(&ctx, (const uint8_t *)"\x00", 1);
-  }
-  blake2s_Final(&ctx, hdr->fingerprint, BLAKE2S_DIGEST_LENGTH);
-
-  ed25519_public_key pub;
-  if (sectrue != compute_pubkey(key_m, key_n, keys, hdr->sigmask, pub))
-    return secfalse;
-
-  return sectrue *
-         (0 == ed25519_sign_open(hdr->fingerprint, BLAKE2S_DIGEST_LENGTH, pub,
-                                 *(const ed25519_signature *)hdr->sig));
-}
-
-secbool load_ble_image_header(const uint8_t *const data, const uint32_t magic,
-                              const uint32_t maxsize, image_header *const hdr) {
-  memcpy(&hdr->magic, data, 4);
-  if (hdr->magic != magic) return secfalse;
-
-  memcpy(&hdr->hdrlen, data + 4, 4);
-  // if (hdr->hdrlen != IMAGE_HEADER_SIZE) return secfalse;
-
-  memcpy(&hdr->expiry, data + 8, 4);
-  // TODO: expiry mechanism needs to be ironed out before production or those
-  // devices won't accept expiring bootloaders (due to boardloader write
-  // protection).
-  if (hdr->expiry != 0) return secfalse;
-
-  memcpy(&hdr->codelen, data + 12, 4);
-  // if (hdr->codelen > (maxsize - hdr->hdrlen)) return secfalse;
-  // if ((hdr->hdrlen + hdr->codelen) < 4 * 1024) return secfalse;
-  // if ((hdr->hdrlen + hdr->codelen) % 512 != 0) return secfalse;
-
-  memcpy(&hdr->version, data + 16, 4);
-  memcpy(&hdr->fix_version, data + 20, 4);
-  memcpy(&hdr->hypermate_version, data + 24, 4);
-
-  memcpy(hdr->hashes, data + 32, 512);
-
-  memcpy(&hdr->sigmask, data + IMAGE_HEADER_SIZE - IMAGE_SIG_SIZE, 1);
-
-  memcpy(hdr->sig, data + IMAGE_HEADER_SIZE - IMAGE_SIG_SIZE + 1,
-         IMAGE_SIG_SIZE - 1);
-
-  return sectrue;
-}
-
-secbool read_vendor_header(const uint8_t *const data,
-                           vendor_header *const vhdr) {
-  memcpy(&vhdr->magic, data, 4);
-  if (vhdr->magic != VENDORHEADER_IMAGE_MAGIC) return secfalse;  // HPTV
-
-  memcpy(&vhdr->hdrlen, data + 4, 4);
-  if (vhdr->hdrlen > 64 * 1024) return secfalse;
-
-  memcpy(&vhdr->expiry, data + 8, 4);
-  if (vhdr->expiry != 0) return secfalse;
-
-  memcpy(&vhdr->version, data + 12, 2);
-
-  memcpy(&vhdr->vsig_m, data + 14, 1);
-  memcpy(&vhdr->vsig_n, data + 15, 1);
-  memcpy(&vhdr->vtrust, data + 16, 2);
-
-  if (vhdr->vsig_n > MAX_VENDOR_PUBLIC_KEYS) {
-    return secfalse;
-  }
-
-  for (int i = 0; i < vhdr->vsig_n; i++) {
-    vhdr->vpub[i] = data + 32 + i * 32;
-  }
-  for (int i = vhdr->vsig_n; i < MAX_VENDOR_PUBLIC_KEYS; i++) {
-    vhdr->vpub[i] = 0;
-  }
-
-  memcpy(&vhdr->vstr_len, data + 32 + vhdr->vsig_n * 32, 1);
-
-  vhdr->vstr = (const char *)(data + 32 + vhdr->vsig_n * 32 + 1);
-
-  vhdr->vimg = data + 32 + vhdr->vsig_n * 32 + 1 + vhdr->vstr_len;
-  // align to 4 bytes
-  vhdr->vimg += (-(uintptr_t)vhdr->vimg) & 3;
-
-  memcpy(&vhdr->sigmask, data + vhdr->hdrlen - IMAGE_SIG_SIZE, 1);
-
-  memcpy(vhdr->sig, data + vhdr->hdrlen - IMAGE_SIG_SIZE + 1,
-         IMAGE_SIG_SIZE - 1);
-
-  return sectrue;
-}
-
-secbool load_vendor_header(const uint8_t *const data, uint8_t key_m,
-                           uint8_t key_n, const uint8_t *const *keys,
-                           vendor_header *const vhdr) {
-  if (sectrue != read_vendor_header(data, vhdr)) {
-    return secfalse;
-  }
-
-  // check header signature
-
-  uint8_t hash[BLAKE2S_DIGEST_LENGTH];
-  BLAKE2S_CTX ctx;
-  blake2s_Init(&ctx, BLAKE2S_DIGEST_LENGTH);
-  blake2s_Update(&ctx, data, vhdr->hdrlen - IMAGE_SIG_SIZE);
-  for (int i = 0; i < IMAGE_SIG_SIZE; i++) {
-    blake2s_Update(&ctx, (const uint8_t *)"\x00", 1);
-  }
-  blake2s_Final(&ctx, hash, BLAKE2S_DIGEST_LENGTH);
-
-  // return sectrue;
-  // // TODO: verify firmware signature
-
-  ed25519_public_key pub;
-  if (sectrue != compute_pubkey(key_m, key_n, keys, vhdr->sigmask, pub))
-    return secfalse;
-
-  return sectrue *
-         (0 == ed25519_sign_open(hash, BLAKE2S_DIGEST_LENGTH, pub,
-                                 *(const ed25519_signature *)vhdr->sig));
-}
-
-void vendor_header_hash(const vendor_header *const vhdr, uint8_t *hash) {
-  BLAKE2S_CTX ctx;
-  blake2s_Init(&ctx, BLAKE2S_DIGEST_LENGTH);
-  blake2s_Update(&ctx, vhdr->vstr, vhdr->vstr_len);
-  blake2s_Update(&ctx, "hypermate Vendor Header", 20);
-  blake2s_Final(&ctx, hash, BLAKE2S_DIGEST_LENGTH);
-}
-
-secbool check_single_hash(const uint8_t *const hash, const uint8_t *const data,
-                          int len) {
-  uint8_t h[BLAKE2S_DIGEST_LENGTH];
-  blake2s(data, len, h, BLAKE2S_DIGEST_LENGTH);
-  return sectrue * (0 == memcmp(h, hash, BLAKE2S_DIGEST_LENGTH));
-}
-
-#if defined(STM32H747xx)
-secbool check_image_contents(const image_header *const hdr, uint32_t firstskip,
-                             const uint8_t *sectors, int blocks) {
-  if (0 == sectors || blocks < 1) {
-    return secfalse;
-  }
-
-  const void *data =
-      flash_get_address(sectors[0], firstskip, IMAGE_CHUNK_SIZE - firstskip);
-  if (!data) {
-    return secfalse;
-  }
-  int remaining = hdr->codelen;
-  if (remaining <= IMAGE_CHUNK_SIZE - firstskip) {
-    if (sectrue != check_single_hash(hdr->hashes, data,
-                                     MIN(remaining, IMAGE_CHUNK_SIZE))) {
+secbool __wur
+image_header_verify(const image_header_t * const header) {
+  if (header->required_sig_count < IMAGE_MIN_REQUIRED_SIG_COUNT) {
+    if (PRODUCTION) {
       return secfalse;
     } else {
+      LOG_DEBUG(MODULE, "Not config `required_sig_count` in develop mode, skip...");
       return sectrue;
     }
   }
-
-  BLAKE2S_CTX ctx;
-  uint8_t hash[BLAKE2S_DIGEST_LENGTH];
-  blake2s_Init(&ctx, BLAKE2S_DIGEST_LENGTH);
-
-  blake2s_Update(&ctx, data, MIN(remaining, IMAGE_CHUNK_SIZE - firstskip));
-  int block = 1;
-  int update_flag = 1;
-  remaining -= IMAGE_CHUNK_SIZE - firstskip;
-  while (remaining > 0) {
-    if (block >= blocks) {
-      return secfalse;
-    }
-    data = flash_get_address(sectors[block], 0, IMAGE_CHUNK_SIZE);
-    if (!data) {
-      return secfalse;
-    }
-    if (remaining - IMAGE_CHUNK_SIZE > 0) {
-      if (block % 2) {
-        update_flag = 0;
-        blake2s_Update(&ctx, data, MIN(remaining, IMAGE_CHUNK_SIZE));
-        blake2s_Final(&ctx, hash, BLAKE2S_DIGEST_LENGTH);
-        if (0 != memcmp(hdr->hashes + (block / 2) * 32, hash,
-                        BLAKE2S_DIGEST_LENGTH)) {
-          return secfalse;
-        }
-      } else {
-        blake2s_Init(&ctx, BLAKE2S_DIGEST_LENGTH);
-        blake2s_Update(&ctx, data, MIN(remaining, IMAGE_CHUNK_SIZE));
-        update_flag = 1;
+  int count = 0;
+  for (int i = 0; i < sizeof(header->sig_mask)*8; i++) {
+    bool present = (header->sig_mask & (1 << i)) != 0;
+    if (present) {
+      if (i >= KEY_N) {
+        LOG_DEBUG(MODULE, "pubkey index %d is out of range", i);
+        return secfalse;
       }
-    } else {
-      if (update_flag) {
-        blake2s_Update(&ctx, data, MIN(remaining, IMAGE_CHUNK_SIZE));
-        blake2s_Final(&ctx, hash, BLAKE2S_DIGEST_LENGTH);
-        if (0 != memcmp(hdr->hashes + (block / 2) * 32, hash,
-                        BLAKE2S_DIGEST_LENGTH)) {
-          return secfalse;
-        }
-      } else {
-        if (sectrue != check_single_hash(hdr->hashes + (block / 2) * 32, data,
-                                         MIN(remaining, IMAGE_CHUNK_SIZE))) {
-          return secfalse;
-        }
+      LOG_DEBUG(MODULE, "use %d pubkey verify sig", i);
+      LOG_HEXDUMP_DEBUG(MODULE, "pubkey", KEYS[i], KEY_SIZE);
+      LOG_HEXDUMP_DEBUG(MODULE, "sig", header->sigs[i], IMAGE_SIG_SIZE);
+      uart_log_flush();
+      if (0 != ed25519_sign_open(header->digest, sizeof(header->digest), KEYS[i], header->sigs[i])) {
+        LOG_ERROR(MODULE, "verify sig %d failed", i);
+        return secfalse;
       }
+      LOG_DEBUG(MODULE, "verify sig %d success", i);
+      count++;
     }
+  }
+  if (count >= header->required_sig_count) {
+    return sectrue;
+  } else if (PRODUCTION){
+    LOG_DEBUG(MODULE, "sign count %d < required %d in develop mode, skip...", count, header->required_sig_count);
+    return sectrue;
+  }
+  return secfalse;
+}
 
-    block++;
-    remaining -= IMAGE_CHUNK_SIZE;
-  }
-  return sectrue;
+secbool __wur
+image_verify_bootloader(uint32_t address) {
+  image_bootloader_t* const bl = (image_bootloader_t*)address;
+
+  // step 0: check magic
+  if (bl->header.magic != BOOTLOADER_IMAGE_MAGIC) return secfalse;
+
+  // step 1: calculate digest
+  SHA256_CTX ctx;
+  sha256_Init(&ctx);
+
+  // `vector_table` is be protected by signature
+  sha256_Update(&ctx, bl->vector_table, sizeof(bl->vector_table));
+
+  // `header` partly protected by signature
+  image_header_hash_update(&ctx, &bl->header);
+
+  // `code` is be protected by signature
+  sha256_Update(&ctx, bl->code, bl->header.code_size - sizeof(image_bootloader_t));
+
+  uint8_t digest[32];
+  sha256_Final(&ctx, digest);
+  LOG_HEXDUMP_DEBUG(MODULE, "bootloader computed digest", digest, sizeof(digest));
+  LOG_HEXDUMP_DEBUG(MODULE, "bootloader stored digest", bl->header.digest, sizeof(bl->header.digest));
+
+  // step 2: check digest
+  if (memcmp(digest, bl->header.digest, sizeof(digest)) != 0) return secfalse;
+
+  // step 3: verify signature
+  return image_header_verify(&bl->header);
 }
-#else
-secbool check_image_contents(const image_header *const hdr, uint32_t firstskip,
-                             const uint8_t *sectors, int blocks) {
-  if (0 == sectors || blocks < 1) {
-    return secfalse;
+
+secbool __wur
+image_verify_firmware(uint32_t address) {
+  image_firmware_t* const fw = (image_firmware_t*)address;
+
+  // step 0: check magic
+  if (fw->header.magic != FIRMWARE_IMAGE_MAGIC) return secfalse;
+
+  // step 1: calculate digest
+  SHA256_CTX ctx;
+  sha256_Init(&ctx);
+
+  // `header` partly protected by signature
+  image_header_hash_update(&ctx, &fw->header);
+
+  // `code` is be protected by signature
+  uint32_t code_size = fw->header.code_size;
+  const uint8_t *sector = FIRMWARE_SECTORS;
+  uint32_t sector_size = FLASH_FIRMWARE_SECTOR_SIZE;
+  // the first sector contain `image_header_t`, header have hash update
+  sector_size -= sizeof(image_firmware_t);
+  code_size -= FLASH_FIRMWARE_SECTOR_SIZE;
+
+  const uint8_t *addr = flash_get_address(*sector, sizeof(image_firmware_t), sector_size);
+  sector++;
+
+  sha256_Update(&ctx, addr, sector_size);
+
+  while (code_size != 0) {
+    sector_size = MIN(FLASH_FIRMWARE_SECTOR_SIZE, code_size);
+    addr = flash_get_address(*sector, 0, sector_size);
+    sector++;
+    code_size -= sector_size;
+    sha256_Update(&ctx, addr, sector_size);
   }
-  const void *data =
-      flash_get_address(sectors[0], firstskip, IMAGE_CHUNK_SIZE - firstskip);
-  if (!data) {
-    return secfalse;
-  }
-  int remaining = hdr->codelen;
-  if (sectrue !=
-      check_single_hash(hdr->hashes, data,
-                        MIN(remaining, IMAGE_CHUNK_SIZE - firstskip))) {
-    return secfalse;
-  }
-  int block = 1;
-  remaining -= IMAGE_CHUNK_SIZE - firstskip;
-  while (remaining > 0) {
-    if (block >= blocks) {
-      return secfalse;
-    }
-    data = flash_get_address(sectors[block], 0, IMAGE_CHUNK_SIZE);
-    if (!data) {
-      return secfalse;
-    }
-    if (sectrue != check_single_hash(hdr->hashes + block * 32, data,
-                                     MIN(remaining, IMAGE_CHUNK_SIZE))) {
-      return secfalse;
-    }
-    block++;
-    remaining -= IMAGE_CHUNK_SIZE;
-  }
-  return sectrue;
+
+  uint8_t digest[32];
+  sha256_Final(&ctx, digest);
+  LOG_HEXDUMP_DEBUG(MODULE, "firmware computed digest", digest, sizeof(digest));
+  LOG_HEXDUMP_DEBUG(MODULE, "firmware stored digest", fw->header.digest, sizeof(fw->header.digest));
+
+  // step 2: check digest
+  if (memcmp(digest, fw->header.digest, sizeof(digest)) != 0) return secfalse;
+
+  // step 3: verify signature
+  return image_header_verify(&fw->header);
 }
-#endif

@@ -3,12 +3,12 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "ble.h"
+#include "log.h"
 #include "common.h"
 #include "irq.h"
 #include "usart.h"
 
-#define BLE_USART_LOG_ENABLED 0
+#define MODULE "ble-usart"
 
 #define USART_TIMEOUT 0x100000
 #define PACKET_H0 0xA5
@@ -28,26 +28,6 @@ static trans_fifo uart_fifo_in = {.p_buf = __uart_data_in__,
                            .read_pos = 0,
                            .write_pos = 0,
                            .lock_pos = 0};
-
-#if BLE_USART_LOG_ENABLED
-#define LOG printf
-void log_data(const uint8_t* data, size_t data_size) {
-  #define __FRAME_LINE__ 16
-  uint8_t count = 0;
-  while (data_size--) {
-    count++;
-    LOG("%02x ", *data++);
-    if (count == __FRAME_LINE__) {
-      LOG("\n");
-      count = 0;
-    }
-  }
-  LOG("\n");
-}
-#else
-#define LOG(...)
-#define log_data(...)
-#endif
 
 void ble_usart_init(void) {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -104,12 +84,11 @@ void ble_usart_send_byte(uint8_t data) {
 }
 
 void ble_usart_send(uint8_t *buf, uint32_t len) {
-  LOG("ble usart send: ");
-  log_data(buf, len);
+  LOG_HEXDUMP_DEBUG(MODULE, "send", buf, len);
   HAL_UART_Transmit(huart, buf, len, 0xFFFF);
 }
 
-bool ble_read_byte(uint8_t *buf) {
+bool ble_usart_read_byte(uint8_t *buf) {
   if (HAL_UART_Receive(huart, buf, 1, 100) == HAL_OK) {
     return true;
   }
@@ -118,6 +97,7 @@ bool ble_read_byte(uint8_t *buf) {
 
 
 void ble_usart_irq_disable(void) { HAL_NVIC_DisableIRQ(UART4_IRQn); }
+void ble_usart_irq_enable(void) { HAL_NVIC_EnableIRQ(UART4_IRQn); }
 
 static uint8_t calXor(uint8_t *buf, uint32_t len) {
   uint8_t crc = 0;
@@ -189,7 +169,7 @@ uint32_t ble_usart_read(uint8_t *buf, uint32_t lenth) {
   // OVERHEAD contain the xor
   if (fifo_lockdata_len(&uart_fifo_in) < N) {
     // not one packet
-    LOG("not one packet\n");
+    LOG_DEBUG(MODULE, "not one packet");
     return 0;
   }
 
@@ -199,13 +179,12 @@ uint32_t ble_usart_read(uint8_t *buf, uint32_t lenth) {
 
   // consume the packet
   fifo_read_lock(&uart_fifo_in, buf, N);
-  LOG("ble usart read: ");
-  log_data(buf, N);
+  LOG_HEXDUMP_DEBUG(MODULE, "read", buf, N);
 
   uint8_t crc = buf[N-1];
   if (crc != calXor(buf, N-1)) {
     // crc not match
-    LOG("crc not match\n");
+    LOG_DEBUG(MODULE, "crc not match");
     return 0;
   }
   return N;

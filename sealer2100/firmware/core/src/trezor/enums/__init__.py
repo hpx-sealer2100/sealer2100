@@ -74,7 +74,7 @@ if TYPE_CHECKING:
         FirmwareErase_ex = 16
         SelfTest = 32
         Reboot = 30000
-        FirmwareUpdateEmmc = 30001
+        FirmwareUpdate = 30001
         GetPublicKey = 11
         PublicKey = 12
         SignTx = 15
@@ -117,17 +117,19 @@ if TYPE_CHECKING:
         DebugLinkRecordScreen = 9003
         DebugLinkEraseSdCard = 9005
         DebugLinkWatchLayout = 9006
-        EmmcFixPermission = 30100
-        EmmcPath = 30101
-        EmmcPathInfo = 30102
-        EmmcFile = 30103
-        EmmcFileRead = 30104
-        EmmcFileWrite = 30105
-        EmmcFileDelete = 30106
-        EmmcDir = 30107
-        EmmcDirList = 30108
-        EmmcDirMake = 30109
-        EmmcDirRemove = 30110
+        FsStat = 30100
+        FsInfo = 30101
+        FsRemove = 30102
+        FsFile = 30103
+        FsFileRead = 30104
+        FsFileWrite = 30105
+        FsChunk = 30106
+        FsRead = 30107
+        FsWrite = 30108
+        FsMkdir = 30109
+        FsFsStat = 30110
+        FsFsInfo = 30111
+        FsChecksums = 30112
         EthereumGetPublicKey = 450
         EthereumPublicKey = 451
         EthereumGetAddress = 56
@@ -146,25 +148,7 @@ if TYPE_CHECKING:
         EthereumTypedDataValueAck = 468
         EthereumTypedDataSignature = 469
         EthereumSignTypedHash = 470
-        EthereumGetPublicKeyHypermate = 20100
-        EthereumPublicKeyHypermate = 20101
-        EthereumGetAddressHypermate = 20102
-        EthereumAddressHypermate = 20103
-        EthereumSignTxHypermate = 20104
-        EthereumSignTxEIP1559Hypermate = 20105
-        EthereumTxRequestHypermate = 20106
-        EthereumTxAckHypermate = 20107
-        EthereumSignMessageHypermate = 20108
-        EthereumVerifyMessageHypermate = 20109
-        EthereumMessageSignatureHypermate = 20110
-        EthereumSignTypedDataHypermate = 20111
-        EthereumTypedDataStructRequestHypermate = 20112
-        EthereumTypedDataStructAckHypermate = 20113
-        EthereumTypedDataValueRequestHypermate = 20114
-        EthereumTypedDataValueAckHypermate = 20115
-        EthereumTypedDataSignatureHypermate = 20116
-        EthereumSignTypedHashHypermate = 20117
-        EthereumSignMessageEIP712 = 10200
+        EthereumStoreDefinition = 471
         NEMGetAddress = 67
         NEMAddress = 68
         NEMSignTx = 69
@@ -378,11 +362,9 @@ if TYPE_CHECKING:
         SEPublicCert = 10008
         SESignMessage = 10012
         SEMessageSignature = 10013
-        ResourceUpload = 10018
-        ZoomRequest = 10019
-        ResourceRequest = 10020
-        ResourceAck = 10021
-        ResourceUpdate = 10022
+        NftUpload = 10018
+        NftRequest = 10019
+        NftAck = 10021
         ListResDir = 10023
         FileInfoList = 10024
         SEInitialize = 10025
@@ -581,9 +563,9 @@ if TYPE_CHECKING:
         Matrix9 = 1
         Matrix6 = 2
 
-    class ResourceType(IntEnum):
-        WallPaper = 0
-        Nft = 1
+    class NftRequestType(IntEnum):
+        IMAGE = 0
+        THUMBNAIL = 1
 
     class DebugSwipeDirection(IntEnum):
         UP = 0
@@ -600,16 +582,6 @@ if TYPE_CHECKING:
         NETWORK = 0
         TOKEN = 1
 
-    class EthereumDataTypeHypermate(IntEnum):
-        UINT = 1
-        INT = 2
-        BYTES = 3
-        STRING = 4
-        BOOL = 5
-        ADDRESS = 6
-        ARRAY = 7
-        STRUCT = 8
-
     class EthereumDataType(IntEnum):
         UINT = 1
         INT = 2
@@ -619,6 +591,10 @@ if TYPE_CHECKING:
         ADDRESS = 6
         ARRAY = 7
         STRUCT = 8
+
+    class FsType(IntEnum):
+        FILE = 1
+        DIRECTORY = 2
 
     class MoneroNetworkType(IntEnum):
         MAINNET = 0

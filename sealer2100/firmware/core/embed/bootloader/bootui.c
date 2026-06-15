@@ -1,905 +1,1127 @@
-/*
- * This file is part of the Trezor project, https://trezor.io/
- *
- * Copyright (c) SatoshiLabs
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+#include "bootui.h"
 
-#include STM32_HAL_H
-
+#include <assert.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
 #include <string.h>
 
-#include "bootui.h"
-#include "br_check.h"
-#include "device.h"
-#include "display.h"
-#include "icon_cancel.h"
-#include "icon_confirm.h"
-#include "icon_done.h"
-#include "icon_fail.h"
-#include "icon_info.h"
-#include "icon_install.h"
-#include "icon_logo.h"
-#include "icon_safeplace.h"
-#include "icon_welcome.h"
-#include "icon_wipe.h"
-#include "version.h"
-#include "touch.h"
+#include "battery.h"
 #include "ble.h"
+#include "boot_context.h"
 #include "common.h"
-#include "flash.h"
-#include "icon_hypermate.h"
+#include "device.h"
 #include "image.h"
-#include "sys.h"
-#include "usb.h"
-#include "stdio.h"
-extern secbool load_vendor_header_keys(const uint8_t *const data,
-                                       vendor_header *const vhdr);
+#include "iris.h"
+#include "log.h"
+#include "power_manager.h"
+#include "se.h"
+#include "secure_heap.h"
+#include "updater.h"
+#include "version.h"
 
-#define BACKLIGHT_NORMAL 80
+#include "lfs.h"
 
-#define COLOR_BL_BG COLOR_BLACK                    // background
-#define COLOR_BL_FG COLOR_WHITE                    // foreground
-#define COLOR_BL_FAIL RGB16(0xFF, 0x00, 0x00)      // red
-#define COLOR_BL_DONE RGB16(0x00, 0xFF, 0x33)      // green
-#define COLOR_BL_PROCESS RGB16(0x4A, 0x90, 0xE2)   // blue
-#define COLOR_BL_GRAY RGB16(0x99, 0x99, 0x99)      // gray
-#define COLOR_BL_ICON RGB16(0x33, 0x33, 0x33)      // gray
-#define COLOR_BL_TAGVALUE RGB16(0xB4, 0xB4, 0xB4)  //
-#define COLOR_BL_SUBTITLE RGB16(0xD2, 0xD2, 0xD2)  //
+#define MODULE "UI"
+#define ENABLE_UI_TEST 0
+#define ENABLE_LOG_BATTERY_INFO 0
 
-#define COLOR_WELCOME_BG COLOR_WHITE  // welcome background
-#define COLOR_WELCOME_FG COLOR_BLACK  // welcome foreground
+typedef struct {
+    lv_obj_t* op;
+    lv_obj_t* bar;
+} ui_updater_t;
 
-#define ICON_WIDTH(ICON) (*(uint16_t *)(ICON + 4))
-#define ICON_HEIGHT(ICON) (*(uint16_t *)(ICON + 6))
-#define ICON_DATA_LEN(ICON) (*(uint32_t *)(ICON + 8))
-#define ICON_DATA(ICON) (ICON + 12)
+struct ui_context_t {
+    lv_obj_t* main;
+    lv_obj_t* fs_rw_bar;
+    ui_updater_t* updater;
+};
 
-// common shared functions
+#define FONT_SMALL           (&lv_font_ping_fang_regular_20)
+#define FONT_BOLD            (&lv_font_ping_fang_medium_32)
+#define FONT_BOLD_SMALL      (&lv_font_ping_fang_medium_20)
+#define FONT_BOLD_LARGE      (&lv_font_ping_fang_medium_44)
 
-static void ui_confirm_cancel_buttons(void) {
-  display_bar_radius(9, 184, 108, 50, COLOR_BL_FAIL, COLOR_BL_BG, 4);
-  display_icon(9 + (108 - 16) / 2, 184 + (50 - 16) / 2, 16, 16,
-               toi_icon_cancel + 12, sizeof(toi_icon_cancel) - 12, COLOR_BL_BG,
-               COLOR_BL_FAIL);
-  display_bar_radius(123, 184, 108, 50, COLOR_BL_DONE, COLOR_BL_BG, 4);
-  display_icon(123 + (108 - 19) / 2, 184 + (50 - 16) / 2, 20, 16,
-               toi_icon_confirm + 12, sizeof(toi_icon_confirm) - 12,
-               COLOR_BL_BG, COLOR_BL_DONE);
-}
+#define BAR_HEIGHT           56
+#define RADIUS               12
+#define CONTENT_PAD          24
+#define CONTENT_SPACE        20
+#define BOTTOM_BUTTON_HEIGHT 76
+#define BOTTOM_BUTTON_RADIUS 12
 
-const char *format_ver(const char *format, uint32_t version) {
-  static char ver_str[64];
-  snprintf(ver_str, sizeof(ver_str), format, (int)(version & 0xFF),
-                (int)((version >> 8) & 0xFF), (int)((version >> 16) & 0xFF)
-                // ignore build field (int)((version >> 24) & 0xFF)
-  );
-  return ver_str;
-}
+#define LABLED_CONTAINER_PAD 20
+#define LABLED_CONTAINER_GAP 16
 
-// boot UI
+#define COLOR_BLACK 0x1D1D1D
+#define COLOR_WHITE 0xFFFFFF
+#define COLOR_GREEN 0x00FE33
+#define COLOR_GRARY 0x282828
 
-static uint16_t boot_background;
-static bool ble_name_show = false;
-static int ui_bootloader_page_current = 0;
+#define COLOR_LIGHT_GRAY 0xBFBFBF
+#define COLOR_DARK_GREEN 0x0B3D15
 
-void ui_boot_clear(void) {
-  // with background
-  display_clear();
-}
+// battery info event, the param is uint32_t, the highest bit is charging flag, the lower 8 bits is soc
+uint32_t UI_EVENT_BATTERY = 0;
+// ble pair code
+uint32_t UI_EVENT_BLE_PAIR = 0;
+// ble state event, the param is uint32_t
+uint32_t UI_EVENT_BLE_STATE = 0;
+// ble name event, the param is char* name
+uint32_t UI_EVENT_BLE_NAME = 0;
+// ble version event, the param is char* version
+uint32_t UI_EVENT_BLE_VERSION = 0;
+// usb state event, the param is uint32_t [0, 1]
+uint32_t UI_EVENT_USB_STATE = 0;
+// reboot EVENT
+uint32_t UI_EVENT_REBOOT = 0;
+// power off event
+uint32_t UI_EVENT_POWER_OFF = 0;
+// BLE info refresh EVENT
+uint32_t UI_EVENT_BLE_INFO_REFRESH = 0;
+// iris version event, the param is char* version
+uint32_t UI_EVENT_IRIS_VERSION = 0;
+// iris info refresh event
+uint32_t UI_EVENT_IRIS_INFO_REFRESH = 0;
 
-void ui_logo_center(void) {
-  int x = (DISPLAY_RESX - ICON_WIDTH(toi_icon_logo)) / 2;
-  int y = (DISPLAY_RESY - ICON_HEIGHT(toi_icon_logo)) / 2;
-  int w = ICON_WIDTH(toi_icon_logo);
-  int h = ICON_HEIGHT(toi_icon_logo);
-  display_image(x, y, w, h, ICON_DATA(toi_icon_logo), ICON_DATA_LEN(toi_icon_logo));
-}
-
-void ui_screen_boot(const vendor_header *const vhdr,
-                    const image_header *const hdr) {
-  display_clear();
-  const int show_string = ((vhdr->vtrust & VTRUST_STRING) == 0);
-  // if ((vhdr->vtrust & VTRUST_RED) == 0) {
-  //   boot_background = RGB16(0xFF, 0x00, 0x00);  // red
-  // } else {
-  //   boot_background = COLOR_BLACK;
-  // }
-
-  boot_background = COLOR_WHITE;
-
-  // const uint8_t *vimg = vhdr->vimg;
-  const uint32_t fw_version = hdr->hypermate_version;
-
-  display_bar(0, 0, DISPLAY_RESX, DISPLAY_RESY, boot_background);
-
-  // check whether vendor image
-  // if (memcmp(vimg, "TOIf", 4) == 0) {
-  //   uint16_t width = vimg[4] + (vimg[5] << 8);
-  //   uint16_t height = vimg[6] + (vimg[7] << 8);
-  //   uint32_t datalen = *(uint32_t *)(vimg + 8);
-  //   display_image((DISPLAY_RESX - width) / 2, image_top, width, height,
-  //                 vimg + 12, datalen);
-  // }
-
-  if (show_string) {
-    display_text(8, 96, vhdr->vstr, vhdr->vstr_len, FONT_NORMAL, COLOR_BL_FG,
-                 boot_background);
-    const char *ver_str = format_ver("v%d.%d.%d", fw_version);
-    display_text(8, 140, ver_str, -1, FONT_NORMAL, COLOR_BL_FG,
-                 boot_background);
-  }
-}
-
-void ui_screen_boot_wait(int wait_seconds) {
-  char wait_str[32];
-  snprintf(wait_str, sizeof(wait_str), "Starting in %d s", wait_seconds);
-  display_bar(0, DISPLAY_RESY - 5 - 20, DISPLAY_RESX, 5 + 20, boot_background);
-  ui_title_update();
-  display_bar(0, 600, DISPLAY_RESX, 100, boot_background);
-  display_text_center(DISPLAY_RESX / 2, 655, wait_str, -1, FONT_NORMAL,
-                      COLOR_BL_FG, boot_background);
-}
-
-void ui_screen_boot_click(void) {
-  display_bar(0, DISPLAY_RESY - 5 - 20, DISPLAY_RESX, 5 + 20, boot_background);
-  display_bar(0, 784, DISPLAY_RESX, 40, boot_background);
-  display_text(8, 784, "Tap to continue ...", -1, FONT_NORMAL, COLOR_BL_FG,
-               boot_background);
-}
-
-// welcome UI
-
-void ui_screen_welcome_first(void) {
-  display_image(0, 0, 256, 256, toi_icon_logo+ 12, sizeof(toi_icon_logo) - 12);
-}
-
-void ui_screen_welcome_second(void) {
-  display_bar(0, 0, DISPLAY_RESX, DISPLAY_RESY, COLOR_WELCOME_BG);
-  display_icon((DISPLAY_RESX - 200) / 2, (DISPLAY_RESY - 60) / 2, 200, 60,
-               toi_icon_safeplace + 12, sizeof(toi_icon_safeplace) - 12,
-               COLOR_WELCOME_FG, COLOR_WELCOME_BG);
-}
-
-void ui_screen_welcome_third(void) {
-  display_bar(0, 0, DISPLAY_RESX, DISPLAY_RESY, COLOR_WELCOME_BG);
-  display_icon((DISPLAY_RESX - 180) / 2, (DISPLAY_RESY - 30) / 2 - 5, 180, 30,
-               toi_icon_welcome + 12, sizeof(toi_icon_welcome) - 12,
-               COLOR_WELCOME_FG, COLOR_WELCOME_BG);
-  display_text_center(120, 220, "Go to hypermate.com", -1, FONT_NORMAL,
-                      COLOR_WELCOME_FG, COLOR_WELCOME_BG);
-}
-
-// info UI
-
-static int display_vendor_string(const char *text, int textlen,
-                                 uint16_t fgcolor) {
-  int split = display_text_split(text, textlen, FONT_NORMAL, DISPLAY_RESX - 55);
-  if (split >= textlen) {
-    display_text(55, 95, text, textlen, FONT_NORMAL, fgcolor, COLOR_BL_BG);
-    return 120;
-  } else {
-    display_text(55, 95, text, split, FONT_NORMAL, fgcolor, COLOR_BL_BG);
-    if (text[split] == ' ') {
-      split++;
-    }
-    display_text(55, 120, text + split, textlen - split, FONT_NORMAL, fgcolor,
-                 COLOR_BL_BG);
-    return 145;
-  }
-}
-
-void ui_screen_firmware_info(const vendor_header *const vhdr,
-                             const image_header *const hdr) {
-  display_clear();
-  const char *ver_str = format_ver("Bootloader %d.%d.%d", VERSION_UINT32);
-  display_text(16, 32, ver_str, -1, FONT_NORMAL, COLOR_BL_FG, COLOR_BL_BG);
-  display_bar(16, 44, DISPLAY_RESX - 14 * 2, 1, COLOR_BL_BG);
-  display_icon(16, 54, 32, 32, toi_icon_info + 12, sizeof(toi_icon_info) - 12,
-               COLOR_BL_GRAY, COLOR_BL_BG);
-  if (vhdr && hdr) {
-    ver_str = format_ver("Firmware %d.%d.%d by", (hdr->hypermate_version));
-    display_text(55, 70, ver_str, -1, FONT_NORMAL, COLOR_BL_GRAY, COLOR_BL_BG);
-    display_vendor_string(vhdr->vstr, vhdr->vstr_len, COLOR_BL_GRAY);
-  } else {
-    display_text(55, 70, "No Firmware", -1, FONT_NORMAL, COLOR_BL_GRAY,
-                 COLOR_BL_BG);
-  }
-  display_text_center(120, 220, "Go to hypermate.com", -1, FONT_NORMAL, COLOR_BL_FG,
-                      COLOR_BL_BG);
-}
-
-void ui_screen_firmware_fingerprint(const image_header *const hdr) {
-  display_clear();
-  display_text(16, 32, "Firmware fingerprint", -1, FONT_NORMAL, COLOR_BL_FG,
-               COLOR_BL_BG);
-  display_bar(16, 44, DISPLAY_RESX - 14 * 2, 1, COLOR_BL_BG);
-
-  static const char *hexdigits = "0123456789abcdef";
-  char fingerprint_str[64];
-  for (int i = 0; i < 32; i++) {
-    fingerprint_str[i * 2] = hexdigits[(hdr->fingerprint[i] >> 4) & 0xF];
-    fingerprint_str[i * 2 + 1] = hexdigits[hdr->fingerprint[i] & 0xF];
-  }
-  for (int i = 0; i < 4; i++) {
-    display_text_center(120, 70 + i * 25, fingerprint_str + i * 16, 16,
-                        FONT_NORMAL, COLOR_BL_FG, COLOR_BL_BG);
-  }
-
-  display_bar_radius(9, 184, 222, 50, COLOR_BL_DONE, COLOR_BL_BG, 4);
-  display_icon(9 + (222 - 19) / 2, 184 + (50 - 16) / 2, 20, 16,
-               toi_icon_confirm + 12, sizeof(toi_icon_confirm) - 12,
-               COLOR_BL_BG, COLOR_BL_DONE);
-}
-
-// install UI
-
-void ui_screen_install_confirm_upgrade(const vendor_header *const vhdr,
-                                       const image_header *const hdr) {
-  display_clear();
-  display_text(16, 32, "Firmware update", -1, FONT_NORMAL, COLOR_BL_FG,
-               COLOR_BL_BG);
-  display_bar(16, 44, DISPLAY_RESX - 14 * 2, 1, COLOR_BL_BG);
-  display_icon(16, 54, 32, 32, toi_icon_info + 12, sizeof(toi_icon_info) - 12,
-               COLOR_BL_FG, COLOR_BL_BG);
-  display_text(55, 70, "Update firmware by", -1, FONT_NORMAL, COLOR_BL_FG,
-               COLOR_BL_BG);
-  int next_y = display_vendor_string(vhdr->vstr, vhdr->vstr_len, COLOR_BL_BG);
-  const char *ver_str = format_ver("to version %d.%d.%d?", hdr->hypermate_version);
-  display_text(55, next_y, ver_str, -1, FONT_NORMAL, COLOR_BL_FG, COLOR_BL_BG);
-  ui_confirm_cancel_buttons();
-}
-
-void ui_screen_install_confirm_newvendor_or_downgrade_wipe(
-    const vendor_header *const vhdr, const image_header *const hdr,
-    secbool downgrade_wipe) {
-  vendor_header current_vhdr;
-  image_header current_hdr;
-  char str[128] = {0};
-  if (sectrue ==
-      load_vendor_header_keys((const uint8_t *)FIRMWARE_START, &current_vhdr)) {
-    if (sectrue ==
-        load_image_header((const uint8_t *)FIRMWARE_START + current_vhdr.hdrlen,
-                          FIRMWARE_IMAGE_MAGIC, FIRMWARE_IMAGE_MAXSIZE,
-                          current_vhdr.vsig_m, current_vhdr.vsig_n,
-                          current_vhdr.vpub, &current_hdr)) {
-    }
-  }
-
-  display_clear();
-  ui_title_update();
-  ui_logo_center();
-
-  display_text_center(
-      MAX_DISPLAY_RESX / 2, 190,
-      (sectrue == downgrade_wipe) ? "Firmware Downgrade" : "Vendor Change", -1,
-      FONT_PJKS_BOLD_38, COLOR_BL_FG, COLOR_BL_BG);
-
-  strlcat(str, "Install firmware by ", sizeof(str));
-  strlcat(str, vhdr->vstr, sizeof(str));
-
-  int split = 0, offset = 0, loop = 0;
-  do {
-    split = display_text_split(str + offset, -1, FONT_NORMAL, MAX_DISPLAY_RESX);
-    display_text_center(MAX_DISPLAY_RESX / 2, 240 + loop * 28, str + offset,
-                        split, FONT_NORMAL, COLOR_BL_SUBTITLE, COLOR_BL_BG);
-    loop++;
-    offset += split;
-  } while (split);
-
-  const char *ver_str = format_ver("%d.%d.%d", current_hdr.hypermate_version);
-  display_text_right(MAX_DISPLAY_RESX / 2 - 25, 320, ver_str, -1, FONT_NORMAL,
-                     COLOR_BL_SUBTITLE, COLOR_BL_BG);
-  ver_str = format_ver("%d.%d.%d", hdr->hypermate_version);
-
-  display_text(MAX_DISPLAY_RESX / 2 + 25, 320, ver_str, -1, FONT_NORMAL,
-               COLOR_BL_SUBTITLE, COLOR_BL_BG);
-
-  display_image(231, 303, 17, 14, toi_icon_arrow_right + 12,
-                sizeof(toi_icon_arrow_right) - 12);
-
-  display_bar(8, 694, 231, 98, COLOR_BL_ICON);
-  display_text_center(DISPLAY_RESX / 4, 755, "Cancel", -1, FONT_PJKS_BOLD_26,
-                      COLOR_BL_FG, COLOR_BL_ICON);
-  display_bar(241, 694, 231, 98, COLOR_BL_ICON);
-  display_text_center(DISPLAY_RESX - DISPLAY_RESX / 4, 755, "Install", -1,
-                      FONT_PJKS_BOLD_26, COLOR_RED, COLOR_BL_ICON);
-
-  display_text_center(DISPLAY_RESX / 2, 678, "Unsafe firmware, do not install.",
-                      -1, FONT_NORMAL, COLOR_BL_FAIL, COLOR_BL_BG);
-}
-
-void ui_screen_progress_bar_prepare(char *title, char *notes) {
-  ui_title_update();
-  ui_logo_center();
-  ui_screen_progress_bar_update(title, notes, -1);
-}
-
-void ui_screen_progress_bar_update(char *title, char *notes, int progress) {
-  if (title != NULL)
-    display_text_center(DISPLAY_RESX / 2, 180, title, -1, FONT_PJKS_BOLD_38,
-                        COLOR_BL_FG, COLOR_BL_BG);
-
-  if ((progress >= 0) || (progress <= 100)) {
-    display_bar(60, 740, 360, 12, COLOR_WHITE);
-    display_bar(61, 740 + 1, 358, 10, COLOR_BLACK);
-    if (progress > 0) {
-      uint16_t width = progress * 10 * 360 / 1000;
-      display_bar(62, 740 + 2, width, 8, COLOR_WHITE);
-    }
-    display_progress_percent(MAX_DISPLAY_RESX / 2, 740 + 40, progress);
-  } else
-    display_bar(60, 740, 360, 12, COLOR_BLACK);
-
-  if (notes != NULL)
-    display_text_center(MAX_DISPLAY_RESX / 2, 722, notes, -1, FONT_NORMAL,
-                        COLOR_WHITE, COLOR_BLACK);
-  else
-    display_text_center(MAX_DISPLAY_RESX / 2, 722, "Please keep connected", -1,
-                        FONT_NORMAL, COLOR_WHITE, COLOR_BLACK);
-}
-
-void ui_screen_install_start(void) {
-  ui_title_update();
-  ui_logo_center();
-  display_text_center(DISPLAY_RESX / 2, 180, "Installing", -1,
-                      FONT_PJKS_BOLD_38, COLOR_BL_FG, COLOR_BL_BG);
-  display_loader(0, false, -20, COLOR_BL_PROCESS, COLOR_BL_BG, toi_icon_install,
-                 sizeof(toi_icon_install), COLOR_BL_BG);
-  display_text_center(MAX_DISPLAY_RESX / 2, 722,
-                      "Keep connected during update.", -1, FONT_NORMAL,
-                      COLOR_WHITE, COLOR_BLACK);
-}
-
-void ui_screen_install_progress_erase(int pos, int len) {
-  ui_title_update();
-  ui_logo_center();
-  display_text_center(DISPLAY_RESX / 2, 180, "Installing", -1,
-                      FONT_PJKS_BOLD_38, COLOR_BL_FG, COLOR_BL_BG);
-  display_loader(250 * pos / len, false, -20, COLOR_BL_PROCESS, COLOR_BL_BG,
-                 toi_icon_install, sizeof(toi_icon_install), COLOR_BL_BG);
-  display_text_center(MAX_DISPLAY_RESX / 2, 722,
-                      "Keep connected during update.", -1, FONT_NORMAL,
-                      COLOR_BL_SUBTITLE, COLOR_BLACK);
-}
-
-void ui_screen_install_progress_upload(int pos) {
-  ui_title_update();
-  ui_logo_center();
-  display_text_center(DISPLAY_RESX / 2, 180, "Installing", -1,
-                      FONT_PJKS_BOLD_38, COLOR_BL_FG, COLOR_BL_BG);
-  display_loader(pos, false, -20, COLOR_BL_PROCESS, COLOR_BL_BG,
-                 toi_icon_install, sizeof(toi_icon_install), COLOR_BL_BG);
-  display_text_center(MAX_DISPLAY_RESX / 2, 722,
-                      "Keep connected during update.", -1, FONT_NORMAL,
-                      COLOR_BL_SUBTITLE, COLOR_BLACK);
-}
-
-// wipe UI
-
-void ui_screen_wipe_confirm(void) {
-  display_clear();
-  display_text(16, 32, "Wipe device", -1, FONT_NORMAL, COLOR_BL_FG,
-               COLOR_BL_BG);
-  display_bar(16, 44, DISPLAY_RESX - 14 * 2, 1, COLOR_BL_BG);
-  display_icon(16, 54, 32, 32, toi_icon_info + 12, sizeof(toi_icon_info) - 12,
-               COLOR_BL_FG, COLOR_BL_BG);
-  display_text(55, 70, "Do you want to", -1, FONT_NORMAL, COLOR_BL_FG,
-               COLOR_BL_BG);
-  display_text(55, 95, "wipe the device?", -1, FONT_NORMAL, COLOR_BL_FG,
-               COLOR_BL_BG);
-
-  display_text_center(120, 170, "Seed will be erased!", -1, FONT_NORMAL,
-                      COLOR_BL_FAIL, COLOR_BL_BG);
-  ui_confirm_cancel_buttons();
-}
-
-void ui_screen_wipe(void) {
-  display_clear();
-  ui_title_update();
-  ui_logo_center();
-  display_text_center(DISPLAY_RESX / 2, 190, "Wipe Device", -1,
-                      FONT_PJKS_BOLD_38, COLOR_BL_FG, COLOR_BL_BG);
-  display_text_center(DISPLAY_RESX / 2, 240, "Do you want to wipe the device?",
-                      -1, FONT_NORMAL, COLOR_BL_SUBTITLE, COLOR_BL_BG);
-  display_text_center(DISPLAY_RESX / 2, 268, "Recovery phrase will be erased",
-                      -1, FONT_NORMAL, COLOR_BL_SUBTITLE, COLOR_BL_BG);
-  display_loader(0, false, -20, COLOR_BL_PROCESS, COLOR_BL_BG, toi_icon_wipe,
-                 sizeof(toi_icon_wipe), COLOR_BL_BG);
-  display_text_center(DISPLAY_RESX / 2, DISPLAY_RESY - 78, "Wiping device...",
-                      -1, FONT_NORMAL, COLOR_BL_SUBTITLE, COLOR_BL_BG);
-}
-
-void ui_screen_wipe_progress(int pos, int len) {
-  display_loader(1000 * pos / len, false, -20, COLOR_BL_PROCESS, COLOR_BL_BG,
-                 toi_icon_wipe, sizeof(toi_icon_wipe), COLOR_BL_BG);
-}
-
-// done UI
-
-void ui_screen_done(int restart_seconds, secbool full_redraw) {
-  const char *str;
-  char count_str[24];
-  if (restart_seconds >= 1) {
-    snprintf(count_str, sizeof(count_str), "Done! Restarting in %d s",
-                  restart_seconds);
-    str = count_str;
-  } else {
-    str = "Done! Tap to restart ...";
-  }
-  if (sectrue == full_redraw) {
-    display_clear();
-    ui_title_update();
-    display_image(203, 56, 74, 74, toi_icon_logo + 12,
-                  sizeof(toi_icon_logo) - 12);
-  }
-  // display_loader(1000, false, -20, COLOR_BL_DONE, COLOR_BL_BG, toi_icon_done,
-  //                sizeof(toi_icon_done), COLOR_BL_BG);
-  if (secfalse == full_redraw) {
-    display_bar(0, DISPLAY_RESY - 24 - 18, 240, 23, COLOR_BL_BG);
-  }
-  display_bar(0, DISPLAY_RESY - 78 - 30, DISPLAY_RESX, 30, COLOR_BL_BG);
-  display_text_center(DISPLAY_RESX / 2, DISPLAY_RESY - 78, str, -1, FONT_NORMAL,
-                      COLOR_BL_FG, COLOR_BL_BG);
-}
-
-// error UI
-
-void ui_screen_fail(void) {
-  display_bar(0, DISPLAY_RESY / 2, DISPLAY_RESX, DISPLAY_RESY, COLOR_BL_BG);
-  ui_title_update();
-  ui_logo_center();
-  display_text_center(DISPLAY_RESX / 2, DISPLAY_RESY - 78,
-                      "Failed! Tap to restart and try again.", -1, FONT_NORMAL,
-                      COLOR_BL_FAIL, COLOR_BL_BG);
-}
-
-// general functions
-
-void ui_fadein(void) { display_fade(0, BACKLIGHT_NORMAL, 200); }
-
-void ui_fadeout(void) {
-  display_fade(BACKLIGHT_NORMAL, 0, 200);
-  display_clear();
-}
-
-int ui_user_input(int zones) {
-  for (;;) {
-    uint32_t evt = touch_click();
-    uint16_t x = touch_unpack_x(evt);
-    uint16_t y = touch_unpack_y(evt);
-    // clicked on Cancel button
-    if ((zones & INPUT_CANCEL) && x >= 9 && x < 9 + 108 && y > 184 &&
-        y < 184 + 50) {
-      return INPUT_CANCEL;
-    }
-    // clicked on Confirm button
-    if ((zones & INPUT_CONFIRM) && x >= 123 && x < 123 + 108 && y > 184 &&
-        y < 184 + 50) {
-      return INPUT_CONFIRM;
-    }
-    // clicked on Long Confirm button
-    if ((zones & INPUT_LONG_CONFIRM) && x >= 9 && x < 9 + 222 && y > 184 &&
-        y < 184 + 50) {
-      return INPUT_LONG_CONFIRM;
-    }
-    // clicked on Info icon
-    if ((zones & INPUT_INFO) && x >= 16 && x < 16 + 32 && y > 54 &&
-        y < 54 + 32) {
-      return INPUT_INFO;
-    }
-  }
-}
-
-int ui_input_poll(int zones, bool poll) {
-  do {
-    uint32_t evt = touch_click();
-    if (evt) {
-      hal_delay(50);
-      uint16_t x = touch_unpack_x(evt);
-      uint16_t y = touch_unpack_y(evt);
-      // clicked on Cancel button
-      if ((zones & INPUT_CANCEL) && x >= 8 && x < 8 + 231 && y > 694 &&
-          y < 694 + 98) {
-        return INPUT_CANCEL;
-      }
-      // clicked on Confirm button
-      if ((zones & INPUT_CONFIRM) && x >= 241 && x < 241 + 231 && y > 694 &&
-          y < 694 + 98) {
-        return INPUT_CONFIRM;
-      }
-      // clicked on next button
-      if ((zones & INPUT_NEXT) && x >= 8 && x < 8 + 464 && y > 694 &&
-          y < 694 + 98) {
-        return (zones & INPUT_NEXT);
-      }
-      // clicked on previous button
-      if ((zones & INPUT_PREVIOUS) && x >= 8 && x < 8 + 231 && y > 694 &&
-          y < 694 + 98) {
-        return (zones & INPUT_PREVIOUS);
-      }
-      // clicked on restart button
-      if ((zones & INPUT_RESTART) && x >= 241 && x < 241 + 231 && y > 694 &&
-          y < 694 + 98) {
-        return (zones & INPUT_RESTART);
-      }
-
-      if ((zones & INPUT_VERSION_INFO) && x >= 0 && x <= 480 && y > 500 &&
-          y < 580) {
-        return (zones & INPUT_VERSION_INFO);
-      }
+/// helper functions
+static void ui_context_init(void) {
+    if (boot_ctx.ui) {
+        return;
     }
 
-  } while (poll);
-  return 0;
+    boot_ctx.ui = lv_mem_alloc(sizeof(ui_context_t));
+    memset(boot_ctx.ui, 0, sizeof(ui_context_t));
 }
 
-
-extern int dev_pwr_source;
-extern int battery_soc;
-void ui_title_update(void) {
-  char battery_str[8] = {0};
-  uint32_t len = 0;
-  uint32_t offset_x = 8;
-  uint32_t offset_y = 6;
-  uint16_t battery_color = COLOR_WHITE;
-
-  ble_get_dev_info();
-  display_bar(0, 0, DISPLAY_RESX, 44, boot_background);
-
-  if (dev_pwr_source == 1) {
-    offset_x += 24;
-    display_icon(DISPLAY_RESX - offset_x, offset_y, 24, 32,
-                 toi_icon_charging + 12, sizeof(toi_icon_charging) - 12,
-                 COLOR_BL_FG, boot_background);
-    battery_color = RGB16(0x00, 0xCC, 0x36);
-  }
-
-  if (battery_soc <= 100) {
-    offset_x += 34;
-    uint8_t bat_width = battery_soc * 25 / 100;
-    display_image(DISPLAY_RESX - offset_x, offset_y, 34, 32,
-                  toi_icon_battery + 12, sizeof(toi_icon_battery) - 12);
-
-    if (battery_soc < 20 && dev_pwr_source != 1) {
-      display_bar(DISPLAY_RESX - offset_x + 3, 10 + offset_y, bat_width, 12,
-                  RGB16(0xDF, 0x32, 0x0C));
+static void battery_update(lv_obj_t* obj, bool charging, int soc) {
+#if ENABLE_LOG_BATTERY_INFO
+    // LOG_DEBUG(MODULE, "battery charging : %d", charging);
+    // LOG_DEBUG(MODULE, "battery soc      : %d%%", soc);
+#endif
+    char* state = NULL;
+    if (charging) {
+        state = "charging";
     } else {
-      display_bar(DISPLAY_RESX - offset_x + 3, 10 + offset_y, bat_width, 12,
-                  battery_color);
+        state = "normal";
     }
 
-  } else {
-    display_bar(DISPLAY_RESX - 32, offset_y, 32, 32, boot_background);
-  }
-  if (dev_pwr_source == 1) {
-    offset_x += 4;
-    snprintf(battery_str, sizeof(battery_str), "%d%%", battery_soc);
-    len = display_text_width(battery_str, -1, FONT_PJKS_REGULAR_20);
-    offset_x += len;
-    display_text(DISPLAY_RESX - offset_x, 24 + offset_y, battery_str, -1,
-                 FONT_PJKS_REGULAR_20, COLOR_BL_SUBTITLE, boot_background);
-  }
-  if (ble_connect_state()) {
-    offset_x += 32;
-    display_icon(DISPLAY_RESX - offset_x, offset_y, 32, 32,
-                 toi_icon_bluetooth_connected + 12,
-                 sizeof(toi_icon_bluetooth_connected) - 12, COLOR_BL_FG,
-                 boot_background);
-  } else if (ble_switch_state()) {
-    offset_x += 32;
-    if (!ble_get_switch()) {
-      display_icon(DISPLAY_RESX - offset_x, offset_y, 32, 32,
-                   toi_icon_bluetooth_closed + 12,
-                   sizeof(toi_icon_bluetooth_closed) - 12, COLOR_BL_FG,
-                   boot_background);
+    soc -= (soc % 5);
+    if (soc == 0) {
+        soc = 5;
+    }
+    char img[32] = {0};
+    sprintf(img, "A:/res/battery-%d-%s.png", soc, state);
+    lv_img_set_src(obj, img);
+}
+
+static void do_event_broadcast(lv_obj_t* obj, lv_event_code_t code, void* param) {
+    // send first
+    lv_event_send(obj, code, param);
+
+    // broadcast event to child
+    uint32_t count = lv_obj_get_child_cnt(obj);
+    for (uint32_t i = 0; i < count; i++) {
+        lv_obj_t* child = lv_obj_get_child(obj, i);
+        if (!child)
+            continue;
+        do_event_broadcast(child, code, param);
+    }
+}
+
+static lv_obj_t* ui_btn_create_ex(lv_obj_t* parent, char* text, uint32_t bg_color, uint32_t text_color) {
+    lv_obj_t* btn = lv_btn_create(parent);
+    lv_obj_set_style_radius(btn, BOTTOM_BUTTON_RADIUS, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(btn, lv_color_hex(bg_color), LV_PART_MAIN);
+    lv_obj_t* label = lv_label_create(btn);
+    lv_obj_center(label);
+    lv_label_set_text(label, text);
+    lv_obj_set_style_text_color(label, lv_color_hex(text_color), LV_PART_MAIN);
+    return btn;
+}
+
+#define ui_btn_create(parent, text) ui_btn_create_ex(parent, text, COLOR_DARK_GREEN, COLOR_GREEN)
+#define ui_primary_btn_create(parent, text) ui_btn_create(parent, text)
+#define ui_secondary_btn_create(parent, text) ui_btn_create_ex(parent, text, COLOR_GRARY, COLOR_WHITE)
+
+static lv_obj_t* ui_detail_labeld_create(lv_obj_t* parent, char* label, char* value) {
+    lv_obj_t* container = lv_obj_create(parent);
+
+    lv_obj_set_width(container, lv_pct(100));
+    lv_obj_set_height(container, LV_SIZE_CONTENT);
+    lv_obj_set_style_border_width(container, 0, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(container, lv_color_hex(COLOR_GRARY), LV_PART_MAIN);
+    lv_obj_set_flex_flow(container, LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_style_radius(container, RADIUS, LV_PART_MAIN);
+    lv_obj_set_style_pad_all(container, LABLED_CONTAINER_PAD, LV_PART_MAIN);
+    lv_obj_set_style_pad_gap(container, LABLED_CONTAINER_GAP, LV_PART_MAIN);
+
+    // label
+    lv_obj_t* obj = lv_label_create(container);
+    lv_obj_set_width(obj, lv_pct(100));
+    lv_obj_set_style_text_font(obj, FONT_BOLD_SMALL, LV_PART_MAIN);
+    lv_label_set_text(obj, label);
+
+    // value
+    obj = lv_label_create(container);
+    lv_obj_set_width(obj, lv_pct(100));
+    lv_obj_set_style_text_font(obj, FONT_SMALL, LV_PART_MAIN);
+    lv_obj_set_style_text_color(obj, lv_color_hex(COLOR_LIGHT_GRAY), LV_PART_MAIN);
+    lv_label_set_text(obj, value);
+
+    // return the value obj
+    return obj;
+}
+
+/// lv obj callbacks
+
+static void idle_timer_cb(lv_timer_t* t) {
+    if (boot_ctx.device.charging) {
+        return;
+    }
+
+    if (hal_ticks_ms() - boot_ctx.last_alive_time_ms > IDLE_TIMEOUT_MS) {
+        // idle timeout, power off
+        LOG_DEBUG(MODULE, "idle timeout, power off");
+        device_power_off();
+    }
+}
+
+static void battery_timer_cb(lv_timer_t* t) {
+    bool charging = pm_get_power_source() == POWER_SOURCE_USB;
+    uint8_t soc = battery_read_SOC();
+
+    void* param = UI_BATTERY_MAKE_PARAM(charging ? 1 : 0, soc);
+    ui_event_broadcast(UI_EVENT_BATTERY, param);
+}
+
+static void reboot_timer_cb(lv_timer_t* t) {
+    uint32_t type = UI_REBOOT_TYPE_GET(t->user_data);
+    if (type == UI_REBOOT_TYPE_NORMAL) {
+        restart();
+    } else if (type == UI_REBOOT_TYPE_BOOTLOADER) {
+        reboot_to_boot();
+    } else if (type == UI_REBOOT_TYPE_BOARDLOADER) {
+        reboot_to_board();
     } else {
-      display_icon(DISPLAY_RESX - offset_x, offset_y, 32, 32,
-                   toi_icon_bluetooth + 12, sizeof(toi_icon_bluetooth) - 12,
-                   COLOR_BL_FG, boot_background);
+        restart();
     }
-  }
-
-  if (is_usb_connected()) {
-    offset_x += 26;
-    display_icon(DISPLAY_RESX - offset_x, offset_y, 32, 32, toi_icon_usb + 12,
-                 sizeof(toi_icon_usb) - 12, COLOR_BL_FG, boot_background);
-  }
 }
 
-void ui_wipe_confirm(const image_header *const hdr) {
-  ui_title_update();
-  ui_logo_center();
-  display_text_center(DISPLAY_RESX / 2, 190, "Wipe Device", -1,
-                      FONT_PJKS_BOLD_38, COLOR_BL_FG, COLOR_BL_BG);
-  display_text_center(DISPLAY_RESX / 2, 240, "Do you want to wipe the device?",
-                      -1, FONT_NORMAL, COLOR_BL_SUBTITLE, COLOR_BL_BG);
-  display_text_center(DISPLAY_RESX / 2, 268, "Recovery phrase will be erased",
-                      -1, FONT_NORMAL, COLOR_BL_SUBTITLE, COLOR_BL_BG);
-  display_bar(8, 694, 231, 98, COLOR_BL_ICON);
-  display_text_center(DISPLAY_RESX / 4, 755, "Cancel", -1, FONT_PJKS_BOLD_26,
-                      COLOR_BL_FG, COLOR_BL_ICON);
-  display_bar(241, 694, 231, 98, COLOR_BL_ICON);
-  display_text_center(DISPLAY_RESX - DISPLAY_RESX / 4, 755, "Wipe", -1,
-                      FONT_PJKS_BOLD_26, COLOR_RED, COLOR_BL_ICON);
-}
+static void reboot_event_cb(lv_event_t* e) {
+    uint32_t type = UI_REBOOT_TYPE_GET(lv_event_get_param(e));
 
-void ui_install_confirm(image_header *current_hdr,
-                        const image_header *const new_hdr) {
-  if ((current_hdr == NULL) || (new_hdr == NULL)) return;
-  ui_title_update();
-  ui_logo_center();
-  display_text_center(DISPLAY_RESX / 2, 190, "System Update", -1,
-                      FONT_PJKS_BOLD_38, COLOR_BL_FG, COLOR_BL_BG);
-  display_text_center(DISPLAY_RESX / 2, 240, "Install firmware ?", -1,
-                      FONT_NORMAL, COLOR_BL_SUBTITLE, COLOR_BL_BG);
-
-  const char *ver_str = format_ver("%d.%d.%d", current_hdr->hypermate_version);
-  display_text_right(DISPLAY_RESX / 2 - 25, 320, ver_str, -1, FONT_NORMAL,
-                     COLOR_BL_SUBTITLE, COLOR_BL_BG);
-  ver_str = format_ver("%d.%d.%d", new_hdr->hypermate_version);
-  display_text(DISPLAY_RESX / 2 + 25, 320, ver_str, -1, FONT_NORMAL,
-               COLOR_BL_SUBTITLE, COLOR_BL_BG);
-
-  display_image(231, 303, 17, 14, toi_icon_arrow_right + 12,
-                sizeof(toi_icon_arrow_right) - 12);
-
-  display_bar(8, 694, 231, 98, COLOR_BL_ICON);
-  display_text_center(DISPLAY_RESX / 4, 755, "Cancel", -1, FONT_PJKS_BOLD_26,
-                      COLOR_BL_FG, COLOR_BL_ICON);
-  display_bar(241, 694, 231, 98, COLOR_BL_ICON);
-  display_text_center(DISPLAY_RESX - DISPLAY_RESX / 4, 755, "Install", -1,
-                      FONT_PJKS_BOLD_26, COLOR_BL_DONE, COLOR_BL_ICON);
-}
-
-void ui_install_ble_confirm(void) {
-  char str[128] = {0};
-  ui_title_update();
-  ui_logo_center();
-  display_text_center(DISPLAY_RESX / 2, 190, "Bluetooth Update", -1,
-                      FONT_PJKS_BOLD_38, COLOR_BL_FG, COLOR_BL_BG);
-  display_text_center(DISPLAY_RESX / 2, 240,
-                      "A new bluetooth firmware is avaliable! The", -1,
-                      FONT_NORMAL, COLOR_BL_SUBTITLE, COLOR_BL_BG);
-  strcat(str, "current version is ");
-  strcat(str, ble_get_ver());
-  display_text_center(DISPLAY_RESX / 2, 268, str, -1, FONT_NORMAL,
-                      COLOR_BL_SUBTITLE, COLOR_BL_BG);
-
-  display_bar(8, 694, 231, 98, COLOR_BL_ICON);
-  display_text_center(DISPLAY_RESX / 4, 755, "Cancel", -1, FONT_PJKS_BOLD_26,
-                      COLOR_BL_FG, COLOR_BL_ICON);
-  display_bar(241, 694, 231, 98, COLOR_BL_ICON);
-  display_text_center(DISPLAY_RESX - DISPLAY_RESX / 4, 755, "Install", -1,
-                      FONT_PJKS_BOLD_26, COLOR_BL_DONE, COLOR_BL_ICON);
-}
-void ui_install_se_confirm(const char* cur_version, const char* new_version) {
-  ui_title_update();
-  ui_logo_center();
-  display_text_center(DISPLAY_RESX / 2, 190, "SE Update", -1,
-                      FONT_PJKS_BOLD_38, COLOR_BL_FG, COLOR_BL_BG);
-  display_text_center(DISPLAY_RESX / 2, 240,
-                      "A new SE firmware is avaliable! The", -1,
-                      FONT_NORMAL, COLOR_BL_SUBTITLE, COLOR_BL_BG);
-  display_text_right(DISPLAY_RESX / 2 - 25, 320, cur_version, -1, FONT_NORMAL,
-                     COLOR_BL_SUBTITLE, COLOR_BL_BG);
-  display_text(DISPLAY_RESX / 2 + 25, 320, new_version, -1, FONT_NORMAL,
-               COLOR_BL_SUBTITLE, COLOR_BL_BG);
-
-  display_image(231, 303, 17, 14, toi_icon_arrow_right + 12,
-                sizeof(toi_icon_arrow_right) - 12);
-
-  display_bar(8, 694, 231, 98, COLOR_BL_ICON);
-  display_text_center(DISPLAY_RESX / 4, 755, "Cancel", -1, FONT_PJKS_BOLD_26,
-                      COLOR_BL_FG, COLOR_BL_ICON);
-  display_bar(241, 694, 231, 98, COLOR_BL_ICON);
-  display_text_center(DISPLAY_RESX - DISPLAY_RESX / 4, 755, "Install", -1,
-                      FONT_PJKS_BOLD_26, COLOR_BL_DONE, COLOR_BL_ICON);
-}
-
-void ui_bootloader_first(const image_header *const hdr) {
-  ui_bootloader_page_current = 0;
-
-  ui_title_update();
-  ui_logo_center();
-  display_text_center(DISPLAY_RESX / 2, 190, "Update Mode", -1,
-                      FONT_PJKS_BOLD_38, COLOR_BL_FG, COLOR_BL_BG);
-
-  if (ble_name_state()) {
-    char *ble_name;
-    ble_name = ble_get_name();
-    display_text_center(DISPLAY_RESX / 2, 240, ble_name, -1, FONT_NORMAL,
-                        COLOR_BL_SUBTITLE, COLOR_BL_BG);
-    ble_name_show = true;
-  }
-  if (hdr) {
-    const char *ver_str = format_ver("%d.%d.%d", (hdr->hypermate_version));
-    display_text_center(DISPLAY_RESX / 2, DISPLAY_RESY - 125, ver_str, -1,
-                        FONT_NORMAL, COLOR_BL_SUBTITLE, COLOR_BL_BG);
-  }
-
-  display_bar(8, 694, 464, 98, COLOR_BL_ICON);
-  display_text_center(DISPLAY_RESX / 2, 755, "View Details", -1,
-                      FONT_PJKS_BOLD_26, COLOR_BL_FG, COLOR_BL_ICON);
-}
-
-void ui_bootloader_ble_name_reset(void) {
-  ble_name_show = false;
-}
-
-void ui_bootloader_second(const image_header *const hdr) {
-  ui_bootloader_page_current = 1;
-
-  int offset_x = 8, offset_y = 90, offset_seg = 44, offset_line = 30;
-  const char *ver_str = NULL;
-
-  ui_title_update();
-  display_text(offset_x, offset_y, "Model", -1, FONT_PJKS_BOLD_26, COLOR_BL_FG,
-               COLOR_BL_BG);
-  offset_y += offset_line;
-  display_text(offset_x, offset_y, "Sealer2100", -1, FONT_NORMAL,
-               COLOR_BL_TAGVALUE, COLOR_BL_BG);
-  offset_y += offset_seg;
-
-  display_text(offset_x, offset_y, "Firmware Version", -1, FONT_PJKS_BOLD_26,
-               COLOR_BL_FG, COLOR_BL_BG);
-  offset_y += offset_line;
-  if (hdr && hdr->hypermate_version != 0) {
-    ver_str = format_ver("%d.%d.%d", (hdr->hypermate_version));
-    display_text(offset_x, offset_y, ver_str, -1, FONT_NORMAL,
-                 COLOR_BL_TAGVALUE, COLOR_BL_BG);
-  } else {
-    display_text(offset_x, offset_y, "No Firmware", -1, FONT_NORMAL,
-                 COLOR_BL_TAGVALUE, COLOR_BL_BG);
-  }
-  offset_y += offset_seg;
-
-  display_text(offset_x, offset_y, "Bluetooth Version", -1, FONT_PJKS_BOLD_26,
-               COLOR_BL_FG, COLOR_BL_BG);
-  offset_y += offset_line;
-  if (ble_ver_state()) {
-    ver_str = ble_get_ver();
-    display_text(offset_x, offset_y, ver_str, -1, FONT_NORMAL,
-                 COLOR_BL_TAGVALUE, COLOR_BL_BG);
-  } else {
-    display_text(offset_x, offset_y, "Pending", -1, FONT_NORMAL,
-                 COLOR_BL_TAGVALUE, COLOR_BL_BG);
-  }
-  offset_y += offset_seg;
-
-  display_text(offset_x, offset_y, "Serial Number", -1, FONT_PJKS_BOLD_26,
-               COLOR_BL_FG, COLOR_BL_BG);
-  offset_y += offset_line;
-  char *dev_serial;
-  if (device_get_serial(&dev_serial)) {
-    display_text(offset_x, offset_y, dev_serial, -1, FONT_NORMAL,
-                 COLOR_BL_TAGVALUE, COLOR_BL_BG);
-  } else {
-    display_text(offset_x, offset_y, "NULL", -1, FONT_NORMAL, COLOR_BL_TAGVALUE,
-                 COLOR_BL_BG);
-  }
-
-  offset_y += offset_seg;
-  display_text(offset_x, offset_y, "SE", -1, FONT_PJKS_BOLD_26, COLOR_BL_FG,
-               COLOR_BL_BG);
-  offset_y += offset_line;
-  display_text(offset_x, offset_y, "THD89", -1, FONT_NORMAL,
-               COLOR_BL_TAGVALUE, COLOR_BL_BG);
-
-  offset_y += offset_seg;
-  display_text(offset_x, offset_y, "Boardloader Version", -1, FONT_PJKS_BOLD_26,
-               COLOR_BL_FG, COLOR_BL_BG);
-  offset_y += offset_line;
-  display_text(offset_x, offset_y, get_boardloader_version(), -1, FONT_NORMAL,
-               COLOR_BL_TAGVALUE, COLOR_BL_BG);
-
-  offset_y += offset_seg;
-  display_text(offset_x, offset_y, "Bootloader Version", -1, FONT_PJKS_BOLD_26,
-               COLOR_BL_FG, COLOR_BL_BG);
-  offset_y += offset_line;
-  ver_str = format_ver("%d.%d.%d", VERSION_UINT32);
-  display_text(offset_x, offset_y, ver_str, -1, FONT_NORMAL, COLOR_BL_TAGVALUE,
-               COLOR_BL_BG);
-
-  offset_y += offset_seg;
-  display_text(offset_x, offset_y, "BuildID", -1, FONT_PJKS_BOLD_26,
-               COLOR_BL_FG, COLOR_BL_BG);
-  offset_y += offset_line;
-  display_text(offset_x, offset_y, BUILD_ID + strlen(BUILD_ID) - 7, -1,
-               FONT_NORMAL, COLOR_BL_TAGVALUE, COLOR_BL_BG);
-
-  display_bar(8, 694, 231, 98, COLOR_BL_ICON);
-  display_text_center(DISPLAY_RESX / 4, 755, "Back", -1, FONT_PJKS_BOLD_26,
-                      COLOR_BL_FG, COLOR_BL_ICON);
-  display_bar(241, 694, 231, 98, COLOR_BL_ICON);
-  display_text_center(DISPLAY_RESX - DISPLAY_RESX / 4, 755, "Restart", -1,
-                      FONT_PJKS_BOLD_26, COLOR_BL_DONE, COLOR_BL_ICON);
-}
-
-void ui_bootloader_moding(void){
-  ui_bootloader_page_current = 0xFF;
-}
-
-void ui_bootloader_factory(void) {
-  display_image(203, 108, 74, 74, toi_icon_logo + 12,
-                sizeof(toi_icon_logo) - 12);
-  display_text_center(DISPLAY_RESX / 2, 277, "Factory Mode", -1,
-                      FONT_PJKS_BOLD_38, COLOR_BL_FG, COLOR_BL_BG);
-}
-
-void ui_bootloader_device_test(void) {
-  ui_bootloader_page_current = 2;
-  display_text_center(DISPLAY_RESX / 2, 277, "Test Mode", -1, FONT_PJKS_BOLD_38,
-                      COLOR_BL_FG, COLOR_BL_BG);
-
-  display_bar(8, 694, 231, 98, COLOR_BL_ICON);
-  display_text_center(DISPLAY_RESX / 4, 755, "device test", -1,
-                      FONT_PJKS_BOLD_26, COLOR_BL_FG, COLOR_BL_ICON);
-  display_bar(241, 694, 231, 98, COLOR_BL_ICON);
-  display_text_center(DISPLAY_RESX - DISPLAY_RESX / 4, 755, "aging test", -1,
-                      FONT_PJKS_BOLD_26, COLOR_BL_FG, COLOR_BL_ICON);
-}
-
-void ui_bootloader_page_switch(const image_header *const hdr) {
-  int response;
-
-  static uint32_t click = 0, click_pre = 0, click_now = 0;
-
-  if (ui_bootloader_page_current == 0) {
-    response = ui_input_poll(INPUT_NEXT, false);
-    if (INPUT_NEXT == response) {
-      display_clear();
-      ui_bootloader_second(hdr);
+    lv_obj_t* content = ui_main_area();
+    lv_obj_clean(content);
+    lv_obj_t* obj = lv_label_create(content);
+    lv_obj_center(obj);
+    if (type == UI_REBOOT_TYPE_NORMAL) {
+        lv_label_set_text(obj, "Restarting ...");
+        LOG_DEBUG(MODULE, "Restarting ...");
+    } else if (type == UI_REBOOT_TYPE_BOOTLOADER) {
+        lv_label_set_text(obj, "Restarting to bootloader ...");
+        LOG_DEBUG(MODULE, "Restarting to bootloader ...");
+    } else if (type == UI_REBOOT_TYPE_BOARDLOADER) {
+        lv_label_set_text(obj, "Restarting to boardloader ...");
+        LOG_DEBUG(MODULE, "Restarting to boardloader ...");
+    } else {
+        lv_label_set_text(obj, "Restarting ...");
+        LOG_DEBUG(MODULE, "Restarting ...");
     }
-    if (!ble_name_show && ble_name_state()) {
-      ui_bootloader_first(hdr);
+
+    lv_timer_t* timer = lv_timer_create(reboot_timer_cb, 500, UI_REBOOT_TYPE_MAKE_PARAM(type));
+    lv_timer_set_repeat_count(timer, 1);
+}
+
+
+static void power_off_event_cb(lv_event_t* e) {
+    (void)e;
+    ui_jump_to(ui_power_off());
+}
+
+static void ble_info_refresh_timer_cb(lv_timer_t* timer) {
+    bool done = strlen(boot_ctx.ble.name) && strlen(boot_ctx.ble.version);
+    if (done) {
+        // stop
+        lv_timer_set_repeat_count(timer, 0);
+
+        // del
+        lv_timer_del(timer);
+        return;
     }
-  } else if (ui_bootloader_page_current == 1) {
-    click_now = HAL_GetTick();
-    if ((click_now - click_pre) > (1000 / 2)) {
-      click = 0;
+
+    ble_async_refresh_dev_info();
+}
+
+static void ble_info_refresh_event_cb(lv_event_t* e) {
+    // create a time for refresh ble info
+    lv_timer_t* timer = lv_timer_create(ble_info_refresh_timer_cb, 1000, NULL);
+    lv_timer_set_repeat_count(timer, -1);
+}
+
+static void iris_info_refresh_timer_cb(lv_timer_t* timer) {
+    iris_poll_context_t* ctx = (void*)timer->user_data;
+    bool done = strlen(boot_ctx.iris.version);
+    if (done || iris_poll_context_is_error(ctx)) {
+        // 模块响应成功，关闭模块
+        if (done) {
+            LOG_DEBUG(MODULE, "get iris version success, close iris");
+        } else {
+            const char* msg = iris_poll_context_get_error_msg(ctx);
+            LOG_DEBUG(MODULE, "get iris version error, close iris, msg: %s", msg);
+        }
+        iris_close();
+
+        // free resource
+        vPortFree(ctx->resp_buf);
+        vPortFree(ctx);
+
+        // stop
+        lv_timer_set_repeat_count(timer, 0);
+        // del
+        lv_timer_del(timer);
+        return;
     }
-    response = ui_input_poll(
-        INPUT_PREVIOUS | INPUT_RESTART | INPUT_VERSION_INFO, false);
-    if (INPUT_PREVIOUS == response) {
-      display_clear();
-      ui_bootloader_first(hdr);
-    } else if (INPUT_RESTART == response) {
-      HAL_NVIC_SystemReset();
-    } else if (INPUT_VERSION_INFO == response) {
-      click++;
-      click_pre = click_now;
-      if (click == 5) {
-        click = 0;
-        display_clear();
-        ui_bootloader_device_test();
-        click_pre = click_now;
-      }
+
+    iris_async_response_poll(ctx);
+
+    // have not done any operation, power on first
+    if (ctx->operation == IRIS_MSG_ID_NONE) {
+        iris_poll_context_reset_state(ctx);
+        // 测试虹膜模块上电大约0.7s，等待响应
+        iris_poll_context_set_timeout(ctx, 2000);
+        // waiting for module status response
+        ctx->operation = IRIS_MSG_ID_NOTE_MODULE_STATUS;
+        // power on
+        iris_open();
+        LOG_DEBUG(MODULE, "iris open ...");
     }
-  } else if (ui_bootloader_page_current == 2) {
-    response = ui_input_poll(INPUT_PREVIOUS | INPUT_RESTART, false);
-    if (INPUT_PREVIOUS == response) {
-      device_test(true);
-    } else if (INPUT_RESTART == response) {
-      // device_burnin_test(true);
+
+    // if (ctx->operation == IRIS_MSG_ID_NOTE_MODULE_STATUS && ctx->state == IRIS_POLL_STATE_DONE) {
+    //     iris_response_poll_context_reset_state(ctx);
+    //     iris_response_poll_context_set_timeout(ctx, 5000);
+    //     ctx->operation = IRIS_MSG_ID_WAIT;
+    //     iris_async_send_reboot();
+    //     LOG_DEBUG(MODULE, "iris reboot ...");
+    // }
+
+    // if (ctx->operation == IRIS_MSG_ID_WAIT && ctx->state == IRIS_POLL_STATE_DONE) {
+    if (ctx->operation == IRIS_MSG_ID_NOTE_MODULE_STATUS && ctx->state == IRIS_POLL_STATE_DONE) {
+        // 模块上电成功
+        LOG_DEBUG(MODULE, "iris open success");
+        if (ctx->resp.note.status == IRIS_MODULE_STATUS_BOUND) {
+            LOG_DEBUG(MODULE, "iris module status: shared key bound");
+            uint8_t key[32] = {0};
+            if (!device_get_iris_pre_shared_key(key)) {
+                LOG_ERROR(MODULE, "get pre shared key failed");
+                ctx->state = IRIS_POLL_STATE_ERROR;
+                // yield cpu
+                return;
+            }
+            // 模块已经绑定密钥, 打开安全通道
+            int ret = IRIS_ERROR_OK;
+            do {
+                hal_delay(10);
+                ret = iris_sec_channel_open(key, 32);
+            } while (ret == IRIS_HANDSHAKE_PENDING);
+            memset(key, 0, sizeof(key));
+
+            if (ret != IRIS_ERROR_OK) {
+                LOG_ERROR(MODULE, "iris sec channel open failed, ret: %d", ret);
+                ctx->state = IRIS_POLL_STATE_ERROR;
+                // yield cpu
+                return;
+            }
+            LOG_DEBUG(MODULE, "iris sec channel open success");
+        }
+        LOG_DEBUG(MODULE, "get version ...");
+        iris_poll_context_reset_state(ctx);
+        iris_poll_context_set_timeout(ctx, 1000);
+        // waiting for version response
+        ctx->operation = IRIS_MSG_ID_DEVICE_GET_VERSION;
+        iris_async_get_version();
     }
-    click_now = HAL_GetTick();
-    if (click_now - click_pre > (1000 * 3)) {
-      display_clear();
-      ui_bootloader_first(hdr);
+    if (ctx->operation == IRIS_MSG_ID_DEVICE_GET_VERSION && ctx->state == IRIS_POLL_STATE_DONE) {
+        // 版本号查询成功，更新版本号
+        strcpy(boot_ctx.iris.version, (const char*)ctx->resp.reply.data);
+        LOG_DEBUG(MODULE, "iris version: %s", boot_ctx.iris.version);
+        ui_event_broadcast(UI_EVENT_IRIS_VERSION, boot_ctx.iris.version);
+
+        // 发送 power down 命令
+        iris_async_send_powerdown();
+        // give power down time to effect
+        lv_timer_set_period(timer, 1000);
+        // iris_wait_power_down(true);
     }
-  }
+
+    if (iris_poll_context_is_error(ctx)) {
+        // 模块响应错误，发送 power down 命令
+        iris_async_send_powerdown();
+        // give power down time to effect
+        lv_timer_set_period(timer, 1000);
+    }
+    // 发送完powerdown之后，至少要过一次 timer 才会进行`close`
+}
+
+static void iris_info_refresh_event_cb(lv_event_t* e) {
+    // create a time for refresh iris info
+    iris_poll_context_t* ctx = (void*)pvPortMalloc(sizeof(iris_poll_context_t));
+    uint8_t* resp_buf = pvPortMalloc(64);
+    iris_poll_context_init(ctx, 1000, resp_buf, 64);
+    lv_timer_t* timer = lv_timer_create(iris_info_refresh_timer_cb, 100, ctx);
+    lv_timer_set_repeat_count(timer, -1);
+}
+
+static void battery_low_power_event_cb(lv_event_t* e) {
+    uint32_t* count = e->user_data;
+    void* param = lv_event_get_param(e);
+    bool charging = UI_BATTERY_PARM_GET_CHARGING(param);
+    uint8_t soc = UI_BATTERY_PARM_GTT_SOC(param);
+
+    if (charging) {
+        if (*count > 0) {
+            // switch to home screen
+            ui_home();
+            *count = 0;
+        }
+        return;
+    }
+
+    if (soc > 1) {
+        return;
+    }
+    if (*count == 0) {
+        ui_jump_to(ui_battery_low());
+    }
+    *count += 1;
+    if (*count < 5) {
+        return;
+    }
+
+    device_power_off();
+}
+
+static void status_bar_usb_state_event_cb(lv_event_t* e) {
+    lv_obj_t* obj = lv_event_get_target(e);
+    uint32_t state = UI_USB_STATE_GET(lv_event_get_param(e));
+    if (state) {
+        lv_obj_clear_flag(obj, LV_OBJ_FLAG_HIDDEN);
+    } else {
+        lv_obj_add_flag(obj, LV_OBJ_FLAG_HIDDEN);
+    }
+}
+
+static void status_bar_ble_state_event_cb(lv_event_t* e) {
+    lv_obj_t* obj = lv_event_get_target(e);
+    uint32_t state = UI_BLE_STATE_GET(lv_event_get_param(e));
+    if (state == UI_BLE_STATE_ENABLED) {
+        lv_img_set_src(obj, "A:/res/ble-enabled.png");
+        lv_obj_clear_flag(obj, LV_OBJ_FLAG_HIDDEN);
+    } else if (state == UI_BLE_STATE_DISABLED) {
+        lv_img_set_src(obj, "A:/res/ble-disabled.png");
+        lv_obj_add_flag(obj, LV_OBJ_FLAG_HIDDEN);
+    } else if (state == UI_BLE_STATE_CONNECTED) {
+        lv_img_set_src(obj, "A:/res/ble-connected.png");
+        lv_obj_clear_flag(obj, LV_OBJ_FLAG_HIDDEN);
+    } else if (state == UI_BLE_STATE_DISCONNECTED) {
+        lv_img_set_src(obj, "A:/res/ble-enabled.png");
+        lv_obj_clear_flag(obj, LV_OBJ_FLAG_HIDDEN);
+    }
+}
+
+static void status_bar_battery_event_cb(lv_event_t* e) {
+    lv_obj_t* obj = lv_event_get_target(e);
+    void* param = lv_event_get_param(e);
+    bool charging = UI_BATTERY_PARM_GET_CHARGING(param);
+    uint8_t soc = UI_BATTERY_PARM_GTT_SOC(param);
+    if (boot_ctx.device.charging == charging && boot_ctx.device.soc == soc) {
+        // no change
+        return;
+    }
+
+    if (boot_ctx.device.charging != charging) {
+        boot_alive_time_touch();
+    }
+#if ENABLE_LOG_BATTERY_INFO
+    LOG_DEBUG(MODULE, "battery status changed");
+#endif
+    battery_update(obj, charging, soc);
+
+    boot_ctx.device.charging = charging;
+    boot_ctx.device.soc = soc;
+}
+
+static void bootloader_ble_name_event_cb(lv_event_t* e) {
+    lv_obj_t* obj = lv_event_get_target(e);
+    char* name = lv_event_get_param(e);
+    lv_label_set_text(obj, name);
+}
+
+static void detail_ble_version_event_cb(lv_event_t* e) {
+    lv_obj_t* obj = lv_event_get_target(e);
+    char* version = lv_event_get_param(e);
+    lv_label_set_text(obj, version);
+}
+static void detail_iris_version_event_cb(lv_event_t* e) {
+    lv_obj_t* obj = lv_event_get_target(e);
+    char* version = lv_event_get_param(e);
+    lv_label_set_text(obj, version);
+}
+
+static void back_to_home_btn_cb(lv_event_t* e) {
+    (void)e;
+    ui_home();
+}
+
+static void restart_btn_cb(lv_event_t* e) {
+    (void)e;
+    LOG_DEBUG(MODULE, "user clicked restart, restarting ...");
+    restart();
+}
+
+static void updater_cancel_btn_cb(lv_event_t* e) {
+    (void)e;
+    LOG_DEBUG(MODULE, "user cancel %s updating", boot_ctx.updater.updater->get_name_fn());
+    updater_success(UPDATER_STATE_CANCELLED);
+}
+
+static void updater_install_btn_cb(lv_event_t* e) {
+    (void)e;
+    LOG_DEBUG(MODULE, "user confirm %s updating", boot_ctx.updater.updater->get_name_fn());
+    updater_success(UPDATER_STATE_CONFIRMED);
+}
+
+static void ui_detail(void) {
+    lv_obj_t* content = ui_main_area();
+
+    lv_obj_t* container = lv_obj_create(content);
+
+    lv_obj_add_flag(container, LV_OBJ_FLAG_SCROLLABLE);
+
+    lv_obj_set_style_radius(container, RADIUS, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(container, lv_color_hex(COLOR_BLACK), LV_PART_MAIN);
+    lv_obj_set_flex_flow(container, LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_style_border_width(container, 0, LV_PART_MAIN);
+    lv_obj_set_size(container, lv_pct(100), 800-80-92);
+    lv_obj_set_style_pad_all(container, 0, LV_PART_MAIN);
+    lv_obj_set_style_pad_gap(container, 8, LV_PART_MAIN);
+    lv_obj_align(container, LV_ALIGN_TOP_LEFT, 0, 0);
+
+    // mode
+    ui_detail_labeld_create(container, "Model", "Selear2100");
+
+    // firmware version
+    char version[17] = {0};
+    if (boot_ctx.firmware.valided) {
+        const image_firmware_t* const fw = FIRMWARE;
+        image_version_format(fw->header.version, version);
+        ui_detail_labeld_create(container, "Firmware Version", version);
+    } else {
+        ui_detail_labeld_create(container, "Firmware Version", "None");
+    }
+
+    // bluetooth version
+    if (strlen(boot_ctx.ble.version)) {
+        ui_detail_labeld_create(container, "Bluetooth Version", boot_ctx.ble.version);
+    } else {
+        lv_obj_t* obj = ui_detail_labeld_create(container, "Bluetooth Version", "Pending");
+        lv_obj_add_event_cb(obj, detail_ble_version_event_cb, UI_EVENT_BLE_VERSION, NULL);
+    }
+
+    // serial number
+    char* dev_sn = NULL;
+    device_get_serial(&dev_sn);
+    if (dev_sn) {
+        ui_detail_labeld_create(container, "Serial Number", dev_sn);
+    } else {
+        ui_detail_labeld_create(container, "Serial Number", "None");
+    }
+
+    // SE
+    int ret = se_get_version(version);
+    if (ret == 0) {
+        ui_detail_labeld_create(container, "SE Version", version);
+    } else {
+        ui_detail_labeld_create(container, "SE Version", "None");
+    }
+
+    // bootloader version
+    const image_bootloader_t* bl = BOOTLOADER;
+    image_version_format(bl->header.version, version);
+    ui_detail_labeld_create(container, "Bootloader Version", version);
+
+    // iris version
+    if (strlen(boot_ctx.iris.version)) {
+        ui_detail_labeld_create(container, "Iris Version", boot_ctx.iris.version);
+    } else {
+        lv_obj_t* obj = ui_detail_labeld_create(container, "Iris Version", "Pending");
+        lv_obj_add_event_cb(obj, detail_iris_version_event_cb, UI_EVENT_IRIS_VERSION, NULL);
+    }
+
+    // `back` button
+    lv_obj_t* btn = ui_secondary_btn_create(content, "Back");
+    lv_obj_set_size(btn, lv_pct(48), BOTTOM_BUTTON_HEIGHT);
+    lv_obj_align(btn, LV_ALIGN_BOTTOM_LEFT, 0, 0);
+    lv_obj_add_event_cb(btn, back_to_home_btn_cb, LV_EVENT_CLICKED, NULL);
+
+    btn = ui_btn_create(content, "Restart");
+    lv_obj_set_size(btn, lv_pct(48), BOTTOM_BUTTON_HEIGHT);
+    lv_obj_align(btn, LV_ALIGN_BOTTOM_RIGHT, 0, 0);
+    lv_obj_add_event_cb(btn, restart_btn_cb, LV_EVENT_CLICKED, NULL);
+}
+
+static void ui_detail_btn_cb(lv_event_t* e) {
+    (void)e;
+    ui_jump_to(ui_detail());
+}
+
+static void test_timer_cb(lv_timer_t* timer) {
+    (void)timer;
+    static const char* pngs[] = {
+        "A:/res/wallpapers/0.png",
+        "A:/res/wallpapers/1.png",
+        "A:/res/wallpapers/2.png",
+        "A:/res/wallpapers/3.png",
+        "A:/res/wallpapers/4.png",
+        "A:/res/wallpapers/5.png",
+    };
+    static int idx = 0;
+    const char* png = pngs[idx%6];
+    LOG_DEBUG(MODULE, "show %s", png);
+    static lv_obj_t* img = NULL;
+    if (!img) {
+        img = lv_img_create(lv_scr_act());
+        lv_obj_set_size(img, lv_pct(100), lv_pct(100));
+        lv_obj_set_pos(img, 0, 0);
+    }
+    lv_img_set_src(img, png);
+    idx++;
+}
+
+static void ui_test(void) {
+    // create a timer to refresh all png list in /res/test/
+    lv_timer_t* timer = lv_timer_create(test_timer_cb, 1000, NULL);
+    // timer->user_data = dir;
+    lv_timer_set_repeat_count(timer , -1);
+}
+
+
+static void test_btn_cb(lv_event_t* e) {
+    (void)e;
+    ui_jump_to(ui_test());
+}
+
+void ui_event_register(void) {
+    UI_EVENT_BATTERY = lv_event_register_id();
+    UI_EVENT_BLE_PAIR = lv_event_register_id();
+    UI_EVENT_BLE_STATE = lv_event_register_id();
+    UI_EVENT_BLE_NAME = lv_event_register_id();
+    UI_EVENT_BLE_VERSION = lv_event_register_id();
+    UI_EVENT_USB_STATE = lv_event_register_id();
+    UI_EVENT_REBOOT = lv_event_register_id();
+    UI_EVENT_POWER_OFF = lv_event_register_id();
+    UI_EVENT_BLE_INFO_REFRESH = lv_event_register_id();
+    UI_EVENT_IRIS_VERSION = lv_event_register_id();
+    UI_EVENT_IRIS_INFO_REFRESH = lv_event_register_id();
+}
+
+lv_obj_t* ui_main_area(void) {
+    assert(boot_ctx.ui->main);
+    return boot_ctx.ui->main;
+}
+
+void ui_init(void) {
+    ui_context_init();
+    lv_obj_t* obj = lv_obj_create(lv_scr_act());
+    lv_obj_clear_flag(obj, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_style_bg_color(obj, lv_color_hex(COLOR_BLACK), LV_PART_MAIN);
+    lv_obj_set_size(obj, lv_pct(100), lv_pct(100));
+    lv_obj_set_style_border_width(obj, 0, LV_PART_MAIN);
+    lv_obj_set_style_pad_all(obj, CONTENT_PAD, LV_PART_MAIN);
+    lv_obj_set_style_pad_top(obj, BAR_HEIGHT, LV_PART_MAIN);
+
+    // add reboot event listener
+    lv_obj_add_event_cb(lv_scr_act(), reboot_event_cb, UI_EVENT_REBOOT, NULL);
+    // add power off event listener
+    lv_obj_add_event_cb(lv_scr_act(), power_off_event_cb, UI_EVENT_POWER_OFF, NULL);
+    // add ble refresh event listener
+    lv_obj_add_event_cb(lv_scr_act(), ble_info_refresh_event_cb, UI_EVENT_BLE_INFO_REFRESH, NULL);
+    // add iris refresh event listener
+    lv_obj_add_event_cb(lv_scr_act(), iris_info_refresh_event_cb, UI_EVENT_IRIS_INFO_REFRESH, NULL);
+    // add battery event listener, low power detect
+    uint32_t *low_power_count = pvPortMalloc(sizeof(uint32_t));
+    *low_power_count = 0;
+    lv_obj_add_event_cb(lv_scr_act(), battery_low_power_event_cb, UI_EVENT_BATTERY, low_power_count);
+    boot_ctx.ui->main = obj;
+
+    // add idle timer
+    lv_timer_t* timer = lv_timer_create(idle_timer_cb, 1000, NULL);
+    lv_timer_set_repeat_count(timer, -1);
+
+    // refresh ble info
+    ui_event_broadcast(UI_EVENT_BLE_INFO_REFRESH, NULL);
+    // refresh iris info
+    ui_event_broadcast(UI_EVENT_IRIS_INFO_REFRESH, NULL);
+}
+
+void ui_status_bar_init(void) {
+    ui_context_init();
+
+    lv_obj_t* container = lv_obj_create(lv_layer_top());
+
+    lv_obj_set_style_bg_color(container, lv_color_hex(COLOR_BLACK), LV_PART_MAIN);
+    lv_obj_set_flex_flow(container, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(container, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+
+    lv_obj_set_style_border_width(container, 0, LV_PART_MAIN);
+    lv_obj_set_width(container, lv_pct(100));
+    lv_obj_set_height(container, LV_SIZE_CONTENT);
+    lv_obj_set_style_pad_all(container, 8, LV_PART_MAIN);
+    lv_obj_set_style_pad_top(container, 4, LV_PART_MAIN);
+    lv_obj_set_style_pad_gap(container, 8, LV_PART_MAIN);
+
+    // a mode label
+    lv_obj_t* obj = NULL;
+    obj = lv_label_create(container);
+    lv_obj_set_style_text_font(obj, FONT_SMALL, LV_PART_MAIN);
+    lv_obj_set_flex_grow(obj, 1);
+    if (boot_ctx.build != BUILD_MODE_PRODUCTION) {
+        lv_label_set_text(obj, "bootloader");
+    } else {
+        lv_label_set_text(obj, "");
+    }
+
+    // usb state
+    obj = lv_img_create(container);
+    lv_img_set_src(obj, "A:/res/usb.png");
+    lv_obj_add_flag(obj, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_event_cb(obj, status_bar_usb_state_event_cb, UI_EVENT_USB_STATE, NULL);
+
+    // ble status
+    obj = lv_img_create(container);
+    lv_img_set_src(obj, "A:/res/ble-enabled.png");
+    lv_obj_add_event_cb(obj, status_bar_ble_state_event_cb, UI_EVENT_BLE_STATE, NULL);
+
+    // battery
+    obj = lv_img_create(container);
+    lv_img_set_src(obj, "A:/res/battery-60-charging.png");
+    lv_obj_add_event_cb(obj, status_bar_battery_event_cb, UI_EVENT_BATTERY, NULL);
+
+    bool charging = pm_get_power_source() == POWER_SOURCE_USB;
+    uint8_t soc = battery_read_SOC();
+    battery_update(obj, charging, soc);
+    boot_ctx.device.charging = charging;
+    boot_ctx.device.soc = soc;
+
+    lv_timer_t* timer = lv_timer_create(battery_timer_cb, 1000, NULL);
+    lv_timer_set_repeat_count(timer, -1);
+}
+
+void ui_event_broadcast(lv_event_code_t code, void* param) {
+    do_event_broadcast(lv_layer_top(), code, param);
+    do_event_broadcast(lv_scr_act(), code, param);
+}
+
+void ui_boardloader(const char* version) {
+  // this function use lvgl to show boardloader ui
+  // it maybe can't show when resource not copied to fs
+  // because lvgl load font from fatfs, fatfs is located in fs
+  // so we can't show boardloader ui when fs is not mounted
+  // It occured when production
+
+  lv_obj_t *screen = lv_scr_act();
+  lv_obj_set_style_pad_all(screen, CONTENT_PAD, LV_PART_MAIN);
+
+  // board version
+  lv_obj_t *label = lv_label_create(screen);
+  lv_label_set_text_static(label, version);
+  lv_obj_set_pos(label, 16, 16);
+
+  // mass storage
+  lv_obj_t *mass_storage_label = lv_label_create(screen);
+  lv_label_set_text_static(mass_storage_label, "USB Mass Storage Mode");
+  lv_obj_set_pos(mass_storage_label, 16, 70);
+
+  // split
+  lv_obj_t *split_label = lv_label_create(screen);
+  lv_label_set_text_static(split_label, "======================");
+  lv_obj_set_pos(split_label, 16, 112);
+
+  // detail button
+  lv_obj_t* btn = ui_btn_create(screen, "Restart");
+  lv_obj_set_size(btn, lv_pct(100), BOTTOM_BUTTON_HEIGHT);
+  lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, 0);
+  lv_obj_add_event_cb(btn, restart_btn_cb, LV_EVENT_CLICKED, NULL);
+}
+
+void ui_bootloader(void) {
+    lv_obj_t* content = ui_main_area();
+
+    lv_obj_t* container = lv_obj_create(content);
+
+    lv_obj_set_style_bg_color(container, lv_color_hex(COLOR_BLACK), LV_PART_MAIN);
+    lv_obj_set_flex_flow(container, LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_flex_align(container, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+
+    lv_obj_set_style_border_width(container, 0, LV_PART_MAIN);
+    lv_obj_set_size(container, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+    lv_obj_set_style_pad_gap(container, CONTENT_SPACE, LV_PART_MAIN);
+    lv_obj_align(container, LV_ALIGN_TOP_MID, 0, 180);
+
+    // logo
+    lv_obj_t* obj = lv_img_create(container);
+    lv_img_set_src(obj, "A:/res/logo.png");
+
+    // ble name
+    obj = lv_label_create(container);
+    lv_obj_set_style_text_font(obj, FONT_BOLD_LARGE, LV_PART_MAIN);
+    if (strlen(boot_ctx.ble.name)) {
+        lv_label_set_text(obj, boot_ctx.ble.name);
+    } else {
+        lv_label_set_text(obj, "");
+        lv_obj_add_event_cb(obj, bootloader_ble_name_event_cb, UI_EVENT_BLE_NAME, NULL);
+    }
+
+
+    // label: `Update Mode`
+    obj = lv_label_create(container);
+    lv_label_set_text(obj, "Update Mode");
+    lv_obj_set_style_text_font(obj, FONT_SMALL, LV_PART_MAIN);
+    lv_obj_set_style_text_color(obj, lv_color_hex(COLOR_LIGHT_GRAY), LV_PART_MAIN);
+
+    // detail button
+    lv_obj_t* btn = ui_btn_create(content, "View Details");
+    lv_obj_set_size(btn, lv_pct(100), BOTTOM_BUTTON_HEIGHT);
+    lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, 0);
+    lv_obj_add_event_cb(btn, ui_detail_btn_cb, LV_EVENT_CLICKED, NULL);
+
+    if (ENABLE_UI_TEST) {
+        // test button
+        btn = ui_secondary_btn_create(content, "Test");
+        lv_obj_set_size(btn, lv_pct(100), BOTTOM_BUTTON_HEIGHT);
+        lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, -96);
+        lv_obj_add_event_cb(btn, test_btn_cb, LV_EVENT_CLICKED, NULL);
+    }
+}
+
+void ui_ble_pairing(char* code) {
+
+    // icon
+    lv_obj_t* content = ui_main_area();
+    lv_obj_t* icon = lv_img_create(content);
+
+    lv_img_set_src(icon, "A:/res/bluetooth-pairing.png");
+    lv_obj_align(icon, LV_ALIGN_TOP_MID, 0, 60);
+
+    // label: `Pairing Code`
+    lv_obj_t* label = lv_label_create(content);
+    lv_label_set_text(label, "Bluetooth pairing");
+    lv_obj_set_style_text_font(label, FONT_BOLD_LARGE, LV_PART_MAIN);
+    lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 180);
+
+
+    // code
+    label = lv_label_create(content);
+    lv_obj_set_style_text_font(label, FONT_BOLD_LARGE, LV_PART_MAIN);
+    lv_label_set_text(label, code);
+    lv_obj_center(label);
+
+    // ok button
+    lv_obj_t* btn = ui_secondary_btn_create(content, "OK");
+    lv_obj_set_size(btn, lv_pct(100), BOTTOM_BUTTON_HEIGHT);
+    lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, 0);
+    lv_obj_set_style_bg_color(btn, lv_color_hex(COLOR_GRARY), LV_PART_MAIN);
+    // go back
+    lv_obj_add_event_cb(btn, back_to_home_btn_cb, LV_EVENT_CLICKED, NULL);
+}
+
+void ui_ble_pair_failed(void) {
+    // icon
+    lv_obj_t* content = ui_main_area();
+    lv_obj_t* icon = lv_img_create(content);
+    lv_img_set_src(icon, "A:/res/hp/ic_cuowu555.png");
+    lv_obj_align(icon, LV_ALIGN_TOP_MID, 0, 140);
+
+    // code
+    lv_obj_t* label = lv_label_create(content);
+    lv_obj_set_style_text_font(label, FONT_BOLD_LARGE, LV_PART_MAIN);
+    lv_label_set_text(label, "Bluetooth pair failed");
+    lv_obj_align_to(label, icon, LV_ALIGN_OUT_BOTTOM_MID, 0, CONTENT_SPACE);
+
+    // ok button
+    lv_obj_t* btn = ui_secondary_btn_create(content, "OK");
+    lv_obj_set_size(btn, lv_pct(100), BOTTOM_BUTTON_HEIGHT);
+    lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, 0);
+    // go back
+    lv_obj_add_event_cb(btn, back_to_home_btn_cb, LV_EVENT_CLICKED, NULL);
+}
+
+static void power_off_btn_cb(lv_event_t* e) {
+    (void)e;
+    device_power_off();
+}
+
+void ui_power_off(void) {
+    lv_obj_t* content = ui_main_area();
+    // icon
+    lv_obj_t* icon = lv_img_create(content);
+    lv_img_set_src(icon, "A:/res/hp/ic_guanji2.png");
+    lv_obj_align(icon, LV_ALIGN_TOP_MID, 0, 60);
+
+    // show prompt "Do you want to power off?"
+    lv_obj_t* obj = lv_label_create(content);
+    lv_obj_set_width(obj, lv_pct(100));
+    lv_obj_set_style_text_font(obj, FONT_BOLD_LARGE, LV_PART_MAIN);
+    lv_obj_align(obj, LV_ALIGN_TOP_MID, 0, 180);
+    lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
+    lv_label_set_text(obj, "Do you want to power off?");
+
+    lv_obj_t* btn = ui_secondary_btn_create(content, "Cancel");
+    lv_obj_set_size(btn, lv_pct(48), BOTTOM_BUTTON_HEIGHT);
+    lv_obj_align(btn, LV_ALIGN_BOTTOM_LEFT, 0, 0);
+    lv_obj_add_event_cb(btn, back_to_home_btn_cb, LV_EVENT_CLICKED, NULL);
+
+    btn = ui_btn_create(content, "Power Off");
+    lv_obj_set_size(btn, lv_pct(48), BOTTOM_BUTTON_HEIGHT);
+    lv_obj_align(btn, LV_ALIGN_BOTTOM_RIGHT, 0, 0);
+    lv_obj_add_event_cb(btn, power_off_btn_cb, LV_EVENT_CLICKED, NULL);
+}
+
+void ui_battery_low(void) {
+    lv_obj_t* content = ui_main_area();
+
+    lv_obj_t* img = lv_img_create(content);
+    lv_img_set_src(img, "A:/res/battery-low.png");
+    lv_obj_center(img);
+
+    lv_obj_t* label = lv_label_create(content);
+    lv_obj_set_width(label, lv_pct(100));
+    lv_label_set_long_mode(label, LV_LABEL_LONG_WRAP);
+    lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
+    lv_label_set_text(label,"Low battery. Shutting down soon.\n Please charge.");
+
+    lv_obj_align_to(label, content, LV_ALIGN_BOTTOM_MID, 0, 0);
+}
+
+
+void ui_fs_file_op_reset(void) {
+    lv_obj_clean(ui_main_area());
+    boot_ctx.ui->fs_rw_bar = NULL;
+}
+void ui_fs_file_op(char* txt) {
+    if (boot_ctx.ui->fs_rw_bar) {
+        return;
+    }
+
+    lv_obj_t* content = ui_main_area();
+    lv_obj_clean(content);
+
+    // icon
+    lv_obj_t* icon = lv_img_create(content);
+    lv_img_set_src(icon, "A:/res/logo.png");
+    lv_obj_center(icon);
+
+    // label
+    lv_obj_t* obj = lv_label_create(content);
+    lv_obj_set_style_text_font(obj, FONT_SMALL, LV_PART_MAIN);
+    lv_obj_set_style_text_color(obj, lv_color_hex(COLOR_LIGHT_GRAY), LV_PART_MAIN);
+    lv_obj_align(obj, LV_ALIGN_TOP_MID, 0, 630);
+    lv_label_set_text(obj, txt);
+
+    // bar
+    lv_obj_t* bar = lv_bar_create(content);
+    lv_bar_set_mode(bar, LV_BAR_MODE_NORMAL);
+    lv_obj_set_size(bar, 240, 6);
+    lv_bar_set_range(bar, 0, 100);
+    lv_obj_set_style_pad_all(bar, 0, LV_PART_MAIN);
+    lv_obj_set_style_radius(bar, LV_RADIUS_CIRCLE, LV_PART_MAIN);
+
+    lv_obj_set_style_bg_color(bar, lv_color_hex(0), LV_PART_MAIN);
+    lv_obj_set_style_bg_color(bar, lv_color_hex(COLOR_GREEN), LV_PART_INDICATOR);
+    lv_bar_set_value(bar, 0, LV_ANIM_OFF);
+    lv_obj_align(bar, LV_ALIGN_TOP_MID, 0, 678);
+
+    boot_ctx.ui->fs_rw_bar = bar;
+}
+
+void ui_fs_file_op_update(int pct) {
+    lv_obj_t* bar = boot_ctx.ui->fs_rw_bar;
+    lv_bar_set_value(bar, pct, LV_ANIM_OFF);
+}
+
+void ui_updater_confirm(const char* dsc) {
+    updater_context_t* ctx = &boot_ctx.updater;
+    lv_obj_t* content = ui_main_area();
+
+    // icon
+    lv_obj_t* icon = lv_img_create(content);
+    lv_img_set_src(icon, "A:/res/update.png");
+    lv_obj_align(icon, LV_ALIGN_TOP_MID, 0, 60);
+
+    // title: xxxx Update
+    char txt[128] = {0};
+    sprintf(txt, "%s Update", dsc);
+    lv_obj_t* obj = lv_label_create(content);
+
+    lv_obj_set_width(obj, lv_pct(100));
+    lv_obj_set_style_text_font(obj, FONT_BOLD_LARGE, LV_PART_MAIN);
+    lv_obj_align(obj, LV_ALIGN_TOP_MID, 0, 180);
+    lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
+    lv_label_set_text(obj, txt);
+
+    lv_obj_t* msg = lv_label_create(content);
+    // label: A new xxx available！
+    sprintf(txt, "A new %s available！", dsc);
+    lv_label_set_text(msg, txt);
+    lv_obj_set_style_text_color(msg, lv_color_hex(COLOR_LIGHT_GRAY), LV_PART_MAIN);
+    lv_obj_set_style_text_font(msg, FONT_SMALL, LV_PART_MAIN);
+    lv_obj_align_to(msg, obj, LV_ALIGN_OUT_BOTTOM_MID, 0, 16);
+
+    lv_obj_t* container = lv_obj_create(content);
+
+    lv_obj_set_style_bg_color(container, lv_color_hex(COLOR_BLACK), LV_PART_MAIN);
+    lv_obj_set_flex_flow(container, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(container, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+
+    lv_obj_set_style_border_width(container, 0, LV_PART_MAIN);
+    lv_obj_set_size(container, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+    lv_obj_set_style_pad_gap(container, CONTENT_SPACE, LV_PART_MAIN);
+    lv_obj_center(container);
+
+    // current version -> new version
+    obj = lv_label_create(container);
+    lv_label_set_text(obj, ctx->updater->get_cur_ver_fn());
+
+    obj = lv_img_create(container);
+    lv_img_set_src(obj, "A:/res/arrow-right_2.png");
+
+    obj = lv_label_create(container);
+    lv_label_set_text(obj, ctx->updater->get_new_ver_fn());
+    lv_obj_set_style_text_font(obj, FONT_BOLD, LV_PART_MAIN);
+
+    lv_obj_t* btn = ui_secondary_btn_create(content, "Cancel");
+    lv_obj_set_size(btn, lv_pct(48), BOTTOM_BUTTON_HEIGHT);
+    lv_obj_align(btn, LV_ALIGN_BOTTOM_LEFT, 0, 0);
+    lv_obj_add_event_cb(btn, updater_cancel_btn_cb, LV_EVENT_CLICKED, NULL);
+
+    btn = ui_btn_create(content, "Install");
+    lv_obj_set_size(btn, lv_pct(48), BOTTOM_BUTTON_HEIGHT);
+    lv_obj_align(btn, LV_ALIGN_BOTTOM_RIGHT, 0, 0);
+    lv_obj_add_event_cb(btn, updater_install_btn_cb, LV_EVENT_CLICKED, NULL);
+}
+
+void ui_updater(const char* dsc) {
+    lv_obj_t* content = ui_main_area();
+
+    // icon
+    lv_obj_t* icon = lv_img_create(content);
+    lv_img_set_src(icon, "A:/res/update.png");
+    lv_obj_align(icon, LV_ALIGN_TOP_MID, 0, 60);
+
+    // title: xxxx Update
+    char txt[128] = {0};
+    sprintf(txt, "%s Update", dsc);
+    lv_obj_t* obj = lv_label_create(content);
+
+    lv_obj_set_width(obj, lv_pct(100));
+    lv_obj_set_style_text_font(obj, FONT_BOLD_LARGE, LV_PART_MAIN);
+    lv_obj_align(obj, LV_ALIGN_TOP_MID, 0, 180);
+    lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
+    lv_label_set_text(obj, txt);
+
+    lv_obj_t* msg = lv_label_create(content);
+    // label: Please DO NOT power off.
+    lv_label_set_text(msg, "Please DO NOT power off.");
+    lv_obj_set_style_text_color(msg, lv_color_hex(COLOR_LIGHT_GRAY), LV_PART_MAIN);
+    lv_obj_set_style_text_font(msg, FONT_SMALL, LV_PART_MAIN);
+    lv_obj_align_to(msg, obj, LV_ALIGN_OUT_BOTTOM_MID, 0, 16);
+
+    // operation: `verifying` or `installing`
+    obj = lv_label_create(content);
+    lv_obj_set_style_text_font(obj, FONT_SMALL, LV_PART_MAIN);
+    lv_obj_set_style_text_color(obj, lv_color_hex(COLOR_LIGHT_GRAY), LV_PART_MAIN);
+    lv_obj_align(obj, LV_ALIGN_TOP_MID, 0, 630);
+    lv_label_set_text(obj, "");
+
+    boot_ctx.ui->updater = pvPortMalloc(sizeof(ui_updater_t));
+    memset(boot_ctx.ui->updater, 0, sizeof(ui_updater_t));
+    boot_ctx.ui->updater->op = obj;
+
+    // bar
+    lv_obj_t* bar = lv_bar_create(content);
+    lv_bar_set_mode(bar, LV_BAR_MODE_NORMAL);
+    lv_obj_set_size(bar, 240, 6);
+    lv_bar_set_range(bar, 0, 100);
+    lv_obj_set_style_pad_all(bar, 0, LV_PART_MAIN);
+    lv_obj_set_style_radius(bar, LV_RADIUS_CIRCLE, LV_PART_MAIN);
+
+    lv_obj_set_style_bg_color(bar, lv_color_hex(0), LV_PART_MAIN);
+    lv_obj_set_style_bg_color(bar, lv_color_hex(COLOR_GREEN), LV_PART_INDICATOR);
+    lv_bar_set_value(bar, 0, LV_ANIM_OFF);
+    lv_obj_align(bar, LV_ALIGN_TOP_MID, 0, 678);
+    boot_ctx.ui->updater->bar = bar;
+}
+
+void ui_updater_reset(void) {
+    if (boot_ctx.ui->updater) {
+        vPortFree(boot_ctx.ui->updater);
+        boot_ctx.ui->updater = NULL;
+    }
+}
+
+void ui_updater_update(const char* op, int pct) {
+    ui_updater_t* updater = boot_ctx.ui->updater;
+
+    if (strcmp(op, lv_label_get_text(updater->bar)) != 0) {
+        lv_label_set_text(updater->op, op);
+    }
+
+    lv_bar_set_value(updater->bar, pct, LV_ANIM_OFF);
+}
+
+
+// provide `_fatal` for common
+__attribute__((noreturn))
+void __fatal(const char* lines[]) {
+    lv_obj_t* content = ui_main_area();
+    lv_obj_clean(content);
+
+    lv_obj_add_flag(content, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_add_event_cb(content, power_off_btn_cb, LV_EVENT_CLICKED, NULL);
+
+    // title
+    lv_obj_t* obj = lv_label_create(content);
+    lv_label_set_text(obj, "System problem detected");
+    lv_obj_set_width(obj, lv_pct(100));
+    lv_obj_set_style_text_font(obj, FONT_BOLD_LARGE, LV_PART_MAIN);
+    lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
+
+    lv_obj_t* container = lv_obj_create(content);
+
+    lv_obj_add_flag(container, LV_OBJ_FLAG_SCROLLABLE);
+
+    lv_obj_set_style_radius(container, RADIUS, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(container, lv_color_hex(COLOR_BLACK), LV_PART_MAIN);
+    lv_obj_set_flex_flow(container, LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_style_border_width(container, 0, LV_PART_MAIN);
+    lv_obj_set_size(container, lv_pct(100), LV_SIZE_CONTENT);
+    lv_obj_set_style_pad_all(container, 0, LV_PART_MAIN);
+    lv_obj_set_style_pad_gap(container, 8, LV_PART_MAIN);
+    lv_obj_align(container, LV_ALIGN_TOP_LEFT, 0, 120);
+
+    while (*lines) {
+        obj = lv_label_create(container);
+        lv_obj_set_width(obj, lv_pct(100));
+        lv_label_set_text(obj, *lines);
+        lines++;
+    }
+
+    obj = lv_label_create(content);
+    lv_label_set_text(obj, "Tap to shutdown");
+    lv_obj_set_style_text_font(obj, FONT_BOLD, LV_PART_MAIN);
+    lv_obj_align(obj, LV_ALIGN_BOTTOM_MID, 0, 0);
+
+    while (1) {
+        lv_timer_handler();
+        hal_delay(1);
+    }
 }

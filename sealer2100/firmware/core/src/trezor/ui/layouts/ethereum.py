@@ -10,6 +10,10 @@ from trezor.ui.screen.apps.ethereum import (
     TransactionDetail,
     TransactionDetail1559,
     TransactionOverview,
+    ApproveOverview,
+    ApproveDetail,
+    Eip712Message,
+    ContractCall,
 )
 
 if TYPE_CHECKING:
@@ -71,6 +75,22 @@ async def confirm_transaction_detail(
     await screen.show()
     await raise_if_cancelled(interact(ctx, screen, ButtonRequestType.SignTx))
 
+async def show_contract_call(
+    ctx: wire.GenericContext,
+    myself: str,
+    contract: str,
+    chain_id: int,
+    fee_max: str,
+):
+    screen = ContractCall(
+        ctx.icon_path,
+        myself,
+        contract,
+        chain_id,
+        fee_max,
+    )
+    await screen.show()
+    await raise_if_cancelled(interact(ctx, screen, ButtonRequestType.SignTx))
 
 async def confirm_transaction_detail_eip1559(
     ctx: wire.GenericContext,
@@ -167,5 +187,38 @@ async def confirm_domain(ctx: wire.GenericContext, **kwargs):
 
     title = i18n.Title.typed_data.format(ctx.name)
     screen = Eip712(title, **kwargs)
+    await screen.show()
+    await raise_if_cancelled(interact(ctx, screen))
+
+
+async def show_approve_overview(
+    ctx: wire.GenericContext,
+    approve_to: str,
+    allowance: str,
+    contract: str,
+):
+    screen = ApproveOverview(approve_to, allowance, contract)
+    await screen.show()
+    r = await interact(ctx, screen, ButtonRequestType.SignTx)
+    if isinstance(r, Reject):
+        raise wire.ActionCancelled()
+    elif isinstance(r, Detail):
+        return True
+    else:
+        return False
+
+async def show_approve_detail(
+    ctx: wire.GenericContext,
+    spender: str,
+    myself: str,
+    max_fee: str,
+    contract_addr: str,
+):
+    screen = ApproveDetail(spender, myself, max_fee, contract_addr)
+    await screen.show()
+    await raise_if_cancelled(interact(ctx, screen, ButtonRequestType.SignTx))
+
+async def confirm_sign_eip712_message(ctx: wire.GenericContext, network: str, icon: str, message: str, address: str):
+    screen = Eip712Message(network, icon, message, address)
     await screen.show()
     await raise_if_cancelled(interact(ctx, screen))

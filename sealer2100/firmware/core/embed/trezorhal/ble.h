@@ -1,66 +1,51 @@
 #ifndef __BLE_H__
 #define __BLE_H__
-
-#include <stdbool.h>
 #include <stdint.h>
-#include <string.h>
 
-#define BLE_NAME_LEN 32
+/// ble ctrl command
+#define BLE_CMD_CTRL 0x81
+// ctrl ble disconnect the connection
+#define BLE_CMD_CTRL_PARAM_DISCONNECT 0x03
 
-// BLE send command
-#define BLE_CMD_ADV 0x01
-#define BLE_CMD_CON_STA 0x02
-#define BLE_CMD_PAIR_TX 0x03
-#define BLE_CMD_PAIR_STA 0x04
-#define BLE_CMD_FM_VER 0x05
-#define BLE_CMD_PROTO_VER 0x06
-#define BLE_CMD_BOOT_VER 0x07
+/// get ble infomation command
+#define BLE_CMD_INFO 0x83
+#define BLE_CMD_INFO_PARAM_ADV_NAME 0x01 // get ble name
+#define BLE_CMD_INFO_PARAM_VERSION  0x02 // get ble version
 
-// ST send command
-#define BLE_BT 0x81
-#define BLE_BT_ON 0x01
-#define BLE_BT_OFF 0x02
-#define BLE_BT_DISCON 0x03
-#define BLE_BT_STA 0x04
-#define BLE_PWR 0x82
-#define BLE_PWR_SYS_OFF 0x01
-#define BLE_PWR_EMMC_OFF 0x02
-#define BLE_PWR_EMMC_ON 0x03
-#define BLE_PWR_EQ 0x04
-#define BLE_PWR_CHARGING 0x05
-#define BLE_VER 0x83
-#define BLE_VER_ADV 0x01
-#define BLE_VER_FW 0x02
-#define BLE_VER_PROTO 0x03
-#define BLE_VER_BOOT 0x04
-#define BLE_REBOOT 0x84
-#define BLE_REBOOT_SYS 0x01
+// ble adv name, response of (BLE_CMD_INFO, BLE_CMD_INFO_PARAM_ADV_NAME)
+#define BLE_RESP_ADV_NAME 0x01
+// ble version, response of (BLE_CMD_INFO, BLE_CMD_INFO_PARAM_VERSION)
+#define BLE_RESP_VERSION  0x05
 
-bool ble_connect_state(void);
+/// BLE_CMD_REBOOT
+#define BLE_CMD_REBOOT 0x84
+#define BLE_CMD_REBOOT_PARAM 0x01
+
+
+// ble connect state, notified from ble
+#define BLE_NOTIFY_STATE 0x02
+#define BLE_NOTIFY_STATE_CONNECTED    0x01 // ble have connected
+#define BLE_NOTIFY_STATE_DISCONNECTED 0x02 // ble have disconnected
+
+// ble pair code, notifyed from ble
+#define BLE_NOTIFY_PAIR_CODE 0x03
+
+// ble pair result, notified from ble
+#define BLE_NOTIFY_PAIR_RESULT 0x04
+#define BLE_NOTIFY_PAIR_RESULT_SUCCESS 0x01
+#define BLE_NOTIFY_PAIR_RESULT_FAILURE 0x02
+
 void ble_cmd_req(uint8_t cmd, uint8_t value);
-void ble_uart_poll(void);
 
-#if !EMULATOR
 void ble_function_on(void);
 void ble_function_off(void);
-bool ble_name_state(void);
-bool ble_ver_state(void);
-char *ble_get_name(void);
-char *ble_get_ver(void);
-bool ble_switch_state(void);
-void ble_set_switch(bool flag);
-bool ble_get_switch(void);
-void ble_get_dev_info(void);
-void ble_refresh_dev_info(void);
-#else
-#define ble_name_state(...) false
-#define ble_ver_state(...) false
-#define ble_get_name(...) "HyperMateMax 0000"
-#define ble_get_ver(...) "1.0.1"
-#define ble_switch_state(...) false
-#define ble_set_switch(...)
-#define ble_get_switch(...) false
-#define change_ble_sta(...)
-#endif
 
+void ble_reboot(void);
+void ble_enter_dfu(void);
+
+// function only send the ble command, poll the `usart` interface get result
+void ble_async_get_name(void);
+void ble_async_get_version(void);
+void ble_async_disconnect(void);
+void ble_async_refresh_dev_info(void);
 #endif

@@ -8,13 +8,10 @@ from trezor.ui import i18n
 from trezor.enums import (
     ButtonRequestType,
     EthereumDataType,
-    EthereumDataTypeHypermate,
 )
 from trezor.messages import (
     EthereumFieldType,
-    EthereumFieldTypeHypermate,
     EthereumStructMember,
-    EthereumStructMemberHypermate,
 )
 from trezor.strings import format_amount, format_amount_ceil
 from trezor.ui.layouts import  (
@@ -31,17 +28,17 @@ from trezor.ui.layouts.ethereum import (
     show_transaction_overview,
     confirm_transaction_detail,
     confirm_transaction_detail_eip1559,
-)
-from trezor.ui.screen.apps.ethereum import (
-    TransactionOverview,
+    show_approve_overview,
+    show_approve_detail,
+    confirm_sign_eip712_message,
+    show_contract_call,
 )
 
-from . import networks, tokens
+from . import networks, tokens, erc20
 from .helpers import (
     address_from_bytes,
     decode_typed_data,
     get_type_name,
-    get_type_name_hypermate,
 )
 
 if TYPE_CHECKING:
@@ -89,6 +86,11 @@ def require_show_overview(
         to=to_str,
         network=network,
     )
+
+def require_show_contract_call(ctx: Context, myself: str, contract: str, chain_id: int, fee_price: int, gas_limit: int):
+    fee_max = fee_price * gas_limit
+    fee_max = format_ethereum_fee(fee_max, None, chain_id)
+    return show_contract_call(ctx, myself, contract, chain_id, fee_max)
 
 
 def require_confirm_fee(
@@ -276,7 +278,7 @@ async def should_show_domain(ctx: Context, name: bytes, version: bytes) -> bool:
 async def should_show_struct(
     ctx: Context,
     description: str,
-    data_members: list[EthereumStructMember] | list[EthereumStructMemberHypermate],
+    data_members: list[EthereumStructMember],
     title: str = "Confirm struct",
     button_text: str | None = None,
 ) -> bool:
@@ -345,49 +347,20 @@ async def confirm_typed_value(
             description=description,
         )
 
+def require_show_approve(ctx: Context, spender: str, value: int, token: tokens.EthereumTokenInfo | None) -> bool:
+    if erc20.approve_is_unlimited(value, token):
+        value = i18n.Text.unlimited
+    else :
+        value = format_ethereum_amount(value, token, token.chain_id)
+    
+    contract_addr = address_from_bytes(token.address)
 
-async def confirm_typed_value_hypermate(
-    ctx: Context,
-    name: str,
-    value: bytes,
-    parent_objects: list[str],
-    field: EthereumFieldTypeHypermate,
-    array_index: int | None = None,
-) -> None:
-    type_name = get_type_name_hypermate(field)
+    return show_approve_overview(ctx, spender, value, contract_addr)
 
-    if array_index is not None:
-        title = limit_str(".".join(parent_objects + [name]))
-        description = f"[{array_index}] ({type_name}):"
-    else:
-        title = limit_str(".".join(parent_objects))
-        description = f"{name} ({type_name}):"
-
-    data = decode_typed_data(value, type_name)
-
-    if field.data_type in (
-        EthereumDataTypeHypermate.ADDRESS,
-        EthereumDataTypeHypermate.BYTES,
-    ):
-        await confirm_blob(
-            ctx,
-            "confirm_typed_value",
-            title=title,
-            blob=data,
-            description=description,
-            ask_pagination=True,
-            icon=None,
-        )
-    else:
-        await confirm_text(
-            ctx,
-            "confirm_typed_value",
-            title=title,
-            data=data,
-            description=description,
-            icon=None,
-        )
-
+def require_confirm_approve_detail(ctx: Context, spender: str, myself: str, gas_price: int, gas_limit: int, token: tokens.EthereumTokenInfo | None):
+    max_fee = format_ethereum_fee(gas_price * gas_limit, None, token.chain_id)
+    contract_addr = address_from_bytes(token.address)
+    return show_approve_detail(ctx, spender, myself, max_fee, contract_addr)
 
 def format_ethereum_amount(
     value: int,

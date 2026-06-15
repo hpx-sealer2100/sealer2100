@@ -1,0 +1,6 @@
+FirmwareUpdate.path max_size:256
+
+FirmwareUpload.payload  max_size:16384
+FirmwareUpload.hash     max_size:32
+
+SelfTest.payload        max_size:16384

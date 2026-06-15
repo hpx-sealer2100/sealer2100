@@ -66,10 +66,4 @@ void display_init(void);
 void display_refresh(void);
 const char *display_save(const char *prefix);
 void display_clear_save(void);
-
-#ifdef TREZOR_MODEL_T
-void display_set_little_endian(void);
-void display_set_big_endian(void);
-#endif
-
 #endif  //_DISPLAY_INTERFACE_H

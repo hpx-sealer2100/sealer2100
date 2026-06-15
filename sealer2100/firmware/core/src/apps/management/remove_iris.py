@@ -72,11 +72,7 @@ async def remove_iris(ctx: wire.Context) -> Success:
 
     device.set_device_protect_type(device.DEVICE_PROTECT_TYPE_PIN)
     if not utils.EMULATOR:
-        async def do_remove_iris():
-            await iris.open()
-            await iris.wipe()
-            iris.close()
-        await wait_doing(i18n.Text.iris_removing_old, do_remove_iris())
+        await wait_doing(i18n.Text.iris_removing_old, iris.wipe())
 
     await show_success(
         ctx,

@@ -445,6 +445,10 @@ thd89_result_t thd89_init(void) {
   return THD89_SUCCESS;
 }
 
+bool thd89_is_secure_channel_established(void) {
+  return thd89_ctx.sec_chan_established;
+}
+
 void thd89_deinit(void) { memzero(&thd89_ctx, sizeof(se_context_t)); }
 
 thd89_result_t thd89_ping(void) {
@@ -626,14 +630,20 @@ thd89_result_t thd89_handshake(const uint8_t* secret, size_t secret_size) {
   return THD89_SUCCESS;
 }
 
-thd89_result_t thd89_execute_command(const uint8_t* command,
+thd89_result_t thd89_execute(const uint8_t* command,
+                                     size_t command_size, uint8_t* response,
+                                     size_t response_buf_size,
+                                     size_t* response_size) {
+  return thd89_transmit(command, command_size, response, response_buf_size, response_size);
+}
+
+thd89_result_t thd89_secure_execute(const uint8_t* command,
                                      size_t command_size, uint8_t* response,
                                      size_t response_buf_size,
                                      size_t* response_size) {
   // security channel not established, useful for debug
   if (!thd89_ctx.sec_chan_established) {
-    return thd89_transmit(command, command_size, response, response_buf_size,
-                          response_size);
+    return THD89_ERR_UNEXPECTED;
   }
 
   if (command_size > THD89_MAX_APDU_SIZE) {
@@ -648,6 +658,7 @@ thd89_result_t thd89_execute_command(const uint8_t* command,
 
   // step2. Create <Record Exchange> message
   // Message: <Record Exchange[1]>|MSEQ|ciphertext
+  // Response: <Record Exchange[1]>|SSEQ|ciphertext
   sec_buffer[0] = SCTR_PROTECTED;
   memcpy(&sec_buffer[1], thd89_ctx.enc_nonce.seq, SEC_SEQ_SIZE);
 
@@ -679,6 +690,7 @@ thd89_result_t thd89_execute_command(const uint8_t* command,
   if (sec_size < SEC_OVERHEAD_SIZE) {
     return THD89_ERR_UNEXPECTED;
   }
+
   if (sec_buffer[0] != SCTR_PROTECTED) {
     return THD89_ERR_UNEXPECTED;
   }

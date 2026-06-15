@@ -64,7 +64,8 @@ from trezor import io, log, loop, utils
 
 from . import event
 from .ur.ur_decoder import URDecoder
-from .ur.ur import UR
+from .rust_ur.rust_ur import RustDecodedUR
+from .rust_ur.rust_ur import QRCodeType
 
 def scan() -> loop.spawn:
     airgap = Airgap.instance()
@@ -108,46 +109,51 @@ class Airgap():
         """
         self.decoder = URDecoder()
 
-async def receive_message(airgap: Airgap) -> UR|None:
+async def receive_message(airgap: Airgap) -> RustDecodedUR|None:
+    rust_ur = RustDecodedUR()
     while True:
         data = await airgap.scan()
         log.debug(__name__, f"scanned: {data}")
         if isinstance(data, bytes):
             data = data.decode()
 
-        log.debug(__name__, f"scanned: {data}")
-        accepted = airgap.decoder.receive_part(data)
-        log.debug(__name__, f"accepted: {accepted}")
+        success = rust_ur.decoding(data)
+        if success:
+            log.debug(__name__, "ur decode success")
+            if rust_ur.is_start_decoding:
+                if rust_ur.is_multi_part:
+                    ur = event.MultiUR(100, 0)
+                else:
+                    ur = event.SingleUR()
+                # publish `ScanStart`
+                airgap.event_hub.publish(event.ScanStart(ur))
 
-        if not accepted:
-            await airgap.event_hub.put(event.InvalidUR())
-            return None
+            if rust_ur.is_multi_part:
+                log.debug(__name__, f"multi part process: {rust_ur.process}")
+                ur = event.MultiUR(100, rust_ur.process)
+                airgap.event_hub.publish(event.Scanning(ur))
 
-        if airgap.decoder.is_complete():
-            airgap.event_hub.publish(event.Done())
-            log.debug(__name__, "airgap receive complete")
-            result: UR = airgap.decoder.result
-            log.debug(__name__, f"result type: {result.type}")
-            log.debug(__name__, f"result cbor: {binascii.hexlify(result.cbor)}")
-            return result
+            if not rust_ur.is_complete:
+                continue
 
-        expected = airgap.decoder.expected_part_count()
-        processed = airgap.decoder.processed_parts_count()
-        log.debug(__name__, f"received: {processed}/{expected}")
-        # publish event
-        airgap.event_hub.publish(event.MultiUR(expected, processed))
+            if rust_ur.is_multi_part:
+                ur = event.MultiUR(100, 100)
+                airgap.event_hub.publish(event.Scanning(ur))
+
+            return rust_ur
+        else:
+            log.debug(__name__, "ur process failed, continue scanning")
 
 
 async def handle_scanning(airgap: Airgap) -> None:
-    message = await receive_message(airgap)
-    if not message:
+    rust_ur = await receive_message(airgap)
+    if not rust_ur.is_complete:
         return
-    await handle_ur_message(message)
+    await handle_ur_message(rust_ur)
     log.debug(__name__, "airgap process done")
 
-async def handle_ur_message(msg: UR):
-    type = msg.type
-    data = msg.cbor
+async def handle_ur_message(msg: RustDecodedUR):
+    log.debug(__name__, f"handle_ur_message type: {msg.ur_type()}")
     unimport_manager = utils.unimport()
     with unimport_manager:
         from trezor import wire
@@ -156,13 +162,13 @@ async def handle_ur_message(msg: UR):
         from trezor.ui.layouts import show_popup, show_error
         from trezor.ui import i18n
         from apps.airgap import MFPNotMatch
-        h = find_handler(type)
+        h = find_handler(msg.ur_type())
         if not h:
-            log.error(__name__, f"no handler for type: {type}")
+            log.error(__name__, f"no handler for type: {msg.ur_type()}")
             await show_popup(i18n.Text.unknown_tx_type)
             return
         try:
-            await h(DUMMY_CONTEXT, data)
+            await h(DUMMY_CONTEXT, msg)
             Airgap.instance().event_hub.publish(4)
         except wire.ActionCancelled:
             # user canceled the action, do nothing

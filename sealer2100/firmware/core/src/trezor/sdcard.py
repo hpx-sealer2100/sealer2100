@@ -1,5 +1,5 @@
 try:
-    from trezorio import fatfs, sdcard
+    from trezorio import fs, sdcard
 
     HAVE_SDCARD = True
     is_present = sdcard.is_present  # type: ignore [obscured-by-same-name]
@@ -44,7 +44,7 @@ class FilesystemWrapper:
         return cls._INSTANCE
 
     def _deinit_instance(self) -> None:
-        fatfs.unmount()
+        fs.unmount()
         sdcard.power_off()
         FilesystemWrapper._INSTANCE = None
 
@@ -54,7 +54,7 @@ class FilesystemWrapper:
                 self.counter = 0
                 sdcard.power_on()
                 if self.mounted:
-                    fatfs.mount()
+                    fs.mount()
             self.counter += 1
         except Exception:
             self._deinit_instance()

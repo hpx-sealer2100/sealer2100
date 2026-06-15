@@ -46,10 +46,16 @@ def get_address(client: "TrezorClient", address: str, show_display: bool) -> str
 
 @cli.command()
 @click.option("-n", "--address", required=True, help=PATH_HELP)
+@click.option("--raw-encoding", default="base58", type=click.Choice(["base58", "hex"]), help="Base encoding of the raw transaction, base58 or hex, default base58")
 @click.option("-d", "--raw_tx", required=True, help=PATH_RAW_TX)
 @with_client
-def sign_tx(client: "TrezorClient", address: str, raw_tx: str) -> str:
-    """Sign Solala transaction."""
+def sign_tx(client: "TrezorClient", address: str, raw_encoding: str, raw_tx: str) -> str:
+    """Sign Solana transaction."""
     address_n = tools.parse_path(address)
-    transaction = solana.sign_tx(client, address_n, base58.b58decode(raw_tx))
+    if raw_encoding == "base58":
+        transaction = solana.sign_tx(client, address_n, base58.b58decode(raw_tx))
+    elif raw_encoding == "hex":
+        transaction = solana.sign_tx(client, address_n, bytes.fromhex(raw_tx))
+    else:
+        raise ValueError(f"Unknown encoding {raw_encoding}")
     return transaction.signature.hex()

@@ -22,14 +22,14 @@ if TYPE_CHECKING:
 
 def _wallpapers() -> Generator[str]:
 
-    SYS_WALLPAPER_PATH = "0:/res/wallpapers"
-    # internal wallpapers
-    for _, _, name in io.fatfs.listdir(SYS_WALLPAPER_PATH):
+    # system wallpapers
+    SYS_WALLPAPER_PATH = "/res/wallpapers"
+    for _, _, name in io.fs.dir_open(SYS_WALLPAPER_PATH):
         yield name
 
-    USER_WALLPAPER_PATH = "1:/res/wallpapers"
+    USER_WALLPAPER_PATH = "/user/wallpapers"
     # user wallpapers
-    for _, _, name in io.fatfs.listdir(USER_WALLPAPER_PATH):
+    for _, _, name in io.fs.dir_open(USER_WALLPAPER_PATH):
         yield name
 
 def validate_homescreen(homescreen: bytes) -> None:

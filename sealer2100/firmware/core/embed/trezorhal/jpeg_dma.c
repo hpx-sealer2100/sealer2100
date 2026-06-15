@@ -287,7 +287,7 @@ int jped_decode(char *path, uint32_t address) {
     HAL_JPEG_GetInfo(&JPEG_Handle, &JPEG_Info);
 
     dma2d_copy_ycbcr_to_rgb((uint32_t *)address,
-                            (uint32_t *)FMC_SDRAM_LTDC_BUFFER_ADDRESS,
+                            (uint32_t *)SDRAM_LTDC_ADDRESS,
                             JPEG_Info.ImageWidth, JPEG_Info.ImageHeight,
                             JPEG_Info.ChromaSubsampling);
     return 0;

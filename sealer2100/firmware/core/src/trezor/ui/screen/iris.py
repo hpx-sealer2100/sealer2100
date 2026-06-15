@@ -53,12 +53,12 @@ class IrisRegistTip(Modal):
         self.btn.set_text(i18n.Button.iris_entry)
         self.set_icon("A:/res/hp/ic_hongmo_1.png")
         self.set_title(i18n.Text.register_iris)
-        self.set_subtitle(i18n.Text.register_iris_desc)
+        self.set_subtitle(i18n.Subtitle.iris_desc)
 
         self.create_content(VStack)
         self.content: VStack
 
-        item = ItemImg(self.content, i18n.Text.iris_entry_desc, "A:/res/hp/ic_infotip.png","left")
+        item = ItemImg(self.content, i18n.Text.iris_desc, "A:/res/hp/ic_infotip.png","left")
         item.spacing(8)
         item.label.set_style_text_color(colors.USER.LIGHT_GRAY, lv.PART.MAIN)
         item.add_style(Styles.group, lv.PART.MAIN)
@@ -93,6 +93,7 @@ class IrisScreen(Modal):
 
     def __init__(self):
         super().__init__()
+        self.iris_power_down_chan = loop.chan()
         self.clean()
         self._content = lv.obj(self)
         self._content.add_style(Styles.container, lv.PART.MAIN)
@@ -166,8 +167,8 @@ class IrisScreen(Modal):
         self.tasks.append(task)
 
     def on_loaded(self):
-        import lvgldrv as lcd
-        lcd.set_directly_copy(True)
+        import lvgldrv as lvdrv
+        lvdrv.set_directly_copy(True)
         super().on_loaded()
         state = CAMERA.state()
         log.debug(__name__, f"camera state: {state}")
@@ -179,8 +180,8 @@ class IrisScreen(Modal):
             CAMERA.resume()
 
     def on_unload_start(self):
-        import lvgldrv as lcd
-        lcd.set_directly_copy(False)
+        import lvgldrv as lvdrv
+        lvdrv.set_directly_copy(False)
         super().on_unload_start()
         CAMERA.suspend()
 
@@ -188,13 +189,37 @@ class IrisScreen(Modal):
         super().on_deleting()
         self.operation.destory()
         CAMERA.stop()
+        CAMERA.deinit()
+
+    def close(self, value: 'R'):
+        async def close_iris(done: bool):
+            if not done:
+                # consume the last `registe` or `match` note, sync secure channel state
+                await iris.wait_response_with_timeout()
+                await iris.cancel()
+                # iris will send `registe`/`match` operation result(failed), consume it
+                await iris.wait_response_with_timeout()
+            await iris.close()
+            self.iris_power_down_chan.publish(True)
 
         for task in self.tasks:
-            task.close()
+            try:
+                task.close()
+            except:
+                pass
 
-        CAMERA.deinit()
-        # close iris module
-        iris.close()
+        loop.spawn(close_iris(bool(value)))
+        super().close(value)
+
+    async def wait_iris_power_down_and_result(self):
+        await self.iris_power_down_chan.take()
+        log.debug(__name__, "iris have power down")
+        return await self.channel.take()
+
+    def __await__(self) -> Generator['R']:
+        return (yield from self.wait_iris_power_down_and_result())
+
+    __iter__ = __await__
 
     def state_reset(self):
         self.suggestion.add_flag(lv.obj.FLAG.HIDDEN)
@@ -577,7 +602,6 @@ class IrisRegist(IrisScreen):
                     self.close(status.data)
                     break
                 else:
-                    iris.close()
                     loop.spawn(self.iris_error(status))
                     break
 
@@ -617,7 +641,7 @@ class IrisMatch(IrisScreen):
 
         if MATCH_TIMEOUT == MATCH_TIMEOUT_MAX_COUNT:
             # too may timeout
-            await self.wipe_when_too_many_timeout()
+            loop.spawn(wipe_when_too_many_timeout())
             self.close(None)
             return
         msg = i18n.Text.verify_iris_error_desc if reply.is_timeout() else reply.error_msg()
@@ -658,39 +682,26 @@ class IrisMatch(IrisScreen):
                     self.close(status.data)
                     break
                 else:
-                    iris.close()
                     loop.spawn(self.iris_error(status))
                     break
 
-    async def wipe_when_too_many_timeout(self):
-        import storage
+async def wipe_when_too_many_timeout():
+    from trezor.ui.screen.confirm import SimpleConfirm
+    from trezor.wire import DummyContext
+    from trezor.messages import WipeDevice
+    from apps.management.wipe_device import wipe_device
 
-        from trezor import config
-        from trezor.ui.screen.confirm import SimpleConfirm
-        from trezor.wire import DUMMY_CONTEXT as ctx
-        from trezor.ui.layouts import (
-            show_pin_reach_limit,
-            wait_doing,
-        )
+    screen = SimpleConfirm(i18n.Text.too_many_iris_match_count)
+    screen.text.set_style_text_font(font.default, lv.PART.MAIN)
+    screen.mode('result')
+    await screen.show()
+    if not await screen:
+        return
 
-        screen = SimpleConfirm(i18n.Text.too_many_iris_match_count)
-        screen.text.set_style_text_font(font.default, lv.PART.MAIN)
-        screen.mode('result')
-        await screen.show()
-        if not await screen:
-            return
+    ctx = DummyContext()
+    ctx.force_wipe = True
+    await wipe_device(ctx, WipeDevice())
 
-        async def do_wipe_device():
-            while config.get_pin_rem():
-                config.unlock("", None)
-                await loop.sleep(50)
-
-            await iris.wipe()
-            storage.wipe()
-            await loop.sleep(100)
-
-        await wait_doing(i18n.Text.wiping_device, do_wipe_device())
-        utils.reset()
 
 if utils.EMULATOR:
     async def emulator_mock_regist(obj: IrisRegist):

@@ -193,7 +193,7 @@ int8_t SCSI_ProcessCmd(USBD_HandleTypeDef *pdev, uint8_t lun, uint8_t *cmd)
     case SCSI_VERIFY10:
       ret = SCSI_Verify10(pdev, lun, cmd);
       break;
-    
+
     case SCSI_USER_WRITE:
       ret = SCSI_UserCommand(pdev, lun, cmd);
       break;
@@ -422,7 +422,7 @@ static int8_t SCSI_ReadCapacity16(USBD_HandleTypeDef *pdev, uint8_t lun, uint8_t
 static int8_t SCSI_ReadFormatCapacity(USBD_HandleTypeDef *pdev, uint8_t lun, uint8_t *params)
 {
   UNUSED(params);
-  uint16_t blk_size;
+  uint32_t blk_size;
   uint32_t blk_nbr;
   uint16_t i;
   int8_t ret;
@@ -1172,40 +1172,57 @@ static int8_t SCSI_UpdateBotData(USBD_MSC_BOT_HandleTypeDef *hmsc,
   return 0;
 }
 
-extern volatile uint32_t system_reset;
 
 static int8_t SCSI_UserCommand(USBD_HandleTypeDef *pdev, uint8_t lun, uint8_t *params)
 {
   USBD_MSC_BOT_HandleTypeDef *hmsc = (USBD_MSC_BOT_HandleTypeDef *)pdev->pClassData;
 
-  if (hmsc == NULL)
-  {
+  if (hmsc == NULL) {
     return -1;
   }
-  static uint16_t len = 0;
-  if (hmsc->bot_state == USBD_BOT_IDLE) /* Idle */
-  {
-    len = (params[7] << 8) + params[8];
-
-    if(len > 64)
-    {
-      return -1;
+  /**
+   * subcommand
+   * 0xA5, reset system
+   * 0xEE, erase block
+   * 0xFE, file system reformat
+   */
+  uint8_t subcmd = params[1];
+  switch (subcmd) {
+    case 0xA5: {
+      // reset system
+      break;
     }
-
-    /* Prepare EP to receive first data packet */
-    hmsc->bot_state = USBD_BOT_DATA_OUT;
-    (void)USBD_LL_PrepareReceive(pdev, MSC_EPOUT_ADDR, hmsc->bot_data, len);
-  }
-  else
-  {
-    if(hmsc->bot_data[0]==0x5A && hmsc->bot_data[1]==0xA5)
-    {
-      system_reset = 1;
-           
+    case 0xEE: {
+      // erase block
+      /**
+       * CBD[2]: block >> 24
+       * CBD[3]: block >> 16
+       * CBD[4]: block >> 8
+       * CBD[5]: block >> 0
+       * @param lun: Logical unit number
+       */
+      uint32_t block = 0;
+      block = (params[2] << 24) | (params[3] << 16) | (params[4] << 8) | (params[5]);
+      USBD_StorageTypeDef *ops = (USBD_StorageTypeDef *)pdev->pUserData;
+      if (ops && ops->Erase) {
+        if (ops->Erase(lun, block) != 0) {
+          SCSI_SenseCode(pdev, lun, HARDWARE_ERROR, WRITE_FAULT);
+          return -1;
+        }
+      }
+      break;
     }
-    MSC_BOT_SendCSW(pdev, USBD_CSW_CMD_PASSED);
+    case 0xFE: {
+      // file system reformat
+      break;
+    }
+    default:
+      // unknown subcommand
+      break;
   }
-  
+
+  MSC_BOT_SendCSW(pdev, USBD_CSW_CMD_PASSED);
+
   return 0;
 }
 

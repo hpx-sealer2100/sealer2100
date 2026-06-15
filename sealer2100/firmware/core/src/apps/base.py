@@ -60,7 +60,7 @@ def get_features() -> Features:
         major_version=utils.VERSION_MAJOR,
         minor_version=utils.VERSION_MINOR,
         patch_version=utils.VERSION_PATCH,
-        hypermate_version=utils.HYPERMATE_VERSION,
+        hypermate_version=utils.firmware_version(),
         revision=utils.SCM_REVISION,
         model=utils.MODEL,
         device_id=storage.device.get_device_id(),
@@ -116,8 +116,7 @@ def get_features() -> Features:
     f.sd_card_present = sdcard.is_present()
     f.initialized = storage.device.is_initialized()
     f.passphrase_protection = storage.device.is_passphrase_enabled()
-    if storage.device.get_iris_version():
-        f.iris_version = storage.device.get_iris_version()
+    f.iris_version = utils.IRIS_VERSION
     # private fields:
     if config.is_unlocked():
         f.needs_backup = storage.device.needs_backup()

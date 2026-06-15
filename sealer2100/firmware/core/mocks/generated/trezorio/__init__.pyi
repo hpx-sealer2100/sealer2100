@@ -195,6 +195,8 @@ class Iris:
         ...
     def write(self, msg: bytes):
         ...
+    def sec_channel_open(self):
+        ...
     def __enter__(self) -> 'Iris':
         ...
     def __exit__(
@@ -374,7 +376,7 @@ class WebUSB:
         """
         Sends message using USB WebUSB (device) or UDP (emulator).
         """
-from . import fatfs, sdcard
+from . import fs, sdcard
 POLL_READ: int  # wait until interface is readable and return read data
 POLL_WRITE: int  # wait until interface is writable
 TOUCH: int  # interface id of the touch events

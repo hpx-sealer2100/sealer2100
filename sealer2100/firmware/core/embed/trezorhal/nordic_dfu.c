@@ -1,11 +1,34 @@
 #include STM32_HAL_H
 
+#include <assert.h>
+
+#include "alignment.h"
+#include "log.h"
 #include "nordic_dfu.h"
 #include "common.h"
 #include "display.h"
 #include "spi.h"
 #include "usart.h"
 #include "ble.h"
+
+#define MODULE "NRF dfu"
+
+#define NRF_DFU_SHOW_TRANSFER 0
+#if !NRF_DFU_SHOW_TRANSFER
+#undef LOG_HEXDUMP_DEBUG
+#define LOG_HEXDUMP_DEBUG(...) ((void)0)
+#endif
+
+#define PRN 0
+#define PACKET_SIZE 64
+
+#define CMD_INIT(BUF, CMD) do {   \
+  BUF[0] = CMD;                       \
+}while(0)
+
+#define RESP_CHECK(RESP, OP)  (RESP[0] == NRF_DFU_OP_RESPONSE && \
+                               RESP[1] == OP && \
+                               RESP[2] == NRF_DFU_RES_CODE_SUCCESS)
 
 #define default_prn 0
 #define resp_header 0x60
@@ -20,357 +43,174 @@
 #define default_delay 20
 #define long_delay 100
 
-static uint16_t mtu_len = 64;
-
-static uint32_t max_size = 0;
-static uint32_t offset = 0;
-static uint32_t crc = 0;
-
-static uint32_t reflect(uint32_t ref, char ch) {
-  uint32_t value = 0;
-
-  for (int i = 1; i < (ch + 1); i++) {
-    if (ref & 1) value |= 1 << (ch - i);
-    ref >>= 1;
-  }
-
-  return value;
-}
-
-uint32_t crc32(uint8_t *buf, uint32_t len) {
-  uint32_t result = 0xFFFFFFFF;
-  uint32_t m_Table[256];
-
-  uint32_t ulPolynomial = 0x04C11DB7;
-
-  for (int i = 0; i <= 0xFF; i++) {
-    m_Table[i] = reflect(i, 8) << 24;
-    for (int j = 0; j < 8; j++)
-      m_Table[i] =
-          (m_Table[i] << 1) ^ (m_Table[i] & (1 << 31) ? ulPolynomial : 0);
-    m_Table[i] = reflect(m_Table[i], 32);
-  }
-
-  while (len--) result = (result >> 8) ^ m_Table[(result & 0xFF) ^ *buf++];
-
-  result ^= 0xFFFFFFFF;
-
-  return result;
-}
-
-static bool serial_transfer(uint8_t *cmd, uint32_t in_len, uint8_t *resp,
-                            uint32_t *out_len, uint32_t delay) {
-  uint32_t counter = delay;
-  uint32_t i;
-  uint32_t len = 0;
-  bool slip_flag = false;
-  bool transfer_end = false;
-  *out_len = 0;
-  // slip encode and send
-  for (i = 0; i < in_len; i++) {
-    if (cmd[i] == SLIP_END) {
+void nrf_dfu_write(const uint8_t *cmd, size_t cmd_len) {
+  LOG_HEXDUMP_DEBUG(MODULE, "write", cmd, cmd_len);
+  while(cmd_len --) {
+    if (*cmd == SLIP_END) {
       ble_usart_send_byte(SLIP_ESC);
       ble_usart_send_byte(SLIP_ESC_END);
-    } else if (cmd[i] == SLIP_ESC) {
+    } else if (*cmd == SLIP_ESC) {
       ble_usart_send_byte(SLIP_ESC);
       ble_usart_send_byte(SLIP_ESC_ESC);
     } else {
-      ble_usart_send_byte(cmd[i]);
+      ble_usart_send_byte(*cmd);
     }
+    cmd++;
   }
   ble_usart_send_byte(SLIP_END);
+}
 
-  // slip decode andresponse
-  while (counter--) {
-    if (ble_read_byte(resp) == true) {
-      if (slip_flag) {
-        slip_flag = false;
-        if (*resp == SLIP_ESC_ESC)
-          *resp = SLIP_ESC;
-        else if (*resp == SLIP_ESC_END)
-          *resp = SLIP_END;
-        else
-          break;
-        len++;
-        resp++;
+bool nrf_dfu_read(uint8_t *resp, size_t resp_buf_size, uint32_t *resp_len) {
+  bool done = false;
+  bool slip = false;
+  uint8_t *p = resp;
+  while (resp_buf_size --) {
+    if (!ble_usart_read_byte(p)) {
+      continue;
+    }
+    if (!slip) {
+      if (*p == SLIP_END) {
+        (*resp_len)++;
+        p++;
+        done = true;
+        break;
+      } else if (*p == SLIP_ESC) {
+        slip = true;
       } else {
-        if (*resp == SLIP_END) {
-          len++;
-          resp++;
-          transfer_end = true;
-          break;
-        } else if (*resp == SLIP_ESC) {
-          slip_flag = true;
-        } else {
-          len++;
-          resp++;
-        }
+        p++;
+        (*resp_len)++;
       }
-    }
-  }
-  *out_len = len;
-  return transfer_end;
-}
-
-static bool set_prn(void) {
-  uint8_t cmd[64] = {0};
-  uint8_t resp[64] = {0};
-  uint32_t resp_len = 0;
-  cmd[0] = NRF_DFU_OP_RECEIPT_NOTIF_SET;
-  cmd[1] = default_prn & 0xff;
-  cmd[2] = (default_prn >> 8) & 0xff;
-  if (serial_transfer(cmd, 3, resp, &resp_len, default_delay) == true) {
-    if ((resp[0] == resp_header) && (resp[2] == NRF_DFU_RES_CODE_SUCCESS)) {
-      return true;
-    }
-  }
-  return false;
-}
-
-static bool get_mtu(void) {
-  uint8_t cmd[64] = {0};
-  uint8_t resp[64] = {0};
-  uint32_t resp_len = 0;
-  cmd[0] = NRF_DFU_OP_MTU_GET;
-  if (serial_transfer(cmd, 1, resp, &resp_len, default_delay) == true) {
-    if ((resp[0] == resp_header) && (resp[2] == NRF_DFU_RES_CODE_SUCCESS)) {
-      // mtu_len == (resp[4] << 8) + resp[3];
-      return true;
-    }
-  }
-  return false;
-}
-
-static bool select_object(uint8_t type) {
-  uint8_t cmd[64] = {0};
-  uint8_t resp[64] = {0};
-  uint32_t resp_len = 0;
-  cmd[0] = NRF_DFU_OP_OBJECT_SELECT;
-  cmd[1] = type;
-  if (serial_transfer(cmd, 2, resp, &resp_len, default_delay) == true) {
-    if ((resp[0] == resp_header) && (resp[2] == NRF_DFU_RES_CODE_SUCCESS)) {
-      max_size = (resp[6] << 24) + (resp[5] << 16) + (resp[4] << 8) + resp[3];
-      offset = (resp[10] << 24) + (resp[9] << 16) + (resp[8] << 8) + resp[7];
-      crc = (resp[14] << 24) + (resp[13] << 16) + (resp[12] << 8) + resp[11];
-      if (init_type == type) {
-      } else if (fw_type == type) {
+    } else {
+      slip = false;
+      if (*p == SLIP_ESC_ESC) {
+        *p= SLIP_ESC;
+      } else if (*p == SLIP_ESC_END) {
+        *p = SLIP_END;
+      } else {
+        // invalid packet
+        break;
       }
-      return true;
+      (*resp_len)++;
+      p++;
     }
   }
-  return false;
-}
-static bool create_object(uint8_t type, uint32_t size) {
-  uint8_t cmd[64] = {0};
-  uint8_t resp[64] = {0};
-  uint32_t resp_len = 0;
-  cmd[0] = NRF_DFU_OP_OBJECT_CREATE;
-  cmd[1] = type;
-  cmd[2] = size & 0xff;
-  cmd[3] = (size >> 8) & 0xff;
-  cmd[4] = (size >> 16) & 0xff;
-  cmd[5] = (size >> 24) & 0xff;
-  if (serial_transfer(cmd, 6, resp, &resp_len, default_delay) == true) {
-    if ((resp[0] == resp_header) && (resp[2] == NRF_DFU_RES_CODE_SUCCESS)) {
-      return true;
-    }
+
+  if (!done) {
+    // read something but failed
+    LOG_HEXDUMP_ERROR(MODULE, "read", resp, *resp_len);
+  } else {
+    LOG_HEXDUMP_DEBUG(MODULE, "read", resp, *resp_len);
   }
-  return false;
+  return done;
 }
 
-static void write_object(uint8_t *buf, uint32_t len) {
-  uint8_t cmd[128] = {0};
-  uint8_t resp[64] = {0};
-  uint32_t resp_len = 0;
-  uint32_t offset_i = 0;
-  cmd[0] = NRF_DFU_OP_OBJECT_WRITE;
-  while (len / mtu_len) {
-    memcpy(cmd + 1, buf + offset_i, mtu_len);
-    serial_transfer(cmd, mtu_len + 1, resp, &resp_len, 0);
-    offset_i += mtu_len;
-    len -= mtu_len;
-  }
-  if (len) {
-    memcpy(cmd + 1, buf + offset_i, len);
-    serial_transfer(cmd, len + 1, resp, &resp_len, 0);
-  }
+bool nrf_dfu_transfer(const uint8_t *cmd, size_t cmd_len, uint8_t *resp, uint32_t resp_buf_size, uint32_t *resp_len) {
+  nrf_dfu_write(cmd, cmd_len);
+  bool r = nrf_dfu_read(resp, resp_buf_size, resp_len);
+  return r;
 }
 
-static bool crc_object(uint32_t in_crc) {
+bool nrf_dfu_ping(uint8_t id) {
   uint8_t cmd[64] = {0};
-  uint8_t resp[64] = {0};
+  uint8_t resp[10] = {0};
   uint32_t resp_len = 0;
-  uint32_t crc_resp;
-  cmd[0] = NRF_DFU_OP_CRC_GET;
-  if (serial_transfer(cmd, 1, resp, &resp_len, default_delay) == true) {
-    if (resp[0] == resp_header) {
-      crc_resp = (resp[10] << 24) + (resp[9] << 16) + (resp[8] << 8) + resp[7];
-      if (in_crc == crc_resp) return true;
-    }
-  }
-  return false;
-}
-static bool excute_object(void) {
-  uint8_t cmd[64] = {0};
-  uint8_t resp[64] = {0};
-  uint32_t resp_len = 0;
-  cmd[0] = NRF_DFU_OP_OBJECT_EXECUTE;
-  if (serial_transfer(cmd, 1, resp, &resp_len, long_delay) == true) {
-    if ((resp[0] == resp_header) && (resp[2] == NRF_DFU_RES_CODE_SUCCESS)) {
-      return true;
-    }
-  }
-  return false;
-}
-
-static bool ping_boot(uint8_t id) {
-  uint8_t cmd[64] = {0};
-  uint8_t resp[64] = {0};
-  uint32_t resp_len = 0;
-  cmd[0] = NRF_DFU_OP_PING;
+  CMD_INIT(cmd, NRF_DFU_OP_PING);
   cmd[1] = id;
-  if (serial_transfer(cmd, 2, resp, &resp_len, default_delay) == true) {
-    if ((resp[0] == resp_header) && (resp[2] == NRF_DFU_RES_CODE_SUCCESS)) {
-      if (resp[3] == id) return true;
-    }
-  }
-  return false;
+  bool r = nrf_dfu_transfer(cmd, 2, resp, sizeof(resp), &resp_len);
+  r = r && RESP_CHECK(resp, NRF_DFU_OP_PING) && resp[3] == id;
+  return r;
 }
 
-static void enter_boot(void) {
-  ble_usart_irq_disable();
-  SET_COMBUS_LOW();
-  ble_function_off();
-  hal_delay(100);
-  ble_function_on();
-  hal_delay(1000);
-  ble_usart_irq_disable();
-  SET_COMBUS_HIGH();
+bool nrf_dfu_set_prn(void) {
+  uint8_t cmd[64] = {0};
+  uint8_t resp[64] = {0};
+  uint32_t resp_len = 0;
+  CMD_INIT(cmd, NRF_DFU_OP_RECEIPT_NOTIF_SET);
+  PUT_UINT16_LE(PRN, cmd, 1);
+  bool r = nrf_dfu_transfer(cmd, 3, resp, sizeof(resp), &resp_len);
+  return r && RESP_CHECK(resp, NRF_DFU_OP_RECEIPT_NOTIF_SET);
 }
 
-bool ble_boot_mode(void) { // check bluetooth is enter dfu mode
-  enter_boot();
-  for (uint8_t i = 0; i < 100; i++) {
-    if (ping_boot(i) == true)
-      break;
-    else if (i == 99) {
-      return false;
-    }
+bool nrf_dfu_get_mtu(size_t *mtu) {
+  uint8_t cmd[64] = {0};
+  uint8_t resp[64] = {0};
+  uint32_t resp_len = 0;
+  CMD_INIT(cmd, NRF_DFU_OP_MTU_GET);
+  bool r = nrf_dfu_transfer(cmd, 1, resp, sizeof(resp), &resp_len);
+  r = r && RESP_CHECK(resp, NRF_DFU_OP_MTU_GET);
+  if (r) {
+    *mtu = resp[3] + resp[4] * 256;
   }
-  return true;
-}
-bool updateBle(uint8_t *init_data, uint8_t init_len, uint8_t *firmware,
-               uint32_t fm_len) {
-  uint32_t crc_i = 0;
-  uint32_t offset_i = 0;
-  uint32_t len;
-  uint32_t totol_len = fm_len;
-
-  display_bar(0, 556, DISPLAY_RESX, 64, COLOR_BLACK);
-  display_text_center(MAX_DISPLAY_RESX / 2, 588, "Enter bluetooth boot", -1,
-                      FONT_NORMAL, COLOR_WHITE, COLOR_BLACK);
-  enter_boot();
-  for (uint8_t i = 0; i < 5; i++) {
-    if (ping_boot(i) == true)
-      break;
-    else if (i == 4) {
-      display_bar(0, 556, DISPLAY_RESX, 64, COLOR_BLACK);
-      display_text_center(MAX_DISPLAY_RESX / 2, 588,
-                          "Enter bluetooth boot failed", -1, FONT_NORMAL,
-                          COLOR_WHITE, COLOR_BLACK);
-      return false;
-    }
-  }
-
-  if (set_prn() != true) return false;
-  if (get_mtu() != true) return false;
-
-  // init data
-  if (create_object(init_type, init_len) != true) return false;
-  crc_i = crc32(init_data, init_len);
-  write_object(init_data, init_len);
-  if (crc_object(crc_i) != true) return false;
-  if (excute_object() != true) return false;
-
-  // firmware
-  if (select_object(fw_type) != true) return false;
-  display_bar(0, 400, DISPLAY_RESX, 400, COLOR_BLACK);
-  while (fm_len > 0) {
-    display_progress("Installing bluetooth firmware",
-                     1000 * offset_i / totol_len);
-    len = fm_len > max_size ? max_size : fm_len;
-    if (create_object(fw_type, len) != true) return false;
-    crc_i = crc32(firmware, offset_i + len);
-    write_object(firmware + offset_i, len);
-    if (crc_object(crc_i) != true) return false;
-    if (excute_object() != true) return false;
-    fm_len -= len;
-    offset_i += len;
-  }
-  display_bar(0, 556, DISPLAY_RESX, 64, COLOR_BLACK);
-  return true;
+  return r;
 }
 
-void bluetooth_reset() {
-  ble_usart_irq_disable();
-  SET_COMBUS_HIGH();  // make sure dfu io released
-  ble_function_off();
-  hal_delay(100);
-  ble_function_on();
-
+bool nrf_dfu_create_object(nrf_dfu_obj_type_t type, uint32_t size) {
+  uint8_t cmd[64] = {0};
+  uint8_t resp[64] = {0};
+  uint32_t resp_len = 0;
+  CMD_INIT(cmd, NRF_DFU_OP_OBJECT_CREATE);
+  cmd[1] = type;
+  PUT_UINT32_LE(size, cmd, 2);
+  bool r = nrf_dfu_transfer(cmd, 6, resp, sizeof(resp), &resp_len);
+  r = r && RESP_CHECK(resp, NRF_DFU_OP_OBJECT_CREATE);
+  return r;
 }
 
-bool bluetooth_enter_dfu() {
-  enter_boot();
-
-  for (uint8_t i = 0; i < 5; i++) {
-    if (ping_boot(i) == true)
-      break;
-    else if (i == 4) {
-      return false;
-    }
+bool nrf_dfu_select_object(nrf_dfu_obj_type_t type, uint32_t *max_size) {
+  uint8_t cmd[64] = {0};
+  uint8_t resp[64] = {0};
+  uint32_t resp_len = 0;
+  CMD_INIT(cmd, NRF_DFU_OP_OBJECT_SELECT);
+  cmd[1] = type;
+  bool r = nrf_dfu_transfer(cmd, 2, resp, sizeof(resp), &resp_len);
+  r = r && RESP_CHECK(resp, NRF_DFU_OP_OBJECT_SELECT);
+  // (max_size, offset, crc)
+  if (r) {
+    *max_size = GET_UINT32_LE(resp, 3);
   }
-  return true;
+  return r;
 }
 
-bool bluetooth_update(uint8_t *init_data, uint8_t init_len, uint8_t *firmware,
-                      uint32_t fm_len,
-                      void (*ui_display_progressBar)(char *title, char *notes,
-                                                     int progress)) {
-  uint32_t crc_i = 0;
-  uint32_t offset_i = 0;
-  uint32_t len;
-  uint32_t totol_len = fm_len;
+void nrf_dfu_write_object(const uint8_t* data, size_t data_len) {
+  while(data_len) {
+    uint8_t cmd[128] = {0};
+    uint8_t block_size = MIN(data_len, PACKET_SIZE);
+    CMD_INIT(cmd, NRF_DFU_OP_OBJECT_WRITE);
+    memcpy(cmd+1, data, block_size);
+    // `cmd` + packet, no response
+    nrf_dfu_write(cmd, block_size+1);
+    data += block_size;
+    data_len -= block_size;
+  }
+}
 
-  // communication config
-  if (set_prn() != true) return false;
-  if (get_mtu() != true) return false;
+bool nrf_dfu_execute_object(void) {
+  uint8_t cmd[64] = {0};
+  uint8_t resp[64] = {0};
+  uint32_t resp_len = 0;
+  CMD_INIT(cmd, NRF_DFU_OP_OBJECT_EXECUTE);
+  bool r = nrf_dfu_transfer(cmd, 1, resp, sizeof(resp), &resp_len);
+  r = r && RESP_CHECK(resp, NRF_DFU_OP_OBJECT_EXECUTE);
+  return r;
+}
 
-  // init data
-  if (create_object(init_type, init_len) != true) return false;
-  crc_i = crc32(init_data, init_len);
-  write_object(init_data, init_len);
-  if (crc_object(crc_i) != true) return false;
-  if (excute_object() != true) return false;
-
-  // firmware
-  if (select_object(fw_type) != true) return false;
-
-  while (fm_len > 0) {
-    ui_display_progressBar(
-        NULL, NULL,
-        100U * offset_i /
-            totol_len);  // both message set to NULL to keep whatever was there
-
-    len = fm_len > max_size ? max_size : fm_len;
-    if (create_object(fw_type, len) != true) return false;
-    crc_i = crc32(firmware, offset_i + len);
-    write_object(firmware + offset_i, len);
-    if (crc_object(crc_i) != true) return false;
-    if (excute_object() != true) return false;
-    fm_len -= len;
-    offset_i += len;
+bool nrf_dfu_get_crc(uint32_t* crc) {
+  uint8_t cmd[64] = {0};
+  uint8_t resp[64] = {0};
+  uint32_t resp_len = 0;
+  CMD_INIT(cmd, NRF_DFU_OP_CRC_GET);
+  bool r = nrf_dfu_transfer(cmd, 1, resp, sizeof(resp), &resp_len);
+  r = r && RESP_CHECK(resp, NRF_DFU_OP_CRC_GET);
+  // (offset, crc)
+  if (r) {
+    *crc = GET_UINT32_LE(resp, 7);
   }
 
-  return true;
+  return r;
+}
+
+void nrf_dfu_restart(void) {
+  uint8_t cmd[64] = {0};
+  CMD_INIT(cmd, NRF_DFU_OP_ABORT);
+  nrf_dfu_write(cmd, 1);
 }

@@ -82,7 +82,7 @@ class MessageType(IntEnum):
     FirmwareErase_ex = 16
     SelfTest = 32
     Reboot = 30000
-    FirmwareUpdateEmmc = 30001
+    FirmwareUpdate = 30001
     GetPublicKey = 11
     PublicKey = 12
     SignTx = 15
@@ -125,17 +125,19 @@ class MessageType(IntEnum):
     DebugLinkRecordScreen = 9003
     DebugLinkEraseSdCard = 9005
     DebugLinkWatchLayout = 9006
-    EmmcFixPermission = 30100
-    EmmcPath = 30101
-    EmmcPathInfo = 30102
-    EmmcFile = 30103
-    EmmcFileRead = 30104
-    EmmcFileWrite = 30105
-    EmmcFileDelete = 30106
-    EmmcDir = 30107
-    EmmcDirList = 30108
-    EmmcDirMake = 30109
-    EmmcDirRemove = 30110
+    FsStat = 30100
+    FsInfo = 30101
+    FsRemove = 30102
+    FsFile = 30103
+    FsFileRead = 30104
+    FsFileWrite = 30105
+    FsChunk = 30106
+    FsRead = 30107
+    FsWrite = 30108
+    FsMkdir = 30109
+    FsFsStat = 30110
+    FsFsInfo = 30111
+    FsChecksums = 30112
     EthereumGetPublicKey = 450
     EthereumPublicKey = 451
     EthereumGetAddress = 56
@@ -154,25 +156,7 @@ class MessageType(IntEnum):
     EthereumTypedDataValueAck = 468
     EthereumTypedDataSignature = 469
     EthereumSignTypedHash = 470
-    EthereumGetPublicKeyHypermate = 20100
-    EthereumPublicKeyHypermate = 20101
-    EthereumGetAddressHypermate = 20102
-    EthereumAddressHypermate = 20103
-    EthereumSignTxHypermate = 20104
-    EthereumSignTxEIP1559Hypermate = 20105
-    EthereumTxRequestHypermate = 20106
-    EthereumTxAckHypermate = 20107
-    EthereumSignMessageHypermate = 20108
-    EthereumVerifyMessageHypermate = 20109
-    EthereumMessageSignatureHypermate = 20110
-    EthereumSignTypedDataHypermate = 20111
-    EthereumTypedDataStructRequestHypermate = 20112
-    EthereumTypedDataStructAckHypermate = 20113
-    EthereumTypedDataValueRequestHypermate = 20114
-    EthereumTypedDataValueAckHypermate = 20115
-    EthereumTypedDataSignatureHypermate = 20116
-    EthereumSignTypedHashHypermate = 20117
-    EthereumSignMessageEIP712 = 10200
+    EthereumStoreDefinition = 471
     NEMGetAddress = 67
     NEMAddress = 68
     NEMSignTx = 69
@@ -386,11 +370,9 @@ class MessageType(IntEnum):
     SEPublicCert = 10008
     SESignMessage = 10012
     SEMessageSignature = 10013
-    ResourceUpload = 10018
-    ZoomRequest = 10019
-    ResourceRequest = 10020
-    ResourceAck = 10021
-    ResourceUpdate = 10022
+    NftUpload = 10018
+    NftRequest = 10019
+    NftAck = 10021
     ListResDir = 10023
     FileInfoList = 10024
     SEInitialize = 10025
@@ -621,9 +603,9 @@ class WordRequestType(IntEnum):
     Matrix6 = 2
 
 
-class ResourceType(IntEnum):
-    WallPaper = 0
-    Nft = 1
+class NftRequestType(IntEnum):
+    IMAGE = 0
+    THUMBNAIL = 1
 
 
 class DebugSwipeDirection(IntEnum):
@@ -644,17 +626,6 @@ class EthereumDefinitionType(IntEnum):
     TOKEN = 1
 
 
-class EthereumDataTypeHypermate(IntEnum):
-    UINT = 1
-    INT = 2
-    BYTES = 3
-    STRING = 4
-    BOOL = 5
-    ADDRESS = 6
-    ARRAY = 7
-    STRUCT = 8
-
-
 class EthereumDataType(IntEnum):
     UINT = 1
     INT = 2
@@ -664,6 +635,11 @@ class EthereumDataType(IntEnum):
     ADDRESS = 6
     ARRAY = 7
     STRUCT = 8
+
+
+class FsType(IntEnum):
+    FILE = 1
+    DIRECTORY = 2
 
 
 class MoneroNetworkType(IntEnum):
@@ -2489,7 +2465,7 @@ class Reboot(protobuf.MessageType):
         self.reboot_type = reboot_type
 
 
-class FirmwareUpdateEmmc(protobuf.MessageType):
+class FirmwareUpdate(protobuf.MessageType):
     MESSAGE_WIRE_TYPE = 30001
     FIELDS = {
         1: protobuf.Field("path", "string", repeated=False, required=True),
@@ -4607,106 +4583,89 @@ class SEWipeUserStorage(protobuf.MessageType):
     MESSAGE_WIRE_TYPE = 10028
 
 
-class ResourceUpload(protobuf.MessageType):
+class NftMetadata(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = None
+    FIELDS = {
+        1: protobuf.Field("id", "string", repeated=False, required=True),
+        3: protobuf.Field("name", "string", repeated=False, required=True),
+        2: protobuf.Field("token", "string", repeated=False, required=True),
+        4: protobuf.Field("network", "string", repeated=False, required=True),
+        5: protobuf.Field("owner", "string", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        id: "str",
+        name: "str",
+        token: "str",
+        network: "str",
+        owner: "str",
+    ) -> None:
+        self.id = id
+        self.name = name
+        self.token = token
+        self.network = network
+        self.owner = owner
+
+
+class NftUpload(protobuf.MessageType):
     MESSAGE_WIRE_TYPE = 10018
     FIELDS = {
-        1: protobuf.Field("extension", "string", repeated=False, required=True),
-        2: protobuf.Field("data_length", "uint32", repeated=False, required=True),
-        3: protobuf.Field("res_type", "ResourceType", repeated=False, required=True),
-        4: protobuf.Field("nft_meta_data", "bytes", repeated=False, required=False),
-        5: protobuf.Field("zoom_data_length", "uint32", repeated=False, required=True),
-        6: protobuf.Field("file_name_no_ext", "string", repeated=False, required=False),
+        1: protobuf.Field("metadata", "NftMetadata", repeated=False, required=True),
+        2: protobuf.Field("extension", "string", repeated=False, required=True),
+        3: protobuf.Field("image_size", "uint32", repeated=False, required=True),
+        4: protobuf.Field("thumbnail_size", "uint32", repeated=False, required=True),
     }
 
     def __init__(
         self,
         *,
+        metadata: "NftMetadata",
         extension: "str",
-        data_length: "int",
-        res_type: "ResourceType",
-        zoom_data_length: "int",
-        nft_meta_data: Optional["bytes"] = None,
-        file_name_no_ext: Optional["str"] = None,
+        image_size: "int",
+        thumbnail_size: "int",
     ) -> None:
+        self.metadata = metadata
         self.extension = extension
-        self.data_length = data_length
-        self.res_type = res_type
-        self.zoom_data_length = zoom_data_length
-        self.nft_meta_data = nft_meta_data
-        self.file_name_no_ext = file_name_no_ext
+        self.image_size = image_size
+        self.thumbnail_size = thumbnail_size
 
 
-class ZoomRequest(protobuf.MessageType):
+class NftRequest(protobuf.MessageType):
     MESSAGE_WIRE_TYPE = 10019
     FIELDS = {
-        1: protobuf.Field("offset", "uint32", repeated=False, required=False),
+        1: protobuf.Field("offset", "uint32", repeated=False, required=True),
         2: protobuf.Field("data_length", "uint32", repeated=False, required=True),
+        3: protobuf.Field("type", "NftRequestType", repeated=False, required=True),
     }
 
     def __init__(
         self,
         *,
+        offset: "int",
         data_length: "int",
-        offset: Optional["int"] = None,
+        type: "NftRequestType",
     ) -> None:
-        self.data_length = data_length
         self.offset = offset
-
-
-class ResourceRequest(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 10020
-    FIELDS = {
-        1: protobuf.Field("offset", "uint32", repeated=False, required=False),
-        2: protobuf.Field("data_length", "uint32", repeated=False, required=True),
-    }
-
-    def __init__(
-        self,
-        *,
-        data_length: "int",
-        offset: Optional["int"] = None,
-    ) -> None:
         self.data_length = data_length
-        self.offset = offset
+        self.type = type
 
 
-class ResourceAck(protobuf.MessageType):
+class NftAck(protobuf.MessageType):
     MESSAGE_WIRE_TYPE = 10021
     FIELDS = {
-        1: protobuf.Field("data_chunk", "bytes", repeated=False, required=True),
+        1: protobuf.Field("chunk", "bytes", repeated=False, required=True),
         2: protobuf.Field("hash", "bytes", repeated=False, required=False),
     }
 
     def __init__(
         self,
         *,
-        data_chunk: "bytes",
+        chunk: "bytes",
         hash: Optional["bytes"] = None,
     ) -> None:
-        self.data_chunk = data_chunk
-        self.hash = hash
-
-
-class ResourceUpdate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 10022
-    FIELDS = {
-        1: protobuf.Field("file_name", "string", repeated=False, required=True),
-        2: protobuf.Field("data_length", "uint32", repeated=False, required=True),
-        3: protobuf.Field("initial_data_chunk", "bytes", repeated=False, required=True),
-        4: protobuf.Field("hash", "bytes", repeated=False, required=False),
-    }
-
-    def __init__(
-        self,
-        *,
-        file_name: "str",
-        data_length: "int",
-        initial_data_chunk: "bytes",
-        hash: Optional["bytes"] = None,
-    ) -> None:
-        self.file_name = file_name
-        self.data_length = data_length
-        self.initial_data_chunk = initial_data_chunk
+        self.chunk = chunk
         self.hash = hash
 
 
@@ -5045,219 +5004,6 @@ class DebugLinkWatchLayout(protobuf.MessageType):
         watch: Optional["bool"] = None,
     ) -> None:
         self.watch = watch
-
-
-class EmmcFixPermission(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 30100
-
-
-class EmmcPath(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 30101
-    FIELDS = {
-        1: protobuf.Field("exist", "bool", repeated=False, required=True),
-        2: protobuf.Field("size", "uint64", repeated=False, required=True),
-        3: protobuf.Field("year", "uint32", repeated=False, required=True),
-        4: protobuf.Field("month", "uint32", repeated=False, required=True),
-        5: protobuf.Field("day", "uint32", repeated=False, required=True),
-        6: protobuf.Field("hour", "uint32", repeated=False, required=True),
-        7: protobuf.Field("minute", "uint32", repeated=False, required=True),
-        8: protobuf.Field("second", "uint32", repeated=False, required=True),
-        9: protobuf.Field("readonly", "bool", repeated=False, required=True),
-        10: protobuf.Field("hidden", "bool", repeated=False, required=True),
-        11: protobuf.Field("system", "bool", repeated=False, required=True),
-        12: protobuf.Field("archive", "bool", repeated=False, required=True),
-        13: protobuf.Field("directory", "bool", repeated=False, required=True),
-    }
-
-    def __init__(
-        self,
-        *,
-        exist: "bool",
-        size: "int",
-        year: "int",
-        month: "int",
-        day: "int",
-        hour: "int",
-        minute: "int",
-        second: "int",
-        readonly: "bool",
-        hidden: "bool",
-        system: "bool",
-        archive: "bool",
-        directory: "bool",
-    ) -> None:
-        self.exist = exist
-        self.size = size
-        self.year = year
-        self.month = month
-        self.day = day
-        self.hour = hour
-        self.minute = minute
-        self.second = second
-        self.readonly = readonly
-        self.hidden = hidden
-        self.system = system
-        self.archive = archive
-        self.directory = directory
-
-
-class EmmcPathInfo(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 30102
-    FIELDS = {
-        1: protobuf.Field("path", "string", repeated=False, required=True),
-    }
-
-    def __init__(
-        self,
-        *,
-        path: "str",
-    ) -> None:
-        self.path = path
-
-
-class EmmcFile(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 30103
-    FIELDS = {
-        1: protobuf.Field("path", "string", repeated=False, required=True),
-        2: protobuf.Field("offset", "uint32", repeated=False, required=True),
-        3: protobuf.Field("len", "uint32", repeated=False, required=True),
-        4: protobuf.Field("data", "bytes", repeated=False, required=False),
-        5: protobuf.Field("data_hash", "uint32", repeated=False, required=False),
-        6: protobuf.Field("processed_byte", "uint32", repeated=False, required=False),
-    }
-
-    def __init__(
-        self,
-        *,
-        path: "str",
-        offset: "int",
-        len: "int",
-        data: Optional["bytes"] = None,
-        data_hash: Optional["int"] = None,
-        processed_byte: Optional["int"] = None,
-    ) -> None:
-        self.path = path
-        self.offset = offset
-        self.len = len
-        self.data = data
-        self.data_hash = data_hash
-        self.processed_byte = processed_byte
-
-
-class EmmcFileRead(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 30104
-    FIELDS = {
-        1: protobuf.Field("file", "EmmcFile", repeated=False, required=True),
-        2: protobuf.Field("ui_percentage", "uint32", repeated=False, required=False),
-    }
-
-    def __init__(
-        self,
-        *,
-        file: "EmmcFile",
-        ui_percentage: Optional["int"] = None,
-    ) -> None:
-        self.file = file
-        self.ui_percentage = ui_percentage
-
-
-class EmmcFileWrite(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 30105
-    FIELDS = {
-        1: protobuf.Field("file", "EmmcFile", repeated=False, required=True),
-        2: protobuf.Field("overwrite", "bool", repeated=False, required=True),
-        3: protobuf.Field("append", "bool", repeated=False, required=True),
-        4: protobuf.Field("ui_percentage", "uint32", repeated=False, required=False),
-    }
-
-    def __init__(
-        self,
-        *,
-        file: "EmmcFile",
-        overwrite: "bool",
-        append: "bool",
-        ui_percentage: Optional["int"] = None,
-    ) -> None:
-        self.file = file
-        self.overwrite = overwrite
-        self.append = append
-        self.ui_percentage = ui_percentage
-
-
-class EmmcFileDelete(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 30106
-    FIELDS = {
-        1: protobuf.Field("path", "string", repeated=False, required=True),
-    }
-
-    def __init__(
-        self,
-        *,
-        path: "str",
-    ) -> None:
-        self.path = path
-
-
-class EmmcDir(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 30107
-    FIELDS = {
-        1: protobuf.Field("path", "string", repeated=False, required=True),
-        2: protobuf.Field("child_dirs", "string", repeated=False, required=False),
-        3: protobuf.Field("child_files", "string", repeated=False, required=False),
-    }
-
-    def __init__(
-        self,
-        *,
-        path: "str",
-        child_dirs: Optional["str"] = None,
-        child_files: Optional["str"] = None,
-    ) -> None:
-        self.path = path
-        self.child_dirs = child_dirs
-        self.child_files = child_files
-
-
-class EmmcDirList(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 30108
-    FIELDS = {
-        1: protobuf.Field("path", "string", repeated=False, required=True),
-    }
-
-    def __init__(
-        self,
-        *,
-        path: "str",
-    ) -> None:
-        self.path = path
-
-
-class EmmcDirMake(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 30109
-    FIELDS = {
-        1: protobuf.Field("path", "string", repeated=False, required=True),
-    }
-
-    def __init__(
-        self,
-        *,
-        path: "str",
-    ) -> None:
-        self.path = path
-
-
-class EmmcDirRemove(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 30110
-    FIELDS = {
-        1: protobuf.Field("path", "string", repeated=False, required=True),
-    }
-
-    def __init__(
-        self,
-        *,
-        path: "str",
-    ) -> None:
-        self.path = path
 
 
 class EosGetPublicKey(protobuf.MessageType):
@@ -5858,7 +5604,6 @@ class EthereumNetworkInfo(protobuf.MessageType):
         3: protobuf.Field("slip44", "uint32", repeated=False, required=True),
         4: protobuf.Field("name", "string", repeated=False, required=True),
         101: protobuf.Field("icon", "string", repeated=False, required=False),
-        102: protobuf.Field("primary_color", "uint64", repeated=False, required=False),
     }
 
     def __init__(
@@ -5869,14 +5614,12 @@ class EthereumNetworkInfo(protobuf.MessageType):
         slip44: "int",
         name: "str",
         icon: Optional["str"] = None,
-        primary_color: Optional["int"] = None,
     ) -> None:
         self.chain_id = chain_id
         self.symbol = symbol
         self.slip44 = slip44
         self.name = name
         self.icon = icon
-        self.primary_color = primary_color
 
 
 class EthereumTokenInfo(protobuf.MessageType):
@@ -5920,458 +5663,6 @@ class EthereumDefinitions(protobuf.MessageType):
     ) -> None:
         self.encoded_network = encoded_network
         self.encoded_token = encoded_token
-
-
-class EthereumGetPublicKeyHypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 20100
-    FIELDS = {
-        1: protobuf.Field("address_n", "uint32", repeated=True, required=False),
-        2: protobuf.Field("show_display", "bool", repeated=False, required=False),
-        3: protobuf.Field("chain_id", "uint64", repeated=False, required=False),
-    }
-
-    def __init__(
-        self,
-        *,
-        address_n: Optional[Sequence["int"]] = None,
-        show_display: Optional["bool"] = None,
-        chain_id: Optional["int"] = None,
-    ) -> None:
-        self.address_n: Sequence["int"] = address_n if address_n is not None else []
-        self.show_display = show_display
-        self.chain_id = chain_id
-
-
-class EthereumPublicKeyHypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 20101
-    FIELDS = {
-        1: protobuf.Field("node", "HDNodeType", repeated=False, required=True),
-        2: protobuf.Field("xpub", "string", repeated=False, required=True),
-    }
-
-    def __init__(
-        self,
-        *,
-        node: "HDNodeType",
-        xpub: "str",
-    ) -> None:
-        self.node = node
-        self.xpub = xpub
-
-
-class EthereumGetAddressHypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 20102
-    FIELDS = {
-        1: protobuf.Field("address_n", "uint32", repeated=True, required=False),
-        2: protobuf.Field("show_display", "bool", repeated=False, required=False),
-        3: protobuf.Field("chain_id", "uint64", repeated=False, required=False),
-    }
-
-    def __init__(
-        self,
-        *,
-        address_n: Optional[Sequence["int"]] = None,
-        show_display: Optional["bool"] = None,
-        chain_id: Optional["int"] = None,
-    ) -> None:
-        self.address_n: Sequence["int"] = address_n if address_n is not None else []
-        self.show_display = show_display
-        self.chain_id = chain_id
-
-
-class EthereumAddressHypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 20103
-    FIELDS = {
-        1: protobuf.Field("_old_address", "bytes", repeated=False, required=False),
-        2: protobuf.Field("address", "string", repeated=False, required=False),
-    }
-
-    def __init__(
-        self,
-        *,
-        _old_address: Optional["bytes"] = None,
-        address: Optional["str"] = None,
-    ) -> None:
-        self._old_address = _old_address
-        self.address = address
-
-
-class EthereumSignTxHypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 20104
-    FIELDS = {
-        1: protobuf.Field("address_n", "uint32", repeated=True, required=False),
-        2: protobuf.Field("nonce", "bytes", repeated=False, required=False),
-        3: protobuf.Field("gas_price", "bytes", repeated=False, required=True),
-        4: protobuf.Field("gas_limit", "bytes", repeated=False, required=True),
-        11: protobuf.Field("to", "string", repeated=False, required=False),
-        6: protobuf.Field("value", "bytes", repeated=False, required=False),
-        7: protobuf.Field("data_initial_chunk", "bytes", repeated=False, required=False),
-        8: protobuf.Field("data_length", "uint32", repeated=False, required=False),
-        9: protobuf.Field("chain_id", "uint64", repeated=False, required=True),
-        10: protobuf.Field("tx_type", "uint32", repeated=False, required=False),
-    }
-
-    def __init__(
-        self,
-        *,
-        gas_price: "bytes",
-        gas_limit: "bytes",
-        chain_id: "int",
-        address_n: Optional[Sequence["int"]] = None,
-        nonce: Optional["bytes"] = b'',
-        to: Optional["str"] = '',
-        value: Optional["bytes"] = b'',
-        data_initial_chunk: Optional["bytes"] = b'',
-        data_length: Optional["int"] = 0,
-        tx_type: Optional["int"] = None,
-    ) -> None:
-        self.address_n: Sequence["int"] = address_n if address_n is not None else []
-        self.gas_price = gas_price
-        self.gas_limit = gas_limit
-        self.chain_id = chain_id
-        self.nonce = nonce
-        self.to = to
-        self.value = value
-        self.data_initial_chunk = data_initial_chunk
-        self.data_length = data_length
-        self.tx_type = tx_type
-
-
-class EthereumSignTxEIP1559Hypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 20105
-    FIELDS = {
-        1: protobuf.Field("address_n", "uint32", repeated=True, required=False),
-        2: protobuf.Field("nonce", "bytes", repeated=False, required=True),
-        3: protobuf.Field("max_gas_fee", "bytes", repeated=False, required=True),
-        4: protobuf.Field("max_priority_fee", "bytes", repeated=False, required=True),
-        5: protobuf.Field("gas_limit", "bytes", repeated=False, required=True),
-        6: protobuf.Field("to", "string", repeated=False, required=False),
-        7: protobuf.Field("value", "bytes", repeated=False, required=True),
-        8: protobuf.Field("data_initial_chunk", "bytes", repeated=False, required=False),
-        9: protobuf.Field("data_length", "uint32", repeated=False, required=True),
-        10: protobuf.Field("chain_id", "uint64", repeated=False, required=True),
-        11: protobuf.Field("access_list", "EthereumAccessListHypermate", repeated=True, required=False),
-    }
-
-    def __init__(
-        self,
-        *,
-        nonce: "bytes",
-        max_gas_fee: "bytes",
-        max_priority_fee: "bytes",
-        gas_limit: "bytes",
-        value: "bytes",
-        data_length: "int",
-        chain_id: "int",
-        address_n: Optional[Sequence["int"]] = None,
-        access_list: Optional[Sequence["EthereumAccessListHypermate"]] = None,
-        to: Optional["str"] = '',
-        data_initial_chunk: Optional["bytes"] = b'',
-    ) -> None:
-        self.address_n: Sequence["int"] = address_n if address_n is not None else []
-        self.access_list: Sequence["EthereumAccessListHypermate"] = access_list if access_list is not None else []
-        self.nonce = nonce
-        self.max_gas_fee = max_gas_fee
-        self.max_priority_fee = max_priority_fee
-        self.gas_limit = gas_limit
-        self.value = value
-        self.data_length = data_length
-        self.chain_id = chain_id
-        self.to = to
-        self.data_initial_chunk = data_initial_chunk
-
-
-class EthereumTxRequestHypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 20106
-    FIELDS = {
-        1: protobuf.Field("data_length", "uint32", repeated=False, required=False),
-        2: protobuf.Field("signature_v", "uint32", repeated=False, required=False),
-        3: protobuf.Field("signature_r", "bytes", repeated=False, required=False),
-        4: protobuf.Field("signature_s", "bytes", repeated=False, required=False),
-    }
-
-    def __init__(
-        self,
-        *,
-        data_length: Optional["int"] = None,
-        signature_v: Optional["int"] = None,
-        signature_r: Optional["bytes"] = None,
-        signature_s: Optional["bytes"] = None,
-    ) -> None:
-        self.data_length = data_length
-        self.signature_v = signature_v
-        self.signature_r = signature_r
-        self.signature_s = signature_s
-
-
-class EthereumTxAckHypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 20107
-    FIELDS = {
-        1: protobuf.Field("data_chunk", "bytes", repeated=False, required=True),
-    }
-
-    def __init__(
-        self,
-        *,
-        data_chunk: "bytes",
-    ) -> None:
-        self.data_chunk = data_chunk
-
-
-class EthereumSignMessageHypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 20108
-    FIELDS = {
-        1: protobuf.Field("address_n", "uint32", repeated=True, required=False),
-        2: protobuf.Field("message", "bytes", repeated=False, required=True),
-        3: protobuf.Field("chain_id", "uint64", repeated=False, required=False),
-    }
-
-    def __init__(
-        self,
-        *,
-        message: "bytes",
-        address_n: Optional[Sequence["int"]] = None,
-        chain_id: Optional["int"] = None,
-    ) -> None:
-        self.address_n: Sequence["int"] = address_n if address_n is not None else []
-        self.message = message
-        self.chain_id = chain_id
-
-
-class EthereumMessageSignatureHypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 20110
-    FIELDS = {
-        2: protobuf.Field("signature", "bytes", repeated=False, required=True),
-        3: protobuf.Field("address", "string", repeated=False, required=True),
-    }
-
-    def __init__(
-        self,
-        *,
-        signature: "bytes",
-        address: "str",
-    ) -> None:
-        self.signature = signature
-        self.address = address
-
-
-class EthereumVerifyMessageHypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 20109
-    FIELDS = {
-        2: protobuf.Field("signature", "bytes", repeated=False, required=True),
-        3: protobuf.Field("message", "bytes", repeated=False, required=True),
-        4: protobuf.Field("address", "string", repeated=False, required=True),
-        5: protobuf.Field("chain_id", "uint64", repeated=False, required=False),
-    }
-
-    def __init__(
-        self,
-        *,
-        signature: "bytes",
-        message: "bytes",
-        address: "str",
-        chain_id: Optional["int"] = None,
-    ) -> None:
-        self.signature = signature
-        self.message = message
-        self.address = address
-        self.chain_id = chain_id
-
-
-class EthereumSignTypedHashHypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 20117
-    FIELDS = {
-        1: protobuf.Field("address_n", "uint32", repeated=True, required=False),
-        2: protobuf.Field("domain_separator_hash", "bytes", repeated=False, required=True),
-        3: protobuf.Field("message_hash", "bytes", repeated=False, required=False),
-        4: protobuf.Field("chain_id", "uint64", repeated=False, required=False),
-    }
-
-    def __init__(
-        self,
-        *,
-        domain_separator_hash: "bytes",
-        address_n: Optional[Sequence["int"]] = None,
-        message_hash: Optional["bytes"] = None,
-        chain_id: Optional["int"] = None,
-    ) -> None:
-        self.address_n: Sequence["int"] = address_n if address_n is not None else []
-        self.domain_separator_hash = domain_separator_hash
-        self.message_hash = message_hash
-        self.chain_id = chain_id
-
-
-class EthereumTypedDataSignatureHypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 20116
-    FIELDS = {
-        1: protobuf.Field("signature", "bytes", repeated=False, required=True),
-        2: protobuf.Field("address", "string", repeated=False, required=True),
-    }
-
-    def __init__(
-        self,
-        *,
-        signature: "bytes",
-        address: "str",
-    ) -> None:
-        self.signature = signature
-        self.address = address
-
-
-class EthereumSignMessageEIP712(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 10200
-    FIELDS = {
-        1: protobuf.Field("address_n", "uint32", repeated=True, required=False),
-        2: protobuf.Field("domain_hash", "bytes", repeated=False, required=False),
-        3: protobuf.Field("message_hash", "bytes", repeated=False, required=False),
-    }
-
-    def __init__(
-        self,
-        *,
-        address_n: Optional[Sequence["int"]] = None,
-        domain_hash: Optional["bytes"] = None,
-        message_hash: Optional["bytes"] = None,
-    ) -> None:
-        self.address_n: Sequence["int"] = address_n if address_n is not None else []
-        self.domain_hash = domain_hash
-        self.message_hash = message_hash
-
-
-class EthereumAccessListHypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = None
-    FIELDS = {
-        1: protobuf.Field("address", "string", repeated=False, required=True),
-        2: protobuf.Field("storage_keys", "bytes", repeated=True, required=False),
-    }
-
-    def __init__(
-        self,
-        *,
-        address: "str",
-        storage_keys: Optional[Sequence["bytes"]] = None,
-    ) -> None:
-        self.storage_keys: Sequence["bytes"] = storage_keys if storage_keys is not None else []
-        self.address = address
-
-
-class EthereumSignTypedDataHypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 20111
-    FIELDS = {
-        1: protobuf.Field("address_n", "uint32", repeated=True, required=False),
-        2: protobuf.Field("primary_type", "string", repeated=False, required=True),
-        3: protobuf.Field("metamask_v4_compat", "bool", repeated=False, required=False),
-        4: protobuf.Field("chain_id", "uint64", repeated=False, required=False),
-    }
-
-    def __init__(
-        self,
-        *,
-        primary_type: "str",
-        address_n: Optional[Sequence["int"]] = None,
-        metamask_v4_compat: Optional["bool"] = True,
-        chain_id: Optional["int"] = None,
-    ) -> None:
-        self.address_n: Sequence["int"] = address_n if address_n is not None else []
-        self.primary_type = primary_type
-        self.metamask_v4_compat = metamask_v4_compat
-        self.chain_id = chain_id
-
-
-class EthereumTypedDataStructRequestHypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 20112
-    FIELDS = {
-        1: protobuf.Field("name", "string", repeated=False, required=True),
-    }
-
-    def __init__(
-        self,
-        *,
-        name: "str",
-    ) -> None:
-        self.name = name
-
-
-class EthereumTypedDataStructAckHypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 20113
-    FIELDS = {
-        1: protobuf.Field("members", "EthereumStructMemberHypermate", repeated=True, required=False),
-    }
-
-    def __init__(
-        self,
-        *,
-        members: Optional[Sequence["EthereumStructMemberHypermate"]] = None,
-    ) -> None:
-        self.members: Sequence["EthereumStructMemberHypermate"] = members if members is not None else []
-
-
-class EthereumTypedDataValueRequestHypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 20114
-    FIELDS = {
-        1: protobuf.Field("member_path", "uint32", repeated=True, required=False),
-    }
-
-    def __init__(
-        self,
-        *,
-        member_path: Optional[Sequence["int"]] = None,
-    ) -> None:
-        self.member_path: Sequence["int"] = member_path if member_path is not None else []
-
-
-class EthereumTypedDataValueAckHypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 20115
-    FIELDS = {
-        1: protobuf.Field("value", "bytes", repeated=False, required=True),
-    }
-
-    def __init__(
-        self,
-        *,
-        value: "bytes",
-    ) -> None:
-        self.value = value
-
-
-class EthereumStructMemberHypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = None
-    FIELDS = {
-        1: protobuf.Field("type", "EthereumFieldTypeHypermate", repeated=False, required=True),
-        2: protobuf.Field("name", "string", repeated=False, required=True),
-    }
-
-    def __init__(
-        self,
-        *,
-        type: "EthereumFieldTypeHypermate",
-        name: "str",
-    ) -> None:
-        self.type = type
-        self.name = name
-
-
-class EthereumFieldTypeHypermate(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = None
-    FIELDS = {
-        1: protobuf.Field("data_type", "EthereumDataTypeHypermate", repeated=False, required=True),
-        2: protobuf.Field("size", "uint32", repeated=False, required=False),
-        3: protobuf.Field("entry_type", "EthereumFieldTypeHypermate", repeated=False, required=False),
-        4: protobuf.Field("struct_name", "string", repeated=False, required=False),
-    }
-
-    def __init__(
-        self,
-        *,
-        data_type: "EthereumDataTypeHypermate",
-        size: Optional["int"] = None,
-        entry_type: Optional["EthereumFieldTypeHypermate"] = None,
-        struct_name: Optional["str"] = None,
-    ) -> None:
-        self.data_type = data_type
-        self.size = size
-        self.entry_type = entry_type
-        self.struct_name = struct_name
 
 
 class EthereumSignTypedData(protobuf.MessageType):
@@ -6533,6 +5824,7 @@ class EthereumGetAddress(protobuf.MessageType):
         1: protobuf.Field("address_n", "uint32", repeated=True, required=False),
         2: protobuf.Field("show_display", "bool", repeated=False, required=False),
         3: protobuf.Field("encoded_network", "bytes", repeated=False, required=False),
+        4: protobuf.Field("chain_id", "uint64", repeated=False, required=False),
     }
 
     def __init__(
@@ -6541,10 +5833,12 @@ class EthereumGetAddress(protobuf.MessageType):
         address_n: Optional[Sequence["int"]] = None,
         show_display: Optional["bool"] = None,
         encoded_network: Optional["bytes"] = None,
+        chain_id: Optional["int"] = None,
     ) -> None:
         self.address_n: Sequence["int"] = address_n if address_n is not None else []
         self.show_display = show_display
         self.encoded_network = encoded_network
+        self.chain_id = chain_id
 
 
 class EthereumAddress(protobuf.MessageType):
@@ -6789,6 +6083,23 @@ class EthereumTypedDataSignature(protobuf.MessageType):
         self.address = address
 
 
+class EthereumStoreDefinition(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = 471
+    FIELDS = {
+        1: protobuf.Field("network", "EthereumNetworkInfo", repeated=False, required=True),
+        2: protobuf.Field("token", "EthereumTokenInfo", repeated=False, required=False),
+    }
+
+    def __init__(
+        self,
+        *,
+        network: "EthereumNetworkInfo",
+        token: Optional["EthereumTokenInfo"] = None,
+    ) -> None:
+        self.network = network
+        self.token = token
+
+
 class EthereumAccessList(protobuf.MessageType):
     MESSAGE_WIRE_TYPE = None
     FIELDS = {
@@ -6872,6 +6183,225 @@ class FilecoinSignedTx(protobuf.MessageType):
         signature: "bytes",
     ) -> None:
         self.signature = signature
+
+
+class FsInfo(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = 30101
+    FIELDS = {
+        1: protobuf.Field("type", "FsType", repeated=False, required=True),
+        2: protobuf.Field("size", "uint32", repeated=False, required=True),
+        3: protobuf.Field("name", "string", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        type: "FsType",
+        size: "int",
+        name: "str",
+    ) -> None:
+        self.type = type
+        self.size = size
+        self.name = name
+
+
+class FsChunk(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = 30106
+    FIELDS = {
+        1: protobuf.Field("data", "bytes", repeated=False, required=True),
+        2: protobuf.Field("data_hash", "bytes", repeated=False, required=False),
+    }
+
+    def __init__(
+        self,
+        *,
+        data: "bytes",
+        data_hash: Optional["bytes"] = None,
+    ) -> None:
+        self.data = data
+        self.data_hash = data_hash
+
+
+class FsRead(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = 30107
+    FIELDS = {
+        1: protobuf.Field("path", "string", repeated=False, required=True),
+        2: protobuf.Field("offset", "uint32", repeated=False, required=True),
+        3: protobuf.Field("size", "uint32", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        path: "str",
+        offset: "int",
+        size: "int",
+    ) -> None:
+        self.path = path
+        self.offset = offset
+        self.size = size
+
+
+class FsWrite(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = 30108
+    FIELDS = {
+        1: protobuf.Field("path", "string", repeated=False, required=True),
+        2: protobuf.Field("total", "uint32", repeated=False, required=True),
+        3: protobuf.Field("offset", "uint32", repeated=False, required=False),
+        4: protobuf.Field("chunk", "FsChunk", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        path: "str",
+        total: "int",
+        chunk: "FsChunk",
+        offset: Optional["int"] = None,
+    ) -> None:
+        self.path = path
+        self.total = total
+        self.chunk = chunk
+        self.offset = offset
+
+
+class FsRemove(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = 30102
+    FIELDS = {
+        1: protobuf.Field("path", "string", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        path: "str",
+    ) -> None:
+        self.path = path
+
+
+class FsMkdir(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = 30109
+    FIELDS = {
+        1: protobuf.Field("path", "string", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        path: "str",
+    ) -> None:
+        self.path = path
+
+
+class FsStat(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = 30100
+    FIELDS = {
+        1: protobuf.Field("path", "string", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        path: "str",
+    ) -> None:
+        self.path = path
+
+
+class FsFsStat(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = 30110
+
+
+class FsFsInfo(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = 30111
+    FIELDS = {
+        1: protobuf.Field("block_count", "uint32", repeated=False, required=True),
+        2: protobuf.Field("block_size", "uint32", repeated=False, required=True),
+        3: protobuf.Field("block_used", "uint32", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        block_count: "int",
+        block_size: "int",
+        block_used: "int",
+    ) -> None:
+        self.block_count = block_count
+        self.block_size = block_size
+        self.block_used = block_used
+
+
+class FsFile(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = 30103
+    FIELDS = {
+        1: protobuf.Field("path", "string", repeated=False, required=True),
+        2: protobuf.Field("offset", "uint32", repeated=False, required=True),
+        3: protobuf.Field("len", "uint32", repeated=False, required=True),
+        4: protobuf.Field("data", "bytes", repeated=False, required=False),
+        5: protobuf.Field("data_hash", "uint32", repeated=False, required=False),
+        6: protobuf.Field("processed_byte", "uint32", repeated=False, required=False),
+    }
+
+    def __init__(
+        self,
+        *,
+        path: "str",
+        offset: "int",
+        len: "int",
+        data: Optional["bytes"] = None,
+        data_hash: Optional["int"] = None,
+        processed_byte: Optional["int"] = None,
+    ) -> None:
+        self.path = path
+        self.offset = offset
+        self.len = len
+        self.data = data
+        self.data_hash = data_hash
+        self.processed_byte = processed_byte
+
+
+class FsFileRead(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = 30104
+    FIELDS = {
+        1: protobuf.Field("file", "FsFile", repeated=False, required=True),
+        2: protobuf.Field("ui_percentage", "uint32", repeated=False, required=False),
+    }
+
+    def __init__(
+        self,
+        *,
+        file: "FsFile",
+        ui_percentage: Optional["int"] = None,
+    ) -> None:
+        self.file = file
+        self.ui_percentage = ui_percentage
+
+
+class FsFileWrite(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = 30105
+    FIELDS = {
+        1: protobuf.Field("file", "FsFile", repeated=False, required=True),
+        2: protobuf.Field("overwrite", "bool", repeated=False, required=True),
+        3: protobuf.Field("append", "bool", repeated=False, required=True),
+        4: protobuf.Field("ui_percentage", "uint32", repeated=False, required=False),
+    }
+
+    def __init__(
+        self,
+        *,
+        file: "FsFile",
+        overwrite: "bool",
+        append: "bool",
+        ui_percentage: Optional["int"] = None,
+    ) -> None:
+        self.file = file
+        self.overwrite = overwrite
+        self.append = append
+        self.ui_percentage = ui_percentage
+
+
+class FsChecksums(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = 30112
 
 
 class KaspaGetAddress(protobuf.MessageType):

@@ -8,14 +8,13 @@ from trezorutils import (  # noqa: F401; FIRMWARE_SECTORS_COUNT,; firmware_secto
     BUILD_ID,
     EMULATOR,
     MODEL,
-    HYPERMATE_VERSION,
     SCM_REVISION,
     VERSION_MAJOR,
     VERSION_MINOR,
     VERSION_PATCH,
     consteq,
     firmware_hash,
-    firmware_vendor,
+    firmware_version,
     halt,
     memcpy,
     reboot2boardloader,
@@ -23,7 +22,6 @@ from trezorutils import (  # noqa: F401; FIRMWARE_SECTORS_COUNT,; firmware_secto
     reset,
     usb_data_connected,
     power_off,
-    avi_play,
     power_source,
 )
 
@@ -42,6 +40,7 @@ else:
 
 BLE_NAME: str | None = None
 BLE_VERSION: str| None = None
+IRIS_VERSION: str | None = None
 DISABLE_ANIMATION = 0
 BLE_CONNECTED: bool | None = None
 BATTERY_CAP: int | None = None
@@ -80,6 +79,35 @@ def set_up() -> None:
             SPI_IFACE_NUM,
         )
     )
+
+def setup_user_dirs():
+    from trezor import io
+    io.fs.mkdir("/user")
+    # user stored ethereum data
+    io.fs.mkdir("/user/ethereum")
+    # user stored wallpapers
+    io.fs.mkdir("/user/wallpapers")
+    io.fs.mkdir("/user/wallpapers/thumbnail")
+    # nfts
+    io.fs.mkdir("/user/nfts")
+
+def clean_user_dirs():
+    from trezor import io, log
+    def rm_dir(path: str):
+        log.debug("storage", f"removing directory: {path}")
+        for _, attrs, name in io.fs.dir_open(path):
+            if name in (".", ".."):
+                continue
+            if "d" in attrs:
+                rm_dir(f"{path}/{name}")
+            else:
+                io.fs.remove(f"{path}/{name}")
+                log.debug("storage", f"removed file: {path}/{name}")
+
+        log.debug("storage", f"removed directory: {path}")
+        io.fs.remove(path)
+    rm_dir("/user")
+
 
 def is_usb_plugged() -> bool:
     # usb connector not connect to USB controler

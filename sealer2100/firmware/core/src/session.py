@@ -53,11 +53,6 @@ if utils.show_app_guide():
 
     loop.schedule(show_app_guide())
 
-if not device.is_initialized() and not device.get_iris_version():
-    from trezor import iris
-    loop.schedule(iris.refresh_iris_version())
-
-
 loop.run()
 workflow.close_others()
 monitor_task_exit()

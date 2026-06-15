@@ -38,7 +38,7 @@
 
 #define BLE_POWER_OFF() do {                              \
   pm_power_down(POWER_MODULE_BLUETOOTH);                  \
-  pm_power_down(POWER_MODULE_NFC);                  \
+  pm_power_down(POWER_MODULE_NFC);                        \
 } while (0)
 
 /* Definition for SPIx's DMA */
@@ -69,7 +69,7 @@ extern uint8_t spi_data_out[SPI_BUF_MAX_OUT_LEN];
 #if !EMULATOR
 int32_t wait_spi_rx_event(int32_t timeout);
 int32_t wait_spi_tx_event(int32_t timeout);
-int32_t spi_slave_send(uint8_t *buf, uint32_t size, int32_t timeout);
+int32_t spi_slave_send(const uint8_t *buf, uint32_t size, int32_t timeout);
 void control_pin_init();
 void control_pin_deinit();
 void control_pin_write(GPIO_PinState state);

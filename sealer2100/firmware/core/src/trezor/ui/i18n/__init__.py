@@ -16,8 +16,8 @@ languages = [
     Language('en', 'English'),
     Language('zh_cn', '简体中文'),
     Language('zh_hk', '繁體中文'),
-    Language('ja','日語'),
-    Language('ko','한국어'),
+    # Language('ja','日語'),
+    # Language('ko','한국어'),
 ]
 
 

@@ -15,16 +15,17 @@ if TYPE_CHECKING:
     from typing import Generator, List
     pass
 
-if utils.EMULATOR:
-    def wallpaper_filter(name: str):
-        if name == ".DS_Store":
-            return False
-        return True
+def wallpaper_filter(name: str):
+    if name in [".DS_Store", ".", ".."]:
+        return False
+    if not name.endswith(".png"):
+        return False
+    return True
 
 class WallpaperImage(lv.img):
     def __init__(self, parent):
         super().__init__(parent)
-        self.add_flag(lv.obj.FLAG.CLICKABLE) 
+        self.add_flag(lv.obj.FLAG.CLICKABLE)
         self.set_style_radius(16, lv.PART.MAIN)
         self.set_style_clip_corner(True, lv.PART.MAIN)
 
@@ -50,7 +51,7 @@ class ImageSource:
 
     def source(self) -> str:
         return f"A:{self.path}/{self.name}"
-    
+
 class HomeScreen(Navigation):
     def __init__(self):
         super().__init__()
@@ -99,7 +100,7 @@ class HomeScreen(Navigation):
         lv.group_focus_obj(item)
         if not item:
             self.images[0]._focused_img.add_flag(lv.obj.FLAG.HIDDEN)
-        
+
         # self.group.set_focus_cb(self.on_group_focus_changed)
     def on_image_clicked(self, event):
         # 获取被点击的图片对象
@@ -151,37 +152,36 @@ class HomeScreen(Navigation):
         from trezor.ui.screen import manager
         from trezor.ui import events
         manager.publish(events.WALLPAPER_CHANGED)
- 
+
     @staticmethod
     def wallpapers() -> Generator[ImageSource]:
 
-        SYS_WALLPAPER_PATH = "0:/res/wallpapers"
+        SYS_WALLPAPER_PATH = "/res/wallpapers"
         papers: List[ImageSource] = []
         # internal wallpapers
-        for _, _, name in io.fatfs.listdir(SYS_WALLPAPER_PATH):
-            if utils.EMULATOR:
-               if not wallpaper_filter(name):
-                   continue
-            source = ImageSource("0:/res/wallpapers", name)
+        for _, _, name in io.fs.dir_open(SYS_WALLPAPER_PATH):
+            log.debug(__name__, f"read wallpaper: {name}")
+            if not wallpaper_filter(name):
+                continue
+            source = ImageSource(SYS_WALLPAPER_PATH, name)
             try :
                 path = f"{SYS_WALLPAPER_PATH}/thumbnail/{name}"
-                size, _, _ = io.fatfs.stat(path)
+                size, _, _ = io.fs.stat(path)
                 log.debug(__name__, f"{source.thumbnail()} : {size}")
                 if size :
                     papers.append(source)
             except:
                 continue
 
-        USER_WALLPAPER_PATH = "1:/res/wallpapers"
+        USER_WALLPAPER_PATH = "/user/wallpapers"
         # user wallpapers
-        for _, _, name in io.fatfs.listdir(USER_WALLPAPER_PATH):
-            if utils.EMULATOR:
-               if not wallpaper_filter(name):
-                   continue
-            source = ImageSource("1:/res/wallpapers", name)
+        for _, _, name in io.fs.dir_open(USER_WALLPAPER_PATH):
+            if not wallpaper_filter(name):
+                continue
+            source = ImageSource(USER_WALLPAPER_PATH, name)
             try :
                 path = f"{USER_WALLPAPER_PATH}/thumbnail/{name}"
-                size, _, _ = io.fatfs.stat(path)
+                size, _, _ = io.fs.stat(path)
                 log.debug(__name__, f"{source.thumbnail()} : {size}")
                 if size :
                     papers.append(source)

@@ -3,26 +3,19 @@
 #include "version.h"
 
     .section .header, "a"
+    .global header
+    .type header, %object
+    .balign 4
 
-    .type g_header, %object
-    .size g_header, .-g_header
 
-g_header:
-    .byte 'H','P','T','B'            // magic
-    .word g_header_end - g_header    // hdrlen
-    .word 0                          // expiry
-    .word _codelen                   // codelen
-    .byte VERSION_MAJOR              // vmajor
-    .byte VERSION_MINOR              // vminor
-    .byte VERSION_PATCH              // vpatch
-    .byte VERSION_BUILD              // vbuild
-    .byte FIX_VERSION_MAJOR          // fix_vmajor
-    .byte FIX_VERSION_MINOR          // fix_vminor
-    .byte FIX_VERSION_PATCH          // fix_vpatch
-    .byte FIX_VERSION_BUILD          // fix_vbuild
-    . = . + 8                        // reserved
-    . = . + 512                      // hash1 ... hash16
-    . = . + 415                      // reserved
-    .byte 0                          // sigmask
-    . = . + 64                       // sig
-g_header_end:
+header:
+    .word 0x42545048                 // `magic: BOOTLOADER_IMAGE_MAGIC`
+    .byte VERSION_BUILD              // `version.build`
+    .byte VERSION_PATCH              // `version.patch`
+    .byte VERSION_MINOR              // `version.minor`
+    .byte VERSION_MAJOR              // `version.major`
+    .word 0x400                      // `header_size`
+    .word _codelen                   // `code_size`
+    .word 2                          // `required_sig_count: KEY_M`
+    .space 0x80-20                   // `_reserved`
+    .space 0x400 - 0x80              // `unprotected, filled zero`

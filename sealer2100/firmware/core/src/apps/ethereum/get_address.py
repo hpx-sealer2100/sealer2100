@@ -7,7 +7,7 @@ from apps.common import paths
 
 from . import networks
 from .helpers import address_from_bytes, get_display_network_name
-from .keychain import PATTERNS_ADDRESS, with_keychain_from_path
+from .keychain import with_keychain_from_chain_id
 
 if TYPE_CHECKING:
     from trezor.messages import EthereumGetAddress
@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from .definitions import Definitions
 
 
-@with_keychain_from_path(*PATTERNS_ADDRESS)
+@with_keychain_from_chain_id
 async def get_address(
     ctx: Context, msg: EthereumGetAddress, keychain: Keychain, defs: Definitions
 ) -> EthereumAddress:

@@ -22,7 +22,6 @@ if TYPE_CHECKING:
         str,  # symbol
         str,  # name
         str,  # icon
-        int,  # primary_color
     ]
     # fmt: on
 
@@ -45,6 +44,7 @@ def all_slip44_ids_hardened() -> Iterator[int]:
 
 
 def by_chain_id(chain_id: int) -> EthereumNetworkInfo:
+    # buildin network
     for n in _networks_iterator():
         n_chain_id = n[0]
         if n_chain_id == chain_id:
@@ -54,8 +54,14 @@ def by_chain_id(chain_id: int) -> EthereumNetworkInfo:
                 symbol=n[2],
                 name=n[3],
                 icon=n[4],
-                primary_color=n[5],
             )
+
+    # try to load from fs
+    from .helpers import get_network_from_fs
+    network = get_network_from_fs(chain_id)
+    if network is not UNKNOWN_NETWORK:
+        return network
+
     return UNKNOWN_NETWORK
 
 
@@ -69,10 +75,11 @@ def by_slip44(slip44: int) -> EthereumNetworkInfo:
                 symbol=n[2],
                 name=n[3],
                 icon=n[4],
-                primary_color=n[5],
             )
     return UNKNOWN_NETWORK
 
+def is_buildin(chain_id: int) -> bool:
+    return chain_id in (x[0] for x in _networks_iterator())
 
 # fmt: off
 def _networks_iterator() -> Iterator[NetworkInfoTuple]:
@@ -83,6 +90,5 @@ def _networks_iterator() -> Iterator[NetworkInfoTuple]:
         "${n.shortcut}",  # symbol
         "${n.name}",  # name
         "${n.icon}",  # name
-        ${n.primary_color},  # primary_color
     )
 % endfor

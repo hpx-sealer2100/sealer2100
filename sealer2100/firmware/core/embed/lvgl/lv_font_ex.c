@@ -2,26 +2,43 @@
 
 #include <string.h>
 #include <memory.h>
+#include "log.h"
 
+#include "fs.h"
+
+#ifndef TREZOR_EMULATOR
 #include "secure_heap.h"
+#include "uart_log.h"
 
 #define font_malloc pvPortMalloc
 #define font_free vPortFree
-
-// 缓存的fat文件不连续的簇数量，用于提高 f_seek 的速度
-// 这个值和文件碎片化有关，文件碎片化越严重，需要缓存的数量越多
-// SZ_TBL = 2 * N + 2 这里的 N是碎片数量，即不连续的簇的数量
-// 经常反复写的文件一般碎片化比较严重，但对于字体文件，我们不会经常写，或者几乎写进去就不会再修改了
-// 所以字体文件基本上都是连续存储的，也就是只有一个簇
-// 假设不连续的簇为128（文件碎片化已经非常严重），这里只需要设置为 258
-// 即使没有命中缓存，fat文件系统也是可以遍历文件查找到对应的数据，只是少慢一点
-#define SZ_TBL 258
+#else
+#include <stdlib.h>
+#define font_malloc malloc
+#define font_free free
+#endif
 
 #define FONT_CACHE_NUM 256
 
 #define LOCA_OFFSET 0x4C
 #define LOCA_VALUE_OFFSET 0x0C
 #define GLYPH_OFFSET 0x08
+
+
+#define MODULE "lvgl font"
+#define ENABLE_LOG 0
+#define ENABLE_DETAIL 0
+
+#if !ENABLE_LOG
+// disable log
+#undef LOG_DEBUG
+#undef LOG_HEXDUMP_DEBUG
+#define LOG_DEBUG(module, fmt, ...)                log_dummy(module, fmt, ##__VA_ARGS__)
+#define LOG_HEXDUMP_DEBUG(module, label, buf, len) log_dummy(module, label, buf, len)
+#endif
+
+// need user provide the file system handle
+extern fs_t* __fs__;
 
 int font_cache_init(font_cache_t *cache) {
   cache->fonts = font_malloc(sizeof(font_ptr_t) * FONT_CACHE_NUM);
@@ -66,34 +83,35 @@ const font_t* font_cache_get(const font_cache_t *cache, uint32_t letter) {
 }
 
 int binary_font_open(binary_font_t *binary) {
-  FRESULT ret;
   uint8_t loca[4];
-  UINT nums;
   uint32_t len;
+  int ret;
 
   if (binary->f) return 0;
-  binary->f = font_malloc(sizeof(FIL));
-  memset(binary->f, 0, sizeof(FIL));
+  binary->f = font_malloc(sizeof(lv_fs_file_t));
+  memset(binary->f, 0, sizeof(lv_fs_file_t));
   if (!binary->f) return -1;
-  ret = f_open(binary->f, binary->path, FA_READ);
-  if (ret != FR_OK) {
-    goto err;
-  }
-  binary->f->cltbl = font_malloc(sizeof(DWORD) * SZ_TBL);
-  if (!binary->f->cltbl) {
-    goto err;
-  }
-  binary->f->cltbl[0] = SZ_TBL; /* Set table size */
-  f_lseek(binary->f, CREATE_LINKMAP); /* Create CLMT */
-
-  ret = f_lseek(binary->f, LOCA_OFFSET);
-  if (FR_OK != ret) {
+  LOG_DEBUG(MODULE, "open font: %s", binary->path);
+  ret = fs_file_open(__fs__, binary->f, binary->path, FS_O_RDONLY);
+  if (ret < 0) {
     goto err;
   }
 
-  if (f_read(binary->f, &len, 4, &nums) != FR_OK ||
-      f_read(binary->f, loca, 4, &nums) != FR_OK ||
-      memcmp("loca", loca, 4) != 0) {
+  ret = fs_file_seek(binary->f, LOCA_OFFSET, FS_SEEK_SET);
+  if (ret < 0) {
+    goto err;
+  }
+
+  ret = fs_file_read(binary->f, &len, 4);
+  if (ret < 0) {
+    goto err;
+  }
+  ret = fs_file_read(binary->f, loca, 4);
+  if (ret < 0) {
+    goto err;
+  }
+
+  if (memcmp("loca", loca, 4) != 0) {
     goto err;
   }
 
@@ -105,12 +123,9 @@ int binary_font_open(binary_font_t *binary) {
   }
   return 0;
 err:
+  LOG_DEBUG(MODULE, "open font failed: %s", binary->path);
   if (binary->f) {
-    if (binary->f->cltbl) {
-      font_free(binary->f->cltbl);
-      binary->f->cltbl = NULL;
-    }
-    f_close(binary->f);
+    fs_file_close(binary->f);
     font_free(binary->f);
     binary->f = NULL;
   }
@@ -140,16 +155,15 @@ static int font_get_data(binary_font_t* binary, uint32_t letter, uint8_t** data)
   uint32_t offset = (letter - binary->xbf.min + 1) * 4;
   uint32_t len = 0;
   uint8_t buf[8] = {0};
-  UINT readed = 0;
-  FRESULT ret = 0;
+  int ret = 0;
 
   // get the infomation of letter: (from, to)
-  ret = f_lseek(binary->f, offset + LOCA_OFFSET + LOCA_VALUE_OFFSET);
-  if (ret != FR_OK) {
+  ret = fs_file_seek(binary->f, offset + LOCA_OFFSET + LOCA_VALUE_OFFSET, FS_SEEK_SET);
+  if (ret < 0) {
     return 1;
   }
-  ret = f_read(binary->f, buf, 8, &readed);
-  if (ret != 0 && readed != 8) {
+  ret = fs_file_read(binary->f, buf, 8);
+  if (ret != 8) {
     return 1;
   }
   uint32_t *pos = (uint32_t*)buf;
@@ -160,28 +174,40 @@ static int font_get_data(binary_font_t* binary, uint32_t letter, uint8_t** data)
   }
   font_data->letter = letter;
   font_data->size = len;
-  ret = f_lseek(binary->f, binary->glyph_location + pos[0]);
-  if (ret != FR_OK) {
+  ret = fs_file_seek(binary->f, binary->glyph_location + pos[0], FS_SEEK_SET);
+  if (ret < 0) {
     font_free(font_data);
     return 1;
   }
-  ret = f_read(binary->f, font_data->data, len, &readed);
-  if (ret != 0 && readed != len) {
+  ret = fs_file_read(binary->f, font_data->data, len);
+  if (ret != len) {
     font_free(font_data);
     return 1;
   }
-  // printf("cache : %x\n", letter);
+#if ENABLE_DETAIL
+  LOG_DEBUG(MODULE, "cache : %c", letter);
+#endif
   font_cache_add(&binary->cache, font_data);
   *data = font_data->data;
   return 0;
 }
 
 const uint8_t* user_font_get_bitmap(const lv_font_t *font, uint32_t unicode_letter) {
+#if ENABLE_DETAIL
+  LOG_DEBUG(MODULE, "geting bitmap: %c", unicode_letter);
+#endif
   binary_font_t *binary = (binary_font_t *)font->user_data;
   uint8_t *data = NULL;
   if (font_get_data(binary, unicode_letter, &data)) {
+#if ENABLE_DETAIL
+    LOG_DEBUG(MODULE, "get bitmap failed: %c", unicode_letter);
+#endif
     return NULL;
   }
+#if ENABLE_DETAIL
+  LOG_DEBUG(MODULE, "get bitmap: %c", unicode_letter);
+  uart_log_flush();
+#endif
   return data + sizeof(glyph_dsc_t);
 }
 bool user_font_get_glyph_dsc(const lv_font_t *font, lv_font_glyph_dsc_t *dsc_out, uint32_t unicode_letter, uint32_t unicode_letter_next) {
@@ -189,6 +215,9 @@ bool user_font_get_glyph_dsc(const lv_font_t *font, lv_font_glyph_dsc_t *dsc_out
   uint8_t *data = NULL;
 
   if (font_get_data(binary, unicode_letter, &data)) {
+#if ENABLE_DETAIL
+    LOG_DEBUG(MODULE, "get glyph dsc failed: %c", unicode_letter);
+#endif
     return false;
   }
   glyph_dsc_t *gdsc = (glyph_dsc_t *)data;
@@ -198,5 +227,15 @@ bool user_font_get_glyph_dsc(const lv_font_t *font, lv_font_glyph_dsc_t *dsc_out
   dsc_out->ofs_x = gdsc->ofs_x;
   dsc_out->ofs_y = gdsc->ofs_y;
   dsc_out->bpp = binary->xbf.bpp;
+  dsc_out->is_placeholder = false;
+  #if ENABLE_DETAIL
+  LOG_DEBUG(MODULE, "get glyph dsc: %c", unicode_letter);
+  LOG_DEBUG(MODULE, "adv_w: %d, w: %d, h: %d, x: %d, y: %d, bpp: %d",
+    dsc_out->adv_w,
+    dsc_out->box_w, dsc_out->box_h,
+    dsc_out->ofs_x, dsc_out->ofs_y,
+    dsc_out->bpp);
+  uart_log_flush();
+  #endif
   return true;
 }

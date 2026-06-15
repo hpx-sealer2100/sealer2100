@@ -4,6 +4,79 @@
 #include <stdint.h>
 #include <stddef.h>
 
+/// commands
+enum {
+  // 设备相关指令
+  CMD_ID_GET_VERSION = 0x00,
+  CMD_ID_GET_STATE = 0x01,
+  CMD_ID_GET_LIFE_CYCLE = 0x02,
+  CMD_ID_GET_SN = 0x03,
+  CMD_ID_GET_DEV_PUBKEY = 0x04,
+  CMD_ID_GET_DEV_CERT_LENGTH = 0x05,
+  CMD_ID_GET_DEV_CERT = 0x06,
+  CMD_ID_DEV_SIGN = 0x07,
+
+  // PIN 相关指令
+  CMD_ID_HAS_PIN = 0x08,
+  CMD_ID_SET_PIN = 0x09,
+  CMD_ID_VERIFY_PIN = 0x0A,
+  CMD_ID_CHANGE_PIN = 0x0B,
+  CMD_ID_RESET_PIN = 0x0C,
+  CMD_ID_GET_PIN_MAX_RETRY = 0x0D,
+  CMD_ID_GET_PIN_RETRY = 0x0E,
+  CMD_ID_FORGET_PIN = 0x0F,
+  CMD_ID_SET_USER_PIN_MAX_RETRY = 0xD8,
+
+
+  // 管理指令
+  CMD_ID_REBOOT = 0x10,
+  CMD_ID_LAUNCH = 0x11,
+  CMD_ID_USER_STORAGE_SIZE = 0x12,
+  CMD_ID_WIPE_USER_STORAGE = 0x13,
+  CMD_ID_PROTECT_USER_STORAGE = 0x14,
+
+  // 文件指令
+  CMD_ID_WRITE_FILE = 0x20,
+  CMD_ID_READ_FILE = 0x21,
+  CMD_ID_DELETE_FILE = 0x22,
+  CMD_ID_GET_FILE_SIZE = 0x23,
+  CMD_ID_SET_FILE_ACCESS = 0x24,
+
+  // 密码算法指令
+  CMD_ID_RANDOM = 0x30,
+  CMD_ID_GEN_SECRET = 0x31,
+  CMD_ID_GEN_KEY = 0x32,
+  CMD_ID_SET_KEY = 0x33,
+  CMD_ID_GEN_KEY_PAIR = 0x34,
+  CMD_ID_GET_PUB_KEY = 0x35,
+  CMD_ID_DERIVE_KEY = 0x36,
+
+  CMD_ID_ENCRYPT_SYM = 0x40,
+  CMD_ID_DECRYPT_SYM = 0x41,
+  CMD_ID_ENCRYPT_ASYM = 0x42,
+  CMD_ID_DECRYPT_ASYM = 0x43,
+  CMD_ID_CMAC = 0x44,
+  CMD_ID_HASH = 0x45,
+  CMD_ID_HMAC = 0x46,
+  CMD_ID_SIGN = 0x47,
+  CMD_ID_VERIFY = 0x48,
+  CMD_ID_ECDH = 0x49,
+
+  // boot 指令
+  CMD_ID_VERIFY_APP = 0x90,
+  CMD_ID_INSTALL_APP = 0x91,
+
+  CMD_ID_ROM_BL = 0xEF,
+
+  // 生产用指令
+  CMD_ID_ERASE_STORAGE = 0x80,
+  CMD_ID_SWITCH_LIFE_CYCLE = 0x81,
+  CMD_ID_SET_SN = 0x82,
+  CMD_ID_SET_PRE_SHARED_KEY = 0x83,
+  CMD_ID_GEN_DEV_KEY = 0x84,
+  CMD_ID_SET_DEV_CERT = 0x85,
+};
+
 /// life cycle object states
 typedef enum {
   LCS_FACTORY = 0,
@@ -42,6 +115,15 @@ enum {
 
 void se_init(void);
 void se_conn_reset(void);
+// execute command with payload and response
+int se_execute_case0(uint8_t cmd_id, const uint8_t *payload, size_t payload_size, uint8_t *response, size_t *response_size);
+// execute command without payload and response
+int se_execute_case1(uint8_t cmd_id);
+// execute command with payload, but without response
+int se_execute_case2(uint8_t cmd_id, const uint8_t *payload, size_t payload_size);
+// execute command without payload, but with response
+int se_execute_case3(uint8_t cmd_id, uint8_t *response, size_t *response_size);
+
 int se_handshake(const uint8_t *secret, size_t secret_len);
 int se_get_life_cycle(life_cycle_t *life_cycle);
 int se_get_version(char version[17]);
@@ -141,6 +223,8 @@ void se_binary_version(const uint8_t *binary, char version[17]);
 // helper user function
 int se_set_user_pin(uint8_t pin[32]);
 int se_verify_user_pin(uint8_t pin[32]);
+int se_set_storage_kekiv(uint8_t keyiv[32]);
+int se_get_storage_kekiv(uint8_t keyiv[32]);
 #define se_lock() se_forget_pin()
 
 #endif

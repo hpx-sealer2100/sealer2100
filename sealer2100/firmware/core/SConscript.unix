@@ -107,6 +107,10 @@ CPPDEFINES_MOD += [
     ('USE_CARDANO', '1' if EVERYTHING else '0'),
     ('USE_NEM', '1' if EVERYTHING else '0'),
     ('USE_EOS', '1' if EVERYTHING else '0'),
+    ('FS_USE_LFS', 0),
+    ('FS_USE_FATFS', 0),
+    ('LOG_ENABLED', 1),
+    ('EMULATOR', 1),
 ]
 SOURCE_MOD += [
     'embed/extmod/trezorobj.c',
@@ -276,6 +280,12 @@ SOURCE_MOD += [
     'embed/extmod/modthd89/modthd89.c',
 ]
 
+# modairgapped
+SOURCE_MOD +=[
+    'embed/extmod/modairgapped/airgapped_memory.c',
+    'embed/extmod/modairgapped/modairgapped.c'
+]
+
 SOURCE_MICROPYTHON = [
     'vendor/micropython/extmod/modubinascii.c',
     'vendor/micropython/extmod/moductypes.c',
@@ -416,10 +426,10 @@ SOURCE_UNIX = [
     'embed/unix/rng.c',
     'embed/unix/touch.c',
     'embed/unix/usb.c',
-    'embed/unix/ff.c',
-    'embed/unix/avi_parser.c',
     'embed/unix/se-unix.c',
     'embed/unix/iris.c',
+    'embed/unix/fs.c',
+    'embed/unix/log.c',
     'vendor/micropython/shared/runtime/gchelper_generic.c',
     'vendor/micropython/ports/unix/alloc.c',
     'vendor/micropython/ports/unix/gccollect.c',
@@ -502,6 +512,7 @@ env.Replace(
         'vendor/micropython/ports/unix',
         'vendor/micropython/lib/mp-readline',
         'vendor/lv_mp/lvgl',
+        'vendor/keystone3-firmware/rust/rust_c/bindings/simulator-multi-coins'
     ] + CPPPATH_MOD,
     CPPDEFINES=[
         'TREZOR_EMULATOR',
@@ -635,6 +646,10 @@ if FROZEN:
 
 
     SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'trezor/wire/*.py'))
+    SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'trezor/airgap/*.py'))
+    SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'trezor/airgap/ur/*.py'))
+    SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'trezor/airgap/rust_ur/*.py'))
+    SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'trezor/airgap/bc_types/*.py'))
 
     SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'storage/*.py'))
 
@@ -800,6 +815,27 @@ env.Depends(rust, protobuf_blobs)
 env.Append(LINKFLAGS=f'-L{RUST_LIBDIR}')
 env.Append(LINKFLAGS=f'-l{RUST_LIB}')
 
+
+RUST_AIRGAPPED_LIB = 'rust_c'
+RUST_AIRGAPPED_LIBDIR = f'vendor/keystone3-firmware/rust/target/{RUST_PROFILE}'
+RUST_AIRGAPPED_PATH = f'{RUST_AIRGAPPED_LIBDIR}/lib{RUST_AIRGAPPED_LIB}.a'
+
+
+def cargo_build_airgapped():
+    #cargo -vv build --release -p rust_c --no-default-features --features simulator-multi-coins --features "bitcoin/secp-lowmemory"
+    return f'cd vendor/keystone3-firmware/rust; cargo build --release -p {RUST_AIRGAPPED_LIB} --no-default-features --features simulator-multi-coins --features "bitcoin/secp-lowmemory"'
+
+rust_airgapped = env.Command(
+    target=RUST_AIRGAPPED_PATH,
+    source='',
+    action=f'RUSTFLAGS="--cfg=rust_secp_no_symbol_renaming" {cargo_build_airgapped()}', )
+
+env.Append(LINKFLAGS=f' -L{RUST_AIRGAPPED_LIBDIR}')
+env.Append(LINKFLAGS=f' -l{RUST_AIRGAPPED_LIB}')
+env.Append(LINKFLAGS='-framework CoreFoundation')
+env.Append(LINKFLAGS='-framework CoreGraphics')
+
+
 #
 # Program objects
 #
@@ -816,6 +852,7 @@ if FEATURE_FLAGS["LVGL"]:
     obj_program.extend(env.Object(source=SOURCE_LVGL, CCFLAGS='$CCFLAGS -Wno-unused-function -Wno-unused-but-set-variable'))
 
 env.Depends(obj_program, qstr_generated)
+env.Depends(obj_program, rust_airgapped)
 
 program = env.Command(
     target='trezor-emu-core',

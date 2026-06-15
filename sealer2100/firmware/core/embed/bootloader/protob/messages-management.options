@@ -1,0 +1,41 @@
+Initialize.session_id           max_size:32
+
+Features.vendor                 max_size:33
+Features.device_id              max_size:25
+Features.language               max_size:17
+Features.label                  max_size:33
+Features.revision               max_size:20
+Features.bootloader_hash        max_size:32
+Features.model                  max_size:17
+Features.fw_vendor              max_size:256
+Features.capabilities           max_count:32
+Features.session_id             max_size:32
+Features.ble_name               max_size:32
+Features.ble_ver                max_size:16
+Features.se_ver                 max_size:16
+Features.hypermate_version      max_size:16
+Features.hypermate_serial       max_size:32
+Features.bootloader_version     max_size:32
+Features.serial_no              max_size:32
+Features.spi_flash              max_size:32
+Features.NFT_voucher            max_size:32
+Features.cpu_info               max_size:16
+Features.pre_firmware           max_size:16
+Features.build_id               max_size:32
+Features.boardloader_version    max_size:16
+Features.iris_version           max_size:16
+
+Ping.message                    max_size:256
+
+DeviceInfoSettings.serial_no    max_size:32
+DeviceInfoSettings.cpu_info     max_size:16
+DeviceInfoSettings.pre_firmware max_size:16
+
+
+SEPublicKey.public_key                  max_size:65
+WriteSEPublicCert.public_cert           max_size:1024
+SEPublicCert.public_cert                max_size:1024
+
+SESignMessage.message                   max_size:512
+SEMessageSignature.signature            max_size:64
+

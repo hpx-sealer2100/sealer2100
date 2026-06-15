@@ -1,0 +1,17 @@
+FsInfo.name max_size:256
+
+FsChunk.data max_size:16384
+FsChunk.data_hash max_size:32
+
+FsRead.path max_size:256
+
+FsWrite.path max_size:256
+
+FsRemove.path max_size:256
+
+FsMkdir.path max_size:256
+
+FsStat.path max_size:256
+
+FsFile.path max_size:256
+FsFile.data max_size:16384

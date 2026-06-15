@@ -10,7 +10,7 @@
 # trezor imports only C modules
 import trezor
 # trezor.utils import only C modules
-from trezor import config, utils, log, ui, loop
+from trezor import config, utils, log, ui, loop, iris
 # we need space for 30 items in the trezor module
 utils.presize_module("trezor", 30)
 # storage imports storage.common, storage.cache and storage.device.
@@ -38,10 +38,6 @@ if not config.has_pin():
 import trezor.ui
 
 log.info("init", "trezor.ui successfully")
-# try:
-#     utils.avi_play("0:/res/booting.avi")
-# except Exception as e:
-#     log.exception(__name__, e)
 
 if not utils.BITCOIN_ONLY:
     # storage.fido2 only imports C modules
@@ -60,7 +56,6 @@ import trezor.pin  # noqa: F401
 
 log.info("init", "trezor.pin successfully")
 
-
 # create an unimport manager that will be reused in the main loop
 unimport_manager = utils.unimport()
 
@@ -69,6 +64,7 @@ with unimport_manager:
     import boot
     del boot
 
+loop.schedule(iris.refresh_iris_version())
 
 # === Prepare the USB interfaces first. Do not connect to the host yet.
 # usb imports trezor.utils and trezor.io which is a C module

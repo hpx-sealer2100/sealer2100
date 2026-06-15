@@ -5,28 +5,18 @@ from trezor import config, io, utils,log
 def set_current_version() -> None:
     device.set_version(common.STORAGE_VERSION_CURRENT)
 
-
-def clean_flash() -> None:
-    for _size, _attrs, name in io.fatfs.listdir("1:/res/wallpapers"):
-        io.fatfs.unlink(f"1:/res/wallpapers/{name}")
-    for _size, _attrs, name in io.fatfs.listdir("1:/res/nfts/imgs"):
-        io.fatfs.unlink(f"1:/res/nfts/imgs/{name}")
-    for _size, _attrs, name in io.fatfs.listdir("1:/res/nfts/zooms"):
-        io.fatfs.unlink(f"1:/res/nfts/zooms/{name}")
-    for _size, _attrs, name in io.fatfs.listdir("1:/res/nfts/desc"):
-        io.fatfs.unlink(f"1:/res/nfts/desc/{name}")
-
-
 def wipe() -> None:
     log.info("init", "before config.wipe")
     config.wipe()
     log.info("init", "after config.wipe")
     cache.clear_all()
-    if not utils.EMULATOR:
-        try:
-            clean_flash()
-        except BaseException:
-            pass
+    try:
+        utils.clean_user_dirs()
+    except BaseException:
+        pass
+
+    # setup empty user dirs
+    utils.setup_user_dirs()
 
 
 def init_unlocked() -> None:

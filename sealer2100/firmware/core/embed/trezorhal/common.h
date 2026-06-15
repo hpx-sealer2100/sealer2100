@@ -50,10 +50,6 @@
   })
 #endif
 
-#define STAY_IN_FLAG_ADDR ((uint32_t *)(0x30040000 - 4))
-#define STAY_IN_BOARDLOADER_FLAG 0x64616F62
-#define STAY_IN_BOOTLOADER_FLAG 0x746F6F62
-
 void shutdown(void);
 
 void restart(void);
@@ -71,7 +67,6 @@ error_shutdown(const char *line1, const char *line2, const char *line3,
 
 void error_reset(const char *line1, const char *line2, const char *line3,
                  const char *line4);
-void error_pin_max(void);
 
 #define ensure(expr, msg) \
   (((expr) == sectrue)    \
@@ -95,7 +90,6 @@ void memset_reg(volatile void *start, volatile void *stop, uint32_t val);
 void jump_to(uint32_t address);
 void jump_to_unprivileged(uint32_t address);
 void jump_to_with_flag(uint32_t address, uint32_t register_flag);
-void ensure_compatible_settings(void);
 
 bool check_all_ones(const void *data, int len);
 

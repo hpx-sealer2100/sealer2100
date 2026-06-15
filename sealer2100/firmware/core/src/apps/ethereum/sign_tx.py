@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 
+from micropython import const
+
 from trezor import wire
 from trezor.crypto import rlp
 from trezor.crypto.curve import secp256k1
@@ -10,7 +12,7 @@ from trezor.utils import HashWriter
 
 from apps.common import paths
 
-from . import networks, tokens
+from . import networks, tokens, erc20
 from .helpers import (
     address_from_bytes,
     bytes_from_address,
@@ -23,6 +25,9 @@ from .layout import (
     require_confirm_fee,
     require_confirm_unknown_token,
     require_show_overview,
+    require_show_approve,
+    require_confirm_approve_detail,
+    require_show_contract_call,
     check_defi_lock,
 )
 
@@ -47,7 +52,7 @@ async def sign_tx(
     await paths.validate_path(ctx, keychain, msg.address_n)
 
     # Handle ERC20s
-    token, address_bytes, recipient, value = await handle_erc20(ctx, msg)
+    token, address_bytes, recipient, value, call = await handle_erc20(ctx, msg, defs)
 
     data_total = msg.data_length
     network = defs.network
@@ -68,42 +73,70 @@ async def sign_tx(
     if msg.data_length and not token and not is_nft_transfer:
         await check_defi_lock(ctx)
 
-    show_details = await require_show_overview(
-        ctx,
-        get_display_network_name(network),
-        recipient,
-        value,
-        msg.chain_id,
-        token,
-        is_nft_transfer,
-    )
+    if call == 'approve':
+        # approve
+        spender = address_from_bytes(recipient, network)
+        show_details = await require_show_approve(ctx, spender=spender, value=value, token=token)
+        if show_details:
+            node = keychain.derive(msg.address_n)
+            myself = address_from_bytes(node.ethereum_pubkeyhash(), defs.network)
+            await require_confirm_approve_detail(
+                ctx,
+                gas_price = int.from_bytes(msg.gas_price, "big"),
+                gas_limit = int.from_bytes(msg.gas_limit, "big"),
+                spender=spender, 
+                myself=myself,
+                token=token
+            )
 
-    if show_details:
-        has_raw_data = False
-        if token is None and token_id is None and msg.data_length > 0:
-            has_raw_data = True
-            # await require_confirm_data(ctx, msg.data_initial_chunk, data_total)
+    elif token is None and token_id is None and msg.data_length > 0:
+        # contract call
         node = keychain.derive(msg.address_n)
-        recipient_str = address_from_bytes(recipient, network)
-        from_str = address_from_bytes(from_addr or node.ethereum_pubkeyhash(), network)
-        await require_confirm_fee(
+        myself = address_from_bytes(node.ethereum_pubkeyhash(), defs.network)
+        await require_show_contract_call(
+            ctx, 
+            myself, 
+            address_from_bytes(address_bytes, network), 
+            msg.chain_id, 
+            int.from_bytes(msg.gas_price, "big"), 
+            int.from_bytes(msg.gas_limit, "big")
+        ) 
+    else:
+        # transfer
+        show_details = await require_show_overview(
             ctx,
+            get_display_network_name(network),
+            recipient,
             value,
-            int.from_bytes(msg.gas_price, "big"),
-            int.from_bytes(msg.gas_limit, "big"),
             msg.chain_id,
             token,
-            from_address=from_str,
-            to_address=recipient_str,
-            contract_addr=address_from_bytes(address_bytes, network)
-            if token_id is not None
-            else None,
-            token_id=token_id,
-            evm_chain_id=None
-            if network is not networks.UNKNOWN_NETWORK
-            else msg.chain_id,
-            raw_data=msg.data_initial_chunk if has_raw_data else None,
+            is_nft_transfer,
         )
+
+        if show_details:
+            has_raw_data = False
+            if token is None and token_id is None and msg.data_length > 0:
+                has_raw_data = True
+                # await require_confirm_data(ctx, msg.data_initial_chunk, data_total)
+            node = keychain.derive(msg.address_n)
+            recipient_str = address_from_bytes(recipient, network)
+            from_str = address_from_bytes(from_addr or node.ethereum_pubkeyhash(), network)
+            await require_confirm_fee(
+                ctx,
+                value,
+                int.from_bytes(msg.gas_price, "big"),
+                int.from_bytes(msg.gas_limit, "big"),
+                msg.chain_id,
+                token,
+                from_address=from_str,
+                to_address=recipient_str,
+                contract_addr=address_from_bytes(address_bytes, network)
+                if token_id is not None
+                else None,
+                token_id=token_id,
+                evm_chain_id=msg.chain_id,
+                raw_data=msg.data_initial_chunk if has_raw_data else None,
+            )
 
     data = bytearray()
     data += msg.data_initial_chunk
@@ -143,28 +176,41 @@ async def sign_tx(
 
 
 async def handle_erc20(
-    ctx: wire.Context, msg: EthereumSignTxAny
-) -> tuple[tokens.EthereumTokenInfo | None, bytes, bytes, int]:
+    ctx: wire.Context, msg: EthereumSignTxAny, defs: Definitions
+) -> tuple[tokens.EthereumTokenInfo | None, bytes, bytes, int, erc20.Erc20Call | None]:
     token = None
     address_bytes = recipient = bytes_from_address(msg.to)
     value = int.from_bytes(msg.value, "big")
-    if (
-        len(msg.to) in (40, 42)
-        and len(msg.value) == 0
-        and msg.data_length == 68
-        and len(msg.data_initial_chunk) == 68
-        and msg.data_initial_chunk[:16]
-        == b"\xa9\x05\x9c\xbb\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
-    ):
-        token = tokens.token_by_chain_address(msg.chain_id, address_bytes)
-        recipient = msg.data_initial_chunk[16:36]
-        value = int.from_bytes(msg.data_initial_chunk[36:68], "big")
+    call = None
 
-        if token is tokens.UNKNOWN_TOKEN:
-            await require_confirm_unknown_token(ctx, address_bytes)
+    if len(msg.to) not in (40, 42):
+        return token, address_bytes, recipient, value, call
 
-    return token, address_bytes, recipient, value
+    if len(msg.value) != 0:
+        return token, address_bytes, recipient, value, call
+    
+    if msg.data_length != 68:
+        return token, address_bytes, recipient, value, call
 
+    method_id = msg.data_initial_chunk[:16]
+
+    if method_id not in (erc20.ERC20_METHOD_ID_TRANSFER, erc20.ERC20_METHOD_ID_APPROVE):
+        return token, address_bytes, recipient, value, call
+
+    if method_id == erc20.ERC20_METHOD_ID_TRANSFER:
+        call = 'transfer'
+    elif method_id == erc20.ERC20_METHOD_ID_APPROVE:
+        call = 'approve'
+
+    token = tokens.token_by_chain_address(msg.chain_id, address_bytes)
+
+    recipient = msg.data_initial_chunk[16:36]
+    value = int.from_bytes(msg.data_initial_chunk[36:68], "big")
+
+    if token is tokens.UNKNOWN_TOKEN:
+        await require_confirm_unknown_token(ctx, address_bytes)
+
+    return token, address_bytes, recipient, value, call
 
 async def handle_erc_721_or_1155(
     ctx: wire.Context, msg: EthereumSignTxAny

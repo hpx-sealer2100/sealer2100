@@ -36,7 +36,7 @@ def parser_path(path: str) -> List[int]:
         # no need do tip user here, because the path is passed by developer
         # so the developer should make sure the path is valid
         # this is just helper developer to debug
-        raise ValueError("invalid path")
+        raise errors.DataError("invalid path")
 
     def convert(item: str) -> int:
         hardened = item.endswith("'")
@@ -47,3 +47,15 @@ def parser_path(path: str) -> List[int]:
         return index
 
     return list(convert(item) for item in items)
+
+async def get_mfp(ctx: "GenericContext") -> int:
+    # 需要测试一下这么取mfp是否数据正确
+    from trezor.messages import EthereumGetPublicKey
+    from apps.ethereum.get_public_key import get_public_key
+    path = "m/44'/60'/0'"
+    address_n = parser_path(path)
+    msg = EthereumGetPublicKey(address_n=address_n[:1])
+    pubkey = await get_public_key(ctx, msg)
+    mfp = pubkey.node.fingerprint
+    return mfp
+

@@ -45,7 +45,6 @@ _EXPERIMENTAL_FEATURES     = const(0x15)  # bool (0x01 or empty)
 _DEVICE_WEAKUP             = const(0x16)  # int
 _PROTECT_TYPE              = const(0x17)  # int (0x01, 0x02, 0x03)
 _DEFI_LOCK                 = const(0x18)  # bool (0x01 or empty)
-_IRIS_VERSION              = const(0x19)  # bytes
 
 _BLE_NAME = const(0x80)  # bytes
 _BLE_VERSION = const(0x81)  # bytes
@@ -116,7 +115,7 @@ def set_version(version: bytes) -> None:
 
 
 def get_firmware_version() -> str:
-    return utils.HYPERMATE_VERSION
+    return utils.firmware_version()
 
 
 def get_storage() -> str:
@@ -375,7 +374,7 @@ def set_passphrase_enabled(enable: bool) -> None:
 def get_homescreen() -> str | None:
     homescreen = common.get(_NAMESPACE, _HOMESCREEN, public=True)
     # default use system 0.png
-    return homescreen.decode() if homescreen else "A:0:/res/wallpapers/0.png"
+    return homescreen.decode() if homescreen else "A:/res/wallpapers/0.png"
 
 def set_homescreen(full_path: str) -> None:
     common.set(_NAMESPACE, _HOMESCREEN, full_path.encode(), public=True)
@@ -618,16 +617,6 @@ def get_defi_lock() -> bool:
 def set_defi_lock(enable: bool):
     common.set_bool(_NAMESPACE, _DEFI_LOCK, enable)
 
-def set_iris_version(version: str) -> None:
-    """Set ble firmware version."""
-    common.set(_NAMESPACE, _IRIS_VERSION, version.encode(), True)
-
-def get_iris_version() -> str:
-    version = common.get(_NAMESPACE, _IRIS_VERSION, public=True)
-    if version is None:
-        return ""
-    return version.decode()
-
 class BTCAddressType:
     def __init__(self, type: BTCAddressTypeValue):
         self.type = type
@@ -641,7 +630,7 @@ class BTCAddressType:
     @staticmethod
     def suported() ->list:
         return [BTCAddressType(t) for t in [86, 44, 49, 84]]
-    
+
     def name(self):
         if self.type == 86:
             return "Taproot"

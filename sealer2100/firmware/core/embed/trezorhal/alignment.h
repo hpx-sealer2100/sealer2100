@@ -4,7 +4,6 @@
 
 #include <stdint.h>
 #include <string.h>
-#include <stdlib.h>
 
 /*
  * Define EFFICIENT_UNALIGNED_ACCESS for architectures where unaligned memory

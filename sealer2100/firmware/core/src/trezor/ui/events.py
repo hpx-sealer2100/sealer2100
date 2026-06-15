@@ -14,3 +14,6 @@ HOLDER_DONE = lv.event_register_id()
 
 # user change language
 LANGUAGE_CHANGED = lv.event_register_id()
+
+# user delete nft
+NFT_CHANGED = lv.event_register_id()

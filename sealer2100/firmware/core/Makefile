@@ -5,13 +5,10 @@ MAKE = make -j $(JOBS)
 SCONS = scons -Q -j $(JOBS)
 
 BUILD_DIR             = build
-BOARDLOADER_BUILD_DIR = $(BUILD_DIR)/boardloader
 BOOTLOADER_BUILD_DIR  = $(BUILD_DIR)/bootloader
-BOOTLOADER_CI_BUILD_DIR  = $(BUILD_DIR)/bootloader_ci
-PRODTEST_BUILD_DIR    = $(BUILD_DIR)/prodtest
-REFLASH_BUILD_DIR     = $(BUILD_DIR)/reflash
 FIRMWARE_BUILD_DIR    = $(BUILD_DIR)/firmware
 UNIX_BUILD_DIR        = $(BUILD_DIR)/unix
+UPGRADER_BUILD_DIR    = $(BUILD_DIR)/upgrader
 RUST_BUILD_DIR        = $(BUILD_DIR)/rust
 
 UNAME_S := $(shell uname -s)
@@ -34,36 +31,34 @@ OPENOCD_INTERFACE ?= stlink
 # OpenOCD transport default. Alternative: jtag
 OPENOCD_TRANSPORT ?= hla_swd
 OPENOCD = openocd -f interface/$(OPENOCD_INTERFACE).cfg -c "transport select $(OPENOCD_TRANSPORT)" -f target/stm32f4x.cfg
-OPENOCD_T1 = openocd -f interface/$(OPENOCD_INTERFACE).cfg -c "transport select $(OPENOCD_TRANSPORT)" -f target/stm32f2x.cfg
 
-BOARDLOADER_START   = 0x08000000
-BOOTLOADER_START    = 0x08020000
+BOOTLOADER_START    = 0x08000000
 FIRMWARE_P1_START   = 0x08060000
 FIRMWARE_P2_START   = 0x90000000
-PRODTEST_START      = 0x08040000
-FIRMWARE_T1_START   = 0x08010000
 
-BOARDLOADER_MAXSIZE = 49152
-BOOTLOADER_MAXSIZE  = 131072
-FIRMWARE_P1_MAXSIZE = 786432
-FIRMWARE_P2_MAXSIZE = 917504
-FIRMWARE_MAXSIZE    = 1703936
+BOOTLOADER_MAXSIZE  = 393216
+FIRMWARE_P1_MAXSIZE = 1572864
+FIRMWARE_P2_MAXSIZE = 3145728
+FIRMWARE_MAXSIZE    = 4718592
 
 CFLAGS += -DSCM_REVISION='\"$(shell git rev-parse HEAD | sed 's:\(..\):\\x\1:g')\"'
 BUILD_DATE=$(shell date "+%m%d")
 
 BOOT_BUILD_VERSION=$(shell ../tools/version.sh ./embed/bootloader/version.h)
-FIRMWARE_BUILD_VERSION=$(shell cat ./embed/firmware/version.h | grep "HYPERMATE_VERSION " | awk -F "[\"\"]" '{print $$2}')
+FIRMWARE_BUILD_VERSION=$(shell ../tools/version.sh ./embed/firmware/version.h)
+UPGRADER_BUILD_VERSION=$(shell ../tools/version.sh ./embed/upgrader/version.h)
 ifndef BUILD_ID
 BUILD_COMMIT=$(shell git rev-parse HEAD | cut -c1-7)
 FIRMWARE_BUILD_NAME=touch.$(FIRMWARE_BUILD_VERSION)-Stable-$(BUILD_DATE)-$(BUILD_COMMIT)
 BOOT_BUILD_NAME=bootloader.$(BOOT_BUILD_VERSION)-Stable-$(BUILD_DATE)-$(BUILD_COMMIT)
+UPGRADER_BUILD_NAME=upgrader.$(UPGRADER_BUILD_VERSION)-Stable-$(BUILD_DATE)-$(BUILD_COMMIT)
+CFLAGS += -DBUILD_ID='\"$(BUILD_COMMIT)\"'
 else
 FIRMWARE_BUILD_NAME=touch.$(FIRMWARE_BUILD_VERSION)-Alpha-$(BUILD_DATE)-$(BUILD_ID)
 BOOT_BUILD_NAME=bootloader.$(BOOT_BUILD_VERSION)-Alpha-$(BUILD_DATE)-$(BUILD_ID)
+UPGRADER_BUILD_NAME=upgrader.$(UPGRADER_BUILD_VERSION)-Alpha-$(BUILD_DATE)-$(BUILD_ID)
+CFLAGS += -DBUILD_ID='\"$(BUILD_ID)\"'
 endif
-#CFLAGS += -DBUILD_ID='\"$(BUILD_COMMIT)\"'
-CFLAGS += -DBUILD_ID='\"$(FIRMWARE_BUILD_NAME)\"'
 
 
 TESTPATH = $(CURDIR)/../tests
@@ -161,27 +156,13 @@ templates_check: ## check that Mako-rendered files match their templates
 
 ## build commands:
 
-build: build_boardloader build_bootloader build_firmware build_prodtest build_unix ## build all
+build: build_bootloader build_firmware ## build all
 
-build_embed: build_boardloader build_bootloader build_firmware # build boardloader, bootloader, firmware
-
-build_boardloader: ## build boardloader
-	$(SCONS) CFLAGS="$(CFLAGS)" PRODUCTION="$(PRODUCTION)" TREZOR_MODEL="$(TREZOR_MODEL)" PRODUCTION_MODEL="$(PRODUCTION_MODEL)" PCB_VERSION="$(PCB_VERSION)" $(BOARDLOADER_BUILD_DIR)/boardloader.bin
+build_embed: build_bootloader build_firmware # build bootloader, firmware
 
 build_bootloader: ## build bootloader
 	$(SCONS) CFLAGS="$(CFLAGS)" PRODUCTION="$(PRODUCTION)" TREZOR_MODEL="$(TREZOR_MODEL)" PRODUCTION_MODEL="$(PRODUCTION_MODEL)" $(BOOTLOADER_BUILD_DIR)/bootloader.bin
 	cp $(BOOTLOADER_BUILD_DIR)/bootloader.bin $(BOOTLOADER_BUILD_DIR)/$(BOOT_BUILD_NAME).bin
-
-build_bootloader_ci: ## build CI device testing bootloader
-	$(SCONS) CFLAGS="$(CFLAGS)" PRODUCTION="$(PRODUCTION)" TREZOR_MODEL="$(TREZOR_MODEL)" $(BOOTLOADER_CI_BUILD_DIR)/bootloader.bin
-
-build_prodtest: ## build production test firmware
-	$(SCONS) CFLAGS="$(CFLAGS)" PRODUCTION="$(PRODUCTION)" TREZOR_MODEL="$(TREZOR_MODEL)" $(PRODTEST_BUILD_DIR)/prodtest.bin
-
-build_reflash: ## build reflash firmware + reflash image
-	$(SCONS) CFLAGS="$(CFLAGS)" PRODUCTION="$(PRODUCTION)" TREZOR_MODEL="$(TREZOR_MODEL)" $(REFLASH_BUILD_DIR)/reflash.bin
-	dd if=build/boardloader/boardloader.bin of=$(REFLASH_BUILD_DIR)/sdimage.bin bs=1 seek=0
-	dd if=build/bootloader/bootloader.bin of=$(REFLASH_BUILD_DIR)/sdimage.bin bs=1 seek=49152
 
 build_firmware: templates build_cross ## build firmware with frozen modules
 	$(SCONS) CFLAGS="$(CFLAGS)" PRODUCTION="$(PRODUCTION)" TREZOR_MODEL="$(TREZOR_MODEL)" PRODUCTION_MODEL="$(PRODUCTION_MODEL)" PYOPT="$(PYOPT)" BITCOIN_ONLY="$(BITCOIN_ONLY)" UI2="$(UI2)" $(FIRMWARE_BUILD_DIR)/firmware.bin
@@ -196,28 +177,24 @@ build_unix_frozen: templates build_cross ## build unix port with frozen modules
 build_unix_debug: templates ## build unix port
 	$(SCONS) --max-drift=1 CFLAGS="$(CFLAGS)" $(UNIX_BUILD_DIR)/trezor-emu-core $(UNIX_PORT_OPTS) TREZOR_MODEL="$(TREZOR_MODEL)" BITCOIN_ONLY="$(BITCOIN_ONLY)" TREZOR_EMULATOR_ASAN=1 UI2="$(UI2)" TREZOR_EMULATOR_DEBUGGABLE=1
 
+build_upgrader: ## build upgrader
+	$(SCONS) CFLAGS="$(CFLAGS)" PRODUCTION="$(PRODUCTION)" TREZOR_MODEL="$(TREZOR_MODEL)" PRODUCTION_MODEL="$(PRODUCTION_MODEL)" $(UPGRADER_BUILD_DIR)/upgrader.bin
+	cp $(UPGRADER_BUILD_DIR)/upgrader.bin $(UPGRADER_BUILD_DIR)/$(UPGRADER_BUILD_NAME).bin
+
+build_upgrader_debug: ## build debugable upgrader, can flash to device
+	$(SCONS) UPGRADER_DEBUG="1" CFLAGS="$(CFLAGS)" PRODUCTION="$(PRODUCTION)" TREZOR_MODEL="$(TREZOR_MODEL)" PRODUCTION_MODEL="$(PRODUCTION_MODEL)" $(UPGRADER_BUILD_DIR)/upgrader.bin
+	cp $(UPGRADER_BUILD_DIR)/upgrader.bin $(UPGRADER_BUILD_DIR)/$(UPGRADER_BUILD_NAME).bin
+
 build_cross: ## build mpy-cross port
 	$(MAKE) -C vendor/micropython/mpy-cross $(CROSS_PORT_OPTS)
 
 ## clean commands:
 
-clean: clean_boardloader clean_bootloader clean_bootloader_ci clean_prodtest clean_reflash clean_firmware clean_unix clean_cross ## clean all
+clean: clean_bootloader clean_firmware clean_unix clean_cross clean_rust_airgapped## clean all
 	rm -f ".sconsign.dblite"
-
-clean_boardloader: ## clean boardloader build
-	rm -rf $(BOARDLOADER_BUILD_DIR)
 
 clean_bootloader: ## clean bootloader build
 	rm -rf $(BOOTLOADER_BUILD_DIR)
-
-clean_bootloader_ci: ## clean bootloader_ci build
-	rm -rf $(BOOTLOADER_CI_BUILD_DIR)
-
-clean_prodtest: ## clean prodtest build
-	rm -rf $(PRODTEST_BUILD_DIR)
-
-clean_reflash: ## clean reflash build
-	rm -rf $(REFLASH_BUILD_DIR)
 
 clean_firmware: ## clean firmware build
 	rm -rf $(FIRMWARE_BUILD_DIR) $(RUST_BUILD_DIR)
@@ -225,42 +202,30 @@ clean_firmware: ## clean firmware build
 clean_unix: ## clean unix build
 	rm -rf $(UNIX_BUILD_DIR) $(RUST_BUILD_DIR)
 
+clean_upgrader: ## clean upgrader build
+	rm -rf $(UPGRADER_BUILD_DIR)
+
 clean_cross: ## clean mpy-cross build
 	$(MAKE) -C vendor/micropython/mpy-cross clean $(CROSS_PORT_OPTS)
 
+clean_rust_airgapped:
+	cargo clean --manifest-path=vendor/keystone3-firmware/rust/Cargo.toml
+
 ## flash commands:
 
-flash: flash_boardloader flash_bootloader flash_firmware ## flash everything using OpenOCD
-
-flash_boardloader: $(BOARDLOADER_BUILD_DIR)/boardloader.bin ## flash boardloader using OpenOCD
-	$(OPENOCD) -c "init; reset halt; flash write_image erase $< $(BOARDLOADER_START); exit"
+flash: flash_bootloader flash_firmware ## flash everything using OpenOCD
 
 flash_bootloader: $(BOOTLOADER_BUILD_DIR)/bootloader.bin ## flash bootloader using OpenOCD
 	$(OPENOCD) -c "init; reset halt; flash write_image erase $< $(BOOTLOADER_START); exit"
 
-flash_bootloader_ci: $(BOOTLOADER_CI_BUILD_DIR)/bootloader.bin ## flash CI bootloader using OpenOCD
-	$(OPENOCD) -c "init; reset halt; flash write_image erase $< $(BOOTLOADER_START); exit"
-
-flash_prodtest: $(PRODTEST_BUILD_DIR)/prodtest.bin ## flash prodtest using OpenOCD
-	$(OPENOCD) -c "init; reset halt; flash write_image erase $< $(PRODTEST_START); exit"
-
 flash_firmware: $(FIRMWARE_BUILD_DIR)/firmware.bin ## flash firmware using OpenOCD
 	$(OPENOCD) -c "init; reset halt; flash write_image erase $<.p1 $(FIRMWARE_P1_START); flash write_image erase $<.p2 $(FIRMWARE_P2_START); exit"
-
-flash_firmware_t1: $(FIRMWARE_BUILD_DIR)/firmware.bin ## flash T1 core port on T1 using OpenOCD
-	$(OPENOCD_T1) -c "init; reset halt; flash write_image erase $< $(FIRMWARE_T1_START); exit"
-
-flash_combine: $(PRODTEST_BUILD_DIR)/combined.bin ## flash combined using OpenOCD
-	$(OPENOCD) -c "init; reset halt; flash write_image erase $< $(BOARDLOADER_START); exit"
 
 flash_erase: ## erase all sectors in flash bank 0
 	$(OPENOCD) -c "init; reset halt; flash info 0; flash erase_sector 0 0 last; flash erase_check 0; exit"
 
-flash_read_storage: ## read storage sectors from flash
-	$(OPENOCD) -c "init; flash read_bank 0 storage1.data 0x10000 65536; flash read_bank 0 storage2.data 0x110000 65536; exit"
-
-flash_erase_storage: ## erase storage sectors from flash
-	$(OPENOCD) -c "init; flash erase_sector 0 4 4; flash erase_sector 0 16 16; exit"
+# flash_erase_storage: ## erase storage sectors from flash
+# 	$(OPENOCD) -c "init; flash erase_sector 0 4 4; flash erase_sector 0 16 16; exit"
 
 flash_boardloader_jlink: $(BOARDLOADER_BUILD_DIR)/boardloader.bin ## flash bootloader using JLink
 	JLinkExe -nogui 1 -commanderscript embed/debugger_scripts/jlink/write_boardloader.jlink
@@ -289,13 +254,7 @@ openocd_reset: ## cause a system reset using OpenOCD
 
 GDB = arm-none-eabi-gdb --nx -ex 'set remotetimeout unlimited' -ex 'set confirm off' -ex 'target remote 127.0.0.1:3333' -ex 'monitor reset halt'
 
-gdb_boardloader: $(BOARDLOADER_BUILD_DIR)/boardloader.elf ## start remote gdb session to openocd with boardloader symbols
-	$(GDB) $<
-
 gdb_bootloader: $(BOOTLOADER_BUILD_DIR)/bootloader.elf ## start remote gdb session to openocd with bootloader symbols
-	$(GDB) $<
-
-gdb_prodtest: $(PRODTEST_BUILD_DIR)/prodtest.elf ## start remote gdb session to openocd with prodtest symbols
 	$(GDB) $<
 
 gdb_firmware: $(FIRMWARE_BUILD_DIR)/firmware.elf ## start remote gdb session to openocd with firmware symbols
@@ -324,12 +283,6 @@ combine: ## combine boardloader + bootloader + prodtest into one combined image
 		$(BOOTLOADER_START) $(BOOTLOADER_BUILD_DIR)/bootloader.bin \
 		$(PRODTEST_START) $(PRODTEST_BUILD_DIR)/prodtest.bin \
 		> $(PRODTEST_BUILD_DIR)/combined.bin
-
-upload: ## upload firmware using trezorctl
-	trezorctl firmware_update -f $(FIRMWARE_BUILD_DIR)/firmware.bin
-
-upload_prodtest: ## upload prodtest using trezorctl
-	trezorctl firmware_update -f $(PRODTEST_BUILD_DIR)/prodtest.bin
 
 coverage:  # generate coverage report
 	./tools/coverage-report

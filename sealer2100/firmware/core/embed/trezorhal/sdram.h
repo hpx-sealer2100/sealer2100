@@ -1,60 +1,59 @@
 #ifndef TREZORHAL_FMC_SDRAMH_
 #define TREZORHAL_FMC_SDRAMH_
+#include "stdint.h"
 
-/* Register Mode */
-#define FMC_SDRAM_DEVICE_BURST_LENGTH_1 0x00000000U
-#define FMC_SDRAM_DEVICE_BURST_LENGTH_2 0x00000001U
-#define FMC_SDRAM_DEVICE_BURST_LENGTH_4 0x00000002U
-#define FMC_SDRAM_DEVICE_BURST_LENGTH_8 0x00000004U
-#define FMC_SDRAM_DEVICE_BURST_TYPE_SEQUENTIAL 0x00000000U
-#define FMC_SDRAM_DEVICE_BURST_TYPE_INTERLEAVED 0x00000008U
-#define FMC_SDRAM_DEVICE_CAS_LATENCY_2 0x00000020U
-#define FMC_SDRAM_DEVICE_CAS_LATENCY_3 0x00000030U
-#define FMC_SDRAM_DEVICE_OPERATING_MODE_STANDARD 0x00000000U
-#define FMC_SDRAM_DEVICE_WRITEBURST_MODE_PROGRAMMED 0x00000000U
-#define FMC_SDRAM_DEVICE_WRITEBURST_MODE_SINGLE 0x00000200U
+// 32 MB
+#define SDRAM_SIZE ((uint32_t)32 * 1024 * 1024)
+#define SDRAM_BASE_ADDRESS ((uint32_t)0xD0000000)
+#define SDRAM_END ((SDRAM_BASE_ADDRESS) + (SDRAM_SIZE))
 
-/* Command Mode */
-#define FMC_SDRAM_DEVICE_NORMAL_MODE_CMD 0x00000000U
-#define FMC_SDRAM_DEVICE_CLK_ENABLE_CMD 0x00000001U
-#define FMC_SDRAM_DEVICE_PALL_CMD 0x00000002U
-#define FMC_SDRAM_DEVICE_AUTOREFRESH_MODE_CMD 0x00000003U
-#define FMC_SDRAM_DEVICE_LOAD_MODE_CMD 0x00000004U
-#define FMC_SDRAM_DEVICE_SELFREFRESH_MODE_CMD 0x00000005U
-#define FMC_SDRAM_DEVICE_POWERDOWN_MODE_CMD 0x00000006U
+#define DEF_SDRAM(name, begin, size)             \
+  enum {                                           \
+    SDRAM_##name##_ADDRESS = (begin),            \
+    SDRAM_##name##_SIZE    = (size),               \
+    SDRAM_##name##_END     = ((begin) + (size)), \
+  }
 
-#define FMC_SDRAM_ADDRESS ((uint32_t)0xD0000000)
+#define DEF_REVERSE_SDRAM(name, end, size) \
+  enum {                                   \
+    SDRAM_##name##_ADDRESS = (end - size), \
+    SDRAM_##name##_SIZE    = (size),       \
+    SDRAM_##name##_END     = (end),        \
+  }
 
-// COMMON
-#define FMC_SDRAM_LTDC_BUFFER_ADDRESS (FMC_SDRAM_ADDRESS)
-#define FMC_SDRAM_LTDC_BUFFER_LEN (2 * 768 * 1024)
+#define DEF_SDRAM_RANGE(name, begin, end) \
+  enum { \
+    SDRAM_##name##_ADDRESS = (begin), \
+    SDRAM_##name##_SIZE    = ((end) - (begin)), \
+    SDRAM_##name##_END     = (end), \
+  }
 
-// BOOLOADER 0xD0200000
-#define FMC_SDRAM_BOOLOADER_BUFFER_ADDRESS \
-  (FMC_SDRAM_LTDC_BUFFER_ADDRESS + FMC_SDRAM_LTDC_BUFFER_LEN)
-#define FMC_SDRAM_BOOLOADER_BUFFER_LEN (30 * 1024 * 1024)
+// LTDC buffer, 800*480, rgb565 pixel format, 1.5MB > 2*(2*800*480)
+// 2 buffers, each 750KB, we used as rendered and rendering buffer
+DEF_SDRAM(LTDC, SDRAM_BASE_ADDRESS, 2*(768*1024));
 
-// FIRMWARE 0xD0200000
-#define FMC_SDRAM_LVGL_BUFFER_ADDRESS \
-  (FMC_SDRAM_LTDC_BUFFER_ADDRESS + FMC_SDRAM_LTDC_BUFFER_LEN)
-#define FMC_SDRAM_LVGL_BUFFER_LEN (2 * 768 * 1024)
+// lvgl buffer, 800*480, double buffer, rgb565 pixel format, 1.5MB > 2*(2*800*480)
+// bootloader and firmware all use the same buffer for lvgl draw
+DEF_SDRAM(LVGL, SDRAM_LTDC_END, 2*(768*1024));
 
-#define FMC_SDRAM_IMAGE_BUFFER_ADDRESS \
-  (FMC_SDRAM_LVGL_BUFFER_ADDRESS + FMC_SDRAM_LVGL_BUFFER_LEN)
-#define FMC_SDRAM_IMAGE_BUFFER_LEN (512 * 1024)
+// camera buffer, for image processing, 512KB > 450KB
+// we capture image in square, the max 480*480, 2*(480*480) = 450KB
+DEF_SDRAM(CAMERA, SDRAM_LVGL_END, 512 * 1024);
 
-#define FMC_SDRAM_GRAY_IMAGE_BUFFER_ADDRESS \
-  (FMC_SDRAM_IMAGE_BUFFER_ADDRESS + FMC_SDRAM_IMAGE_BUFFER_LEN)
-#define FMC_SDRAM_GRAY_IMAGE_BUFFER_LEN (512 * 1024)
+// grayscale image buffer, for image processing, 512KB
+// same size as camera buffer
+DEF_SDRAM(GRAY, SDRAM_CAMERA_END, 512 * 1024);
 
-#define FMC_SDRAM_USER_HEAP_ADDRESS \
-  (FMC_SDRAM_GRAY_IMAGE_BUFFER_ADDRESS + FMC_SDRAM_GRAY_IMAGE_BUFFER_LEN)
-#define FMC_SDRAM_USER_HEAP_LEN (20 * 1024 * 1024)
+// code buffer, for firmware code, 3MB, from D1D00000 ~ D2000000
+// used in ld script
+DEF_REVERSE_SDRAM(CODE, SDRAM_END, 3*1024*1024);
 
-#define FMC_SDRAM_JPEG_OUTPUT_DATA_BUFFER_ADDRESS \
-  (FMC_SDRAM_USER_HEAP_ADDRESS + FMC_SDRAM_USER_HEAP_LEN)
+// micropython heap buffer, 2MB
+DEF_REVERSE_SDRAM(MP, SDRAM_CODE_ADDRESS, 2*1024*1024);
 
-#define FMC_SDRAM_ADDRESS_END ((uint32_t)0xD0000000 + (32 * 1024 * 1024))
+// user heap buffer
+// all left memory for user heap buffer
+DEF_SDRAM_RANGE(USER_HEAP, SDRAM_GRAY_END, SDRAM_MP_ADDRESS);
 
 int sdram_init(void);
 

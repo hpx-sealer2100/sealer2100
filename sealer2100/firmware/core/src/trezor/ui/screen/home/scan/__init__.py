@@ -96,10 +96,30 @@ class ScanApp(Navigation):
         # task = workflow.spawn(self.show_fps())
         # self.tasks.append(task)
 
+        self.bar = self.add(lv.bar)
+        self.bar.set_mode(lv.bar.MODE.NORMAL)
+        self.bar.set_range(0, 100)
+        self.bar.set_value(0, lv.ANIM.OFF)
+        self.bar.add_style(
+            Style()
+            .width(213)
+            .height(6)
+            .radius(lv.RADIUS.CIRCLE)
+            .bg_color(lv.color_hex(0))
+            .pad_all(0),
+            lv.PART.MAIN,
+        )
+        self.bar.add_style(
+            Style().radius(lv.RADIUS.CIRCLE).bg_color(colors.USER.GREEN),
+            lv.PART.INDICATOR,
+        )
+        self.bar.align(lv.ALIGN.BOTTOM_MID, 0, 0)
+        self.bar.add_flag(lv.obj.FLAG.HIDDEN)
+
 
     def on_loaded(self):
-        import lvgldrv as lcd
-        lcd.set_directly_copy(True)
+        import lvgldrv as lvdrv
+        lvdrv.set_directly_copy(True)
         super().on_loaded()
         state = CAMERA.state()
         log.debug(__name__, f"camera state: {state}")
@@ -110,8 +130,8 @@ class ScanApp(Navigation):
             CAMERA.resume()
 
     def on_unload_start(self):
-        import lvgldrv as lcd
-        lcd.set_directly_copy(False)
+        import lvgldrv as lvdrv
+        lvdrv.set_directly_copy(False)
         super().on_unload_start()
         CAMERA.suspend()
 
@@ -163,8 +183,15 @@ class ScanApp(Navigation):
         CAMERA.start()
 
     async def scanning(self):
+        from trezor.airgap.event import (
+            InvalidUR,
+            MultiUR,
+            SingleUR,
+            ScanStart,
+            Scanning,
+            Done,
+        )
         from trezor.airgap import scan, scaning_event
-        from trezor.airgap.event import InvalidUR
         from trezor.ui.layouts import show_error
         from trezor.wire import DUMMY_CONTEXT as ctx
 
@@ -183,14 +210,25 @@ class ScanApp(Navigation):
                     i18n.Button.try_again,
                 )
                 self.tasks.remove(task)
+                self.bar.add_flag(lv.obj.FLAG.HIDDEN)
                 CAMERA.scan_reset()
                 task = scan()
                 self.tasks.append(task)
+            elif isinstance(event, ScanStart):
+                if isinstance(event.ur, SingleUR):
+                    continue
+                # for multi ur show progress bar
+                self.bar.clear_flag(lv.obj.FLAG.HIDDEN)
+            elif isinstance(event, Scanning):
+                log.debug(__name__, f"scanning: {event.mur.processed}")
+                self.bar.set_value(event.mur.processed * 100 // event.mur.expected, lv.ANIM.OFF)
             elif event == 3:
                 self.tasks.remove(task)
+                self.bar.add_flag(lv.obj.FLAG.HIDDEN)
                 CAMERA.scan_reset()
                 task = scan()
                 self.tasks.append(task)
 
             elif event == 4:
+                await loop.sleep(500)
                 self.close(None)

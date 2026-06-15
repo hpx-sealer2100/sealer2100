@@ -61,13 +61,6 @@ def firmware_hash(
 
 
 # extmod/modtrezorutils/modtrezorutils.c
-def firmware_vendor() -> str:
-    """
-    Returns the firmware vendor string from the vendor header.
-    """
-
-
-# extmod/modtrezorutils/modtrezorutils.c
 def reboot_to_bootloader() -> None:
     """
     Reboots to bootloader.
@@ -78,6 +71,13 @@ def reboot_to_bootloader() -> None:
 def reboot2boardloader() -> None:
     """
     Reboots to boardloader.
+    """
+
+
+# extmod/modtrezorutils/modtrezorutils.c
+def firmware_version() -> str:
+    """
+    Returns the firmware version string.
     """
 
 
@@ -100,13 +100,6 @@ def usb_data_connected() -> bool:
     """
     Returns whether USB has been enumerated/configured
     (and is not just connected by cable without data pins)
-    """
-
-
-# extmod/modtrezorutils/modtrezorutils.c
-def avi_play(path) -> None:
-    """
-    Play a video on screen
     """
 
 

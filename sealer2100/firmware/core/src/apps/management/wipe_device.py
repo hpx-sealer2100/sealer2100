@@ -26,11 +26,21 @@ async def wipe_device(ctx: wire.GenericContext, msg: WipeDevice) -> Success:
 
     await confirm_wipe_device(ctx)
 
-    # verify user pin
-    await verify_protection(ctx)
+    async def do_wipe():
+        if hasattr(ctx, "force_wipe") and ctx.force_wipe:
+            # use <empty> pin to verify protection until lock device, make the device can be wiped
+            from trezor import config, loop
+            while config.get_pin_rem():
+                config.unlock("", None)
+                await loop.sleep(10)
+        else:
+            # verify user pin
+            await verify_protection(ctx)
+
+        await iris.wipe()
     # show tips
     # await confirm_wipe_device_tips(ctx)
-    await wait_doing(i18n.Text.wiping_device, iris.wipe())
+    await wait_doing(i18n.Text.wiping_device, do_wipe())
     storage.wipe()
     reload_settings_from_storage()
     await confirm_wipe_device_success(ctx)

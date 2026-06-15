@@ -34,8 +34,8 @@ from typing import (
 
 import click
 
-from .. import definitions, ethereum, tools
-from ..messages import EthereumDefinitions
+from .. import definitions, ethereum, tools, protobuf
+from ..messages import EthereumDefinitions, EthereumNetworkInfo, EthereumTokenInfo
 from . import with_client
 
 if TYPE_CHECKING:
@@ -270,14 +270,17 @@ def cli(
 
 
 @cli.command()
+@click.option(
+    "-c", "--chain-id", type=int, default=1, help="EIP-155 chain id (replay protection)"
+)
 @click.option("-n", "--address", required=True, help=PATH_HELP)
 @click.option("-d", "--show-display", is_flag=True)
 @with_client
-def get_address(client: "TrezorClient", address: str, show_display: bool) -> str:
+def get_address(client: "TrezorClient", chain_id, address: str, show_display: bool) -> str:
     """Get Ethereum address in hex encoding."""
     address_n = tools.parse_path(address)
     network = ethereum.network_from_address_n(address_n, DEFINITIONS_SOURCE)
-    return ethereum.get_address(client, address_n, show_display, network)
+    return ethereum.get_address(client, chain_id, address_n, show_display, network)
 
 
 @cli.command()
@@ -405,7 +408,7 @@ def sign_tx(
     encoded_network = DEFINITIONS_SOURCE.get_network(chain_id)
     address_n = tools.parse_path(address)
     from_address = ethereum.get_address(
-        client, address_n, encoded_network=encoded_network
+        client, chain_id, address_n, encoded_network=encoded_network
     )
 
     if token:
@@ -620,3 +623,20 @@ def sign_typed_data_hash(
         "signature": f"0x{ret.signature.hex()}",
     }
     return output
+
+@cli.command()
+@click.option("-t", "--store-type", type=click.Choice(["network", "token"]), default="network")
+@click.argument("json_file", type=click.File("r"))
+@with_client
+def store_definition(client: "TrezorClient", store_type: str, json_file: TextIO) -> str:
+    """Store Ethereum network or token definitions."""
+    data = json.load(json_file)
+
+    network = protobuf.dict_to_proto(EthereumNetworkInfo, data.get("network", {}))
+    token = None
+    if store_type == "token":
+        d = data.get("token", {})
+        d["address"] = ethereum.decode_hex(d["address"])
+        token = protobuf.dict_to_proto(EthereumTokenInfo, d)
+
+    return ethereum.store_definition(client, network, token)

@@ -39,7 +39,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
   if (htim->Instance == TIM4) {
     lv_tick_inc(10);
   } else if (htim->Instance == TIM2) {
-    button_state_monitor();
+    // button_state_monitor();
   }
 }
 

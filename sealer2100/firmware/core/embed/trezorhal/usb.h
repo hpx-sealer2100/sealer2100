@@ -27,6 +27,11 @@
 #define USB_EP_DIR_OUT 0x00
 #define USB_EP_DIR_IN 0x80
 
+typedef enum {
+  MSC_BLOCK_EMMC = 0x01,
+  MSC_BLOCK_NAND = 0x02,
+} usb_block_type_t;
+
 typedef struct __attribute__((packed)) {
   uint8_t bLength;
   uint8_t bDescriptorType;
@@ -143,7 +148,7 @@ void usb_init(const usb_dev_info_t *dev_info);
 void usb_deinit(void);
 void usb_start(void);
 void usb_stop(void);
-void usb_msc_init(void);
+void usb_msc_init(usb_block_type_t block_type);
 secbool is_usb_connected(void);
 secbool is_usb_configuard(void);
 

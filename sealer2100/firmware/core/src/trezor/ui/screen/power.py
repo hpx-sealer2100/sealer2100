@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 class PowerOff(Confirm):
     def __init__(self):
         super().__init__()
-        self.set_title(i18n.Text.power_off_confirm)
+        self.set_title(i18n.Title.power_off)
         self.set_icon( "A:/res/hp/ic_guanji2.png")
         self.btn_cancel.set_text(i18n.Button.cancel)
         self.btn_confirm.set_text(i18n.Button.confirm)

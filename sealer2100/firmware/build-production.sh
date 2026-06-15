@@ -2,7 +2,6 @@ set -e
 
 export PRODUCTION=1
 poetry run make -C core clean
-poetry run make -C core build_boardloader
 poetry run make -C core build_bootloader
 export BITCOIN_ONLY=0
 rm -f ./core/build/firmware/firmware.elf

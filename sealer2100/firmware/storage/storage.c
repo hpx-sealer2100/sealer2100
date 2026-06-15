@@ -18,6 +18,7 @@
  */
 
 #include <assert.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -30,9 +31,13 @@
 #include "pbkdf2.h"
 #include "rand.h"
 #include "random_delays.h"
+#include "secbool.h"
 #include "sha2.h"
 #include "storage.h"
 #include "se.h"
+#include "log.h"
+
+#define MODULE "storage"
 
 #define LOW_MASK 0x55555555
 
@@ -182,9 +187,39 @@ static secbool storage_set_encrypted(const uint16_t key, const void *val,
                                      const uint16_t len);
 static secbool storage_get_encrypted(const uint16_t key, void *val_dest,
                                      const uint16_t max_len, uint16_t *len);
+static void init_wiped_storage(void);
+
 #ifndef TREZOR_EMULATOR
 #include "device.h"
 #endif
+
+static void storage_force_wipe(void) {
+  norcow_wipe();
+  // SE can wipe in states:
+  //    locked
+  //    verified
+  // sometime we need to force wipe, if device is in invalid state
+  // make sure SE is locked first
+  int retry = 0;
+  do {
+    retry = 0;
+    uint8_t dummy[32] = {0};
+    se_verify_pin(dummy, sizeof(dummy));
+    se_get_pin_retry(&retry);
+    hal_delay(7);
+  } while (retry > 0);
+  se_wipe_user_storage();
+  norcow_active_version = NORCOW_VERSION;
+  memzero(authentication_sum, sizeof(authentication_sum));
+  memzero(cached_keys, sizeof(cached_keys));
+  init_wiped_storage();
+}
+
+static inline void xor(const uint8_t* a, uint8_t *b, size_t n) {
+    while (n--) {
+        *b++ ^= *a++;
+    }
+}
 static secbool storage_set_edek_pvc_key(uint8_t *key, uint16_t key_len) {
   uint8_t enc_key[32];
   uint8_t key_buf[64] = {0};
@@ -198,12 +233,19 @@ static secbool storage_set_edek_pvc_key(uint8_t *key, uint16_t key_len) {
 
   memcpy(key_buf, key, key_len);
   aes_encrypt_key256(enc_key, &ctxe);
+  // clear the memory
+  memset(enc_key, 0, sizeof(enc_key));
 
   aes_ecb_encrypt(key_buf, key_buf, sizeof(key_buf), &ctxe);
+  // clear the aes context
+  memset(&ctxe, 0, sizeof(ctxe));
 
-  return norcow_set(EDEK_PVC_KEY, key_buf, sizeof(key_buf));
+  secbool r = norcow_set(EDEK_PVC_KEY, key_buf, sizeof(key_buf));
+  // clear the memory
+  memset(key_buf, 0, sizeof(key_buf));
+  return r;
 }
-static secbool storage_get_edek_pvc_key(const void **key, uint16_t *key_len) {
+static secbool storage_get_edek_pvc_key(uint8_t key[64]) {
   const void *val = NULL;
   uint16_t len = 0;
 
@@ -215,7 +257,6 @@ static secbool storage_get_edek_pvc_key(const void **key, uint16_t *key_len) {
   }
 
   uint8_t enc_key[32];
-  static uint8_t key_buf[64] = {0};
   aes_decrypt_ctx ctxe;
 #ifndef TREZOR_EMULATOR
   device_get_enc_key(enc_key);
@@ -224,11 +265,13 @@ static secbool storage_get_edek_pvc_key(const void **key, uint16_t *key_len) {
   memset(enc_key, 0xAA, sizeof(enc_key));
 #endif
   aes_decrypt_key256(enc_key, &ctxe);
+  // clear the memory
+  memset(enc_key, 0, sizeof(enc_key));
 
-  aes_ecb_decrypt((uint8_t *)val, key_buf, sizeof(key_buf), &ctxe);
+  aes_ecb_decrypt((uint8_t *)val, key, len, &ctxe);
+  // clear the aes context
+  memset(&ctxe, 0, sizeof(ctxe));
 
-  *key = key_buf;
-  *key_len = STORAGE_SALT_SIZE + KEYS_SIZE + PVC_SIZE;
   return sectrue;
 }
 
@@ -567,7 +610,7 @@ static void derive_kek_v4(const uint8_t *pin, size_t pin_len,
 
   ui_rem -= DERIVE_SECS;
   memzero(&ctx, sizeof(PBKDF2_HMAC_SHA256_CTX));
-  memzero(&salt, sizeof(salt));
+  memzero(salt, sizeof(salt));
 }
 
 static void stretch_pin(const uint8_t *pin, size_t pin_len,
@@ -590,7 +633,7 @@ static void stretch_pin(const uint8_t *pin, size_t pin_len,
 
   PBKDF2_HMAC_SHA256_CTX ctx = {0};
   pbkdf2_hmac_sha256_Init(&ctx, pin, pin_len, salt, salt_len, 1);
-  memzero(&salt, sizeof(salt));
+  memzero(salt, sizeof(salt));
 
   for (int i = 1; i <= 10; i++) {
     pbkdf2_hmac_sha256_Update(&ctx, PIN_ITER_COUNT / 10);
@@ -640,6 +683,17 @@ static secbool set_pin(const uint8_t *pin, size_t pin_len,
   chacha20poly1305_ctx ctx = {0};
   random_buffer(rand_salt, STORAGE_SALT_SIZE);
   ensure(derive_kek_set(pin, pin_len, rand_salt, ext_salt, kek), "derive_kek_set failed");
+
+  // store kekiv in SE
+  {
+    random_buffer(keiv, sizeof(keiv));
+    uint8_t rnd[32] = {0};
+    se_random(sizeof(rnd), rnd);
+    xor(rnd, keiv, sizeof(keiv));
+    secbool r = se_set_storage_kekiv(keiv) == 0 ? sectrue : secfalse;
+    ensure(r, "se_set_storage_kekiv failed");
+  }
+
   rfc7539_init(&ctx, kek, keiv);
   memzero(kek, sizeof(kek));
   memzero(keiv, sizeof(keiv));
@@ -788,7 +842,7 @@ void storage_init(PIN_UI_WAIT_CALLBACK callback, const uint8_t *salt,
 
   if (norcow_active_version < NORCOW_VERSION) {
     if (sectrue != storage_upgrade()) {
-      storage_wipe();
+      storage_force_wipe();
       ensure(secfalse, "storage_upgrade failed");
     }
   }
@@ -796,7 +850,7 @@ void storage_init(PIN_UI_WAIT_CALLBACK callback, const uint8_t *salt,
   // If there is no EDEK, then generate a random DEK and SAK and store them.
   const void *val = NULL;
   uint16_t len = 0;
-  if (secfalse == storage_get_edek_pvc_key(&val, &len))
+  if (secfalse == norcow_get(EDEK_PVC_KEY, &val, &len) || len != 64)
   {
     init_wiped_storage();
     storage_lock();
@@ -1027,14 +1081,14 @@ secbool check_storage_version(void) {
 
   if (version > norcow_active_version) {
     // Attack: Storage was downgraded.
-    storage_wipe();
+    storage_force_wipe();
     handle_fault("storage version check");
     return secfalse;
   } else if (version < norcow_active_version) {
     // Storage was upgraded.
     if (*(const uint32_t *)storage_upgraded != TRUE_WORD) {
       // Attack: The upgrade process was bypassed.
-      storage_wipe();
+      storage_force_wipe();
       handle_fault("storage version check");
       return secfalse;
     }
@@ -1047,7 +1101,7 @@ secbool check_storage_version(void) {
     // Standard operation. The storage was neither upgraded nor downgraded.
     if (*(const uint32_t *)storage_upgraded != FALSE_WORD) {
       // Attack: The upgrade process was launched when it shouldn't have been.
-      storage_wipe();
+      storage_force_wipe();
       handle_fault("storage version check");
       return secfalse;
     }
@@ -1056,12 +1110,10 @@ secbool check_storage_version(void) {
 }
 
 static secbool decrypt_dek(const uint8_t *pin, size_t pin_len, const uint8_t* ext_salt) {
-  const void *buffer = NULL;
-  uint16_t len = 0;
+  uint8_t buffer[64] = {0};
 
-  secbool ret = storage_get_edek_pvc_key(&buffer, &len);
-  if (sectrue != initialized || sectrue != ret ||
-      len != STORAGE_SALT_SIZE + KEYS_SIZE + PVC_SIZE) {
+  secbool ret = storage_get_edek_pvc_key(buffer);
+  if (sectrue != initialized || sectrue != ret) {
     handle_fault("no EDEK");
     return secfalse;
   }
@@ -1075,12 +1127,24 @@ static secbool decrypt_dek(const uint8_t *pin, size_t pin_len, const uint8_t* ex
   uint8_t kek[SHA256_DIGEST_LENGTH] = {0};
   uint8_t keiv[SHA256_DIGEST_LENGTH] = {0};
 
-  if (get_lock_version() >= 5) {
+  LOG_DEBUG(MODULE, "storage version: %d", get_lock_version());
+  if (get_lock_version() >= 6) {
     if (sectrue != derive_kek_unlock(pin, pin_len, storage_salt, ext_salt, kek)){
+      memzero(buffer, sizeof(buffer));
+      return secfalse;
+    }
+    if (0 != se_get_storage_kekiv(keiv)){
+      memzero(buffer, sizeof(buffer));
+      return secfalse;
+    }
+  } else if (get_lock_version() == 5) {
+    if (sectrue != derive_kek_unlock(pin, pin_len, storage_salt, ext_salt, kek)){
+      memzero(buffer, sizeof(buffer));
       return secfalse;
     }
   } else {
     if (sectrue != derive_kek_unlock_v4(pin, pin_len, storage_salt, ext_salt, kek, keiv)) {
+      memzero(buffer, sizeof(buffer));
       return secfalse;
     }
   }
@@ -1102,17 +1166,19 @@ static secbool decrypt_dek(const uint8_t *pin, size_t pin_len, const uint8_t* ex
   if (secequal32(tag, pvc, PVC_SIZE) != sectrue) {
     memzero(keys, sizeof(keys));
     memzero(tag, sizeof(tag));
+    memzero(buffer, sizeof(buffer));
     return secfalse;
   }
   memcpy(cached_keys, keys, sizeof(keys));
   memzero(keys, sizeof(keys));
   memzero(tag, sizeof(tag));
+  memzero(buffer, sizeof(buffer));
   return sectrue;
 }
 
 static void ensure_not_wipe_code(const uint8_t *pin, size_t pin_len) {
   if (sectrue != is_not_wipe_code(pin, pin_len)) {
-    storage_wipe();
+    storage_force_wipe();
     error_reset("You have entered the", "wipe code. All private",
                 "data has been erased.", NULL);
   }
@@ -1564,12 +1630,13 @@ void storage_wipe(void) {
 
 static void __handle_fault(const char *msg, const char *file, int line,
                            const char *func) {
+  LOG_DEBUG(MODULE, "Fault detected: %s, %s:%d, %s", msg, file, line, func);
   static secbool in_progress = secfalse;
 
   // If fault handling is already in progress, then we are probably facing a
   // fault injection attack, so wipe.
   if (secfalse != in_progress) {
-    storage_wipe();
+    storage_force_wipe();
     __fatal_error("Fault detected", msg, file, line, func);
   }
 
@@ -1578,18 +1645,18 @@ static void __handle_fault(const char *msg, const char *file, int line,
   in_progress = sectrue;
   uint32_t ctr = 0;
   if (sectrue != pin_get_fails(&ctr)) {
-    storage_wipe();
+    storage_force_wipe();
     __fatal_error("Fault detected", msg, file, line, func);
   }
 
   if (sectrue != storage_pin_fails_increase()) {
-    storage_wipe();
+    storage_force_wipe();
     __fatal_error("Fault detected", msg, file, line, func);
   }
 
   uint32_t ctr_new = 0;
   if (sectrue != pin_get_fails(&ctr_new) || ctr + 1 != ctr_new) {
-    storage_wipe();
+    storage_force_wipe();
   }
   __fatal_error("Fault detected", msg, file, line, func);
 }
@@ -1787,9 +1854,11 @@ static secbool storage_upgrade_unlocked(const uint8_t *pin, size_t pin_len,
   }
 
   secbool ret = sectrue;
-  if (version <= 4) {
+  if (version <= 5) {
     // Upgrade EDEK_PVC_KEY from the old uint32 PIN scheme to the new
     // variable-length PIN scheme.
+    // Upgrade version 5 -> version 6, store kekiv in SE
+    LOG_DEBUG(MODULE, "upgrade storage version from %d to %d", (int)version, NORCOW_VERSION);
     if (sectrue != set_pin(pin, pin_len, ext_salt)) {
       return secfalse;
     }

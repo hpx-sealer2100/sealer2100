@@ -35,7 +35,7 @@ class BootScreen(Screen):
         obj.remove_style_all()
         obj.add_style(style, lv.PART.MAIN)
         obj.set_size(4, 8)
-    
+
         # logo
         img = lv.img(self)
         img.set_src("A:/res/logo.png")
@@ -53,6 +53,9 @@ class BootScreen(Screen):
         anim.set_ready_cb(lambda _: self.channel.publish(lv.EVENT.READY))
         anim.start()
 
+        self.click_count = 0
+        self.add_event_cb(self.on_click, lv.EVENT.CLICKED, None)
+
         # self.timeline = lv.anim_timeline_create()
         # lv.anim_timeline_add(self.timeline, 0, anim)
         # lv.anim_timeline_set_reverse(self.timeline, True)
@@ -60,6 +63,16 @@ class BootScreen(Screen):
 
     def update_animation(self, bar: HStack, v):
         bar.set_width(v)
+
+    def on_click(self, event: lv.event_t):
+        from trezor import utils, log
+        self.click_count += 1
+        log.info(__name__, f"click_count: {self.click_count}")
+        if self.click_count < 5:
+            return
+
+        utils.reboot_to_bootloader()
+
 
     async def show(self):
         from . import manager

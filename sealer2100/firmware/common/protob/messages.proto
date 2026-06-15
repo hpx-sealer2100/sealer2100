@@ -90,7 +90,7 @@ enum MessageType {
     MessageType_SetBusy = 16 [(bitcoin_only) = true, (wire_in) = true];
     MessageType_Features = 17 [(bitcoin_only) = true, (wire_out) = true];
     MessageType_PinMatrixRequest = 18 [(bitcoin_only) = true, (wire_out) = true];
-    MessageType_PinMatrixAck = 19 [(bitcoin_only) = true, (wire_in) = true, (wire_tiny) = true, (wire_no_fsm) = true];
+    MessageType_PinMatrixAck = 19 [(bitcoin_only) = true, (wire_in) = true, (wire_tiny) = true, (wire_no_fsm) = true, deprecated = true];
     MessageType_Cancel = 20 [(bitcoin_only) = true, (wire_in) = true, (wire_tiny) = true];
     MessageType_LockDevice = 24 [(bitcoin_only) = true, (wire_in) = true];
     MessageType_ApplySettings = 25 [(bitcoin_only) = true, (wire_in) = true];
@@ -131,13 +131,13 @@ enum MessageType {
     MessageType_Deprecated_PassphraseStateAck = 78 [deprecated = true];
 
     // Bootloader
-    MessageType_FirmwareErase = 6 [(bitcoin_only) = true, (wire_in) = true, (wire_bootloader) = true];
-    MessageType_FirmwareUpload = 7 [(bitcoin_only) = true, (wire_in) = true, (wire_bootloader) = true];
-    MessageType_FirmwareRequest = 8 [(bitcoin_only) = true, (wire_out) = true, (wire_bootloader) = true];
-    MessageType_FirmwareErase_ex = 16 [(wire_in) = true, (wire_bootloader) = true];
-    MessageType_SelfTest = 32 [(bitcoin_only) = true, (wire_in) = true, (wire_bootloader) = true];
+    MessageType_FirmwareErase = 6 [(bitcoin_only) = true, (wire_in) = true, (wire_bootloader) = true,  deprecated = true];
+    MessageType_FirmwareUpload = 7 [(bitcoin_only) = true, (wire_in) = true, (wire_bootloader) = true,  deprecated = true];
+    MessageType_FirmwareRequest = 8 [(bitcoin_only) = true, (wire_out) = true, (wire_bootloader) = true,  deprecated = true];
+    MessageType_FirmwareErase_ex = 16 [(wire_in) = true, (wire_bootloader) = true,  deprecated = true];
+    MessageType_SelfTest = 32 [(bitcoin_only) = true, (wire_in) = true, (wire_bootloader) = true,  deprecated = true];
     MessageType_Reboot = 30000 [(bitcoin_only) = true, (wire_in) = true, (wire_bootloader) = true];
-    MessageType_FirmwareUpdateEmmc = 30001 [(bitcoin_only) = true, (wire_in) = true, (wire_bootloader) = true];
+    MessageType_FirmwareUpdate = 30001 [(bitcoin_only) = true, (wire_in) = true, (wire_bootloader) = true];
 
     // Bitcoin
     MessageType_GetPublicKey = 11 [(bitcoin_only) = true, (wire_in) = true];
@@ -188,17 +188,20 @@ enum MessageType {
     MessageType_DebugLinkWatchLayout = 9006 [(bitcoin_only) = true, (wire_debug_in) = true];
 
     // Emmc
-    MessageType_EmmcFixPermission = 30100 [(wire_in) = true, (wire_bootloader) = true];
-    MessageType_EmmcPath = 30101 [(wire_in) = true, (wire_out) = true, (wire_bootloader) = false];
-    MessageType_EmmcPathInfo = 30102 [(wire_in) = true, (wire_bootloader) = true];
-    MessageType_EmmcFile = 30103 [(wire_in) = true, (wire_out) = true, (wire_bootloader) = false];
-    MessageType_EmmcFileRead = 30104 [(wire_in) = true, (wire_bootloader) = true];
-    MessageType_EmmcFileWrite = 30105 [(wire_in) = true, (wire_bootloader) = true];
-    MessageType_EmmcFileDelete = 30106 [(wire_in) = true, (wire_bootloader) = true];
-    MessageType_EmmcDir = 30107 [(wire_out) = true, (wire_bootloader) = false];
-    MessageType_EmmcDirList = 30108 [(wire_in) = true, (wire_bootloader) = true];
-    MessageType_EmmcDirMake = 30109 [(wire_in) = true, (wire_bootloader) = false];
-    MessageType_EmmcDirRemove = 30110 [(wire_in) = true, (wire_bootloader) = true];
+    MessageType_FsStat = 30100 [(wire_in) = true, (wire_bootloader) = true];
+    MessageType_FsInfo = 30101 [(wire_out) = true, (wire_bootloader) = true];
+    MessageType_FsRemove = 30102 [(wire_in) = true, (wire_bootloader) = true];
+    MessageType_FsFile = 30103 [(wire_out) = true, (wire_bootloader) = true];
+    MessageType_FsFileRead = 30104 [(wire_in) = true, (wire_bootloader) = true];
+    MessageType_FsFileWrite = 30105 [(wire_in) = true, (wire_bootloader) = true];
+    MessageType_FsChunk = 30106 [(wire_out) = true, (wire_bootloader) = true];
+    MessageType_FsRead = 30107 [(wire_in) = true, (wire_bootloader) = true];
+    MessageType_FsWrite = 30108 [(wire_in) = true, (wire_bootloader) = true];
+    MessageType_FsMkdir = 30109 [(wire_in) = true, (wire_bootloader) = true];
+    MessageType_FsFsStat = 30110 [(wire_in) = true, (wire_bootloader) = true];
+    MessageType_FsFsInfo = 30111 [(wire_out) = true, (wire_bootloader) = true];
+    MessageType_FsChecksums = 30112 [(wire_in) = true, (wire_bootloader) = true];
+
 
     // Ethereum
     MessageType_EthereumGetPublicKey = 450 [(wire_in) = true];
@@ -219,27 +222,7 @@ enum MessageType {
     MessageType_EthereumTypedDataValueAck = 468 [(wire_in) = true];
     MessageType_EthereumTypedDataSignature = 469 [(wire_out) = true];
     MessageType_EthereumSignTypedHash = 470 [(wire_in) = true];
-
-    // Ethereum Hypermate
-    MessageType_EthereumGetPublicKeyHypermate = 20100 [(wire_in) = true];
-    MessageType_EthereumPublicKeyHypermate = 20101 [(wire_out) = true];
-    MessageType_EthereumGetAddressHypermate = 20102 [(wire_in) = true];
-    MessageType_EthereumAddressHypermate = 20103 [(wire_out) = true];
-    MessageType_EthereumSignTxHypermate = 20104 [(wire_in) = true];
-    MessageType_EthereumSignTxEIP1559Hypermate = 20105 [(wire_in) = true];
-    MessageType_EthereumTxRequestHypermate = 20106 [(wire_out) = true];
-    MessageType_EthereumTxAckHypermate = 20107 [(wire_in) = true];
-    MessageType_EthereumSignMessageHypermate = 20108 [(wire_in) = true];
-    MessageType_EthereumVerifyMessageHypermate = 20109 [(wire_in) = true];
-    MessageType_EthereumMessageSignatureHypermate = 20110 [(wire_out) = true];
-    MessageType_EthereumSignTypedDataHypermate = 20111 [(wire_in) = true];
-    MessageType_EthereumTypedDataStructRequestHypermate = 20112 [(wire_out) = true];
-    MessageType_EthereumTypedDataStructAckHypermate = 20113 [(wire_in) = true];
-    MessageType_EthereumTypedDataValueRequestHypermate = 20114 [(wire_out) = true];
-    MessageType_EthereumTypedDataValueAckHypermate = 20115 [(wire_in) = true];
-    MessageType_EthereumTypedDataSignatureHypermate = 20116 [(wire_out) = true];
-    MessageType_EthereumSignTypedHashHypermate = 20117 [(wire_in) = true];
-    MessageType_EthereumSignMessageEIP712 = 10200 [(wire_in) = true];
+    MessageType_EthereumStoreDefinition = 471 [(wire_in) = true];
 
     // NEM
     MessageType_NEMGetAddress = 67 [(wire_in) = true];
@@ -526,11 +509,11 @@ enum MessageType {
     MessageType_SEMessageSignature = 10013 [(wire_out) = true, (wire_bootloader) = true];
     // MessageType_NFTWriteInfo = 10014 [deprecated = true];
     // MessageType_NFTWriteData = 10015 [deprecated = true];
-    MessageType_ResourceUpload = 10018 [(wire_in) = true];
-    MessageType_ZoomRequest = 10019 [(wire_out) = true];
-    MessageType_ResourceRequest = 10020 [(wire_out) = true];
-    MessageType_ResourceAck = 10021 [(wire_in) = true];
-    MessageType_ResourceUpdate = 10022 [(wire_in) = true];
+    MessageType_NftUpload = 10018 [(wire_in) = true];
+    MessageType_NftRequest = 10019 [(wire_out) = true];
+    // MessageType_ResourceRequest = 10020 [(wire_out) = true];
+    MessageType_NftAck = 10021 [(wire_in) = true];
+    //MessageType_ResourceUpdate = 10022 [(wire_in) = true];
     MessageType_ListResDir = 10023 [(wire_in) = true];
     MessageType_FileInfoList = 10024 [(wire_out) = true];
     MessageType_SEInitialize = 10025 [(wire_in) = true, (wire_bootloader) = true];

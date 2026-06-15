@@ -12,13 +12,27 @@
 #include "irq.h"
 #include "spi.h"
 #include "timer.h"
+#include "sram.h"
+#include "log.h"
+
+#define MODULE "BLE"
+#define ENABLE_BLE_LOG 0
+
+#if !ENABLE_BLE_LOG
+// disable log
+#undef LOG_DEBUG
+#undef LOG_HEXDUMP_DEBUG
+#define LOG_DEBUG(module, fmt, ...)                log_dummy(module, fmt, ##__VA_ARGS__)
+#define LOG_HEXDUMP_DEBUG(module, label, buf, len) log_dummy(module, label, buf, len)
+#endif
 
 SPI_HandleTypeDef spi;
 static DMA_HandleTypeDef hdma_tx;
 static DMA_HandleTypeDef hdma_rx;
 
-static uint8_t *recv_buf = (uint8_t *)0x30040000;
-static uint8_t *send_buf = (uint8_t *)0x30040100;
+// buffer in sram3, see um0399 section 2.3.2
+static uint8_t *recv_buf = (uint8_t *)SRAM_BLE_RECV_ADDRESS;
+static uint8_t *send_buf = (uint8_t *)SRAM_BLE_SEND_ADDRESS;
 static int32_t volatile spi_rx_event = 0;
 static int32_t volatile spi_tx_event = 0;
 static int32_t volatile spi_abort_event = 0;
@@ -27,23 +41,6 @@ ChannelType host_channel = CHANNEL_NULL;
 
 uint8_t spi_data_in[SPI_BUF_MAX_IN_LEN];
 uint8_t spi_data_out[SPI_BUF_MAX_OUT_LEN];
-
-#define SPI_LOG_DATA 0
-
-#if SPI_LOG_DATA
-static void log_data(char* tag, uint8_t *data, size_t len) {
-  printf("%s : \n", tag);
-  for (int i = 0; i < len; i++) {
-    printf(" %02x", data[i]);
-    if ((i+1) % 16 == 0) {
-      printf("\n");
-    }
-  }
-  printf("\n");
-}
-#else
-#define log_data(...)
-#endif
 
 trans_fifo spi_fifo_in = {0};
 
@@ -143,8 +140,6 @@ int32_t spi_slave_init() {
 
   __HAL_RCC_SPI1_CLK_ENABLE();
   __HAL_RCC_DMA1_CLK_ENABLE();
-  __HAL_RCC_DMA1_FORCE_RESET();
-  __HAL_RCC_DMA1_RELEASE_RESET();
   __HAL_RCC_SPI1_FORCE_RESET();
   __HAL_RCC_SPI1_RELEASE_RESET();
   /*
@@ -275,9 +270,13 @@ int32_t spi_slave_init() {
 int32_t spi_slave_deinit() {
   GPIO_InitTypeDef gpio;
 
-  if (HAL_OK != HAL_SPI_DeInit(&spi)) {
-    return -1;
-  }
+  HAL_NVIC_DisableIRQ(SPIx_DMA_TX_IRQn);
+  HAL_NVIC_DisableIRQ(SPIx_DMA_RX_IRQn);
+  HAL_NVIC_DisableIRQ(SPI1_IRQn);
+  HAL_DMA_DeInit(&hdma_tx);
+  HAL_DMA_DeInit(&hdma_rx);
+  HAL_SPI_DeInit(&spi);
+
   /*
    * MOSI: PD7
    * MISO: PB4
@@ -318,12 +317,12 @@ int32_t spi_slave_deinit() {
 }
 
 
-int32_t spi_slave_send(uint8_t *buf, uint32_t size, int32_t timeout) {
+int32_t spi_slave_send(const uint8_t *buf, uint32_t size, int32_t timeout) {
   int32_t ret = 0;
   if (size != TREZOR_PKG_SIZE) {
-    printf("sending unpack trezor packet, size: %ld!!! \n", size);
+    LOG_ERROR(MODULE, "sending unpack trezor packet, size: %ld!!!", size);
   }
-  log_data("sending", buf, size);
+  LOG_HEXDUMP_DEBUG(MODULE, "sending", buf, size);
 
   memset(send_buf, 0, SPI_PKG_SIZE);
   memcpy(&send_buf[1], buf, size);
@@ -334,20 +333,20 @@ int32_t spi_slave_send(uint8_t *buf, uint32_t size, int32_t timeout) {
   spi_abort_event = 1;
   if (HAL_SPI_Abort_IT(&spi) != HAL_OK) {
     memset(send_buf, 0, SPI_PKG_SIZE);
-    printf("spi abort error!!\n");
+    LOG_ERROR(MODULE, "spi abort error!!");
     return 0;
   }
   while (spi_abort_event){}
 
   spi_tx_event = 1;
   if (HAL_SPI_Transmit_DMA(&spi, send_buf, SPI_PKG_SIZE) != HAL_OK) {
-    printf("spi dma start send error!!\n");
+    LOG_ERROR(MODULE, "spi dma start send error!!");
     goto END;
   }
 
   SET_COMBUS_LOW();
   if (wait_spi_tx_event(timeout) != 0) {
-    printf("spi wait send timeout!!\n");
+    LOG_ERROR(MODULE, "spi wait send timeout!!");
     goto END;
   }
   ret = size;
@@ -378,7 +377,7 @@ static void try_cache_packet(void) {
     spi_rx_complete = sectrue;
     return;
   }
-  log_data("caching", recv_buf+1, recv_buf[0]);
+  LOG_HEXDUMP_DEBUG(MODULE, "caching", recv_buf+1, recv_buf[0]);
   // ok, we can cache the packet to fifo buffer
   // copy data
   fifo_write_no_overflow(&spi_fifo_in, &recv_buf[1], block);
@@ -403,7 +402,7 @@ uint32_t spi_slave_poll(uint8_t *buf) {
   }
   len = total_len > TREZOR_PKG_SIZE ? TREZOR_PKG_SIZE : total_len;
   ret = fifo_read_lock(&spi_fifo_in, buf, len);
-  log_data("reading", buf, ret);
+  LOG_HEXDUMP_DEBUG(MODULE, "reading", buf, ret);
   return ret;
 }
 

@@ -438,6 +438,18 @@ void dma2d_copy_buffer(void *pSrc, void* dst,  uint16_t x, uint16_t y,
   uint32_t destination = ((uint32_t) dst) + (y * lcd_params.xres + x) * (lcd_params.bbp);
   uint32_t source = (uint32_t)pSrc;
 
+  {
+    uint32_t line_size    = 32;  // D-Cache line size (H7 usually 32)
+    uint32_t data_size    = (uint32_t)xsize * ysize * lcd_params.bbp;  // 字节数
+
+    uint32_t addr_start   = (uint32_t)pSrc;
+    uint32_t addr_end     = addr_start + data_size;
+
+    uint32_t addr_aligned = addr_start & ~(line_size - 1U);
+    uint32_t size_aligned = (addr_end - addr_aligned + (line_size - 1U)) & ~(line_size - 1U);
+
+    SCB_CleanDCache_by_Addr((uint32_t *)addr_aligned, size_aligned);
+  }
   /*##-1- Configure the DMA2D Mode, Color Mode and output offset #############*/
   hlcd_dma2d.Init.Mode = DMA2D_M2M;
   hlcd_dma2d.Init.ColorMode = DMA2D_OUTPUT_RGB565;

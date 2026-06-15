@@ -55,6 +55,10 @@ CPPDEFINES_MOD += [
     ('USE_NEM', '1' if EVERYTHING else '0'),
     ('USE_EOS', '1' if EVERYTHING else '0'),
 ]
+if ARGUMENTS.get('PRODUCTION', '0') == '0':
+    CPPDEFINES_MOD +=[
+        ('LOG_ENABLED', 1)
+    ]
 SOURCE_MOD += [
     'embed/extmod/trezorobj.c',
     'embed/extmod/modtrezorcrypto/crc.c',
@@ -181,11 +185,8 @@ SOURCE_MOD += [
 ]
 if TREZOR_MODEL in ('T',):
     SOURCE_MOD += [
-#        'embed/extmod/modtrezorio/ff.c',
-#        'embed/extmod/modtrezorio/ffunicode.c',
         'embed/trezorhal/fatfs/ff.c',
         'embed/trezorhal/fatfs/ffunicode.c',
-        'embed/trezorhal/fatfs/diskio_emmc.c',
     ]
 
 # modtrezorui
@@ -231,10 +232,40 @@ SOURCE_MOD += [
     'embed/extmod/modutime.c',
 ]
 
+# modlvgldrv
+SOURCE_MOD += [
+    'embed/extmod/modlvgldrv.c',
+]
+
 # modthd89
 SOURCE_MOD += [
     'embed/extmod/modthd89/modthd89.c',
 ]
+
+# modairgapped
+SOURCE_MOD +=[
+    'embed/extmod/modairgapped/airgapped_memory.c',
+    'embed/extmod/modairgapped/modairgapped.c'
+]
+
+# littlefs
+CPPPATH_MOD += [
+    'vendor/littlefs',
+]
+
+CPPDEFINES_MOD += [
+    # disable std memory functions
+    ('LFS_DEFINES', 'secure_heap.h'),
+    # use heap_4 memory functions
+    ('LFS_MALLOC', 'pvPortMalloc'),
+    ('LFS_FREE', 'vPortFree'),
+]
+
+SOURCE_MOD += [
+    'vendor/littlefs/lfs_util.c',
+    'vendor/littlefs/lfs.c',
+]
+
 
 SOURCE_MICROPYTHON = [
     'vendor/micropython/extmod/modubinascii.c',
@@ -359,15 +390,15 @@ SOURCE_LVGL.extend(Glob('vendor/lv_mp/lvgl/src/*/*/*/*/*.c'))
 LVGL_BINDING_DIR = 'vendor/lv_mp'
 LVGL_DIR = f'{LVGL_BINDING_DIR}/lvgl'
 LVGL_BUILD = 'build/firmware'
-INC = f' -Iembed/lvgl'
+INC = f' -Iembed/firmware'
 LVGL_PP = f'{LVGL_BUILD}/lvgl.pp.c'
 LVGL_MPY = f'{LVGL_BUILD}/lv_mpy.c'
 LVGL_MPY_METADATA =f'{LVGL_BUILD}/lv_mpy.json'
 LV_CFLAGS = '-E -Wno-unused-function -DPYCPARSER -x c'
 
 LV_INC = [
+    'embed/firmware/lv_conf.h',
     f'{LVGL_DIR}/lvgl.h',
-    'embed/lvgl/lv_conf.h'
 ]
 
 env1 = Environment(ENV=os.environ)
@@ -426,6 +457,7 @@ SOURCE_STMHAL = [
     'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c',
     'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_jpeg.c',
     'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_hsem.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rtc_ex.c',
     'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_fmc.c',
     'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_sdmmc.c',
     'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_usb.c',
@@ -437,6 +469,8 @@ SOURCE_FIRMWARE = [
     'embed/firmware/delay.c',
     'embed/firmware/header.S',
     'embed/firmware/main.c',
+    'embed/firmware/firmware_context.c',
+    'embed/firmware/boot_updater.c',
     'embed/firmware/mphalport.c',
     'embed/firmware/nlrthumb.c',
     'embed/firmware/startup.S',
@@ -450,6 +484,7 @@ SOURCE_TREZORHAL = [
     #'embed/trezorhal/dma.c',
     'embed/trezorhal/image.c',
     'embed/trezorhal/emmc.c',
+    'embed/trezorhal/nand_flash.c',
     'embed/trezorhal/flash.c',
     'embed/trezorhal/heap_4.c',
     'embed/trezorhal/qspi_flash.c',
@@ -461,6 +496,7 @@ SOURCE_TREZORHAL = [
     'embed/trezorhal/stm32.c',
     'embed/trezorhal/systick.c',
     'embed/trezorhal/timer.c',
+    'embed/trezorhal/log.c',
     'embed/trezorhal/uart_log.c',
     'embed/trezorhal/usb.c',
     'embed/trezorhal/usbd_conf.c',
@@ -481,7 +517,6 @@ SOURCE_TREZORHAL = [
     'embed/trezorhal/ble.c',
     'embed/trezorhal/camera.c',
     'embed/trezorhal/device.c',
-    'embed/trezorhal/br_check.c',
     'embed/trezorhal/util.s',
     'embed/trezorhal/vectortable.s',
     'embed/trezorhal/i2c.c',
@@ -489,9 +524,17 @@ SOURCE_TREZORHAL = [
     'embed/trezorhal/sbu.c',
     'embed/trezorhal/touch.c',
     'embed/trezorhal/gt911.c',
-    'embed/trezorhal/button.c',
     'embed/trezorhal/power_manager.c',
     'embed/trezorhal/avi_parser.c',
+    'embed/trezorhal/keys.c',
+    'embed/trezorhal/fs.c',
+    'embed/trezorhal/fsport/fs_lfs_port.c',
+    'embed/trezorhal/fsport/fs_fatfs_port.c',
+    'embed/trezorhal/fsport/lfs_port_emmc.c',
+    'embed/trezorhal/fsport/lfs_port_nand.c',
+    'embed/trezorhal/fsport/lfs_port.c',
+    'embed/trezorhal/fsport/fatfs_diskio.c',
+    'embed/trezorhal/fsport/fatfs_diskio_emmc.c',
 ]
 
 SOURCE_NANOPB = [
@@ -580,6 +623,7 @@ env.Replace(
         'vendor/nanopb',
         'embed/lvgl',
         'vendor/lv_mp/lvgl',
+        'vendor/keystone3-firmware/rust/rust_c/bindings/production-multi-coins'
     ] + CPPPATH_MOD,
     CPPDEFINES=[
         'TREZOR_MODEL_'+TREZOR_MODEL,
@@ -597,6 +641,7 @@ env.Replace(
 
 env.Replace(
     HEADERTOOL='tools/headertool.py',
+    SIGNER='tools/signer_linux',
     PYTHON='python',
     MAKEQSTRDATA='$PYTHON vendor/micropython/py/makeqstrdata.py',
     MAKEVERSIONHDR='$PYTHON vendor/micropython/py/makeversionhdr.py',
@@ -693,6 +738,7 @@ if FROZEN:
     SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'trezor/wire/*.py'))
     SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'trezor/airgap/*.py'))
     SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'trezor/airgap/ur/*.py'))
+    SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'trezor/airgap/rust_ur/*.py'))
     SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'trezor/airgap/bc_types/*.py'))
 
     SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'storage/*.py'))
@@ -847,8 +893,6 @@ def cargo_build():
         f'--target-dir=../../build/firmware/rust',
         '--no-default-features',
         '--features ' + ','.join(features),
-        '-Z build-std=core',
-        '-Z build-std-features=panic_immediate_abort',
     ]
 
     return f'cd embed/rust; cargo build {profile} ' + ' '.join(cargo_opts)
@@ -861,6 +905,23 @@ env.Depends(rust, protobuf_blobs)
 
 env.Append(LINKFLAGS=f' -L{RUST_LIBDIR}')
 env.Append(LINKFLAGS=f' -l{RUST_LIB}')
+
+RUST_AIRGAPPED_LIB = 'rust_c'
+RUST_AIRGAPPED_LIBDIR = f'vendor/keystone3-firmware/rust/target/{RUST_TARGET}/{RUST_PROFILE}'
+RUST_AIRGAPPED_PATH = f'{RUST_AIRGAPPED_LIBDIR}/lib{RUST_AIRGAPPED_LIB}.a'
+
+
+def cargo_build_airgapped():
+    #cargo build --release -p rust_c --target thumbv7em-none-eabihf --no-default-features --features production-multi-coins --features "bitcoin/secp-lowmemory"
+    return f'cd vendor/keystone3-firmware/rust; cargo build --release -p rust_c --target={RUST_TARGET} --no-default-features --features production-multi-coins --features "bitcoin/secp-lowmemory"'
+
+rust_airgapped = env.Command(
+    target=RUST_AIRGAPPED_PATH,
+    source='',
+    action=f'RUSTFLAGS="--cfg=rust_secp_no_symbol_renaming" {cargo_build_airgapped()}', )
+
+env.Append(LINKFLAGS=f' -L{RUST_AIRGAPPED_LIBDIR}')
+env.Append(LINKFLAGS=f' -l{RUST_AIRGAPPED_LIB}')
 
 #
 # Program objects
@@ -881,25 +942,8 @@ obj_program.extend(env.Object(source=SOURCE_NANOPB))
 if FROZEN:
     obj_program.extend(env.Object(source=source_mpyc))
 
-VENDORHEADER = 'embed/vendorheader/vendorheader_' + ('hypermate_test_signed.bin' if ARGUMENTS.get('PRODUCTION', '0') == '0' else 'hypermate_signed.bin')
-
-obj_program.extend(
-    env.Command(
-        target='embed/firmware/vendorheader.o',
-        source=VENDORHEADER,
-        action='$OBJCOPY -I binary -O elf32-littlearm -B arm'
-        ' --rename-section .data=.vendorheader,alloc,load,readonly,contents'
-        ' $SOURCE $TARGET', ))
-
-obj_program.extend(
-    env.Command(
-        target='embed/firmware/bootloader.o',
-        source='embed/firmware/bootloader.bin',
-        action='$OBJCOPY -I binary -O elf32-littlearm -B arm'
-        ' --rename-section .data=.bootloader'
-        ' $SOURCE $TARGET', ))
-
 env.Depends(obj_program, qstr_generated)
+env.Depends(obj_program, rust_airgapped)
 
 program_elf = env.Command(
     target='firmware.elf',
@@ -909,13 +953,23 @@ program_elf = env.Command(
 )
 
 env.Depends(program_elf, rust)
+env.Depends(program_elf, rust_airgapped)
+
+if ARGUMENTS.get('PRODUCTION', '0') == '0':
+    sign_bin = ('$HEADERTOOL -h $TARGET -D',)
+else:
+    token = env.get('ENV').get('SIGNER_TOKEN', '')
+    sign_bin = (
+        f'$SIGNER sign $TARGET $TARGET {token}',
+        '$HEADERTOOL --verify $TARGET',
+    )
 
 if PRODUCTION_MODEL == 'H':
     action_bin=[
-        '$OBJCOPY -O binary -j .vendorheader -j .header -j .flash -j .data --pad-to 0x081E0000 $SOURCE build/firmware/firmware.p1.bin',
+        '$OBJCOPY -O binary -j .flash -j .data --pad-to 0x081E0000 $SOURCE build/firmware/firmware.p1.bin',
         '$OBJCOPY -O binary -j .flash2 $SOURCE build/firmware/firmware.p2.bin',
         '$CAT build/firmware/firmware.p1.bin build/firmware/firmware.p2.bin > $TARGET',
-        '$HEADERTOOL -h $TARGET ' + ('-D' if ARGUMENTS.get('PRODUCTION', '0') == '0' else ''),
+        *sign_bin,
         '$DD if=$TARGET of=build/firmware/firmware.p1.bin skip=0 bs=128k count=12',
     ]
 
@@ -924,7 +978,7 @@ elif TREZOR_MODEL in ('T', 'R'):
         '$OBJCOPY -O binary -j .vendorheader -j .header -j .flash -j .data --pad-to 0x08100000 $SOURCE ${TARGET}.p1',
         '$OBJCOPY -O binary -j .flash2 $SOURCE ${TARGET}.p2',
         '$CAT ${TARGET}.p1 ${TARGET}.p2 > $TARGET',
-        '$HEADERTOOL -h $TARGET ' + ('-D' if ARGUMENTS.get('PRODUCTION', '0') == '0' else ''),
+        *sign_bin,
         '$DD if=$TARGET of=${TARGET}.p1 skip=0 bs=128k count=6',
     ]
 elif TREZOR_MODEL in ('1',):

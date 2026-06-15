@@ -64,14 +64,10 @@ def find_message_handler_module(msg_type: int) -> str:
 
     if utils.MODEL in ("T",) and msg_type == MessageType.SdProtect:
         return "apps.management.sd_protect"
-    if utils.MODEL == "T" and msg_type == MessageType.ResourceUpload:
+    if utils.MODEL == "T" and msg_type == MessageType.NftUpload:
         if utils.EMULATOR:
             raise ValueError
-        return "apps.management.upload_res"
-    if utils.MODEL == "T" and msg_type == MessageType.ResourceUpdate:
-        if utils.EMULATOR:
-            raise ValueError
-        return "apps.management.update_res"
+        return "apps.management.upload_nft"
     if utils.MODEL == "T" and msg_type == MessageType.ListResDir:
         if utils.EMULATOR:
             raise ValueError
@@ -140,24 +136,8 @@ def find_message_handler_module(msg_type: int) -> str:
             return "apps.ethereum.sign_typed_data"
         if msg_type == MessageType.EthereumSignTypedHash:
             return "apps.ethereum.sign_typed_data_hash"
-
-        # ethereum Hypermate
-        if msg_type == MessageType.EthereumGetAddressHypermate:
-            return "apps.ethereum.hypermate.get_address"
-        if msg_type == MessageType.EthereumGetPublicKeyHypermate:
-            return "apps.ethereum.hypermate.get_public_key"
-        if msg_type == MessageType.EthereumSignTxHypermate:
-            return "apps.ethereum.hypermate.sign_tx"
-        if msg_type == MessageType.EthereumSignTxEIP1559Hypermate:
-            return "apps.ethereum.hypermate.sign_tx_eip1559"
-        if msg_type == MessageType.EthereumSignMessageHypermate:
-            return "apps.ethereum.hypermate.sign_message"
-        if msg_type == MessageType.EthereumVerifyMessageHypermate:
-            return "apps.ethereum.hypermate.verify_message"
-        if msg_type == MessageType.EthereumSignTypedDataHypermate:
-            return "apps.ethereum.hypermate.sign_typed_data"
-        if msg_type == MessageType.EthereumSignTypedHashHypermate:
-            return "apps.ethereum.hypermate.sign_typed_data_hash"
+        if msg_type == MessageType.EthereumStoreDefinition:
+            return "apps.ethereum.store_definition"
 
         # eos
         # if msg_type == MessageType.EosGetPublicKey:
@@ -170,7 +150,7 @@ def find_message_handler_module(msg_type: int) -> str:
             return "apps.polkadot.get_address"
         if msg_type == MessageType.PolkadotSignTx:
             return "apps.polkadot.sign_tx"
-        
+
         # tron
         if msg_type == MessageType.TronGetAddress:
             return "apps.tron.get_address"
@@ -206,7 +186,7 @@ def find_message_handler_module(msg_type: int) -> str:
         #     return "apps.aptos.sign_tx"
         # if msg_type == MessageType.AptosSignMessage:
         #     return "apps.aptos.sign_message"
-        
+
 
         # filecoin
         if msg_type == MessageType.FilecoinGetAddress:

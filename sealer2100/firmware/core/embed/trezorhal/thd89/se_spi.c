@@ -1,3 +1,4 @@
+#include "uart_log.h"
 #include STM32_HAL_H
 #include "stm32h7xx_hal_gpio.h"
 #include "stm32h7xx_hal_spi.h"
@@ -6,26 +7,20 @@
 #include "se_spi.h"
 #include "sec_trans.h"
 #include "device.h"
+#include "log.h"
 
-#if 1
-#define SE_LOG(...)
-#define log_data(...)
-#define log_frame(...)
+#define MODULE "SE"
+
+#define ENABLE_SE_LOG 0
+
+#if !ENABLE_SE_LOG
+// disable log
+#undef LOG_DEBUG
+#undef LOG_HEXDUMP_DEBUG
+#define LOG_DEBUG(module, fmt, ...)                log_dummy(module, fmt, ##__VA_ARGS__)
+#define LOG_HEXDUMP_DEBUG(module, label, buf, len) log_dummy(module, label, buf, len)
+#define log_frame(frame) log_dummy(MODULE, frame)
 #else
-#define SE_LOG printf
-void log_data(uint8_t* data, size_t data_size) {
-  #define __FRAME_LINE__ 16
-  uint8_t count = 0;
-  while (data_size--) {
-    count++;
-    SE_LOG("%02x ", *data++);
-    if (count == __FRAME_LINE__) {
-      SE_LOG("\n");
-      count = 0;
-    }
-  }
-  SE_LOG("\n");
-}
 static void log_frame(uint8_t frame[SEC_MAX_FRAME_SIZE]) {
   uint8_t fctr = frame[0];
   (void)fctr;
@@ -35,16 +30,17 @@ static void log_frame(uint8_t frame[SEC_MAX_FRAME_SIZE]) {
 
   size_t frame_size = len + 5;
   (void)frame_size;
-  uint8_t* p = frame + 3;
+  uint8_t *p = frame + 3;
   if (frame_size > SEC_MAX_FRAME_SIZE) {
-    printf("SE spi maybe read failed\n");
+    LOG_DEBUG(MODULE, "SE spi maybe read failed\n");
     return;
   }
-  SE_LOG("frame: %02x,  len: %d(%02x%02x), crc: %02x%02x\n", fctr, len,
-          frame[1], frame[2], frame[frame_size - 2], frame[frame_size - 1]);
-
-  log_data(p, len);
+  LOG_DEBUG(MODULE, "frame: %02x, len: %d(%02x%02x), crc: %02x%02x", fctr, len, frame[1], frame[2],
+             frame[frame_size - 2], frame[frame_size - 1]);
+  LOG_HEXDUMP_DEBUG(MODULE, "payload", p, len);
+  uart_log_flush();
 }
+
 #endif
 
 static SPI_HandleTypeDef hspi5 = {0};
@@ -63,7 +59,7 @@ int se_spi_init(void) {
   // CLK
   gpio.Pin = SPI_CLK_GPIO_PIN;
   gpio.Mode = GPIO_MODE_AF_PP;
-  gpio.Pull = GPIO_PULLDOWN;
+  gpio.Pull = GPIO_PULLUP;
   gpio.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   gpio.Alternate = GPIO_AF5_SPI5;
   HAL_GPIO_Init(SPI_CLK_GPIO_PORT, &gpio);
@@ -145,7 +141,7 @@ int sec_trans_write(const uint8_t *frame, size_t frame_size, uint32_t timeout) {
   } else if (ret != HAL_OK) {
     return SEC_TRANS_ERR_FAILED;
   }
-  SE_LOG("APP ==> SE\n");
+  LOG_DEBUG(MODULE, "APP ==> SE");
   log_frame((uint8_t*)frame);
   return SEC_TRANS_SUCCESS;
 }
@@ -170,7 +166,8 @@ int sec_trans_read(uint8_t *frame, size_t frame_buf_size, uint32_t timeout) {
   } else if (ret != HAL_OK) {
     return SEC_TRANS_ERR_FAILED;
   }
-  SE_LOG("SE ==> APP\n");
+  HAL_Delay(1);
+  LOG_DEBUG(MODULE, "SE ==> APP");
   log_frame((uint8_t*)frame);
   return SEC_TRANS_SUCCESS;
 }
@@ -178,8 +175,7 @@ int se_send(uint8_t *buf, size_t size, uint32_t timeout) {
   // wait combus pull up, SE is IDLE
   while (SE_COMBUS_IS_LOW());
   HAL_Delay(1);
-  SE_LOG("SE sending: \n");
-  log_data(buf, size);
+  LOG_HEXDUMP_DEBUG(MODULE, "sending", buf, size);
   if (HAL_SPI_Transmit(&hspi5, buf, size, timeout) != HAL_OK) {
     return -1;
   }
@@ -193,7 +189,6 @@ int se_recv(uint8_t *buf, size_t size, uint32_t timeout) {
   if (HAL_SPI_Receive(&hspi5, buf, size, timeout) != HAL_OK) {
     return -1;
   }
-  SE_LOG("SE received: \n");
-  log_data(buf, size);
+  LOG_HEXDUMP_DEBUG(MODULE, "received", buf, size);
   return 0;
 }

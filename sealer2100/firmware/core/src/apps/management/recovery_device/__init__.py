@@ -46,10 +46,11 @@ async def reset_storage():
     """
     wipe `iris` `storage` and refresh iris version
     """
-    await iris.wipe()
     # wipe storage to make sure the device is in a clear state
     storage.reset()
-    await loop.sleep(50)
+    await loop.sleep(100)
+    await iris.wipe()
+    await loop.sleep(100)
     await iris.refresh_iris_version()
 
 async def recovery_device(ctx: wire.Context, msg: RecoveryDevice) -> Success:

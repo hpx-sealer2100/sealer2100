@@ -31,8 +31,6 @@ extern "C" {
 
 /// project configuration
 #ifdef STM32H747xx
-#define USE_ZIAN_BOARD                      0U
-#define USE_DUNAN_BOARD                     1U
 #define UART_LOG                            1U
 #define USE_USB_HS
 // #define USE_USB_FS
@@ -277,7 +275,7 @@ extern "C" {
 #define USE_HAL_TIM_REGISTER_CALLBACKS \
   0U /* TIM register callback disabled     */
 #define USE_HAL_UART_REGISTER_CALLBACKS \
-  0U /* UART register callback disabled    */
+  1U /* UART register callback disabled    */
 #define USE_HAL_USART_REGISTER_CALLBACKS \
   0U /* USART register callback disabled   */
 #define USE_HAL_WWDG_REGISTER_CALLBACKS \

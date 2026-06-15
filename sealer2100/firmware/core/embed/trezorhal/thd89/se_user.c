@@ -13,6 +13,7 @@
 #define OID_USER_PIN_HMAC_KEY (OID_USER_OBJ_BASE+1)
 #define OID_USER_PIN_ECDH_KEY_PAIR (OID_USER_OBJ_BASE+2)
 #define OID_USER_PIN_SECRET (OID_USER_OBJ_BASE+3)
+#define OID_USER_PIN_STORAGE_KEKIV (OID_USER_OBJ_BASE+4)
 
 // b ^= a;
 static inline void xor(const uint8_t* a, uint8_t *b, size_t n) {
@@ -184,4 +185,27 @@ err:
   memset(digest, 0, sizeof(digest));
   memset(secret, 0, sizeof(secret));
   return ret;
+}
+
+int se_set_storage_kekiv(uint8_t keyiv[32]) {
+  int ret = 0;
+  if ((ret = se_write_file(OID_USER_PIN_STORAGE_KEKIV, keyiv, 32)) != 0) {
+    return ret;
+  }
+  if ((ret = se_set_file_access(OID_USER_PIN_STORAGE_KEKIV, 0)) != 0) {
+    return ret;
+  }
+  return 0;
+}
+
+int se_get_storage_kekiv(uint8_t keyiv[32]) {
+  int ret = 0;
+  size_t len = 32;
+  if ((ret = se_read_file(OID_USER_PIN_STORAGE_KEKIV, keyiv, &len)) != 0) {
+    return ret;
+  }
+  if (len != 32) {
+    return 1;
+  }
+  return 0;
 }

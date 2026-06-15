@@ -8,6 +8,7 @@ from trezor.enums import ButtonRequestType
 from trezor.messages import ButtonAck, ButtonRequest
 from trezor.ui import i18n, colors
 from .common import button_request, interact2, raise_if_cancelled
+from trezor.airgap.rust_ur.rust_ur import *
 
 if TYPE_CHECKING:
     from typing import Any, Awaitable, TypeVar, Sequence
@@ -74,10 +75,10 @@ async def show_app_guide() -> None:
         screen = await screen
 
 
-async def show_airgap_signature(sig: str):
-    from trezor.ui.screen.airgap import EthSignature
+async def show_airgap_qrcode(rust_encoded_ur: RustEncodedUR) -> None:
+    from trezor.ui.screen.airgap import AirgappedQrcode
 
-    screen = EthSignature(sig)
+    screen = AirgappedQrcode(rust_encoded_ur)
     await screen.show()
     await screen
 
@@ -162,6 +163,12 @@ async def show_airgap_pubkey(
 ):
     from trezor.ui.screen.airgap import AirgapPublicKey
     screen = AirgapPublicKey(pubkey, path, network)
+    await screen.show()
+    await interact(ctx, screen)
+
+async def show_airgap_add_wallet(ctx: wire.GenericContext, wallet):
+    from trezor.ui.screen.airgap import AirgapAddWallet
+    screen = AirgapAddWallet(wallet)
     await screen.show()
     await interact(ctx, screen)
 
@@ -252,10 +259,8 @@ async def confirm_set_homescreen(ctx, replace: bool = False):
         msg,
     )
 
-async def confirm_collect_nft(ctx, replace: bool = False):
-    msg = i18n.Text.collect_nft
-    if replace:
-        msg = i18n.Text.replace_nft
+async def confirm_collect_nft(ctx, msg: str):
+    msg = f"{i18n.Text.collect_nft}\n\n{msg}"
     await confirm_action(
         ctx,
         i18n.Title.collect_nft,
@@ -265,13 +270,9 @@ async def confirm_collect_nft(ctx, replace: bool = False):
 async def confirm_verify_device(ctx):
     await confirm_action(ctx, i18n.Title.verify_device, i18n.Text.verify_device)
 
-async def confirm_update_res(ctx, update_boot:bool):
-    if update_boot:
-        title = i18n.Title.update_bootloader
-        msg = i18n.Text.update_bootloader
-    else:
-        title = i18n.Title.update_resource
-        msg = i18n.Text.update_resource
+async def confirm_update_res(ctx):
+    title = i18n.Title.update_resource
+    msg = i18n.Text.update_resource
 
     from trezor.ui.screen.confirm import SimpleConfirm
     screen = SimpleConfirm(msg)
@@ -337,11 +338,15 @@ async def request_iris_regist(ctx: wire.GenericContext):
 
 async def request_iris_match(ctx: wire.GenericContext):
     await button_request(ctx, code=ButtonRequestType.IrisEntry)
+    from trezor import loop
     from trezor.ui.screen.iris import IrisMatch
     screen = IrisMatch()
     await screen.show()
     result = await ctx.wait(screen)
     if not result:
+        # rewrite IrisMatch.__await__
+        # now we wait power down first then result
+        await loop.sleep(100)
         raise wire.ActionCancelled
     return result
 

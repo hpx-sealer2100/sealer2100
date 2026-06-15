@@ -18,6 +18,7 @@ import os
 import sys
 import re
 import time
+import json
 from typing import TYPE_CHECKING, Optional, Sequence
 
 import click
@@ -47,10 +48,6 @@ SD_PROTECT_OPERATIONS = {
     "refresh": messages.SdProtectOperationType.REFRESH,
 }
 
-RESOURCE_UPLOAD_PURPOSE = {
-    "wallpaper": messages.ResourceType.WallPaper,
-    "nft": messages.ResourceType.Nft,
-}
 BL_REBOOT_TYPE = {
     "firmware": messages.RebootType.Normal,
     "boardloader": messages.RebootType.Boardloader,
@@ -369,47 +366,48 @@ def se_sign_message(obj: "TrezorConnection", message: str) -> dict:
 
 @cli.command()
 # fmt: off
-@click.option("-f", "--fullpath", help="The full path of the file to upload")
-@click.option("-z", "--zoompath", help="The zoom file of the image to upload")
-@click.option("-p", "--purpose", type=ChoiceType(RESOURCE_UPLOAD_PURPOSE), default="wallpaper", help="The upload file used for")
-@click.option("-m", "--metadata", help="the metadata of the nft, a json string include header, subheader, network and owner fields")
+@click.option("-i", "--image", help="The full path of the image to upload", type=click.File('rb'))
+@click.option("-t", "--thumbnail", help="The thumbnail file of the image to upload", type=click.File('rb'))
+@click.option("-m", "--metadata", help="the metadata of the nft, a json string include id, name, token, network and owner fields", type = click.File())
 # fmt: on
 @with_client
-def upload_res(
+def upload_nft(
     client: "TrezorClient",
-    fullpath: str,
-    zoompath: str,
-    purpose: messages.ResourceType,
-    metadata: str
+    image: click.File,
+    thumbnail: click.File,
+    metadata: click.File,
 ) -> None:
-    """Upload wallpaper/nft to device."""
-    if fullpath:
-        ext = fullpath.split(".")[-1]
-        with open(zoompath, "rb") as f:
-            zoomdata = f.read()
-        with open(fullpath, "rb") as f:
-            data = f.read()
-        try:
-            click.echo("Please confirm the action on your Trezor device")
+    """Upload nft to device."""
 
-            click.echo("Uploading...\r", nl=False)
-            with click.progressbar(
-                label="Uploading", length=len(data) + len(zoomdata), show_eta=False
-            ) as bar:
-                device.upload_res(
-                    client,
-                    ext,
-                    data,
-                    zoomdata,
-                    progress_update=bar.update,
-                    res_type=purpose,
-                    nft_metadata=metadata if metadata else None,
-                )
-        except exceptions.Cancelled:
-            click.echo("Upload aborted on device.")
-        except exceptions.TrezorException as e:
-            click.echo(f"Upload failed: {e}")
-            sys.exit(3)
+    ext1 = image.name.split(".")[-1]
+    ext2 = thumbnail.name.split(".")[-1]
+    if ext1 != ext2:
+        click.echo(f"Image and thumbnail must have the same extension, but got {ext1} and {ext2}")
+        sys.exit(3)
+
+    image_data = image.read()
+    thumbnail_data = thumbnail.read()
+    meta = json.load(metadata)
+    try:
+        click.echo("Please confirm the action on your Trezor device")
+
+        click.echo("Uploading...\r", nl=False)
+        bar = click.progressbar(
+            label="Uploading", length=len(image_data) + len(thumbnail_data), show_eta=False
+        )
+        device.upload_nft(
+            client,
+            meta,
+            image=image_data,
+            thumbnail=thumbnail_data,
+            progress=bar.update,
+            extension=ext1,
+        )
+    except exceptions.Cancelled:
+        click.echo("Upload aborted on device.")
+    except exceptions.TrezorException as e:
+        click.echo(f"Upload failed: {e}")
+        sys.exit(3)
 
 
 @cli.command()
@@ -437,16 +435,6 @@ def update_res(
         except exceptions.TrezorException as e:
             click.echo(f"Update failed: {e}")
             sys.exit(3)
-
-@cli.command()
-# fmt: off
-@click.option("-p", "--path_dir", help="The path of dir to enum")
-# fmt: on
-@with_client
-def list_dir(client: "TrezorClient", path_dir: str) -> None:
-    files_info = device.list_dir(client, path_dir)
-    for info in files_info:
-        click.echo(f"file_name {info.name} with size {info.size} bytes")
 
 @cli.command()
 @click.argument("enable", type=ChoiceType({"on": True, "off": False}), required=False)
@@ -485,34 +473,7 @@ def header_printer(header:str) -> None:
 def print_buffer(buffer:bytes) -> None:
     print(''.join(format(x, '02x') for x in buffer))
 
-def parse_human_readable_size(size:str):
-
-    # units = {"B": 1, "KB": 10**3, "MB": 10**6, "GB": 10**9, "TB": 10**12} #Unix
-    units = {"B": 1, "KB": 2**10, "MB": 2**20, "GB": 2**30, "TB": 2**40} #Windows
-
-    match_result = re.search(r'(\d*)\s{0,1}(\D{0,2})', size)
-
-    if(match_result == None):
-        raise RuntimeError(f"{size} is not a valid size, format error!")
-
-    number:float = float(match_result.group(1))
-    if(match_result.group(2) != ''):
-        try:
-            unit_factor:float = float(units[match_result.group(2)])
-        except KeyError:
-            raise RuntimeError(f"{size} is not a valid size, unit error!")
-    else:
-        unit_factor:float = 1
-
-    return int(number*unit_factor)
-
-# settings
-max_chunk_size:str = "10MB"
-default_chunk_size:str = "256KB"
-LINE_UP = '\033[1A'
-LINE_CLEAR = '\x1b[2K'
-
-# EmmcPathInfo
+# firmware update
 @cli.command()
 # fmt: off
 @click.option("-t", "--reboot_type", type=ChoiceType(BL_REBOOT_TYPE), default="firmware", help="Reboot type")
@@ -524,12 +485,12 @@ def bl_reboot(client: "TrezorClient", reboot_type: messages.RebootType) -> str:
 # FirmwareUpdateEmmc
 @cli.command()
 # fmt: off
-@click.option("-p", "--path", required=True, help="Remote firmware file path (e.g. 0:fw.bin)")
-@click.option("-f", "--force_erease", required=False, is_flag=True, help="Force erease and factory reset the device")
+@click.option("-p", "--path", required=True, help="Remote firmware file path (e.g. /updates/fw.bin)")
+@click.option("-r", "--reboot_on_success", required=False, is_flag=True, help="Reboot on success")
 # fmt: on
 @with_client
-def firmware_update_emmc(client: "TrezorClient",path:str, force_erease:bool) -> None:
-    result = device.firmware_update_emmc(client, path_file=path, force_erease=force_erease)
+def firmware_update(client: "TrezorClient",path:str, reboot_on_success:bool) -> None:
+    result = device.firmware_update(client, path_file=path, reboot_on_success=reboot_on_success)
     if isinstance(result, messages.Success):
         print(result.message)
     elif isinstance(result, messages.Failure):
@@ -537,239 +498,6 @@ def firmware_update_emmc(client: "TrezorClient",path:str, force_erease:bool) -> 
         print(result.message)
     else:
         raise RuntimeError(f"Unexpected message {result}")
-
-
-# EmmcFixPermission
-@cli.command()
-@with_client
-def emmc_fix_permission(client: "TrezorClient") -> None:
-    result = device.emmc_fix_permission(client)
-    if isinstance(result, messages.Success):
-        print(result.message)
-    elif isinstance(result, messages.Failure):
-        print(result.code)
-        print(result.message)
-    else:
-        raise RuntimeError(f"Unexpected message {result}")
-
-# EmmcPathInfo
-@cli.command()
-# fmt: off
-@click.option("-p", "--path", required=True)
-# fmt: on
-@with_client
-def emmc_path_info(client: "TrezorClient", path: str) -> None:
-    result = device.emmc_path_info(client, path)
-    print(result)
-
-# EmmcFileRead
-@cli.command()
-# fmt: off
-@click.option("-l", "--local", required=True, help="Local file path. (e.g. /home/xxx/test.bin)")
-@click.option("-r", "--remote", required=True, help="Remote file path. (e.g. 0:test.bin)")
-@click.option("-o", "--offset", required=False, default=0, help="Offset")
-@click.option("-s", "--len", required=False, default=-1, help="len to read/write at offset")
-@click.option("-a", "--append", required=False, is_flag=True, help="Append to LOCAL file")
-@click.option("-f", "--force", required=False, is_flag=True, help="Force overwrite LOCAL file")
-# fmt: on
-@with_client
-def emmc_file_read_lowlevel(client: "TrezorClient", local: str, remote: str, offset: int, len: int, append:bool, force: bool) -> None:
-
-    if len < 0: # auto len
-        len = os.path.getsize(local)
-
-    if len > parse_human_readable_size(max_chunk_size):
-        raise RuntimeError(f"Max len is limited to {max_chunk_size}!")
-
-    if append and force:
-        raise RuntimeError("Both append and overwrite are enabled!")
-
-    emmc_file = device.emmc_file_read(client, remote, len, offset, ui_percentage=None)
-
-    file = open(local, 'wb')
-    if file.seek(offset, 0) < 0:
-        raise RuntimeError("File seek failed!")
-    file.write(emmc_file.data)
-    file.close()
-
-    print(f'Wrote {emmc_file.processed_byte} bytes to {local} at offset {emmc_file.offset}\n')
-
-@cli.command()
-# fmt: off
-@click.option("-l", "--local", required=True, help="Local file path. (e.g. /home/xxx/test.bin)")
-@click.option("-r", "--remote", required=True, help="Remote file path. (e.g. 0:test.bin)")
-@click.option("-f", "--force", required=False, is_flag=True, help="Force overwrite LOCAL file")
-@click.option("-cs", "--chunk_size", required=False, default=f"{default_chunk_size}", help="Chunk size for deviding a big transfer")
-# fmt: on
-@with_client
-def emmc_file_read(client: "TrezorClient", local: str, remote: str, force: bool, chunk_size:str) -> None:
-
-    chunk_size_bytes = parse_human_readable_size(chunk_size)
-    remote_file_size = device.emmc_path_info(client, path=remote).size
-    processed_size = 0
-
-    print(f'Chunk size {chunk_size_bytes}')
-
-    if os.path.exists(local) and not force:
-        raise RuntimeError(f"{local} exist and force set to false!")
-
-    file = open(local, 'wb')
-
-    while processed_size < remote_file_size:
-
-        # reset line
-        if processed_size > 0:
-            print(LINE_UP, end=LINE_CLEAR)
-
-        # decide how many bytes to process this turn
-        if (remote_file_size - processed_size) > chunk_size_bytes:
-            next_process_size = chunk_size_bytes
-        else:
-            next_process_size = remote_file_size - processed_size
-
-        # ui percentage
-        ui_percentage: int = int(100*((processed_size+next_process_size)/remote_file_size))
-
-        # package and send command
-        emmc_file = device.emmc_file_read(client, remote, next_process_size, processed_size, ui_percentage=ui_percentage)
-
-        # seek and write
-        file.seek(processed_size)
-        file.write(emmc_file.data)
-
-        # record size processed
-        processed_size += emmc_file.processed_byte
-
-        # display progress
-        print(f'\rProgress: {round(100*(processed_size/remote_file_size),2)}% {processed_size}/{remote_file_size}\nui_percentage={ui_percentage}', end='', flush=True)
-
-    file.close()
-
-    print(f'\nWrote {processed_size} bytes to {local}\n')
-
-# EmmcFileWrite
-@cli.command()
-# fmt: off
-@click.option("-l", "--local", required=True, help="Local file path. (e.g. /home/xxx/test.bin)")
-@click.option("-r", "--remote", required=True, help="Remote file path. (e.g. 0:test.bin)")
-@click.option("-o", "--offset", required=False, default=0, help="Offset")
-@click.option("-s", "--len", required=False, default=-1, help="len to read/write at offset")
-@click.option("-a", "--append", required=False, is_flag=True, help="Append to REMOTE file")
-@click.option("-f", "--force", required=False, is_flag=True, help="Force overwrite REMOTE file (only available in bootloader)")
-# fmt: on
-@with_client
-def emmc_file_write_lowlevel(client: "TrezorClient", local: str, remote: str, offset: int, len: int, append:bool, force: bool) -> None:
-
-    if len < 0: # auto len
-        len = os.path.getsize(local)
-
-    if len > parse_human_readable_size(max_chunk_size):
-        raise RuntimeError(f"Max len is limited to {max_chunk_size}!")
-
-    if append and force:
-        raise RuntimeError("Both append and overwrite are enabled!")
-
-    file = open(local, 'rb')
-    file.seek(offset)
-    data:bytes = file.read(len)
-    file.close()
-
-    emmc_file = device.emmc_file_write(client, remote, len, offset, data, overwrite=force, append=append, ui_percentage=None)
-
-    print(f'Wrote {emmc_file.processed_byte} bytes to {emmc_file.path} at offset {emmc_file.offset}\n')
-
-@cli.command()
-# fmt: off
-@click.option("-l", "--local", required=True, help="Local file path. (e.g. /home/xxx/test.bin)")
-@click.option("-r", "--remote", required=True, help="Remote file path. (e.g. 0:test.bin)")
-@click.option("-f", "--force", required=False, is_flag=True, help="Force overwrite REMOTE file")
-@click.option("-cs", "--chunk_size", required=False, default=f"{default_chunk_size}", help="Chunk size for deviding a big transfer")
-# fmt: on
-@with_client
-def emmc_file_write(client: "TrezorClient", local: str, remote: str, force: bool, chunk_size:str) -> None:
-
-    chunk_size_bytes = parse_human_readable_size(chunk_size)
-    local_file_size = os.path.getsize(local)
-    processed_size = 0
-
-    print(f'Chunk size {chunk_size_bytes}')
-
-    file = open(local, 'rb')
-
-    while processed_size < local_file_size:
-
-        # reset line
-        if processed_size > 0:
-            print(LINE_UP, end=LINE_CLEAR)
-
-        # decide how many bytes to process this turn
-        if (local_file_size - processed_size) > chunk_size_bytes:
-            next_process_size = chunk_size_bytes
-        else:
-            next_process_size = local_file_size - processed_size
-
-        # seek and read
-        file.seek(processed_size)
-        data:bytes = file.read(next_process_size)
-
-        # ui percentage
-        ui_percentage: int = int(100*((processed_size+next_process_size)/local_file_size))
-
-        # package and send command
-        emmc_file = device.emmc_file_write(client, remote, next_process_size, processed_size, data, overwrite=(force and (processed_size==0)), append=(processed_size!=0), ui_percentage=ui_percentage)
-
-        # record size processed
-        processed_size += emmc_file.processed_byte
-
-        # display progress
-        print(f'\rProgress: {round(100*(processed_size/local_file_size),2)}% {processed_size}/{local_file_size}\nui_percentage={ui_percentage}', end='', flush=True)
-
-    file.close()
-
-    print(f'\nWrote {processed_size} bytes to {emmc_file.path}')
-
-# EmmcFileDelete
-@cli.command()
-# fmt: off
-@click.option("-p", "--path", required=True)
-# fmt: on
-@with_client
-def emmc_file_delete(client: "TrezorClient", path: str) -> None:
-    device.emmc_file_delete(client, path)
-
-# EmmcDirList
-@cli.command()
-# fmt: off
-@click.option("-p", "--path", required=True)
-# fmt: on
-@with_client
-def emmc_dir_list(client: "TrezorClient", path: str) -> None:
-    emmc_dir = device.emmc_dir_list(client, path)
-
-    print("Folders:")
-    for subdir in emmc_dir.child_dirs.split('\n'):
-        click.echo(f'{subdir}')
-    print("Files:")
-    for file in emmc_dir.child_files.split('\n'):
-        click.echo(f'{file}')
-
-# EmmcDirMake
-@cli.command()
-# fmt: off
-@click.option("-p", "--path", required=True)
-# fmt: on
-@with_client
-def emmc_dir_make(client: "TrezorClient", path: str) -> None:
-    device.emmc_dir_make(client, path)
-
-# EmmcDirRemove
-@cli.command()
-# fmt: off
-@click.option("-p", "--path", required=True)
-# fmt: on
-@with_client
-def emmc_dir_remove(client: "TrezorClient", path: str) -> None:
-    device.emmc_dir_remove(client, path)
 
 # write-sn
 @cli.command()

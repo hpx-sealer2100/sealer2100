@@ -128,6 +128,7 @@ class MnemonicCheck(Modal):
         for w in checked_words:
             item = LItem(self.content, w, "A:/res/arrow-right_3.png")
             item.set_width(lv.pct(100))
+            item.add_style(Styles.pressed, lv.PART.MAIN|lv.STATE.PRESSED)
             item.add_flag(lv.obj.FLAG.CLICKABLE)
             item.add_flag(lv.obj.FLAG.EVENT_BUBBLE)
             item.add_style(Styles.board, lv.PART.MAIN)

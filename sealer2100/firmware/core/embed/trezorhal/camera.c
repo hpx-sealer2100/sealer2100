@@ -1,4 +1,5 @@
 #include "camera.h"
+#include "sram.h"
 #include STM32_HAL_H
 
 #include "stm32h7xx_hal_gpio.h"
@@ -107,8 +108,8 @@
 #define CAMERA_LED_GPIO_PORT GPIOD
 #define CAMERA_LED_GPIO_PIN GPIO_PIN_5
 
-#define CAMERA_GRAY_BUFFER FMC_SDRAM_GRAY_IMAGE_BUFFER_ADDRESS
-#define CAMERA_CAPTURE_BUFFER 0x30020000 // sram2 in D2
+#define CAMERA_GRAY_BUFFER SDRAM_GRAY_ADDRESS
+#define CAMERA_CAPTURE_BUFFER SRAM_CAMERA_ADDRESS
 
 #define GC0308_RGB565 1 // rgb565 bytes in gc0308 is reversed
 
@@ -131,7 +132,7 @@ static void DCMI_MspDeInit(DCMI_HandleTypeDef *hdcmi);
 #if CAMERA_SHOW_GRAY
 static void gray_to_rgb565(void);
 // reuse this buffer
-#define CAMERA_TEST_BUFFER FMC_SDRAM_JPEG_OUTPUT_DATA_BUFFER_ADDRESS
+#define CAMERA_TEST_BUFFER SDRAM_JPEG_ADDRESS
 #endif
 
 enum {
@@ -386,7 +387,7 @@ static void DCMI_DMAXferCplt(DMA_HandleTypeDef *hdma)
     hdcmi->XferCount = hdcmi->XferTransferNumber;
   }
 
-  dst = FMC_SDRAM_IMAGE_BUFFER_ADDRESS + line * __camera__.width * 2;
+  dst = SDRAM_CAMERA_ADDRESS + line * __camera__.width * 2;
   HAL_MDMA_Start(&hmdma, src, dst, __camera__.width * 2, LINES_PER_DMA_FETCH);
   HAL_MDMA_PollForTransfer(&hmdma, HAL_MDMA_FULL_TRANSFER, 1000);
   // update lines
@@ -504,7 +505,7 @@ void camera_led_init(void) {
 
 
 void convert_rgb565_to_grayscale(void) {
-  uint8_t *p = (uint8_t *)FMC_SDRAM_IMAGE_BUFFER_ADDRESS;
+  uint8_t *p = (uint8_t *)SDRAM_CAMERA_ADDRESS;
   uint8_t *gray = (uint8_t *)CAMERA_GRAY_BUFFER;
   for (int i = 0; i < __camera__.width * __camera__.height; i++) {
     uint16_t rgb565 = p[1] << 8 | p[0];
@@ -606,7 +607,6 @@ int camera_scan_qrcode(uint8_t qrcode[1024 + 1], int *type) {
   if (qr_code_len > 0) {
     __camera__.qr_state = QR_CODE;
     *type = CAMERA_QR_TYPE_STRING;
-    printf("qrcode : %s", (char*)qrcode);
   } else {
     __camera__.qr_state = QR_NONE;
   }
@@ -625,7 +625,7 @@ uint8_t* camera_buffer(void) {
 #if CAMERA_SHOW_GRAY
   return (uint8_t*)CAMERA_TEST_BUFFER;
 #else
-  return (uint8_t*)FMC_SDRAM_IMAGE_BUFFER_ADDRESS;
+  return (uint8_t*)SDRAM_CAMERA_ADDRESS;
 #endif
 }
 

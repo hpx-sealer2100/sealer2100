@@ -3,14 +3,13 @@
 ENTRY(reset_handler)
 
 MEMORY {
-   FLASH  (rx)  : ORIGIN = 0x08020000, LENGTH = 256K 
-  /*FLASH  (rx)  : ORIGIN = 0x08020000, LENGTH = 384K*/
+  FLASH  (rx)  : ORIGIN = 0x08000000, LENGTH = 384K
   AXIRAM (wal) : ORIGIN = 0x24000000, LENGTH = 512K
   SRAM   (wal) : ORIGIN = 0x20000000, LENGTH = 128K
   SRAM4   (wal) : ORIGIN = 0x38000000, LENGTH = 64K
 }
 
-main_stack_base = ORIGIN(SRAM) + LENGTH(SRAM); /* 8-byte aligned full descending stack */
+main_stack_base = ORIGIN(AXIRAM) + LENGTH(AXIRAM); /* 栈基址在 AXIRAM 顶部 */
 
 /* used by the startup code to populate variables used by the C code */
 data_lma = LOADADDR(.data);
@@ -28,12 +27,10 @@ sram_end = ORIGIN(SRAM) + LENGTH(SRAM);
 _codelen = SIZEOF(.flash) + SIZEOF(.data);
 
 SECTIONS {
-  .header : ALIGN(4) {
-    KEEP(*(.header));
-  } >FLASH AT>FLASH
-
   .flash : ALIGN(512) {
     KEEP(*(.vector_table));
+    . = ALIGN(1024);
+    KEEP(*(.header));
     . = ALIGN(4);
     *(.text*);
     . = ALIGN(4);
@@ -42,12 +39,6 @@ SECTIONS {
     *(.ARM.exidx*);
     . = ALIGN(512);
   } >FLASH AT>FLASH
-
-  .emmc_data : ALIGN(4) {
-    *(.emmc_data*);
-    . = ALIGN(512);
-  } >SRAM4 
-
 
   .data : ALIGN(4) {
     *(.data*);
@@ -59,15 +50,15 @@ SECTIONS {
     . = ALIGN(4);
   } >SRAM
 
-  .stack : ALIGN(8) {
-    . = 4K; /* this acts as a build time assertion that at least this much memory is available for stack use */
+  .heap (NOLOAD) : ALIGN(4)
+  {
+    PROVIDE ( end = .);
+    PROVIDE ( _end = .);
+    __HeapBase  = .;
+    __HeapLimit = .;
   } >SRAM
 
-  /* this is needed, otherwise will have "undefined reference to `end'" error */
-  .heap : ALIGN(4) {
-    PROVIDE ( end = . );
-    PROVIDE ( _end = . );
-    . = 512K; /* this acts as a build time assertion that at least this much memory is available for heap use */
-    /*. = ABSOLUTE(sram_end - 16K);  this explicitly sets the end of the heap effectively giving the stack at most 16K */
+  .stack : ALIGN(8) {
+    . = 512; /* this acts as a build time assertion that at least this much memory is available for stack use */
   } >AXIRAM
 }

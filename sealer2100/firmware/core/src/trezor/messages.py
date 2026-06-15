@@ -38,9 +38,9 @@ if TYPE_CHECKING:
     from trezor.enums import DebugSwipeDirection  # noqa: F401
     from trezor.enums import DecredStakingSpendType  # noqa: F401
     from trezor.enums import EthereumDataType  # noqa: F401
-    from trezor.enums import EthereumDataTypeHypermate  # noqa: F401
     from trezor.enums import EthereumDefinitionType  # noqa: F401
     from trezor.enums import FailureType  # noqa: F401
+    from trezor.enums import FsType  # noqa: F401
     from trezor.enums import InputScriptType  # noqa: F401
     from trezor.enums import MessageType  # noqa: F401
     from trezor.enums import MoneroNetworkType  # noqa: F401
@@ -48,11 +48,11 @@ if TYPE_CHECKING:
     from trezor.enums import NEMModificationType  # noqa: F401
     from trezor.enums import NEMMosaicLevy  # noqa: F401
     from trezor.enums import NEMSupplyChangeType  # noqa: F401
+    from trezor.enums import NftRequestType  # noqa: F401
     from trezor.enums import OutputScriptType  # noqa: F401
     from trezor.enums import PinMatrixRequestType  # noqa: F401
     from trezor.enums import RecoveryDeviceType  # noqa: F401
     from trezor.enums import RequestType  # noqa: F401
-    from trezor.enums import ResourceType  # noqa: F401
     from trezor.enums import SafetyCheckLevel  # noqa: F401
     from trezor.enums import SdProtectOperationType  # noqa: F401
     from trezor.enums import StellarAssetType  # noqa: F401
@@ -3253,96 +3253,80 @@ if TYPE_CHECKING:
         def is_type_of(cls, msg: Any) -> TypeGuard["SEWipeUserStorage"]:
             return isinstance(msg, cls)
 
-    class ResourceUpload(protobuf.MessageType):
+    class NftMetadata(protobuf.MessageType):
+        id: "str"
+        name: "str"
+        token: "str"
+        network: "str"
+        owner: "str"
+
+        def __init__(
+            self,
+            *,
+            id: "str",
+            name: "str",
+            token: "str",
+            network: "str",
+            owner: "str",
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["NftMetadata"]:
+            return isinstance(msg, cls)
+
+    class NftUpload(protobuf.MessageType):
+        metadata: "NftMetadata"
         extension: "str"
-        data_length: "int"
-        res_type: "ResourceType"
-        nft_meta_data: "bytes | None"
-        zoom_data_length: "int"
-        file_name_no_ext: "str | None"
+        image_size: "int"
+        thumbnail_size: "int"
 
         def __init__(
             self,
             *,
+            metadata: "NftMetadata",
             extension: "str",
-            data_length: "int",
-            res_type: "ResourceType",
-            zoom_data_length: "int",
-            nft_meta_data: "bytes | None" = None,
-            file_name_no_ext: "str | None" = None,
+            image_size: "int",
+            thumbnail_size: "int",
         ) -> None:
             pass
 
         @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["ResourceUpload"]:
+        def is_type_of(cls, msg: Any) -> TypeGuard["NftUpload"]:
             return isinstance(msg, cls)
 
-    class ZoomRequest(protobuf.MessageType):
-        offset: "int | None"
+    class NftRequest(protobuf.MessageType):
+        offset: "int"
         data_length: "int"
+        type: "NftRequestType"
 
         def __init__(
             self,
             *,
+            offset: "int",
             data_length: "int",
-            offset: "int | None" = None,
+            type: "NftRequestType",
         ) -> None:
             pass
 
         @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["ZoomRequest"]:
+        def is_type_of(cls, msg: Any) -> TypeGuard["NftRequest"]:
             return isinstance(msg, cls)
 
-    class ResourceRequest(protobuf.MessageType):
-        offset: "int | None"
-        data_length: "int"
-
-        def __init__(
-            self,
-            *,
-            data_length: "int",
-            offset: "int | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["ResourceRequest"]:
-            return isinstance(msg, cls)
-
-    class ResourceAck(protobuf.MessageType):
-        data_chunk: "bytes"
+    class NftAck(protobuf.MessageType):
+        chunk: "bytes"
         hash: "bytes | None"
 
         def __init__(
             self,
             *,
-            data_chunk: "bytes",
+            chunk: "bytes",
             hash: "bytes | None" = None,
         ) -> None:
             pass
 
         @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["ResourceAck"]:
-            return isinstance(msg, cls)
-
-    class ResourceUpdate(protobuf.MessageType):
-        file_name: "str"
-        data_length: "int"
-        initial_data_chunk: "bytes"
-        hash: "bytes | None"
-
-        def __init__(
-            self,
-            *,
-            file_name: "str",
-            data_length: "int",
-            initial_data_chunk: "bytes",
-            hash: "bytes | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["ResourceUpdate"]:
+        def is_type_of(cls, msg: Any) -> TypeGuard["NftAck"]:
             return isinstance(msg, cls)
 
     class ListResDir(protobuf.MessageType):
@@ -3655,198 +3639,6 @@ if TYPE_CHECKING:
 
         @classmethod
         def is_type_of(cls, msg: Any) -> TypeGuard["DebugLinkWatchLayout"]:
-            return isinstance(msg, cls)
-
-    class EmmcFixPermission(protobuf.MessageType):
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EmmcFixPermission"]:
-            return isinstance(msg, cls)
-
-    class EmmcPath(protobuf.MessageType):
-        exist: "bool"
-        size: "int"
-        year: "int"
-        month: "int"
-        day: "int"
-        hour: "int"
-        minute: "int"
-        second: "int"
-        readonly: "bool"
-        hidden: "bool"
-        system: "bool"
-        archive: "bool"
-        directory: "bool"
-
-        def __init__(
-            self,
-            *,
-            exist: "bool",
-            size: "int",
-            year: "int",
-            month: "int",
-            day: "int",
-            hour: "int",
-            minute: "int",
-            second: "int",
-            readonly: "bool",
-            hidden: "bool",
-            system: "bool",
-            archive: "bool",
-            directory: "bool",
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EmmcPath"]:
-            return isinstance(msg, cls)
-
-    class EmmcPathInfo(protobuf.MessageType):
-        path: "str"
-
-        def __init__(
-            self,
-            *,
-            path: "str",
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EmmcPathInfo"]:
-            return isinstance(msg, cls)
-
-    class EmmcFile(protobuf.MessageType):
-        path: "str"
-        offset: "int"
-        len: "int"
-        data: "bytes | None"
-        data_hash: "int | None"
-        processed_byte: "int | None"
-
-        def __init__(
-            self,
-            *,
-            path: "str",
-            offset: "int",
-            len: "int",
-            data: "bytes | None" = None,
-            data_hash: "int | None" = None,
-            processed_byte: "int | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EmmcFile"]:
-            return isinstance(msg, cls)
-
-    class EmmcFileRead(protobuf.MessageType):
-        file: "EmmcFile"
-        ui_percentage: "int | None"
-
-        def __init__(
-            self,
-            *,
-            file: "EmmcFile",
-            ui_percentage: "int | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EmmcFileRead"]:
-            return isinstance(msg, cls)
-
-    class EmmcFileWrite(protobuf.MessageType):
-        file: "EmmcFile"
-        overwrite: "bool"
-        append: "bool"
-        ui_percentage: "int | None"
-
-        def __init__(
-            self,
-            *,
-            file: "EmmcFile",
-            overwrite: "bool",
-            append: "bool",
-            ui_percentage: "int | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EmmcFileWrite"]:
-            return isinstance(msg, cls)
-
-    class EmmcFileDelete(protobuf.MessageType):
-        path: "str"
-
-        def __init__(
-            self,
-            *,
-            path: "str",
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EmmcFileDelete"]:
-            return isinstance(msg, cls)
-
-    class EmmcDir(protobuf.MessageType):
-        path: "str"
-        child_dirs: "str | None"
-        child_files: "str | None"
-
-        def __init__(
-            self,
-            *,
-            path: "str",
-            child_dirs: "str | None" = None,
-            child_files: "str | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EmmcDir"]:
-            return isinstance(msg, cls)
-
-    class EmmcDirList(protobuf.MessageType):
-        path: "str"
-
-        def __init__(
-            self,
-            *,
-            path: "str",
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EmmcDirList"]:
-            return isinstance(msg, cls)
-
-    class EmmcDirMake(protobuf.MessageType):
-        path: "str"
-
-        def __init__(
-            self,
-            *,
-            path: "str",
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EmmcDirMake"]:
-            return isinstance(msg, cls)
-
-    class EmmcDirRemove(protobuf.MessageType):
-        path: "str"
-
-        def __init__(
-            self,
-            *,
-            path: "str",
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EmmcDirRemove"]:
             return isinstance(msg, cls)
 
     class EosGetPublicKey(protobuf.MessageType):
@@ -4379,7 +4171,6 @@ if TYPE_CHECKING:
         slip44: "int"
         name: "str"
         icon: "str | None"
-        primary_color: "int | None"
 
         def __init__(
             self,
@@ -4389,7 +4180,6 @@ if TYPE_CHECKING:
             slip44: "int",
             name: "str",
             icon: "str | None" = None,
-            primary_color: "int | None" = None,
         ) -> None:
             pass
 
@@ -4433,408 +4223,6 @@ if TYPE_CHECKING:
 
         @classmethod
         def is_type_of(cls, msg: Any) -> TypeGuard["EthereumDefinitions"]:
-            return isinstance(msg, cls)
-
-    class EthereumGetPublicKeyHypermate(protobuf.MessageType):
-        address_n: "list[int]"
-        show_display: "bool | None"
-        chain_id: "int | None"
-
-        def __init__(
-            self,
-            *,
-            address_n: "list[int] | None" = None,
-            show_display: "bool | None" = None,
-            chain_id: "int | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumGetPublicKeyHypermate"]:
-            return isinstance(msg, cls)
-
-    class EthereumPublicKeyHypermate(protobuf.MessageType):
-        node: "HDNodeType"
-        xpub: "str"
-
-        def __init__(
-            self,
-            *,
-            node: "HDNodeType",
-            xpub: "str",
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumPublicKeyHypermate"]:
-            return isinstance(msg, cls)
-
-    class EthereumGetAddressHypermate(protobuf.MessageType):
-        address_n: "list[int]"
-        show_display: "bool | None"
-        chain_id: "int | None"
-
-        def __init__(
-            self,
-            *,
-            address_n: "list[int] | None" = None,
-            show_display: "bool | None" = None,
-            chain_id: "int | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumGetAddressHypermate"]:
-            return isinstance(msg, cls)
-
-    class EthereumAddressHypermate(protobuf.MessageType):
-        address: "str | None"
-
-        def __init__(
-            self,
-            *,
-            address: "str | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumAddressHypermate"]:
-            return isinstance(msg, cls)
-
-    class EthereumSignTxHypermate(protobuf.MessageType):
-        address_n: "list[int]"
-        nonce: "bytes"
-        gas_price: "bytes"
-        gas_limit: "bytes"
-        to: "str"
-        value: "bytes"
-        data_initial_chunk: "bytes"
-        data_length: "int"
-        chain_id: "int"
-        tx_type: "int | None"
-
-        def __init__(
-            self,
-            *,
-            gas_price: "bytes",
-            gas_limit: "bytes",
-            chain_id: "int",
-            address_n: "list[int] | None" = None,
-            nonce: "bytes | None" = None,
-            to: "str | None" = None,
-            value: "bytes | None" = None,
-            data_initial_chunk: "bytes | None" = None,
-            data_length: "int | None" = None,
-            tx_type: "int | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumSignTxHypermate"]:
-            return isinstance(msg, cls)
-
-    class EthereumSignTxEIP1559Hypermate(protobuf.MessageType):
-        address_n: "list[int]"
-        nonce: "bytes"
-        max_gas_fee: "bytes"
-        max_priority_fee: "bytes"
-        gas_limit: "bytes"
-        to: "str"
-        value: "bytes"
-        data_initial_chunk: "bytes"
-        data_length: "int"
-        chain_id: "int"
-        access_list: "list[EthereumAccessListHypermate]"
-
-        def __init__(
-            self,
-            *,
-            nonce: "bytes",
-            max_gas_fee: "bytes",
-            max_priority_fee: "bytes",
-            gas_limit: "bytes",
-            value: "bytes",
-            data_length: "int",
-            chain_id: "int",
-            address_n: "list[int] | None" = None,
-            access_list: "list[EthereumAccessListHypermate] | None" = None,
-            to: "str | None" = None,
-            data_initial_chunk: "bytes | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumSignTxEIP1559Hypermate"]:
-            return isinstance(msg, cls)
-
-    class EthereumTxRequestHypermate(protobuf.MessageType):
-        data_length: "int | None"
-        signature_v: "int | None"
-        signature_r: "bytes | None"
-        signature_s: "bytes | None"
-
-        def __init__(
-            self,
-            *,
-            data_length: "int | None" = None,
-            signature_v: "int | None" = None,
-            signature_r: "bytes | None" = None,
-            signature_s: "bytes | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumTxRequestHypermate"]:
-            return isinstance(msg, cls)
-
-    class EthereumTxAckHypermate(protobuf.MessageType):
-        data_chunk: "bytes"
-
-        def __init__(
-            self,
-            *,
-            data_chunk: "bytes",
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumTxAckHypermate"]:
-            return isinstance(msg, cls)
-
-    class EthereumSignMessageHypermate(protobuf.MessageType):
-        address_n: "list[int]"
-        message: "bytes"
-        chain_id: "int | None"
-
-        def __init__(
-            self,
-            *,
-            message: "bytes",
-            address_n: "list[int] | None" = None,
-            chain_id: "int | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumSignMessageHypermate"]:
-            return isinstance(msg, cls)
-
-    class EthereumMessageSignatureHypermate(protobuf.MessageType):
-        signature: "bytes"
-        address: "str"
-
-        def __init__(
-            self,
-            *,
-            signature: "bytes",
-            address: "str",
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumMessageSignatureHypermate"]:
-            return isinstance(msg, cls)
-
-    class EthereumVerifyMessageHypermate(protobuf.MessageType):
-        signature: "bytes"
-        message: "bytes"
-        address: "str"
-        chain_id: "int | None"
-
-        def __init__(
-            self,
-            *,
-            signature: "bytes",
-            message: "bytes",
-            address: "str",
-            chain_id: "int | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumVerifyMessageHypermate"]:
-            return isinstance(msg, cls)
-
-    class EthereumSignTypedHashHypermate(protobuf.MessageType):
-        address_n: "list[int]"
-        domain_separator_hash: "bytes"
-        message_hash: "bytes | None"
-        chain_id: "int | None"
-
-        def __init__(
-            self,
-            *,
-            domain_separator_hash: "bytes",
-            address_n: "list[int] | None" = None,
-            message_hash: "bytes | None" = None,
-            chain_id: "int | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumSignTypedHashHypermate"]:
-            return isinstance(msg, cls)
-
-    class EthereumTypedDataSignatureHypermate(protobuf.MessageType):
-        signature: "bytes"
-        address: "str"
-
-        def __init__(
-            self,
-            *,
-            signature: "bytes",
-            address: "str",
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumTypedDataSignatureHypermate"]:
-            return isinstance(msg, cls)
-
-    class EthereumSignMessageEIP712(protobuf.MessageType):
-        address_n: "list[int]"
-        domain_hash: "bytes | None"
-        message_hash: "bytes | None"
-
-        def __init__(
-            self,
-            *,
-            address_n: "list[int] | None" = None,
-            domain_hash: "bytes | None" = None,
-            message_hash: "bytes | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumSignMessageEIP712"]:
-            return isinstance(msg, cls)
-
-    class EthereumAccessListHypermate(protobuf.MessageType):
-        address: "str"
-        storage_keys: "list[bytes]"
-
-        def __init__(
-            self,
-            *,
-            address: "str",
-            storage_keys: "list[bytes] | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumAccessListHypermate"]:
-            return isinstance(msg, cls)
-
-    class EthereumSignTypedDataHypermate(protobuf.MessageType):
-        address_n: "list[int]"
-        primary_type: "str"
-        metamask_v4_compat: "bool"
-        chain_id: "int | None"
-
-        def __init__(
-            self,
-            *,
-            primary_type: "str",
-            address_n: "list[int] | None" = None,
-            metamask_v4_compat: "bool | None" = None,
-            chain_id: "int | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumSignTypedDataHypermate"]:
-            return isinstance(msg, cls)
-
-    class EthereumTypedDataStructRequestHypermate(protobuf.MessageType):
-        name: "str"
-
-        def __init__(
-            self,
-            *,
-            name: "str",
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumTypedDataStructRequestHypermate"]:
-            return isinstance(msg, cls)
-
-    class EthereumTypedDataStructAckHypermate(protobuf.MessageType):
-        members: "list[EthereumStructMemberHypermate]"
-
-        def __init__(
-            self,
-            *,
-            members: "list[EthereumStructMemberHypermate] | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumTypedDataStructAckHypermate"]:
-            return isinstance(msg, cls)
-
-    class EthereumTypedDataValueRequestHypermate(protobuf.MessageType):
-        member_path: "list[int]"
-
-        def __init__(
-            self,
-            *,
-            member_path: "list[int] | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumTypedDataValueRequestHypermate"]:
-            return isinstance(msg, cls)
-
-    class EthereumTypedDataValueAckHypermate(protobuf.MessageType):
-        value: "bytes"
-
-        def __init__(
-            self,
-            *,
-            value: "bytes",
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumTypedDataValueAckHypermate"]:
-            return isinstance(msg, cls)
-
-    class EthereumStructMemberHypermate(protobuf.MessageType):
-        type: "EthereumFieldTypeHypermate"
-        name: "str"
-
-        def __init__(
-            self,
-            *,
-            type: "EthereumFieldTypeHypermate",
-            name: "str",
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumStructMemberHypermate"]:
-            return isinstance(msg, cls)
-
-    class EthereumFieldTypeHypermate(protobuf.MessageType):
-        data_type: "EthereumDataTypeHypermate"
-        size: "int | None"
-        entry_type: "EthereumFieldTypeHypermate | None"
-        struct_name: "str | None"
-
-        def __init__(
-            self,
-            *,
-            data_type: "EthereumDataTypeHypermate",
-            size: "int | None" = None,
-            entry_type: "EthereumFieldTypeHypermate | None" = None,
-            struct_name: "str | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumFieldTypeHypermate"]:
             return isinstance(msg, cls)
 
     class EthereumSignTypedData(protobuf.MessageType):
@@ -4985,6 +4373,7 @@ if TYPE_CHECKING:
         address_n: "list[int]"
         show_display: "bool | None"
         encoded_network: "bytes | None"
+        chain_id: "int | None"
 
         def __init__(
             self,
@@ -4992,6 +4381,7 @@ if TYPE_CHECKING:
             address_n: "list[int] | None" = None,
             show_display: "bool | None" = None,
             encoded_network: "bytes | None" = None,
+            chain_id: "int | None" = None,
         ) -> None:
             pass
 
@@ -5205,6 +4595,22 @@ if TYPE_CHECKING:
         def is_type_of(cls, msg: Any) -> TypeGuard["EthereumTypedDataSignature"]:
             return isinstance(msg, cls)
 
+    class EthereumStoreDefinition(protobuf.MessageType):
+        network: "EthereumNetworkInfo"
+        token: "EthereumTokenInfo | None"
+
+        def __init__(
+            self,
+            *,
+            network: "EthereumNetworkInfo",
+            token: "EthereumTokenInfo | None" = None,
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumStoreDefinition"]:
+            return isinstance(msg, cls)
+
     class EthereumAccessList(protobuf.MessageType):
         address: "str"
         storage_keys: "list[bytes]"
@@ -5283,6 +4689,150 @@ if TYPE_CHECKING:
 
         @classmethod
         def is_type_of(cls, msg: Any) -> TypeGuard["FilecoinSignedTx"]:
+            return isinstance(msg, cls)
+
+    class FsInfo(protobuf.MessageType):
+        type: "FsType"
+        size: "int"
+        name: "str"
+
+        def __init__(
+            self,
+            *,
+            type: "FsType",
+            size: "int",
+            name: "str",
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["FsInfo"]:
+            return isinstance(msg, cls)
+
+    class FsChunk(protobuf.MessageType):
+        data: "bytes"
+        data_hash: "bytes | None"
+
+        def __init__(
+            self,
+            *,
+            data: "bytes",
+            data_hash: "bytes | None" = None,
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["FsChunk"]:
+            return isinstance(msg, cls)
+
+    class FsRead(protobuf.MessageType):
+        path: "str"
+        offset: "int"
+        size: "int"
+
+        def __init__(
+            self,
+            *,
+            path: "str",
+            offset: "int",
+            size: "int",
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["FsRead"]:
+            return isinstance(msg, cls)
+
+    class FsWrite(protobuf.MessageType):
+        path: "str"
+        total: "int"
+        offset: "int | None"
+        chunk: "FsChunk"
+
+        def __init__(
+            self,
+            *,
+            path: "str",
+            total: "int",
+            chunk: "FsChunk",
+            offset: "int | None" = None,
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["FsWrite"]:
+            return isinstance(msg, cls)
+
+    class FsRemove(protobuf.MessageType):
+        path: "str"
+
+        def __init__(
+            self,
+            *,
+            path: "str",
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["FsRemove"]:
+            return isinstance(msg, cls)
+
+    class FsMkdir(protobuf.MessageType):
+        path: "str"
+
+        def __init__(
+            self,
+            *,
+            path: "str",
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["FsMkdir"]:
+            return isinstance(msg, cls)
+
+    class FsStat(protobuf.MessageType):
+        path: "str"
+
+        def __init__(
+            self,
+            *,
+            path: "str",
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["FsStat"]:
+            return isinstance(msg, cls)
+
+    class FsFsStat(protobuf.MessageType):
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["FsFsStat"]:
+            return isinstance(msg, cls)
+
+    class FsFsInfo(protobuf.MessageType):
+        block_count: "int"
+        block_size: "int"
+        block_used: "int"
+
+        def __init__(
+            self,
+            *,
+            block_count: "int",
+            block_size: "int",
+            block_used: "int",
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["FsFsInfo"]:
+            return isinstance(msg, cls)
+
+    class FsChecksums(protobuf.MessageType):
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["FsChecksums"]:
             return isinstance(msg, cls)
 
     class KaspaGetAddress(protobuf.MessageType):

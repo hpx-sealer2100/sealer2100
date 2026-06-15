@@ -95,7 +95,7 @@ async def change_iris(ctx: wire.Context) -> Success:
             await loop.sleep(50)
             await iris.del_user_by_id(iris_data)
             await loop.sleep(50)
-            iris.close()
+            await iris.close()
         await wait_doing(i18n.Text.iris_removing_old, do_del_iris_by_id())
 
     await show_success(

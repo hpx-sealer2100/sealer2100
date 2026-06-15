@@ -47,7 +47,7 @@ bool usb_connected_previously = true;
 #include "modtrezorio-webusb.h"
 #include "modtrezorio-usb.h"
 #include "modtrezorio-ble.h"
-#include "modtrezorio-fatfs.h"
+#include "modtrezorio-fs.h"
 #include "modtrezorio-moto.h"
 #include "modtrezorio-sbu.h"
 #include "modtrezorio-spi.h"
@@ -57,7 +57,7 @@ bool usb_connected_previously = true;
 // clang-format on
 
 /// package: trezorio.__init__
-/// from . import fatfs, sdcard
+/// from . import fs, sdcard
 
 /// POLL_READ: int  # wait until interface is readable and return read data
 /// POLL_WRITE: int  # wait until interface is writable
@@ -89,7 +89,7 @@ STATIC const mp_rom_map_elem_t mp_module_trezorio_globals_table[] = {
     {MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_trezorio)},
 
 #if defined TREZOR_MODEL_T
-    {MP_ROM_QSTR(MP_QSTR_fatfs), MP_ROM_PTR(&mod_trezorio_fatfs_module)},
+    {MP_ROM_QSTR(MP_QSTR_fs), MP_ROM_PTR(&mod_trezorio_fs_module)},
     {MP_ROM_QSTR(MP_QSTR_SBU), MP_ROM_PTR(&mod_trezorio_SBU_type)},
 
     {MP_ROM_QSTR(MP_QSTR_IRIS), MP_ROM_INT(IRIS_IFACE)},

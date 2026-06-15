@@ -26,17 +26,19 @@ _leveldict = {
 level = DEBUG
 color = True
 
-if EMULATOR:
-    _SECONDS_1970_TO_2000 = const(946684800)
-    def _format_timestamp(ms: int):
-        s = ms //1000
-        ms = ms % 1000
+_SECONDS_1970_TO_2000 = const(946684800)
+def _format_timestamp(ms: int):
+    s = ms //1000
+    ms = ms % 1000
+    from trezor import utils
+    if utils.EMULATOR:
         d = utime.gmtime2000(s - _SECONDS_1970_TO_2000)
-        return f"{d[0]}-{d[1]:02d}-{d[2]:02d} {d[3]:02d}:{d[4]:02d}:{d[5]:02d} {ms:03d}"
+        return f"[{d[0]}-{d[1]:02d}-{d[2]:02d} {d[3]:02d}:{d[4]:02d}:{d[5]:02d} {ms:03d}]"
+    else:
+        return f"[{s} {ms:03d}]"
 
 def _log(name: str, mlevel: int, msg: str, *args: Any) -> None:
     if __debug__ and mlevel >= level:
-        from trezor import utils
         if color:
             fmt = (
                 "%s \x1b[35m%s\x1b[0m \x1b["
@@ -47,10 +49,7 @@ def _log(name: str, mlevel: int, msg: str, *args: Any) -> None:
         else:
             fmt = "%s %s %s " + msg
 
-        if EMULATOR:
-            t = _format_timestamp(utime.ticks_ms())
-        else:
-            t = f"{utime.sleep_us}"
+        t = _format_timestamp(utime.ticks_ms())
         print(fmt % ((t, name, _leveldict[mlevel][0]) + args))
 
 

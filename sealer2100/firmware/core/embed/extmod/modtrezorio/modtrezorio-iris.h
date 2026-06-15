@@ -2,6 +2,8 @@
 
 #include "mpconfigport.h"
 #include "embed/extmod/trezorobj.h"
+#include "device.h"
+#include <string.h>
 
 
 /// package: trezorio.__init__
@@ -19,6 +21,8 @@
 ///     def close(self):
 ///         ...
 ///     def write(self, msg: bytes):
+///         ...
+///     def sec_channel_open(self):
 ///         ...
 ///     def __enter__(self) -> 'Iris':
 ///         ...
@@ -83,6 +87,26 @@ static mp_obj_t mod_trezorio_Iris_write(mp_obj_t self, mp_obj_t msg) {
 }
 static MP_DEFINE_CONST_FUN_OBJ_2(mod_trezorio_Iris_write_obj, mod_trezorio_Iris_write);
 
+static mp_obj_t mod_trezorio_Iris_sec_channel_open(mp_obj_t self) {
+    mp_obj_Iris_t *o = MP_OBJ_TO_PTR(self);
+    if (!o->opened) {
+        mp_raise_ValueError("iris is not opend");
+    }
+    uint8_t key[32] = {0};
+    if (!device_get_iris_pre_shared_key(key)) {
+        mp_raise_ValueError("get pre shared key failed");
+    }
+    int ret = iris_sec_channel_open(key, sizeof(key));
+    memset(key, 0, sizeof(key));
+    if (ret < 0) {
+        mp_raise_ValueError("sec channel open failed");
+    } else if (ret == IRIS_HANDSHAKE_PENDING) {
+        return mp_obj_new_int(1);
+    }
+    return mp_const_none;
+}
+static MP_DEFINE_CONST_FUN_OBJ_1(mod_trezorio_Iris_sec_channel_open_obj, mod_trezorio_Iris_sec_channel_open);
+
 static mp_obj_t mod_trezorio_Iris___exit__(size_t n_args, const mp_obj_t *args) {
     mp_obj_Iris_t *o = MP_OBJ_TO_PTR(args[0]);
     if (!o->opened) {
@@ -111,6 +135,7 @@ static const mp_rom_map_elem_t mod_trezorio_Iris_locals_dict_table[] = {
   { MP_ROM_QSTR(MP_QSTR_open), MP_ROM_PTR(&mod_trezorio_Iris_open_obj) },
   { MP_ROM_QSTR(MP_QSTR_close), MP_ROM_PTR(&mod_trezorio_Iris_close_obj) },
   { MP_ROM_QSTR(MP_QSTR_write), MP_ROM_PTR(&mod_trezorio_Iris_write_obj) },
+  { MP_ROM_QSTR(MP_QSTR_sec_channel_open), MP_ROM_PTR(&mod_trezorio_Iris_sec_channel_open_obj) },
   { MP_ROM_QSTR(MP_QSTR___del__), MP_ROM_PTR(&mod_trezorio_Iris___del___obj) },
   { MP_ROM_QSTR(MP_QSTR___enter__), MP_ROM_PTR(&mp_identity_obj) },
   { MP_ROM_QSTR(MP_QSTR___exit__), MP_ROM_PTR(&mod_trezorio_Iris___exit___obj) },

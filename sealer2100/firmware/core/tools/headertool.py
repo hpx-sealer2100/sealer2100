@@ -1,47 +1,31 @@
 #!/usr/bin/env python3
 import click
 
-from trezorlib import cosi, firmware
-from trezorlib._internal import firmware_headers
+from trezorlib import cosi, firmware, _ed25519
+from trezorlib._internal import image
 
 from typing import List, Tuple
-
-
-try:
-    import Pyro4
-
-    Pyro4.config.SERIALIZER = "marshal"
-except ImportError:
-    Pyro4 = None
-
-PORT = 5001
 
 # =========================== signing =========================
 
 
-def sign_with_privkeys(digest: bytes, privkeys: List[bytes]) -> bytes:
-    """Locally produce a CoSi signature."""
-    pubkeys = [cosi.pubkey_from_privkey(sk) for sk in privkeys]
-    # for i, pk in enumerate(pubkeys):
-    #     click.echo("Signing with public key #{}: {}".format(i + 1, pk.hex()))
-    #     click.echo("Signing with public key #{}: (const uint8_t *)\"{}".format(i + 1, ''.join([f'\\x{byte:02x}' for byte in pk])))
-    nonces = [cosi.get_nonce(sk, digest, i) for i, sk in enumerate(privkeys)]
-
-    global_pk = cosi.combine_keys(pubkeys)
-    global_R = cosi.combine_keys(R for r, R in nonces)
+def sign_with_privkeys(digest: bytes, privkeys: List[bytes]) -> List[bytes]:
+    pubkeys = [_ed25519.publickey_unsafe(sk) for sk in privkeys]
+    for i, pk in enumerate(pubkeys):
+        click.echo("Signing with public key #{}: {}".format(i + 1, pk.hex()))
 
     sigs = [
-        cosi.sign_with_privkey(digest, sk, global_pk, r, global_R)
-        for sk, (r, R) in zip(privkeys, nonces)
+        _ed25519.signature_unsafe(digest, sk, pk)
+        for sk, pk in zip(privkeys, pubkeys)
     ]
 
-    signature = cosi.combine_sig(global_R, sigs)
     try:
-        cosi.verify_combined(signature, digest, global_pk)
+        for sig, pk in zip(sigs, pubkeys):
+            _ed25519.checkvalid(sig, digest, pk)
     except Exception as e:
         raise click.ClickException("Failed to produce valid signature.") from e
 
-    return signature
+    return sigs
 
 
 def parse_privkey_args(privkey_data: List[str]) -> Tuple[int, List[bytes]]:
@@ -58,71 +42,7 @@ def parse_privkey_args(privkey_data: List[str]) -> Tuple[int, List[bytes]]:
             raise click.ClickException("Unrecognized key format.")
     return sigmask, privkeys
 
-
-def process_remote_signers(fw, addrs: List[str]) -> Tuple[int, List[bytes]]:
-    if len(addrs) < fw.sigs_required:
-        raise click.ClickException(
-            f"Not enough signers (need at least {fw.sigs_required})"
-        )
-
-    digest = fw.digest()
-    name = fw.NAME
-
-    def mkproxy(addr):
-        return Pyro4.Proxy(f"PYRO:keyctl@{addr}:{PORT}")
-
-    sigmask = 0
-    pks, Rs = [], []
-    for addr in addrs:
-        click.echo(f"Connecting to {addr}...")
-        with mkproxy(addr) as proxy:
-            pk, R = proxy.get_commit(name, digest)
-        if pk not in fw.public_keys:
-            raise click.ClickException(
-                f"Signer at {addr} commits with unknown public key {pk.hex()}"
-            )
-        idx = fw.public_keys.index(pk)
-        click.echo(
-            f"Signer at {addr} commits with public key #{idx + 1}: {pk.hex()}"
-        )
-        sigmask |= 1 << idx
-        pks.append(pk)
-        Rs.append(R)
-
-    # compute global commit
-    global_pk = cosi.combine_keys(pks)
-    global_R = cosi.combine_keys(Rs)
-
-    # collect signatures
-    sigs = []
-    for addr in addrs:
-        click.echo(f"Waiting for {addr} to sign... ", nl=False)
-        with mkproxy(addr) as proxy:
-            sig = proxy.get_signature(name, digest, global_R, global_pk)
-        sigs.append(sig)
-        click.echo("OK")
-
-    for addr in addrs:
-        with mkproxy(addr) as proxy:
-            proxy.finish()
-
-    # compute global signature
-    return sigmask, cosi.combine_sig(global_R, sigs)
-
-
 # ===================== CLI actions =========================
-
-
-def do_replace_vendorheader(fw, vh_file) -> None:
-    if not isinstance(fw, firmware_headers.FirmwareImage):
-        raise click.ClickException("Invalid image type (must be firmware).")
-
-    vh = firmware.VendorHeader.parse(vh_file.read())
-    if vh.header_len != fw.fw.vendor_header.header_len:
-        raise click.ClickException("New vendor header must have the same size.")
-
-    fw.fw.vendor_header = vh
-
 
 @click.command()
 @click.option("-n", "--dry-run", is_flag=True, help="Do not save changes.")
@@ -148,7 +68,6 @@ def do_replace_vendorheader(fw, vh_file) -> None:
     metavar="INDEX:INDEX:INDEX... SIGNATURE_HEX",
     help="Insert external signature.",
 )
-@click.option("-V", "--replace-vendor-header", type=click.File("rb"))
 @click.option(
     "-d",
     "--digest",
@@ -173,7 +92,6 @@ def cli(
     privkey_data,
     sign_dev_keys,
     insert_signature,
-    replace_vendor_header,
     print_digest,
     remote,
 ):
@@ -218,7 +136,7 @@ def cli(
     firmware_data = firmware_file.read()
 
     try:
-        fw = firmware_headers.parse_image(firmware_data)
+        fw = image.parse(firmware_data)
     except Exception as e:
         import traceback
 
@@ -229,6 +147,7 @@ def cli(
         ) from e
 
     if verify:
+        fw.identify_dev_keys()
         click.echo(fw.format(True))
         return
 
@@ -237,42 +156,46 @@ def cli(
         click.echo(digest.hex())
         return
 
-    if replace_vendor_header:
-        do_replace_vendorheader(fw, replace_vendor_header)
-
     if rehash:
         fw.rehash()
 
     if sign_dev_keys:
+        fw.set_devel(True)
         privkeys = fw.DEV_KEYS
         sigmask = fw.DEV_KEY_SIGMASK
     else:
+        fw.set_devel(False)
         sigmask, privkeys = parse_privkey_args(privkey_data)
 
-    signature = None
+    signatures = None
 
     if privkeys:
         click.echo("Signing with local private keys...", err=True)
-        signature = sign_with_privkeys(digest, privkeys)
+        signatures = sign_with_privkeys(digest, privkeys)
 
     if insert_signature:
         click.echo("Inserting external signature...", err=True)
-        sigmask_str, signature = insert_signature
-        signature = bytes.fromhex(signature)
+        sigmask_str, signatures = insert_signature
+        signatures = bytes.fromhex(signatures)
         sigmask = 0
         for bit in sigmask_str.split(":"):
             sigmask |= 1 << (int(bit) - 1)
 
-    if remote:
-        if Pyro4 is None:
-            raise click.ClickException("Please install Pyro4 for remote signing.")
-        click.echo(fw)
-        click.echo(f"Signing with {len(remote)} remote participants.")
-        sigmask, signature = process_remote_signers(fw, remote)
-
-    if signature:
+    if signatures:
         fw.rehash()
-        fw.insert_signature(signature, sigmask)
+        for sig in signatures:
+            valid = False
+            for i, pk in enumerate(fw.public_keys):
+                try:
+                    _ed25519.checkvalid(sig, digest, pk)
+                    fw.insert_signature(sig, i)
+                    valid = True
+                    break
+                except Exception:
+                    pass
+
+            if not valid:
+                click.echo("Signature {} is invalid".format(sig.hex()), err=True)
 
     click.echo(fw.format(verbose))
 

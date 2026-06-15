@@ -51,16 +51,20 @@ async def sign_typed_data(
     await check_defi_lock(ctx)
     await paths.validate_path(ctx, keychain, msg.address_n)
 
+    node = keychain.derive(msg.address_n)
+
     network = defs.network
     ctx.icon_path = get_icon(
         network.chain_id if network else None
     )
     ctx.name = get_display_network_name(network)
+
+    ctx.myself = address_from_bytes(node.ethereum_pubkeyhash(), defs)
+
     data_hash = await generate_typed_data_hash(
         ctx, msg.primary_type, msg.metamask_v4_compat
     )
 
-    node = keychain.derive(msg.address_n)
     signature = secp256k1.sign(
         node.private_key(), data_hash, False, secp256k1.CANONICAL_SIG_ETHEREUM
     )
@@ -86,6 +90,9 @@ async def generate_typed_data_hash(
         metamask_v4_compat=metamask_v4_compat,
     )
     await typed_data_envelope.collect_types()
+
+    if typed_data_envelope.is_hp_message_sign():
+        return await generate_hp_message_hash(ctx, typed_data_envelope)
 
     await confirm_domain(ctx, typed_data_envelope)
     domain_separator = await typed_data_envelope.hash_struct(
@@ -119,6 +126,29 @@ async def generate_typed_data_hash(
     await confirm_typed_data_final(ctx)
 
     return keccak256(b"\x19\x01" + domain_separator + message_hash)
+
+async def generate_hp_message_hash(
+    ctx: Context, typed_data_envelope: 'TypedDataEnvelope'
+) -> bytes:
+    """Generate hash for HyperMate message signing"""
+    await confirm_eip712_message(ctx)
+
+    domain_separator = await typed_data_envelope.hash_struct(
+        primary_type="EIP712Domain",
+        member_path=[0],
+        show_data=False,
+        parent_objects=["EIP712Domain"],
+    )
+
+    primary_type = typed_data_envelope.primary_type
+    message_hash = await typed_data_envelope.hash_struct(
+        primary_type=primary_type,
+        member_path=[1],
+        show_data=False,
+        parent_objects=[primary_type],
+    )
+    return keccak256(b"\x19\x01" + domain_separator + message_hash)
+
 
 
 def get_hash_writer() -> HashWriter:
@@ -359,6 +389,9 @@ class TypedDataEnvelope:
                         field=field_type,
                     )
 
+    def is_hp_message_sign(self) -> bool:
+        # use  `PermitSingle` as message sign
+        return self.primary_type == "PermitSingle"
 
 def encode_field(
     w: HashWriter,
@@ -555,3 +588,10 @@ async def confirm_domain(ctx: Context, typed_data_envelope: TypedDataEnvelope) -
     from .layout import confirm_domain
 
     await confirm_domain(ctx, eip712_domain)
+
+async def confirm_eip712_message(ctx: Context) -> None:
+    network = ctx.name
+    icon = ctx.icon_path
+    address = ctx.myself
+    from .layout import confirm_sign_eip712_message
+    await confirm_sign_eip712_message(ctx, network, icon, "Agree to sign this message", address)

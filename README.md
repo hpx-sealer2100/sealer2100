@@ -76,6 +76,16 @@ sealer2100-project/
     └── audit-reports           # Audit reports
 ```
 
+```
+sealer2100-project/
+├── firmware
+│   ├── core
+│   │    └──embed/               # Need to codereview
+│   └── storage/                 # Need to codereview
+├── jub-sdk-cxx/                 # Need to codereview
+├── jub-sdk-android/             # Need to codereview
+```
+
 ## 🤝 Community Participation
 
 ### Contribution Guidelines

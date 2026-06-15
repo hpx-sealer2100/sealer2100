@@ -82,6 +82,17 @@ class GuideApp(Navigation):
     def click_quickstart(self):
         screen = QuicStart()
         workflow.spawn(screen.show())
+        # from apps.tron.serialize import serialize,deserialize
+        # import trezor.airgap.rust_ur.utils as utils
+        # from trezor.crypto import base58
+        # str_tx = "0a0229722208212e9c020f76a13a4080c4e89ff52f5a53080d124f0a34747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e576974686472617742616c616e6365436f6e747261637412170a15419f154c741a98251c16e4fa1f3acaf5b6cdb158b37083f7e49ff52f"
+        # tx = deserialize(bytearray(utils.hex_to_bytes(str_tx)))
+        # owner_address =base58.encode_check(utils.hex_to_bytes("419f154c741a98251c16e4fa1f3acaf5b6cdb158b3"))
+        # str_tx2 = utils.bytes_to_hex(serialize(tx,owner_address))
+        # if str_tx != str_tx2:
+        #     raise ValueError(f"Transaction mismatch: {str_tx} != {str_tx2}")
+        # else:
+        #     log.debug(__name__, "Transaction serialization and deserialization successful")
 
     def click_what_mnemonic(self):
         icon = "A:/res/hp/guide-mnemonic.png"
@@ -182,7 +193,7 @@ class QuicStart(Navigation):
         self.content: lv.obj
 
         style = Style().bg_img_recolor(colors.USER.DISABLED_FILTER_COLOR).bg_img_recolor_opa(colors.USER.DISABLED_FILTER_OPA)
-        
+
         self.btn_left.mode("switch")
         self.btn_left.set_style_bg_img_src("A:/res/hp/ic_arrow_left.png", lv.PART.MAIN)
         self.btn_left.add_style(style, lv.PART.MAIN|lv.STATE.DISABLED)
@@ -191,7 +202,7 @@ class QuicStart(Navigation):
         self.btn_right.mode("switch")
         self.btn_right.set_style_bg_img_src("A:/res/hp/ic_arrow_right.png", lv.PART.MAIN)
         self.btn_right.add_style(style, lv.PART.MAIN|lv.STATE.DISABLED)
-        
+
         # click events
         self.btn_left.add_event_cb(self.on_click_left_btn, lv.EVENT.CLICKED, None)
         self.btn_right.add_event_cb(self.on_click_right_btn, lv.EVENT.CLICKED, None)
@@ -236,7 +247,7 @@ class QuicStart(Navigation):
     def on_click_left_btn(self, e: lv.event_t):
         self.btn_left.add_state(lv.STATE.DISABLED)
         self.btn_right.clear_state(lv.STATE.DISABLED)
-        
+
         self.download_app_view()
 
     def on_click_right_btn(self, event):

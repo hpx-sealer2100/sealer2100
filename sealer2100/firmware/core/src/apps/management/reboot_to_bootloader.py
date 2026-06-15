@@ -24,8 +24,5 @@ async def reboot_to_bootloader(ctx: wire.Context, msg: RebootToBootloader) -> No
     await loop.wait(ctx.wire.iface.iface_num() | io.POLL_WRITE)
     # wait soemtime for ble send to phone
     await loop.sleep(500)
-    # create a flag file
-    with io.fatfs.open("0:/.stay_in_bootloader", "w"):
-        pass
     utils.reboot_to_bootloader()
     raise RuntimeError

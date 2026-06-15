@@ -18,9 +18,9 @@ import trezorlib.device
 from trezorlib._internal.emulator import CoreEmulator
 
 try:
-    import inotify.adapters
-except Exception:
-    inotify = None
+    import watchfiles
+except Exception as e:
+    watchfiles = None
 
 
 HERE = Path(__file__).resolve().parent
@@ -54,14 +54,16 @@ def run_emulator(emulator: CoreEmulator) -> int:
         signal.signal(signal.SIGINT, signal.SIG_IGN)
         return emulator.wait()
 
-
 def watch_emulator(emulator: CoreEmulator) -> int:
-    assert inotify is not None
-    watch = inotify.adapters.InotifyTree(str(SRC_DIR))
+    assert watchfiles is not None
+    watch = watchfiles.watch(str(SRC_DIR))
     try:
-        for _, type_names, _, _ in watch.event_gen(yield_nones=False):
-            if "IN_CLOSE_WRITE" in type_names:
-                emulator.restart()
+        for changes in watch:
+            for (change, file) in changes:
+                file = file.removeprefix(f"{str(SRC_DIR)}/")
+                print(f"detect {file} {change.raw_str()}")
+            print("restart emulator ...")
+            emulator.restart()
     except KeyboardInterrupt:
         emulator.stop()
     return 0
@@ -165,8 +167,8 @@ def cli(
     if watch and (command or debugger):
         raise click.ClickException("Cannot use -w together with -c or -D")
 
-    if watch and inotify is None:
-        raise click.ClickException("inotify module is missing, install with pip")
+    if watch and watchfiles is None:
+        raise click.ClickException("watchfiles module is missing, install with pip")
 
     if main and (profiling or alloc_profiling):
         raise click.ClickException("Cannot use --main and -g together")

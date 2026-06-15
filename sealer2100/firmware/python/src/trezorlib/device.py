@@ -16,7 +16,7 @@
 
 import os
 import time
-from hashlib import blake2s
+from hashlib import blake2s, sha256
 from typing import TYPE_CHECKING, Any, Callable, Optional, Sequence
 
 from . import messages
@@ -259,54 +259,47 @@ def se_sign_message(client: "TrezorClient", msg: bytes) -> "MessageType":
     return out
 
 @session
-def upload_res(
+def upload_nft(
     client: "TrezorClient",
-    ext: str,
-    data: bytes,
-    zoomdata: bytes,
-    res_type: messages.ResourceType = messages.ResourceType.WallPaper,
-    nft_metadata: Optional[str] = None,
-    progress_update: Callable[[int], Any] = lambda _: None,
+    meta: dict[str: str],
+    image: bytes,
+    thumbnail: bytes,
+    extension: str,
+    progress: Callable[[int], Any] = lambda _: None,
 ):
-    mac = blake2s(data).digest()
-    timestamp = int(round(time.time() * 1000))
-    file_name_no_ext = f"{'wp' if res_type == messages.ResourceType.WallPaper else 'nft'}-{mac[:4].hex()}-{str(timestamp)}"
-    resp = client.call(
-        messages.ResourceUpload(
-            extension=ext,
-            data_length=len(data),
-            res_type=res_type,
-            zoom_data_length=len(zoomdata),
-            file_name_no_ext=file_name_no_ext,
-            nft_meta_data=nft_metadata.encode() if nft_metadata else None,
-        )
+    req = messages.NftUpload(
+        metadata=messages.NftMetadata(
+            id=meta["id"],
+            name=meta["name"],
+            token=meta["token"],
+            network=meta["network"],
+            owner=meta["owner"],
+        ),
+        image_size=len(image),
+        thumbnail_size=len(thumbnail),
+        extension=extension,
     )
 
-    while isinstance(resp, messages.ResourceRequest):
-        offset = resp.offset
-        length = resp.data_length
-        assert offset is not None
-        assert length is not None
-        payload = data[offset : offset + length]
-        digest = blake2s(payload).digest()
-        resp = client.call(messages.ResourceAck(data_chunk=payload, hash=digest))
-        progress_update(length)
+    resp = client.call(req)
+    progress(0)
 
-    while isinstance(resp, messages.ZoomRequest):
-        offset = resp.offset
-        length = resp.data_length
-        assert offset is not None
-        assert length is not None
-        payload = zoomdata[offset : offset + length]
-        digest = blake2s(payload).digest()
-        resp = client.call(messages.ResourceAck(data_chunk=payload, hash=digest))
-        progress_update(length)
+    while isinstance(resp, messages.NftRequest):
+        if resp.type == messages.NftRequestType.IMAGE:
+            data = image
+        elif resp.type == messages.NftRequestType.THUMBNAIL:
+            data = thumbnail
+        else:
+            raise RuntimeError(f"Unexpected message {resp}")
+
+        chunk = data[resp.offset : resp.offset + resp.data_length]
+        digest = sha256(chunk).digest()
+
+        resp = client.call(messages.NftAck(chunk=chunk, hash=digest))
 
     if isinstance(resp, messages.Success):
         return
     else:
         raise RuntimeError(f"Unexpected message {resp}")
-
 
 DATA_CHUNK_SIZE = 16 * 1024
 
@@ -345,15 +338,6 @@ def update_res(
     else:
         raise RuntimeError(f"Unexpected message {resp}")
 
-@session
-def list_dir(client: "TrezorClient", path_dir: str) -> Sequence[messages.FileInfo]:
-    resp = client.call(messages.ListResDir(path=path_dir))
-    if isinstance(resp, messages.FileInfoList):
-        return resp.files
-    else:
-        raise RuntimeError(f"Unexpected message {resp}")
-
-
 @expect(messages.Success, field="message", ret_type=str)
 @session
 def set_busy(client: "TrezorClient", expiry_ms: Optional[int]) -> "MessageType":
@@ -374,63 +358,11 @@ def bl_reboot(client: "TrezorClient", reboot_type:messages.RebootType) -> "Messa
     resp = client.call(messages.Reboot(reboot_type=reboot_type))
     return resp
 
-# FirmwareUpdateEmmc
+# FirmwareUpdate
 @session
-def firmware_update_emmc(client: "TrezorClient", path_file: str, force_erease: bool) -> "MessageType":
-    msg = messages.FirmwareUpdateEmmc(path=path_file, reboot_on_success=force_erease)
+def firmware_update(client: "TrezorClient", path_file: str, reboot_on_success: bool) -> "MessageType":
+    msg = messages.FirmwareUpdate(path=path_file, reboot_on_success=reboot_on_success)
     resp = client.call(msg)
-    return resp
-
-# EmmcPathInfo
-@session
-def emmc_path_info(client: "TrezorClient", path: str) -> "MessageType":
-    resp = client.call(messages.EmmcPathInfo(path=path))
-    return resp
-
-# EmmcFixPermission
-@session
-def emmc_fix_permission(client: "TrezorClient") -> "MessageType":
-    resp = client.call(messages.EmmcFixPermission())
-    return resp
-
-# EmmcFileRead
-@session
-def emmc_file_read(client: "TrezorClient", path_file: str, len:int, offset: int, ui_percentage:int) -> "MessageType":
-    msg_file = messages.EmmcFile(path=path_file, len=len, offset=offset, data=None)
-    msg = messages.EmmcFileRead(file=msg_file, ui_percentage=ui_percentage)
-    resp = client.call(msg)
-    return resp
-
-# EmmcFileWrite
-@session
-def emmc_file_write(client: "TrezorClient", path_file: str, len:int, offset: int, data: bytes, overwrite: bool, append: bool, ui_percentage:int) -> "MessageType":
-    msg_file = messages.EmmcFile(path=path_file, len=len, offset=offset, data=data)
-    msg = messages.EmmcFileWrite(file=msg_file, overwrite=overwrite, append=append, ui_percentage=ui_percentage)
-    resp = client.call(msg)
-    return resp
-
-# EmmcFileDelete
-@session
-def emmc_file_delete(client: "TrezorClient", path_file: str) -> "MessageType":
-    resp = client.call(messages.EmmcFileDelete(path=path_file))
-    return resp
-
-# EmmcDirList
-@session
-def emmc_dir_list(client: "TrezorClient", path_dir: str) -> "MessageType":
-    resp = client.call(messages.EmmcDirList(path=path_dir))
-    return resp
-
-# EmmcDirMake
-@session
-def emmc_dir_make(client: "TrezorClient", path_dir: str) -> "MessageType":
-    resp = client.call(messages.EmmcDirMake(path=path_dir))
-    return resp
-
-# EmmcDirRemove
-@session
-def emmc_dir_remove(client: "TrezorClient", path_dir: str) -> "MessageType":
-    resp = client.call(messages.EmmcDirRemove(path=path_dir))
     return resp
 
 # WriteSN

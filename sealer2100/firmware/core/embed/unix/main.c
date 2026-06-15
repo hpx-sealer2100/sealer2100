@@ -51,8 +51,17 @@
 #include "py/repl.h"
 #include "py/runtime.h"
 #include "py/stackctrl.h"
+#include "fs.h"
+#include "lvgl.h"
 
 #include "common.h"
+
+#include "lv_fs_port.c"
+
+static fs_t fs;
+
+// provide fs_t* __fs__ for lvgl font
+fs_t* __fs__ = &fs;
 
 // Command line options, with their defaults
 STATIC bool compile_only = false;
@@ -461,6 +470,8 @@ reimport:
   return 0;
 }
 
+
+
 MP_NOINLINE int main_(int argc, char **argv) {
 #ifdef SIGPIPE
   // Do not raise SIGPIPE, instead return EPIPE. Otherwise, e.g. writing
@@ -482,7 +493,7 @@ MP_NOINLINE int main_(int argc, char **argv) {
 
   // Map hypermate.flash to memory.
   flash_init();
-
+  fs_init(&fs);
 #if MICROPY_ENABLE_GC
   char *heap = malloc(heap_size);
   gc_init(heap, heap + heap_size);
@@ -542,6 +553,8 @@ MP_NOINLINE int main_(int argc, char **argv) {
 
   mp_obj_list_init(MP_OBJ_TO_PTR(mp_sys_argv), 0);
 
+  lv_init();
+  lv_port_fs_init(&fs);
   // Here is some example code to create a class and instance of that class.
   // First is the Python, then the C code.
   //

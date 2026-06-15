@@ -3,4 +3,6 @@
 
 #include STM32_HAL_H
 int uart_log_init(void);
+void uart_log_flush(void);
+void uart_log_deinit(void);
 #endif

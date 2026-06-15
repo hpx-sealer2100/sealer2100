@@ -38,15 +38,11 @@
 #include "common.h"
 #include "flash.h"
 #include "usb.h"
-#include "avi_parser.h"
-#include "ff.h"
 
 #ifndef TREZOR_EMULATOR
 #include "device.h"
 #include "sdram.h"
-#include "br_check.h"
 #include "image.h"
-#include "lv_jpeg_stm32.h"
 #endif
 
 static void ui_progress(mp_obj_t ui_wait_callback, uint32_t current,
@@ -208,27 +204,6 @@ STATIC mp_obj_t mod_trezorutils_firmware_hash(size_t n_args,
 STATIC MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(mod_trezorutils_firmware_hash_obj, 0,
                                            2, mod_trezorutils_firmware_hash);
 
-/// def firmware_vendor() -> str:
-///     """
-///     Returns the firmware vendor string from the vendor header.
-///     """
-STATIC mp_obj_t mod_trezorutils_firmware_vendor(void) {
-#ifdef TREZOR_EMULATOR
-  return mp_obj_new_str_copy(&mp_type_str, (const uint8_t *)"EMULATOR", 8);
-#else
-  vendor_header vhdr = {0};
-  uint32_t size = flash_sector_size(FLASH_SECTOR_FIRMWARE_START);
-  const void *data = flash_get_address(FLASH_SECTOR_FIRMWARE_START, 0, size);
-  if (data == NULL || sectrue != read_vendor_header(data, &vhdr)) {
-    mp_raise_msg(&mp_type_RuntimeError, "Failed to read vendor header.");
-  }
-  return mp_obj_new_str_copy(&mp_type_str, (const uint8_t *)vhdr.vstr,
-                             vhdr.vstr_len);
-#endif
-}
-STATIC MP_DEFINE_CONST_FUN_OBJ_0(mod_trezorutils_firmware_vendor_obj,
-                                 mod_trezorutils_firmware_vendor);
-
 /// def reboot_to_bootloader() -> None:
 ///     """
 ///     Reboots to bootloader.
@@ -256,6 +231,22 @@ STATIC mp_obj_t mod_trezorutils_reboot2boardloader() {
 STATIC MP_DEFINE_CONST_FUN_OBJ_0(mod_trezorutils_reboot2boardloader_obj,
                                  mod_trezorutils_reboot2boardloader);
 
+/// def firmware_version() -> str:
+///     """
+///     Returns the firmware version string.
+///     """
+STATIC mp_obj_t mod_trezorutils_firmware_version(void) {
+#if TREZOR_EMULATOR
+  return mp_obj_new_str_copy(&mp_type_str, (const uint8_t *)"EMULATOR", 8);
+#else
+  char version[12] = {0};
+  image_version_format(FIRMWARE->header.version, version);
+  return mp_obj_new_str_copy(&mp_type_str, (const uint8_t *)version, strlen(version));
+#endif
+}
+STATIC MP_DEFINE_CONST_FUN_OBJ_0(mod_trezorutils_firmware_version_obj,
+                                 mod_trezorutils_firmware_version);
+
 /// def boot_version() -> str:
 ///     """
 ///     Returns the bootloader version string.
@@ -264,16 +255,10 @@ STATIC mp_obj_t mod_trezorutils_boot_version(void) {
 #ifdef TREZOR_EMULATOR
   return mp_obj_new_str_copy(&mp_type_str, (const uint8_t *)"EMULATOR", 8);
 #else
-  uint8_t *boot_header = (uint8_t *)BOOTLOADER_START;
-  uint32_t version;
-  char ver_str[64] = {0};
-
-  memcpy(&version, boot_header + 16, 4);
-
-  snprintf(ver_str, sizeof(ver_str), "%d.%d.%d", (int)(version & 0xFF),
-                (int)((version >> 8) & 0xFF), (int)((version >> 16) & 0xFF));
-  return mp_obj_new_str_copy(&mp_type_str, (const uint8_t *)ver_str,
-                             strlen(ver_str));
+  const image_bootloader_t* const bl = BOOTLOADER;
+  char version[12] = {0};
+  image_version_format(bl->header.version, version);
+  return mp_obj_new_str_copy(&mp_type_str, (const uint8_t *)version, strlen(version));
 #endif
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_0(mod_trezorutils_boot_version_obj,
@@ -287,11 +272,11 @@ STATIC mp_obj_t mod_trezorutils_board_version(void) {
 #ifdef TREZOR_EMULATOR
   return mp_obj_new_str_copy(&mp_type_str, (const uint8_t *)"EMULATOR", 8);
 #else
-
-  char *ver_str = get_boardloader_version();
-
-  return mp_obj_new_str_copy(&mp_type_str, (const uint8_t *)ver_str,
-                             strlen(ver_str));
+  // we have combined boardloader and bootloader
+  const image_bootloader_t* const bl = BOOTLOADER;
+  char version[12] = {0};
+  image_version_format(bl->header.version, version);
+  return mp_obj_new_str_copy(&mp_type_str, (const uint8_t *)version, strlen(version));
 #endif
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_0(mod_trezorutils_board_version_obj,
@@ -316,8 +301,6 @@ STATIC mp_obj_str_t mod_trezorutils_build_id_obj = {
 #define PASTER(s) MP_QSTR_##s
 #define MP_QSTR(s) PASTER(s)
 
-MP_DEFINE_STR_OBJ(mp_HYPERMATE_VERSION, HYPERMATE_VERSION);
-
 static mp_obj_t mod_trezorutils_power_off(void) {
 #ifndef TREZOR_EMULATOR
   device_power_off();
@@ -326,77 +309,6 @@ static mp_obj_t mod_trezorutils_power_off(void) {
 }
 
 STATIC MP_DEFINE_CONST_FUN_OBJ_0(mod_trezorutils_power_off_obj, mod_trezorutils_power_off);
-
-/// def avi_play(path) -> None:
-///     """
-///     Play a video on screen
-///     """
-///
-static mp_obj_t mod_trezorutils_avi_play(mp_obj_t path) {
-  if (!MP_OBJ_IS_STR(path)) {
-    mp_raise_msg(&mp_type_ValueError, "Invalid path type");
-    return mp_const_none;
-  }
-  mp_buffer_info_t bi;
-  if (!mp_get_buffer(path, &bi, MP_BUFFER_READ)) {
-    mp_raise_msg(&mp_type_ValueError, "Invalid path type");
-    return mp_const_none;
-  }
-  if (bi.len == 0) {
-    mp_raise_msg(&mp_type_ValueError, "Invalid path, empty string");
-    return mp_const_none;
-  }
-
-  FIL f;
-  if (f_open(&f, (const char *)bi.buf, FA_READ) != FR_OK) {
-    // can't open the avi file
-    mp_raise_msg(&mp_type_ValueError, "Invalid path, can't open file");
-    return mp_const_none;
-  }
-
-  AVI_CONTEXT avi;
-  // reuse a buffer
-  uint8_t* video = NULL;
-  size_t video_buffer_size = 0;
-#ifndef TREZOR_EMULATOR
-  video = (uint8_t*) FMC_SDRAM_IMAGE_BUFFER_ADDRESS;
-  video_buffer_size = FMC_SDRAM_IMAGE_BUFFER_LEN;
-#else
-  uint8_t __video__[512*1024] = {0};
-  video = __video__;
-  video_buffer_size = sizeof(__video__);
-#endif
-  if (AVI_ParserInit(&avi, &f, video, video_buffer_size, NULL, 0) != 0) {
-    goto err;
-  }
-#ifndef TREZOR_EMULATOR
-  // reuse lvgl `lv_jpeg_stm32.h`
-  lv_st_jpeg_init();
-#endif
-  // decode avi
-  volatile uint32_t start = hal_ticks_ms();
-
-  do {
-    uint32_t frame_type = AVI_GetFrame(&avi, &f);
-    if (frame_type != AVI_VIDEO_FRAME) {
-      continue;
-    }
-    avi.CurrentImage++;
-    extern void decode_to_lcd(const uint8_t* buf, size_t size);
-    decode_to_lcd(video, avi.FrameSize);
-    uint32_t duration = (hal_ticks_ms() - start) + 1;
-    uint32_t cur_frame_until = (avi.aviInfo.SecPerFrame/1000) * avi.CurrentImage;
-    if (duration < cur_frame_until) {
-      hal_delay(cur_frame_until - duration);
-    }
-  }while (avi.CurrentImage < avi.aviInfo.TotalFrame);
-
-err:
-  f_close(&f);
-  memset(video, 0, video_buffer_size);
-  return mp_const_none;
-}
-static MP_DEFINE_CONST_FUN_OBJ_1(mod_trezorutils_avi_play_obj, mod_trezorutils_avi_play);
 
 /// def power_source() -> int:
 ///     """
@@ -430,8 +342,8 @@ STATIC const mp_rom_map_elem_t mp_module_trezorutils_globals_table[] = {
     {MP_ROM_QSTR(MP_QSTR_reset), MP_ROM_PTR(&mod_trezorutils_reset_obj)},
     {MP_ROM_QSTR(MP_QSTR_firmware_hash),
      MP_ROM_PTR(&mod_trezorutils_firmware_hash_obj)},
-    {MP_ROM_QSTR(MP_QSTR_firmware_vendor),
-     MP_ROM_PTR(&mod_trezorutils_firmware_vendor_obj)},
+    {MP_ROM_QSTR(MP_QSTR_firmware_version),
+     MP_ROM_PTR(&mod_trezorutils_firmware_version_obj)},
     {MP_ROM_QSTR(MP_QSTR_boot_version),
      MP_ROM_PTR(&mod_trezorutils_boot_version_obj)},
     {MP_ROM_QSTR(MP_QSTR_board_version),
@@ -439,7 +351,6 @@ STATIC const mp_rom_map_elem_t mp_module_trezorutils_globals_table[] = {
 
     {MP_ROM_QSTR(MP_QSTR_usb_data_connected),
      MP_ROM_PTR(&mod_trezorutils_usb_data_connected_obj)},
-    {MP_ROM_QSTR(MP_QSTR_avi_play), MP_ROM_PTR(&mod_trezorutils_avi_play_obj)},
     {MP_ROM_QSTR(MP_QSTR_power_source), MP_ROM_PTR(&mod_trezorutils_power_source_obj)},
     // various built-in constants
     {MP_ROM_QSTR(MP_QSTR_SCM_REVISION),
@@ -448,7 +359,6 @@ STATIC const mp_rom_map_elem_t mp_module_trezorutils_globals_table[] = {
     {MP_ROM_QSTR(MP_QSTR_VERSION_MAJOR), MP_ROM_INT(VERSION_MAJOR)},
     {MP_ROM_QSTR(MP_QSTR_VERSION_MINOR), MP_ROM_INT(VERSION_MINOR)},
     {MP_ROM_QSTR(MP_QSTR_VERSION_PATCH), MP_ROM_INT(VERSION_PATCH)},
-    {MP_ROM_QSTR(MP_QSTR_HYPERMATE_VERSION), MP_ROM_PTR(&mp_HYPERMATE_VERSION)},
 #if defined TREZOR_MODEL_1
     {MP_ROM_QSTR(MP_QSTR_MODEL), MP_ROM_QSTR(MP_QSTR_1)},
 #elif defined TREZOR_MODEL_T

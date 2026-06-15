@@ -1,6 +1,7 @@
 #ifndef __THD89_H__
 #define __THD89_H__
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -19,9 +20,20 @@ void thd89_deinit(void);
 thd89_result_t thd89_ping(void);
 thd89_result_t thd89_reset(void);
 thd89_result_t thd89_handshake(const uint8_t* secret, size_t secret_size);
-thd89_result_t thd89_execute_command(const uint8_t* command,
-                                     size_t command_size, uint8_t* response,
-                                     size_t response_buf_size,
-                                     size_t* response_len);
+
+thd89_result_t thd89_secure_execute(
+  const uint8_t* command,
+  size_t command_size, uint8_t* response,
+  size_t response_buf_size, size_t* response_len
+);
+
+thd89_result_t thd89_execute(
+  const uint8_t* command,
+  size_t command_size, uint8_t* response,
+  size_t response_buf_size, size_t* response_len
+);
+
+
+bool thd89_is_secure_channel_established(void);
 
 #endif

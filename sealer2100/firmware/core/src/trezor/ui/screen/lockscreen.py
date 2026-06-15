@@ -11,6 +11,7 @@ from trezor.ui.theme import Styles
 class LockScreen(Modal):
     def __init__(self):
         super().__init__()
+        self.timeline = None
         wallpaper = device.get_homescreen()
         self.set_style_bg_img_src(wallpaper, lv.PART.MAIN)
         self.add_flag(lv.obj.FLAG.CLICKABLE)
@@ -29,14 +30,17 @@ class LockScreen(Modal):
         container = self.add(VStack)
         container.add_style(Styles.container, lv.PART.MAIN)
         container.set_style_flex_cross_place(lv.FLEX_ALIGN.CENTER, lv.PART.MAIN)
-        container.set_size(lv.SIZE.CONTENT, lv.SIZE.CONTENT)
+        container.set_size(lv.pct(100), lv.SIZE.CONTENT)
 
         device_name = device.get_label()
         # Create product_lab
         self.device_name = container.add(lv.label)
+        self.device_name.set_width(lv.pct(100))
+        self.device_name.set_height(lv.SIZE.CONTENT)
+        self.device_name.set_long_mode(lv.label.LONG.WRAP)
         self.device_name.set_text(device_name or "Iris cnnc")
         self.device_name.add_style(
-            Style().text_color(colors.USER.WHITE).text_font(font.Medium.PF44),
+            Style().text_color(colors.USER.WHITE).text_font(font.Medium.PF44).text_align_center(),
             lv.PART.MAIN,
         )
 
@@ -63,10 +67,54 @@ class LockScreen(Modal):
         self.add_event_cb(self.on_click, lv.EVENT.CLICKED, None)
         loop.spawn(self.delay_get_ble_name())
 
+        # add a animation when not ready
+        if not self.is_ready():
+            self.busying()
+
+    def busying(self):
+        self.img = lv.img(self)
+        self.img.set_src("A:/res/hp/loading-1.png")
+        self.img.align(lv.ALIGN.BOTTOM_MID, 0, -196)
+
+        # a animation
+        a = lv.anim_t()
+        a.init()
+        a.set_var(self.img)
+        a.set_time(1000)
+        a.set_values(0, 3600)
+        a.set_repeat_count(lv.ANIM_REPEAT.INFINITE)
+        a.set_custom_exec_cb(self.busy_cb)
+
+        self.timeline = lv.anim_timeline_create()
+        lv.anim_timeline_add(self.timeline, 0, a)
+        lv.anim_timeline_start(self.timeline)
+
+    def busy_cb(self, a: lv.anim_t, v: int):
+        self.img.set_angle(v)
+        if not self.is_ready():
+            return
+
+        # when ready, stop the animation and remove
+        lv.anim_timeline_stop(self.timeline)
+        lv.anim_timeline_del(self.timeline)
+        self.timeline = None
+        self.img.delete()
+
+    def is_ready(self) -> bool:
+        ready = bool(utils.IRIS_VERSION)
+        if not device.ble_enabled():
+            # if ble is not enabled, just test iris version
+            return ready
+
+        # if ble is enabled, test ble name and iris version
+        return ready and bool(utils.BLE_NAME)
+
     def on_click(self, e):
         if not ui.display.backlight() and not device.is_tap_awake_enabled():
             return
         if utils.turn_on_lcd_if_possible():
+            return
+        if not self.is_ready():
             return
         from apps.base import unlock_device
 
@@ -76,6 +124,13 @@ class LockScreen(Modal):
         super().on_loaded()
         device_name = device.get_label()
         self.device_name.set_text(device_name or "Iris cnnc")
+
+    def on_deleting(self):
+        super().on_deleting()
+        if self.timeline:
+            lv.anim_timeline_stop(self.timeline)
+            lv.anim_timeline_del(self.timeline)
+            self.timeline = None
 
     async def delay_get_ble_name(self):
         if not device.ble_enabled():

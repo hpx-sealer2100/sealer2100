@@ -1,6 +1,8 @@
 #include STM32_HAL_H
 #include "button.h"
 
+#if 0
+// not used
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -99,3 +101,4 @@ void TIM2_IRQHandler(void)
 {
     HAL_TIM_IRQHandler(&htim2);
 }
+#endif

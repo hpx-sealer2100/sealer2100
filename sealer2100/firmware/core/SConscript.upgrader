@@ -1,0 +1,317 @@
+# pylint: disable=E0602
+
+import os
+
+TREZOR_MODEL = ARGUMENTS.get('TREZOR_MODEL', 'T')
+PRODUCTION_MODEL = ARGUMENTS.get('PRODUCTION_MODEL', 'H')
+UPGRADER_DEBUG = ARGUMENTS.get('UPGRADER_DEBUG', '0')
+
+CCFLAGS_MOD = ''
+CPPPATH_MOD = []
+CPPDEFINES_MOD = []
+SOURCE_MOD = []
+
+
+# modtrezorcrypto
+CCFLAGS_MOD += '-Wno-sequence-point '
+CPPPATH_MOD += [
+    'vendor/trezor-crypto',
+]
+CPPDEFINES_MOD += [
+    'AES_128',
+    'AES_192',
+    'USE_KECCAK',
+    'ED25519_NO_PRECOMP',
+    ('USE_PRECOMPUTED_CP', 0),
+]
+if ARGUMENTS.get('PRODUCTION', '0') == '0':
+    CPPDEFINES_MOD +=[
+        ('LOG_ENABLED', 1)
+    ]
+if UPGRADER_DEBUG != '0':
+    CPPDEFINES_MOD +=[
+        ('UPGRADER_DEBUG', 1)
+    ]
+
+    memory_ld = 'memory_debug.ld'
+    startup = 'startup_debug.s'
+else:
+    CPPDEFINES_MOD +=[
+        ('UPGRADER_DEBUG', 0)
+    ]
+
+    memory_ld = 'memory.ld'
+    startup = 'startup.s'
+
+SOURCE_MOD += [
+    'embed/extmod/modtrezorcrypto/rand.c',
+    'vendor/trezor-crypto/blake2s.c',
+    'vendor/trezor-crypto/chacha_drbg.c',
+    'vendor/trezor-crypto/chacha20poly1305/chacha_merged.c',
+    'vendor/trezor-crypto/ed25519-donna/curve25519-donna-32bit.c',
+    'vendor/trezor-crypto/ed25519-donna/curve25519-donna-helpers.c',
+    'vendor/trezor-crypto/ed25519-donna/ed25519.c',
+    'vendor/trezor-crypto/ed25519-donna/ed25519-donna-32bit-tables.c',
+    'vendor/trezor-crypto/ed25519-donna/ed25519-donna-impl-base.c',
+    'vendor/trezor-crypto/ed25519-donna/modm-donna-32bit.c',
+    'vendor/trezor-crypto/memzero.c',
+    'vendor/trezor-crypto/rand.c',
+    'vendor/trezor-crypto/hmac.c',
+    'vendor/trezor-crypto/sha2.c',
+    'vendor/trezor-crypto/aes/aes_modes.c',
+    'vendor/trezor-crypto/aes/aesccm.c',
+    'vendor/trezor-crypto/aes/aescrypt.c',
+    'vendor/trezor-crypto/aes/aeskey.c',
+    'vendor/trezor-crypto/aes/aestab.c',
+    'vendor/trezor-crypto/bignum.c',
+    'vendor/trezor-crypto/curves.c',
+    'vendor/trezor-crypto/ecdsa.c',
+    'vendor/trezor-crypto/nist256p1.c',
+    'vendor/trezor-crypto/secp256k1.c',
+    'vendor/trezor-crypto/rfc6979.c',
+    'vendor/trezor-crypto/hmac_drbg.c',
+]
+
+# modtrezorui
+CPPPATH_MOD += [
+    'vendor/micropython/lib/uzlib',
+]
+
+SOURCE_MOD += [
+    'embed/extmod/modtrezorui/mipi_lcd.c',
+    # 'embed/extmod/modtrezorui/display.c',
+    'vendor/micropython/lib/uzlib/adler32.c',
+    'vendor/micropython/lib/uzlib/crc32.c',
+    'vendor/micropython/lib/uzlib/tinflate.c',
+]
+SOURCE_STMHAL = [
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_mmc.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pcd.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pcd_ex.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_sdram.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_sram.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma2d.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_qspi.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_mdma.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_ltdc.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_ltdc_ex.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dsi.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rtc_ex.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_fmc.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_sdmmc.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_usb.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_delayblock.c',
+    'embed/BSP_drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_jpeg.c',
+]
+
+SOURCE_UPGRADER = [
+    f'embed/upgrader/{startup}',
+    'embed/upgrader/main.c',
+    'embed/upgrader/bootui.c',
+    'embed/upgrader/boot_context.c',
+    'embed/upgrader/boot_power_key.c',
+    'embed/upgrader/boot_updater.c',
+    'embed/upgrader/updater.c',
+    'embed/upgrader/updater_firmware.c',
+    'embed/upgrader/updater_bootloader.c',
+    'embed/upgrader/updater_se.c',
+]
+
+# littlefs module
+CPPPATH_MOD += [
+    'vendor/littlefs',
+]
+
+CPPDEFINES_MOD += [
+    # disable std memory functions
+    ('LFS_DEFINES', 'secure_heap.h'),
+    # use heap_4 memory functions
+    ('LFS_MALLOC', 'pvPortMalloc'),
+    ('LFS_FREE', 'vPortFree'),
+]
+
+SOURCE_FS_LFS = [
+    'vendor/littlefs/lfs_util.c',
+    'vendor/littlefs/lfs.c',
+]
+
+
+SOURCE_TREZORHAL = [
+    'embed/trezorhal/system_stm32h7xx.c',
+    'embed/trezorhal/common.c',
+    'embed/trezorhal/image.c',
+    'embed/trezorhal/flash.c',
+    'embed/trezorhal/mpu.c',
+    'embed/trezorhal/emmc.c',
+    'embed/trezorhal/qspi_flash.c',
+    'embed/trezorhal/nand_flash.c',
+    'embed/trezorhal/random_delays.c',
+    'embed/trezorhal/rng.c',
+    'embed/trezorhal/stm32.c',
+    'embed/trezorhal/systick.c',
+    'embed/trezorhal/usb.c',
+    'embed/trezorhal/usbd_conf.c',
+    'embed/trezorhal/usbd_core.c',
+    'embed/trezorhal/usbd_ctlreq.c',
+    'embed/trezorhal/usbd_ioreq.c',
+    'embed/trezorhal/usbd_msc.c',
+    'embed/trezorhal/usbd_msc_bot.c',
+    'embed/trezorhal/usbd_msc_data.c',
+    'embed/trezorhal/usbd_msc_scsi.c',
+    'embed/trezorhal/usbd_msc_emmc.c',
+    'embed/trezorhal/usbd_msc_nand.c',
+    'embed/trezorhal/usbd_desc.c',
+    'embed/trezorhal/trans_fifo.c',
+    'embed/trezorhal/battery.c',
+    'embed/trezorhal/spi.c',
+    'embed/trezorhal/usart.c',
+    'embed/trezorhal/ble.c',
+    'embed/trezorhal/sys.c',
+    'embed/trezorhal/device.c',
+    'embed/trezorhal/nordic_dfu.c',
+    'embed/trezorhal/fs.c',
+    'embed/trezorhal/fsport/fs_lfs_port.c',
+    'embed/trezorhal/fsport/fs_fatfs_port.c',
+    'embed/trezorhal/fsport/lfs_port_emmc.c',
+    'embed/trezorhal/fsport/lfs_port_nand.c',
+    'embed/trezorhal/fsport/lfs_port.c',
+    'embed/trezorhal/fsport/fatfs_diskio.c',
+    'embed/trezorhal/fsport/fatfs_diskio_emmc.c',
+    'embed/trezorhal/fatfs/ff.c',
+    'embed/trezorhal/fatfs/ffunicode.c',
+    'embed/trezorhal/util.s',
+    'embed/trezorhal/vectortable.s',
+    'embed/trezorhal/i2c.c',
+    'embed/trezorhal/uart_log.c',
+    'embed/trezorhal/log.c',
+    'embed/trezorhal/lowlevel.c',
+    'embed/trezorhal/gt911.c',
+    'embed/trezorhal/touch.c',
+
+    # se files
+    'embed/trezorhal/thd89/se.c',
+    'embed/trezorhal/thd89/se_spi.c',
+    'embed/trezorhal/thd89/se_factory.c',
+    'embed/trezorhal/thd89/thd89.c',
+    'embed/trezorhal/thd89/thd89_test.c',
+
+    'embed/trezorhal/sdram.c',
+    'embed/trezorhal/power_manager.c',
+    'embed/trezorhal/heap_4.c',
+    'embed/trezorhal/timer.c',
+    'embed/trezorhal/keys.c',
+    'embed/trezorhal/iris.c',
+]
+
+# lvgl build
+SOURCE_LVGL = Glob('vendor/lv_mp/lvgl/src/*/*.c')
+SOURCE_LVGL.extend(Glob('vendor/lv_mp/lvgl/src/*/*/*.c'))
+SOURCE_LVGL.extend(Glob('vendor/lv_mp/lvgl/src/*/*/*/*.c'))
+SOURCE_LVGL.extend(Glob('vendor/lv_mp/lvgl/src/*/*/*/*/*.c'))
+SOURCE_LVGL.extend(Glob('embed/lvgl/*.c'))
+
+env = Environment(ENV=os.environ, CFLAGS='%s -DPRODUCTION=%s' % (ARGUMENTS.get('CFLAGS', ''), ARGUMENTS.get('PRODUCTION', '0')))
+
+env.Replace(
+    AS='arm-none-eabi-as',
+    AR='arm-none-eabi-ar',
+    CC='arm-none-eabi-gcc',
+    LINK='arm-none-eabi-gcc',
+    SIZE='arm-none-eabi-size',
+    STRIP='arm-none-eabi-strip',
+    OBJCOPY='arm-none-eabi-objcopy', )
+
+env.Replace(
+    TREZOR_MODEL=TREZOR_MODEL,
+    PRODUCTION_MODEL=ord(PRODUCTION_MODEL), )
+
+CPU_ASFLAGS = '-mthumb -mcpu=cortex-m7 -mfloat-abi=hard -mfpu=fpv5-d16 '
+CPU_CCFLAGS = '-mthumb -mcpu=cortex-m7 -mfloat-abi=hard -mfpu=fpv5-d16 -mtune=cortex-m7 --specs=nano.specs '
+CPU_MODEL   = 'STM32H747xx'
+CORE_MODEL = 'CORE_CM7'
+
+env.Replace(
+    COPT=env.get('ENV').get('OPTIMIZE', '-Os'),
+    # COPT=env.get('ENV').get('OPTIMIZE', '-O0'),
+    CCFLAGS='$COPT '
+    '-g3 '
+    # '-DDEBUG '
+    '-nostdlib '
+    '-std=gnu99 -Wall -Werror -Wdouble-promotion -Wpointer-arith -Wno-missing-braces -fno-common '
+    '-fsingle-precision-constant -fdata-sections -ffunction-sections '
+    '-ffreestanding '
+    '-fstack-protector-all '
+    + CPU_CCFLAGS + CCFLAGS_MOD,
+    CCFLAGS_QSTR='-DNO_QSTR -DN_X64 -DN_X86 -DN_THUMB',
+    LINKFLAGS=f'-T embed/upgrader/{memory_ld} -Wl,--gc-sections -Wl,-Map=build/upgrader/upgrader.map -Wl,--warn-common',
+    CPPPATH=[
+        'embed/upgrader',
+        'embed/trezorhal',
+        'embed/trezorhal/thd89',
+        'embed/trezorhal/fatfs',
+        'embed/lvgl',
+        'embed/extmod/modtrezorui',
+        'embed/BSP_drivers/STM32H7xx_HAL_Driver/Inc',
+        'embed/BSP_drivers/CMSIS/Include',
+        'embed/BSP_drivers/CMSIS/Device/ST/STM32H7xx/Include',
+        'vendor/lv_mp/lvgl',
+    ] + CPPPATH_MOD,
+    CPPDEFINES=[
+        'TREZOR_MODEL_'+TREZOR_MODEL,
+        ('PRODUCTION_MODEL', '$PRODUCTION_MODEL'),
+        'RAND_PLATFORM_INDEPENDENT',
+        CPU_MODEL,
+        CORE_MODEL,
+        'USE_HAL_DRIVER',
+        ('STM32_HAL_H', '"<stm32h7xx.h>"'),
+        'PB_FIELD_16BIT',
+        'PB_ENCODE_ARRAYS_UNPACKED',
+        'PB_VALIDATE_UTF8',
+        'BOOT_ONLY',
+        'LV_LVGL_H_INCLUDE_SIMPLE',
+    ] + CPPDEFINES_MOD,
+    ASFLAGS=CPU_ASFLAGS,
+    ASPPFLAGS='$CFLAGS $CCFLAGS', )
+
+#
+# Program objects
+#
+
+obj_program = []
+obj_program += env.Object(source=SOURCE_MOD)
+obj_program += env.Object(source=SOURCE_FS_LFS)
+obj_program += env.Object(source=SOURCE_UPGRADER)
+obj_program += env.Object(source=SOURCE_STMHAL)
+obj_program += env.Object(source=SOURCE_TREZORHAL)
+obj_program += env.Object(source=SOURCE_LVGL)
+
+program_elf = env.Command(
+    target='upgrader.elf',
+    source=obj_program,
+    action=
+    '$LINK -o $TARGET $CCFLAGS $CFLAGS $LINKFLAGS $SOURCES -Wl,--start-group -lc_nano -lnosys -lgcc -Wl,--end-group',
+)
+
+program_bin = env.Command(
+    target='upgrader.bin',
+    source=program_elf,
+    action=[
+        '$OBJCOPY -O binary $SOURCE $TARGET',
+    ], )

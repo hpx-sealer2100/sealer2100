@@ -9,11 +9,14 @@ from typing import TYPE_CHECKING
 IRIS = IrisDevice()
 
 if TYPE_CHECKING:
-    from typing import Literal, NewType, Optional, Union, Awaitable
+    from typing import Literal, NewType, Optional, Union, Awaitable, Callable, TypeVar
 
     MsgType = Literal[0, 1, 2]
 
     MsgId = NewType("MsgId", int)
+
+    T = TypeVar("T")
+    TimeoutedResult = Union[T, TimeoutError]
 
 _iris_version: Optional[str] = None
 _iris_sn: Optional[str] = None
@@ -61,6 +64,8 @@ MODULE_STATUS_READY = const(1)
 MODULE_STATUS_MATCH = const(2)
 # 模组启动注册（enroll）
 MODULE_STATUS_ENROLL = const(3)
+# 模组绑定状态（bind）
+MODULE_STATUS_BIND = const(4)
 
 # user defined
 # 模组正在启动
@@ -69,6 +74,26 @@ MODULE_STATUS_IRIS_STARTING = const(0x80)
 MODULE_STATUS_IRIS_STARTING_TIMEOUT = const(0x81)
 # 注册或识别完成
 MODULE_STATUS_DONE = const(0x82)
+
+IRIS_HANDSHAKE_PENDING = const(1)
+
+class TimeoutError(Exception):
+    pass
+
+
+# helper decorator
+def with_timeout(timeout: int):
+    def decorator(func: Callable[..., Awaitable[T]], *args, **kwargs) -> Callable[..., Awaitable[TimeoutedResult]]:
+        async def wrapper(*args, **kwargs):
+            timeout_task = loop.sleep(timeout)
+            main_task = func(*args, **kwargs)
+            racer = loop.race(main_task, timeout_task)
+            result = await racer
+            if timeout_task in racer.finished:
+                raise TimeoutError()
+            return result
+        return wrapper
+    return decorator
 
 # Message 分为两种 Request 和 Response
 # Request app 向虹膜模组发送的消息
@@ -105,6 +130,13 @@ class Regist(Request):
             1, # auto generate user id
         ])
         self.payload.extend(b'\x00'*32)
+
+class Powerdown(Request):
+    """
+    关机请求
+    """
+    def __init__(self):
+        super().__init__(MSG_ID_DEVICE_POWERDOWN)
 
 class Match(Request):
     """
@@ -261,51 +293,115 @@ async def wait_response() -> Union[Reply, Note]:
     log.debug(__name__,f"resp: {resp}")
     return resp
 
+@with_timeout(1000)
+async def wait_response_with_timeout() -> Union[Reply, Note]:
+    """
+    Wait for response with timeout
+    """
+    try:
+        return await wait_response()
+    except TimeoutError:
+        return None
+
+@with_timeout(1500)
+async def power_up() -> ModuleStatus:
+    """
+    Power up iris module
+    """
+    if IRIS.is_opened():
+        return
+
+    log.debug(__name__, "Power up iris ...")
+    IRIS.open()
+    resp = await wait_response()
+
+    if not isinstance(resp, ModuleStatus):
+        log.exception(__name__, f"Invalid response: {resp}")
+        raise RuntimeError("IRIS open failed")
+    log.debug(__name__, "Power up success success")
+    return resp
+
+@with_timeout(1000)
+async def get_module_status() -> ModuleStatus:
+    """
+    Get module status
+    """
+    req = Request(MSG_ID_DEVICE_GET_STATUS)
+    send_request(req)
+    resp = await wait_response()
+    if not isinstance(resp, ModuleStatus):
+        raise RuntimeError("IRIS get module status failed")
+    return resp
+
+async def do_sec_channel_open() -> None:
+    """
+    Do sec channel open
+    """
+    while True:
+        ret: int|None = IRIS.sec_channel_open()
+        if ret is None:
+            log.debug(__name__, "sec channel open success")
+            return
+        if ret == IRIS_HANDSHAKE_PENDING:
+            await loop.sleep(10)
+
 async def open() -> None:
     """
     Open iris Module
 
     Power up iris module and connect to it.
     """
+    log.debug(__name__, "Open iris ...")
     if IRIS.is_opened():
         return
+    try:
+        resp = await power_up()
+    except TimeoutError:
+        log.debug(__name__, "Power up iris timeout, get module status")
+        resp = await get_module_status()
 
-    IRIS.open()
-    await loop.sleep(10)
-    # wait ModuleStatus
-    timeout_task = loop.sleep(1000)
-    response_task = wait_response()
-    racer = loop.race(response_task, timeout_task)
-    resp = await racer
-    if timeout_task in racer.finished:
-        log.debug(__name__, "IRIS open timeout")
-        try:
-            code = await get_module_status(500)
-            if code != 0:
-                raise RuntimeError("IRIS open failed")
-            return
-        except Exception as e:
-            log.exception(__name__, e)
-            raise RuntimeError("IRIS open timeout")
-
-    if not isinstance(resp, ModuleStatus):
-        raise RuntimeError("IRIS open failed")
-    if resp.status != MODULE_STATUS_READY:
+    if resp.status == MODULE_STATUS_BIND:
+        await do_sec_channel_open()
+    elif resp.status != MODULE_STATUS_READY:
         raise RuntimeError("IRIS open failed")
     log.debug(__name__, "Open success")
 
     return resp
 
-def close():
+@with_timeout(1000)
+async def send_power_down() -> None:
+    """
+    Send power down command
+    """
+    log.debug(__name__, "Power down iris ...")
+    req = Powerdown()
+    send_request(req)
+    resp = await wait_response()
+    if not isinstance(resp, Reply):
+        raise RuntimeError("IRIS power down failed")
+    if resp.code != 0:
+        raise RuntimeError("IRIS power down failed")
+    log.debug(__name__, "Power down command success")
+
+
+async def close():
     """
     Close iris Module
 
     Power down iris module and disconnect from it.
     """
-    # will power down iris module, can't wait any message
+    try:
+        # send power down command to iris module
+        await send_power_down()
+    except Exception as e:
+        # close iris module whatever happens
+        log.exception(__name__, e)
+    # wait a moment to make sure iris module power down
+    await loop.sleep(50)
     log.debug(__name__, "iris close")
     IRIS.close()
 
+@with_timeout(1000)
 async def cancel():
     """
     Cancel iris operation
@@ -314,6 +410,7 @@ async def cancel():
     send_request(req)
     await wait_response()
 
+@with_timeout(1000)
 async def regist():
     """
     Start iris registration
@@ -332,6 +429,7 @@ async def regist():
 
     return resp
 
+@with_timeout(1000)
 async def match():
     """
     Start iris match
@@ -351,6 +449,7 @@ async def match():
 
     return resp
 
+@with_timeout(1000)
 async def del_user_by_id(id: bytes):
     """
     Delete user by id
@@ -365,6 +464,18 @@ async def del_user_by_id(id: bytes):
         raise RuntimeError("IRIS delete user by id failed")
     log.debug(__name__, "Delete user by id success")
 
+
+@with_timeout(1000)
+async def do_wipe():
+    req = Request(MSG_ID_USER_DEL_ALL)
+    send_request(req)
+    resp = await wait_response()
+    if not isinstance(resp, Reply):
+        raise RuntimeError("IRIS wipe failed")
+    if resp.code != 0:
+        raise RuntimeError("IRIS wipe failed")
+    log.debug(__name__, "Wipe success")
+
 async def wipe():
     """
     Delete all users
@@ -374,30 +485,23 @@ async def wipe():
     if utils.EMULATOR:
         await loop.sleep(800)
         return
-    await loop.sleep(200)
+    # wait a moment to make sure iris module has power down
+    # when only enable iris verification, before wipe, need `match` first
+    # IRIS will power up and match then power down, so need to wait a moment
+    await loop.sleep(1000)
     await open()
-    log.debug(__name__, "after open")
     await loop.sleep(200)
-    req = Request(MSG_ID_USER_DEL_ALL)
-    send_request(req)
-    log.debug(__name__, "after send")
-    resp = await wait_response()
-    log.debug(__name__, "after resp")
-    if not isinstance(resp, Reply):
-        raise RuntimeError("IRIS wipe failed")
-    if resp.code != 0:
-        raise RuntimeError("IRIS wipe failed")
+    await do_wipe()
+    await close()
 
-    log.debug(__name__, "Wipe success")
-
-    close()
-
+@with_timeout(1000)
 async def get_version() -> str:
     """
     Get iris module version
     """
     global _iris_version
     if _iris_version is not None:
+        log.debug(__name__, f"version (cached): {_iris_version}")
         return _iris_version
 
     req = Request(MSG_ID_DEVICE_GET_VERSION)
@@ -406,6 +510,7 @@ async def get_version() -> str:
     if not isinstance(resp, Reply):
         raise RuntimeError("IRIS get version failed")
     _iris_version = resp.data.decode("utf-8").rstrip('\x00')
+    log.debug(__name__, f"version: {_iris_version}")
     return _iris_version
 
 async def get_sn() -> str:
@@ -424,41 +529,18 @@ async def get_sn() -> str:
     _iris_sn = resp.data.decode("utf-8")
     return _iris_sn
 
-async def get_module_status(timeout: int) -> int:
-    """
-    Get iris module status
-    """
-    req = Request(MSG_ID_DEVICE_GET_STATUS)
-    send_request(req)
-
-    timeout_task = loop.sleep(timeout)
-    response_task = wait_response()
-
-    racer = loop.race(response_task, timeout_task)
-
-    resp: Note = await racer
-
-    if timeout_task in racer.finished:
-        raise RuntimeError("IRIS get module status timeout")
-
-    if not isinstance(resp, Reply):
-        raise RuntimeError("IRIS get module status failed")
-
-    return resp.code
-
 async def refresh_iris_version():
     from trezor import utils
     if utils.EMULATOR:
         version = "iris-emulator"
-        from storage import device
-        device.set_iris_version(version)
+        utils.IRIS_VERSION = version
         return
     try:
         await open()
-        await loop.sleep(50)
         version = await get_version()
-        from storage import device
-        device.set_iris_version(version)
-        close()
+        utils.IRIS_VERSION = version
     except Exception as e:
         log.exception(__name__, e)
+    finally:
+        await close()
+

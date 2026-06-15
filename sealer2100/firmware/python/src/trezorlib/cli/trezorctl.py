@@ -43,7 +43,6 @@ from . import (
     device,
     eos,
     ethereum,
-    ethereum_hypermate,
     fido,
     firmware,
     monero,
@@ -63,6 +62,7 @@ from . import (
     with_client,
     kaspa,
     nexa,
+    fs,
 )
 
 F = TypeVar("F", bound=Callable)
@@ -433,7 +433,6 @@ cli.add_command(crypto.cli)
 cli.add_command(device.cli)
 cli.add_command(eos.cli)
 cli.add_command(ethereum.cli)
-cli.add_command(ethereum_hypermate.cli)
 cli.add_command(fido.cli)
 cli.add_command(monero.cli)
 cli.add_command(nem.cli)
@@ -455,6 +454,8 @@ cli.add_command(cosmos.cli)
 cli.add_command(polkadot.cli)
 cli.add_command(kaspa.cli)
 cli.add_command(nexa.cli)
+cli.add_command(fs.cli)
+
 
 #
 # Main

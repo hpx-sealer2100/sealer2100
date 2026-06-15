@@ -26,33 +26,37 @@ typedef enum {
   NRF_DFU_RES_CODE_INVALID = 0x00,                //!< Invalid opcode.
   NRF_DFU_RES_CODE_SUCCESS = 0x01,                //!< Operation successful.
   NRF_DFU_RES_CODE_OP_CODE_NOT_SUPPORTED = 0x02,  //!< Opcode not supported.
-  NRF_DFU_RES_CODE_INVALID_PARAMETER =
-      0x03,  //!< Missing or invalid parameter value.
-  NRF_DFU_RES_CODE_INSUFFICIENT_RESOURCES =
-      0x04,  //!< Not enough memory for the data object.
-  NRF_DFU_RES_CODE_INVALID_OBJECT =
-      0x05,  //!< Data object does not match the firmware and hardware
+  NRF_DFU_RES_CODE_INVALID_PARAMETER = 0x03,  //!< Missing or invalid parameter value.
+  NRF_DFU_RES_CODE_INSUFFICIENT_RESOURCES = 0x04,  //!< Not enough memory for the data object.
+  NRF_DFU_RES_CODE_INVALID_OBJECT = 0x05,  //!< Data object does not match the firmware and hardware
              //!< requirements, the signature is wrong, or parsing the command
              //!< failed.
-  NRF_DFU_RES_CODE_UNSUPPORTED_TYPE =
-      0x07,  //!< Not a valid object type for a Create request.
-  NRF_DFU_RES_CODE_OPERATION_NOT_PERMITTED =
-      0x08,  //!< The state of the DFU process does not allow this operation.
+  NRF_DFU_RES_CODE_UNSUPPORTED_TYPE = 0x07,  //!< Not a valid object type for a Create request.
+  NRF_DFU_RES_CODE_OPERATION_NOT_PERMITTED = 0x08,  //!< The state of the DFU process does not allow this operation.
   NRF_DFU_RES_CODE_OPERATION_FAILED = 0x0A,  //!< Operation failed.
-  NRF_DFU_RES_CODE_EXT_ERROR =
-      0x0B,  //!< Extended error. The next byte of the response contains the
+  NRF_DFU_RES_CODE_EXT_ERROR = 0x0B,  //!< Extended error. The next byte of the response contains the
              //!< error code of the extended error (see @ref
              //!< nrf_dfu_ext_error_code_t.
 } nrf_dfu_result_t;
 
-bool updateBle(uint8_t* init_data, uint8_t init_len, uint8_t* firmware,
-               uint32_t fm_len);
+typedef enum
+{
+    NRF_DFU_OBJ_TYPE_INVALID,                   //!< Invalid object type.
+    NRF_DFU_OBJ_TYPE_COMMAND,                   //!< Command object.
+    NRF_DFU_OBJ_TYPE_DATA,                      //!< Data object.
+} nrf_dfu_obj_type_t;
 
-void bluetooth_reset();
-bool bluetooth_enter_dfu();
-bool bluetooth_update(uint8_t* init_data, uint8_t init_len, uint8_t* firmware,
-                      uint32_t fm_len,
-                      void (*ui_display_progressBar)(char* title, char* notes,
-                                                     int progress));
+void nrf_dfu_write(const uint8_t* cmd, size_t cmd_len);
+bool nrf_dfu_read(uint8_t* resp, size_t resp_buf_size, uint32_t* resp_len);
+bool nrf_dfu_transfer(const uint8_t* cmd, size_t cmd_len, uint8_t* resp, uint32_t resp_buf_size, uint32_t* resp_len);
 
+bool nrf_dfu_ping(uint8_t id);
+bool nrf_dfu_set_prn(void);
+bool nrf_dfu_get_mtu(size_t* mtu);
+bool nrf_dfu_create_object(nrf_dfu_obj_type_t type, uint32_t size);
+bool nrf_dfu_select_object(nrf_dfu_obj_type_t type, uint32_t* max_size);
+void nrf_dfu_write_object(const uint8_t* data, size_t data_len);
+bool nrf_dfu_execute_object(void);
+bool nrf_dfu_get_crc(uint32_t* crc);
+void nrf_dfu_restart(void);
 #endif

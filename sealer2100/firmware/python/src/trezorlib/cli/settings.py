@@ -18,7 +18,7 @@ from typing import TYPE_CHECKING, Optional, cast
 
 import click
 
-from .. import device, firmware, messages, toif
+from .. import device, firmware, messages
 from . import AliasedGroup, ChoiceType, with_client
 
 if TYPE_CHECKING:

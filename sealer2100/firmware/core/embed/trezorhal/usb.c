@@ -25,7 +25,8 @@
 #include "usbd_core.h"
 #include "usbd_desc.h"
 #include "usbd_msc.h"
-#include "usbd_msc_storage.h"
+#include "usbd_msc_emmc.h"
+#include "usbd_msc_nand.h"
 
 #define USB_MAX_CONFIG_DESC_SIZE 256
 #define USB_MAX_STR_SIZE 62
@@ -608,7 +609,7 @@ static const USBD_ClassTypeDef usb_class = {
     .GetUsrStrDescriptor = usb_class_get_usrstr_desc,
 };
 
-void usb_msc_init(void) {
+void usb_msc_init(usb_block_type_t block_type) {
   HAL_PWREx_EnableUSBVoltageDetector();
   /* Init Device Library */
   USBD_Init(&usb_dev_handle, &MSC_Desc, 1);
@@ -616,10 +617,16 @@ void usb_msc_init(void) {
   /* Add Supported Class */
   USBD_RegisterClass(&usb_dev_handle, USBD_MSC_CLASS);
 
-  /* Add Storage callbacks for MSC Class */
-  USBD_MSC_RegisterStorage(&usb_dev_handle, &USBD_DISK_fops);
-
-  /* Start Device Process */
+  switch (block_type) {
+    case MSC_BLOCK_EMMC:
+      USBD_MSC_RegisterStorage(&usb_dev_handle, &USBD_emmc_fops);
+      break;
+    case MSC_BLOCK_NAND:
+      USBD_MSC_RegisterStorage(&usb_dev_handle, &USBD_nand_fops);
+      break;
+    default:
+      break;
+  }
   USBD_Start(&usb_dev_handle);
 }
 

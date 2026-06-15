@@ -127,6 +127,16 @@ def encode_data(value: Any, type_name: str) -> bytes:
         return value.encode()
     elif type_name.startswith(("int", "uint")):
         byte_length = get_byte_size_for_int_type(type_name)
+        if isinstance(value, str):
+            if value.startswith("0x") or value.startswith("0X"):
+                value = value[2:]
+                value = int(value, 16)
+            elif value.isdigit():
+                value = int(value)
+            else:
+                raise ValueError(f"Invalid int value - {value}")
+        elif not isinstance(value, int):
+            raise ValueError(f"Invalid int value - {value}")
         return int(value).to_bytes(
             byte_length, "big", signed=type_name.startswith("int")
         )
@@ -164,6 +174,7 @@ def network_from_address_n(
 @expect(messages.EthereumAddress, field="address", ret_type=str)
 def get_address(
     client: "TrezorClient",
+    chain_id: int,
     n: "Address",
     show_display: bool = False,
     encoded_network: Optional[bytes] = None,
@@ -171,6 +182,7 @@ def get_address(
     return client.call(
         messages.EthereumGetAddress(
             address_n=n,
+            chain_id=chain_id,
             show_display=show_display,
             encoded_network=encoded_network,
         )
@@ -412,5 +424,19 @@ def sign_typed_data_hash(
             domain_separator_hash=domain_hash,
             message_hash=message_hash,
             encoded_network=encoded_network,
+        )
+    )
+
+@session
+@expect(messages.Success, field="message", ret_type=str)
+def store_definition(
+    client: "TrezorClient",
+    network: messages.EthereumNetworkInfo,
+    token: Optional[messages.EthereumTokenInfo] = None,
+) -> str:
+    return client.call(
+        messages.EthereumStoreDefinition(
+            network=network,
+            token=token,
         )
     )

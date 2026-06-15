@@ -71,7 +71,7 @@ static void test_factory(void) {
     // need reboot after erase device
     se_reboot();
     // delay a moment wait se start up
-    HAL_Delay(50);
+    HAL_Delay(100);
     se_conn_reset();
 
     // 2. 设置序列号
@@ -118,7 +118,7 @@ static void test_factory(void) {
     // reboot for switch to user command list
     se_reboot();
     // delay a moment wait se start up
-    HAL_Delay(50);
+    HAL_Delay(100);
     se_conn_reset();
 
 }

@@ -22,10 +22,10 @@ class ConnectWallet(Navigation):
 
         async def load_address():
             # wait a while, not block the UI
-            await loop.sleep(300)
+            await loop.sleep(150)
             await self.do_update_qrcode()
         self.task = workflow.spawn(load_address())
-        
+
     def on_deleting(self):
         super().on_deleting()
         self.task.close()
@@ -43,9 +43,9 @@ class ConnectWallet(Navigation):
         from trezor import wire
         from trezor.ui import events
         try:
-            airgap = await self.wallet.airgap_address()
-            for ur in airgap:
+            while True:
+                ur = await self.wallet.airgap_connect_ur_str()
                 self.qrcode_view.update(ur, len(ur))
-                await loop.sleep(200)
+                await loop.sleep(150)
         except wire.ActionCancelled:
             lv.event_send(self, events.NAVIGATION_BACK, None)

@@ -1,0 +1,5 @@
+#include "messages.pb.h"
+#include "messages-bootloader.pb.h"
+#include "messages-common.pb.h"
+#include "messages-fs.pb.h"
+#include "messages-management.pb.h"

@@ -63,8 +63,7 @@ async def process_push() -> None:
         # unexpected prefix, ignore directly
         return
     value = response[_HEADER_LEN:][: length - 2]
-    if __debug__:
-        print(f"cmd == {cmd} with value {value} ")
+    log.debug(__name__, f"cmd == {cmd} with value {value} ")
     if cmd == _CMD_BLE_STATUS:
         # 1 connected 2 disconnected 3 opened 4 closed
         await _deal_ble_status(value)
@@ -81,8 +80,7 @@ async def process_push() -> None:
         # retrieve nrf version
         _retrieve_nrf_version(value)
     else:
-        if __debug__:
-            print("unknown or not care command:", cmd)
+        log.debug(__name__, f"unknown or not care command:{cmd}")
 
 
 async def _deal_ble_pair(value):

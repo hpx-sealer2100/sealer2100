@@ -79,8 +79,8 @@ enum RebootType {
  * @next Success
  * @next Failure
  */
-message FirmwareUpdateEmmc {
-    // update firmware from emmc
+message FirmwareUpdate {
+    // update firmware from fs
     required string path = 1;
     // reboot or back to main screen when success
     optional bool reboot_on_success = 2;

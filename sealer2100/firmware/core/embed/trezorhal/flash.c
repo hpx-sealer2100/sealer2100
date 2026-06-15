@@ -29,7 +29,13 @@
 
 #define FLASH_TYPEPROGRAM_WORD FLASH_TYPEPROGRAM_FLASHWORD
 
-FlashLockedData *flash_otp_data = (FlashLockedData *)0x081E0000;
+FlashLockedData* flash_otp_data = (FlashLockedData*)0x081E0000;
+
+const uint8_t BOOTLOADER_SECTORS[BOOTLOADER_SECTORS_COUNT] = {
+    FLASH_SECTOR_BOOTLOADER_START,
+    1,
+    FLASH_SECTOR_BOOTLOADER_END,
+};
 
 const uint8_t FIRMWARE_SECTORS[FIRMWARE_SECTORS_COUNT] = {
     FLASH_SECTOR_FIRMWARE_START,
@@ -59,6 +65,38 @@ const uint8_t FIRMWARE_SECTORS[FIRMWARE_SECTORS_COUNT] = {
     28,
     29,
     30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
     FLASH_SECTOR_FIRMWARE_EXTRA_END
 };
 
@@ -68,413 +106,401 @@ const uint8_t STORAGE_SECTORS[STORAGE_SECTORS_COUNT] = {
 };
 
 secbool flash_unlock_write(void) {
-  HAL_FLASH_Unlock();
-  SCB_DisableDCache();
-  return sectrue;
+    HAL_FLASH_Unlock();
+    SCB_DisableDCache();
+    return sectrue;
 }
 
 secbool flash_lock_write(void) {
-  HAL_FLASH_Lock();
-  SCB_EnableDCache();
-  return sectrue;
+    HAL_FLASH_Lock();
+    SCB_EnableDCache();
+    return sectrue;
 }
 
-const void *flash_get_address(uint8_t sector, uint32_t offset, uint32_t size) {
-  if (sector >= FLASH_SECTOR_COUNT) {
+const void* flash_get_address(uint8_t sector, uint32_t offset, uint32_t size) {
+    if (sector >= FLASH_SECTOR_COUNT) {
+        return NULL;
+    }
+    if (sector < FLASH_INNER_COUNT) {
+        if (offset + size > FLASH_FIRMWARE_SECTOR_SIZE) {
+            return NULL;
+        }
+        return (const void*)(0x08000000 + sector * FLASH_FIRMWARE_SECTOR_SIZE + offset);
+    } else if (sector >= FLASH_SECTOR_FIRMWARE_EXTRA_START && sector <= FLASH_SECTOR_FIRMWARE_EXTRA_END) {
+        if (offset + size > FLASH_FIRMWARE_SECTOR_SIZE) {
+            return NULL;
+        }
+        return (const void*)(QSPI_FLASH_BASE_ADDRESS +
+                             (sector - FLASH_SECTOR_FIRMWARE_EXTRA_START) * FLASH_FIRMWARE_SECTOR_SIZE +
+                             offset);
+    } else if (sector >= FLASH_SECTOR_STORAGE_1 && sector <= FLASH_SECTOR_STORAGE_2) {
+        if (offset + size > FLASH_STORAGE_SECTOR_SIZE) {
+            return NULL;
+        }
+        return (const void*)(QSPI_FLASH_BASE_ADDRESS + QSPI_FLASH_STORAG_OFFSET +
+                             (sector - FLASH_SECTOR_STORAGE_1) * FLASH_STORAGE_SECTOR_SIZE + offset);
+    }
     return NULL;
-  }
-  if (sector < FLASH_INNER_COUNT) {
-    if (offset + size > FLASH_FIRMWARE_SECTOR_SIZE) {
-      return NULL;
-    }
-    return (const void *)(0x08000000 + sector * FLASH_FIRMWARE_SECTOR_SIZE +
-                          offset);
-  } else if (sector >= FLASH_SECTOR_FIRMWARE_EXTRA_START &&
-             sector <= FLASH_SECTOR_FIRMWARE_EXTRA_END) {
-    if (offset + size > FLASH_FIRMWARE_SECTOR_SIZE) {
-      return NULL;
-    }
-    return (const void *)(QSPI_FLASH_BASE_ADDRESS +
-                          (sector - FLASH_SECTOR_FIRMWARE_EXTRA_START) *
-                              FLASH_FIRMWARE_SECTOR_SIZE +
-                          offset);
-  } else if (sector >= FLASH_SECTOR_STORAGE_1 &&
-             sector <= FLASH_SECTOR_STORAGE_2) {
-    if (offset + size > FLASH_STORAGE_SECTOR_SIZE) {
-      return NULL;
-    }
-    return (const void *)(QSPI_FLASH_BASE_ADDRESS + QSPI_FLASH_STORAG_OFFSET +
-                          (sector - FLASH_SECTOR_STORAGE_1) *
-                              FLASH_STORAGE_SECTOR_SIZE +
-                          offset);
-  }
-  return NULL;
 }
 
-secbool flash_erase_sectors(const uint8_t *sectors, int len,
-                            void (*progress)(int pos, int len)) {
-  if (progress) {
-    progress(0, len);
-  }
-  for (int i = 0; i < len; i++) {
-    if (sectors[i] >= FLASH_SECTOR_FIRMWARE_EXTRA_START &&
-        sectors[i] <= FLASH_SECTOR_FIRMWARE_EXTRA_END) {
-      qspi_flash_erase_block_64k(
-          (sectors[i] - FLASH_SECTOR_FIRMWARE_EXTRA_START) * 2 *
-          QSPI_SECTOR_SIZE);
-      qspi_flash_erase_block_64k(
-          (sectors[i] - FLASH_SECTOR_FIRMWARE_EXTRA_START) * 2 *
-              QSPI_SECTOR_SIZE +
-          QSPI_SECTOR_SIZE);
-    } else if (sectors[i] >= FLASH_SECTOR_STORAGE_1 &&
-               sectors[i] <= FLASH_SECTOR_STORAGE_2) {
-      qspi_flash_erase_block_64k((sectors[i] - FLASH_SECTOR_STORAGE_1) *
-                                     QSPI_SECTOR_SIZE +
-                                 QSPI_FLASH_STORAG_OFFSET);
-    } else {
-      ensure(flash_unlock_write(), NULL);
-      FLASH_EraseInitTypeDef EraseInitStruct;
-      EraseInitStruct.TypeErase = FLASH_TYPEERASE_SECTORS;
-      EraseInitStruct.VoltageRange = FLASH_VOLTAGE_RANGE_3;
-      EraseInitStruct.NbSectors = 1;
-
-      if (sectors[i] < 8) {
-        EraseInitStruct.Banks = FLASH_BANK_1;
-        EraseInitStruct.Sector = sectors[i];
-      } else {
-        EraseInitStruct.Banks = FLASH_BANK_2;
-        EraseInitStruct.Sector = sectors[i] - 8;
-      }
-
-      uint32_t SectorError;
-      if (HAL_FLASHEx_Erase(&EraseInitStruct, &SectorError) != HAL_OK) {
-        ensure(flash_lock_write(), NULL);
-        return secfalse;
-      }
-      ensure(flash_lock_write(), NULL);
-    }
-
-    // check whether the sector was really deleted (contains only 0xFF)
-    const uint32_t addr_start = (uint32_t)flash_get_address(sectors[i], 0, 0);
-    uint32_t addr_end;
-    if (sectors[i] < FLASH_SECTOR_STORAGE_1) {
-      addr_end = addr_start + FLASH_FIRMWARE_SECTOR_SIZE;
-    } else {
-      addr_end = addr_start + FLASH_STORAGE_SECTOR_SIZE;
-    }
-    for (uint32_t addr = addr_start; addr < addr_end; addr += 4) {
-      if (*((const uint32_t *)addr) != 0xFFFFFFFF) {
-        return secfalse;
-      }
-    }
+secbool flash_erase_sectors(const uint8_t* sectors, int len, void (*progress)(int pos, int len)) {
     if (progress) {
-      progress(i + 1, len);
+        progress(0, len);
     }
-  }
+    int retry_count = 5;
 
-  return sectrue;
+erase_begin:
+    for (int i = 0; i < len; i++) {
+        if (sectors[i] >= FLASH_SECTOR_FIRMWARE_EXTRA_START &&
+            sectors[i] <= FLASH_SECTOR_FIRMWARE_EXTRA_END) {
+            qspi_flash_erase_block_64k(
+                (sectors[i] - FLASH_SECTOR_FIRMWARE_EXTRA_START) * 2 * QSPI_SECTOR_SIZE
+            );
+            qspi_flash_erase_block_64k(
+                (sectors[i] - FLASH_SECTOR_FIRMWARE_EXTRA_START) * 2 * QSPI_SECTOR_SIZE + QSPI_SECTOR_SIZE
+            );
+        } else if (sectors[i] >= FLASH_SECTOR_STORAGE_1 && sectors[i] <= FLASH_SECTOR_STORAGE_2) {
+            qspi_flash_erase_block_64k(
+                (sectors[i] - FLASH_SECTOR_STORAGE_1) * QSPI_SECTOR_SIZE + QSPI_FLASH_STORAG_OFFSET
+            );
+        } else {
+            ensure(flash_unlock_write(), NULL);
+            FLASH_EraseInitTypeDef EraseInitStruct;
+            EraseInitStruct.TypeErase = FLASH_TYPEERASE_SECTORS;
+            EraseInitStruct.VoltageRange = FLASH_VOLTAGE_RANGE_3;
+            EraseInitStruct.NbSectors = 1;
+
+            if (sectors[i] < 8) {
+                EraseInitStruct.Banks = FLASH_BANK_1;
+                EraseInitStruct.Sector = sectors[i];
+            } else {
+                EraseInitStruct.Banks = FLASH_BANK_2;
+                EraseInitStruct.Sector = sectors[i] - 8;
+            }
+
+            uint32_t SectorError;
+            if (HAL_FLASHEx_Erase(&EraseInitStruct, &SectorError) != HAL_OK) {
+                ensure(flash_lock_write(), NULL);
+                return secfalse;
+            }
+            ensure(flash_lock_write(), NULL);
+        }
+
+        // check whether the sector was really deleted (contains only 0xFF)
+        const uint32_t addr_start = (uint32_t)flash_get_address(sectors[i], 0, 0);
+        uint32_t addr_end;
+        if (sectors[i] < FLASH_SECTOR_STORAGE_1) {
+            addr_end = addr_start + FLASH_FIRMWARE_SECTOR_SIZE;
+        } else {
+            addr_end = addr_start + FLASH_STORAGE_SECTOR_SIZE;
+        }
+        SCB_InvalidateDCache_by_Addr((void*)addr_start, addr_end - addr_start);
+        for (uint32_t addr = addr_start; addr < addr_end; addr += 4) {
+            if (*((const uint32_t*)addr) != 0xFFFFFFFF) {
+                if (retry_count) {
+                    retry_count--;
+                    goto erase_begin;
+                }
+                return secfalse;
+            }
+        }
+        if (progress) {
+            progress(i + 1, len);
+        }
+    }
+
+    return sectrue;
 }
 secbool flash_write_byte(uint8_t sector, uint32_t offset, uint8_t data) {
-  uint32_t address = (uint32_t)flash_get_address(sector, offset, 1);
-  if (address == 0) {
-    return secfalse;
-  }
-  if (address < QSPI_FLASH_BASE_ADDRESS) {
-    return secfalse;
-  }
-  if (data != (data & *((const uint8_t *)address))) {
-    return secfalse;
-  }
-  // display_printf("flash write byte\n");
-  if (HAL_OK != qspi_flash_write_buffer_unsafe(
-                    (uint8_t *)&data, address - QSPI_FLASH_BASE_ADDRESS, 1)) {
-    return secfalse;
-  }
-  if (data != *((const uint8_t *)address)) {
-    return secfalse;
-  }
-  return sectrue;
+    uint32_t address = (uint32_t)flash_get_address(sector, offset, 1);
+    if (address == 0) {
+        return secfalse;
+    }
+    if (address < QSPI_FLASH_BASE_ADDRESS) {
+        return secfalse;
+    }
+    if (data != (data & *((const uint8_t*)address))) {
+        return secfalse;
+    }
+    // display_printf("flash write byte\n");
+    if (HAL_OK != qspi_flash_write_buffer_unsafe((uint8_t*)&data, address - QSPI_FLASH_BASE_ADDRESS, 1)) {
+        return secfalse;
+    }
+    if (data != *((const uint8_t*)address)) {
+        return secfalse;
+    }
+    return sectrue;
 }
 
 secbool flash_write_word(uint8_t sector, uint32_t offset, uint32_t data) {
-  uint32_t address = (uint32_t)flash_get_address(sector, offset, 4);
-  if (address == 0) {
-    return secfalse;
-  }
-  if (address < QSPI_FLASH_BASE_ADDRESS) {
-    return secfalse;
-  }
-  if (offset % sizeof(uint32_t)) {  // we write only at 4-byte boundary
-    return secfalse;
-  }
-  if (data != (data & *((const uint32_t *)address))) {
-    return secfalse;
-  }
-  if (HAL_OK != qspi_flash_write_buffer_unsafe(
-                    (uint8_t *)&data, address - QSPI_FLASH_BASE_ADDRESS, 4)) {
-    return secfalse;
-  }
-  if (data != *((const uint32_t *)address)) {
-    return secfalse;
-  }
-  return sectrue;
+    uint32_t address = (uint32_t)flash_get_address(sector, offset, 4);
+    if (address == 0) {
+        return secfalse;
+    }
+    if (address < QSPI_FLASH_BASE_ADDRESS) {
+        return secfalse;
+    }
+    if (offset % sizeof(uint32_t)) { // we write only at 4-byte boundary
+        return secfalse;
+    }
+    if (data != (data & *((const uint32_t*)address))) {
+        return secfalse;
+    }
+    if (HAL_OK != qspi_flash_write_buffer_unsafe((uint8_t*)&data, address - QSPI_FLASH_BASE_ADDRESS, 4)) {
+        return secfalse;
+    }
+    if (data != *((const uint32_t*)address)) {
+        return secfalse;
+    }
+    return sectrue;
 }
 
 secbool flash_write_words(uint8_t sector, uint32_t offset, uint32_t data[8]) {
-  uint32_t flash_word[8];
-  int retry = -1;
+    uint32_t flash_word[8];
+    int retry = -1;
 
-  uint32_t address = (uint32_t)flash_get_address(sector, offset, 4);
-  if (address == 0) {
-    return secfalse;
-  }
-  if (address % 32) {  // we write only at 4-byte boundary
-    return secfalse;
-  }
-  if (offset % 32) {  // we write only at 4-byte boundary
-    return secfalse;
-  }
-  for (int i = 0; i < 8; i++) {
-    if (flash_word[i] !=
-        (flash_word[i] & *((const uint32_t *)(address + 4 * i)))) {
-      return secfalse;
+    uint32_t address = (uint32_t)flash_get_address(sector, offset, 4);
+    if (address == 0) {
+        return secfalse;
     }
-  }
+    if (address % 32) { // we write only at 4-byte boundary
+        return secfalse;
+    }
+    if (offset % 32) { // we write only at 4-byte boundary
+        return secfalse;
+    }
+    for (int i = 0; i < 8; i++) {
+        if (flash_word[i] != (flash_word[i] & *((const uint32_t*)(address + 4 * i)))) {
+            return secfalse;
+        }
+    }
 rewrite:
-  retry++;
-  if (retry == 3) {
-    return secfalse;
-  }
-  memcpy(flash_word, data, 32);
+    retry++;
+    if (retry == 3) {
+        return secfalse;
+    }
+    memcpy(flash_word, data, 32);
 
-  if (sector >= FLASH_SECTOR_BOOTLOADER_1 &&
-      sector <= FLASH_SECTOR_OTP_EMULATOR) {
-    if (HAL_OK != HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, address,
-                                    (uint32_t)&flash_word)) {
-      goto rewrite;
+    if (sector >= FLASH_SECTOR_BOOTLOADER_START && sector <= FLASH_SECTOR_OTP_EMULATOR) {
+        if (HAL_OK != HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, address, (uint32_t)&flash_word)) {
+            goto rewrite;
+        }
+    } else {
+        if (HAL_OK !=
+            qspi_flash_write_buffer_unsafe((uint8_t*)&flash_word, address - QSPI_FLASH_BASE_ADDRESS, 32)) {
+            goto rewrite;
+        }
     }
-  } else {
-    if (HAL_OK !=
-        qspi_flash_write_buffer_unsafe((uint8_t *)&flash_word,
-                                       address - QSPI_FLASH_BASE_ADDRESS, 32)) {
-      goto rewrite;
-    }
-  }
 
-  for (int i = 0; i < 8; i++) {
-    if (flash_word[i] != *((const uint32_t *)(address + 4 * i))) {
-      goto rewrite;
+    for (int i = 0; i < 8; i++) {
+        if (flash_word[i] != *((const uint32_t*)(address + 4 * i))) {
+            goto rewrite;
+        }
     }
-  }
-  return sectrue;
+    return sectrue;
 }
 
 uint32_t flash_sector_size(uint8_t sector) {
-  if (sector >= FLASH_SECTOR_COUNT) {
+    if (sector >= FLASH_SECTOR_COUNT) {
+        return 0;
+    }
+    if (sector < FLASH_INNER_COUNT) {
+        return FLASH_FIRMWARE_SECTOR_SIZE;
+    } else if (sector >= FLASH_SECTOR_FIRMWARE_EXTRA_START && sector <= FLASH_SECTOR_FIRMWARE_EXTRA_END) {
+        return FLASH_FIRMWARE_SECTOR_SIZE;
+    } else if (sector >= FLASH_SECTOR_STORAGE_1 && sector <= FLASH_SECTOR_STORAGE_2) {
+        return FLASH_STORAGE_SECTOR_SIZE;
+    }
     return 0;
-  }
-  if (sector < FLASH_INNER_COUNT) {
-    return FLASH_FIRMWARE_SECTOR_SIZE;
-  } else if (sector >= FLASH_SECTOR_FIRMWARE_EXTRA_START &&
-             sector <= FLASH_SECTOR_FIRMWARE_EXTRA_END) {
-    return FLASH_FIRMWARE_SECTOR_SIZE;
-  } else if (sector >= FLASH_SECTOR_STORAGE_1 &&
-             sector <= FLASH_SECTOR_STORAGE_2) {
-    return FLASH_STORAGE_SECTOR_SIZE;
-  }
-  return 0;
 }
 
 bool flash_check_ecc_fault() {
-  if ((FLASH->SR1 & (FLASH_FLAG_SNECCERR_BANK1 | FLASH_FLAG_DBECCERR_BANK1)) !=
-          0U ||
-      (FLASH->SR2 & (FLASH_FLAG_SNECCERR_BANK2 | FLASH_FLAG_DBECCERR_BANK2) &
-       0x7FFFFFFFU) != 0U) {
-    return true;
-  }
-  return false;
+    if ((FLASH->SR1 & (FLASH_FLAG_SNECCERR_BANK1 | FLASH_FLAG_DBECCERR_BANK1)) != 0U ||
+        (FLASH->SR2 & (FLASH_FLAG_SNECCERR_BANK2 | FLASH_FLAG_DBECCERR_BANK2) & 0x7FFFFFFFU) != 0U) {
+        return true;
+    }
+    return false;
 }
 
 bool flash_clear_ecc_fault(uint32_t address) {
-  if (IS_FLASH_PROGRAM_ADDRESS_BANK1(address)) {
-    FLASH->CCR1 |= (FLASH_FLAG_SNECCERR_BANK1 | FLASH_CCR_CLR_DBECCERR_Msk);
-    __DSB();
-    return true;
-  }
+    if (IS_FLASH_PROGRAM_ADDRESS_BANK1(address)) {
+        FLASH->CCR1 |= (FLASH_FLAG_SNECCERR_BANK1 | FLASH_CCR_CLR_DBECCERR_Msk);
+        __DSB();
+        return true;
+    }
 
-  if (IS_FLASH_PROGRAM_ADDRESS_BANK2(address)) {
-    FLASH->CCR2 |= (FLASH_FLAG_SNECCERR_BANK1 | FLASH_CCR_CLR_DBECCERR_Msk);
-    __DSB();
-    return true;
-  }
-  return false;
+    if (IS_FLASH_PROGRAM_ADDRESS_BANK2(address)) {
+        FLASH->CCR2 |= (FLASH_FLAG_SNECCERR_BANK1 | FLASH_CCR_CLR_DBECCERR_Msk);
+        __DSB();
+        return true;
+    }
+    return false;
 }
 
 // sector erase method, large effect area
 bool flash_fix_ecc_fault_FIRMWARE(uint32_t address) {
-  const size_t header_backup_len = 4096;
+    const size_t header_backup_len = 4096;
 
-  if (!((IS_FLASH_PROGRAM_ADDRESS_BANK1(address)) ||
-        (IS_FLASH_PROGRAM_ADDRESS_BANK2(address)))) {
-    return false;
-  }
-
-  // find which sector the address is on
-  uint32_t offset = address - FLASH_BANK1_BASE;
-  uint8_t sector = offset / FLASH_FIRMWARE_SECTOR_SIZE;
-
-  // sanity check
-  if (sector < FLASH_SECTOR_FIRMWARE_START ||
-      sector > FLASH_SECTOR_FIRMWARE_END) {
-    return false;
-  }
-
-  // wipe sector
-  if (sector == FLASH_SECTOR_FIRMWARE_START) {
-    // backup header
-    uint8_t temp_header_backup[header_backup_len];
-    memcpy(temp_header_backup, flash_get_address(sector, 0, header_backup_len),
-           header_backup_len);
-    // wipe sector
-    flash_erase(sector);
-    // restore header
-    if (sectrue != flash_unlock_write()) {
-      return false;
-    }
-    for (size_t sector_offset = 0; sector_offset < header_backup_len;
-         sector_offset += 32) {
-      if (sectrue !=
-          flash_write_words(sector, sector_offset,
-                            (uint32_t *)(temp_header_backup + sector_offset))) {
+    if (!((IS_FLASH_PROGRAM_ADDRESS_BANK1(address)) || (IS_FLASH_PROGRAM_ADDRESS_BANK2(address)))) {
         return false;
-      }
     }
-    if (sectrue != flash_lock_write()) {
-      return false;
-    }
-  } else {
-    if (sectrue == flash_erase(sector)) {
-    } else {
-      return false;
-    }
-  }
 
-  return true;
+    // find which sector the address is on
+    uint32_t offset = address - FLASH_BANK1_BASE;
+    uint8_t sector = offset / FLASH_FIRMWARE_SECTOR_SIZE;
+
+    // sanity check
+    if (sector < FLASH_SECTOR_FIRMWARE_START || sector > FLASH_SECTOR_FIRMWARE_END) {
+        return false;
+    }
+
+    // wipe sector
+    if (sector == FLASH_SECTOR_FIRMWARE_START) {
+        // backup header
+        uint8_t temp_header_backup[header_backup_len];
+        memcpy(temp_header_backup, flash_get_address(sector, 0, header_backup_len), header_backup_len);
+        // wipe sector
+        flash_erase(sector);
+        // restore header
+        if (sectrue != flash_unlock_write()) {
+            return false;
+        }
+        for (size_t sector_offset = 0; sector_offset < header_backup_len; sector_offset += 32) {
+            if (sectrue !=
+                flash_write_words(sector, sector_offset, (uint32_t*)(temp_header_backup + sector_offset))) {
+                return false;
+            }
+        }
+        if (sectrue != flash_lock_write()) {
+            return false;
+        }
+    } else {
+        if (sectrue == flash_erase(sector)) {
+        } else {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 // write zero method, smaller effect area
 bool flash_fix_ecc_fault_FIRMWARE_v2(uint32_t address) {
-  // sanity check
-  if (!((IS_FLASH_PROGRAM_ADDRESS_BANK1(address)) ||
-        (IS_FLASH_PROGRAM_ADDRESS_BANK2(address)))) {
-    return false;
-  }
+    // sanity check
+    if (!((IS_FLASH_PROGRAM_ADDRESS_BANK1(address)) || (IS_FLASH_PROGRAM_ADDRESS_BANK2(address)))) {
+        return false;
+    }
 
-  // find which sector the address is on
-  uint32_t offset = address - FLASH_BANK1_BASE;
-  uint8_t sector = offset / FLASH_FIRMWARE_SECTOR_SIZE;
+    // find which sector the address is on
+    uint32_t offset = address - FLASH_BANK1_BASE;
+    uint8_t sector = offset / FLASH_FIRMWARE_SECTOR_SIZE;
 
-  // sanity check
-  if (sector < FLASH_SECTOR_FIRMWARE_START ||
-      sector > FLASH_SECTOR_FIRMWARE_END) {
-    return false;
-  }
+    // sanity check
+    if (sector < FLASH_SECTOR_FIRMWARE_START || sector > FLASH_SECTOR_FIRMWARE_END) {
+        return false;
+    }
 
-  uint8_t zeros[32];  // has to be 32 bytes
-  memset(zeros, 0x00, 32);
-  uint32_t overwrite_offset =
-      (address / sizeof(zeros)) * sizeof(zeros);  // force align
+    uint8_t zeros[32]; // has to be 32 bytes
+    memset(zeros, 0x00, 32);
+    uint32_t overwrite_offset = (address / sizeof(zeros)) * sizeof(zeros); // force align
 
-  // unlock for write
-  if (sectrue != flash_unlock_write()) {
-    return false;
-  }
+    // unlock for write
+    if (sectrue != flash_unlock_write()) {
+        return false;
+    }
 
-  // overwrite
-  if (HAL_OK != HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, overwrite_offset,
-                                  (uint32_t)&zeros)) {
-    return false;
-  }
+    // overwrite
+    if (HAL_OK != HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, overwrite_offset, (uint32_t)&zeros)) {
+        return false;
+    }
 
-  // lock back
-  if (sectrue != flash_lock_write()) {
-    return false;
-  }
+    // lock back
+    if (sectrue != flash_lock_write()) {
+        return false;
+    }
 
-  return true;
+    return true;
 }
 
 void flash_otp_init(void) {
-  if (memcmp(flash_otp_data->flag, "erased", strlen("erased")) == 0) {
-    return;
-  }
-  uint8_t buf[32] = "erased";
-  uint8_t secotrs[1];
-  secotrs[0] = 15;
+    if (memcmp(flash_otp_data->flag, "erased", strlen("erased")) == 0) {
+        return;
+    }
+    uint8_t buf[32] = "erased";
+    uint8_t secotrs[1];
+    secotrs[0] = 15;
 
-  ensure(flash_erase_sectors(secotrs, 1, NULL), "erase data sector 15");
-  ensure(flash_unlock_write(), NULL);
-  ensure(flash_write_words(15, 0, (uint32_t *)buf), "write init flag");
-  ensure(flash_lock_write(), NULL);
-  return;
-}
-
-secbool flash_otp_read(uint8_t block, uint8_t offset, uint8_t *data,
-                       uint8_t datalen) {
-  if (block >= FLASH_OTP_NUM_BLOCKS ||
-      offset + datalen > FLASH_OTP_BLOCK_SIZE) {
-    return secfalse;
-  }
-  memcpy(data, flash_otp_data->flash_otp[block] + offset, datalen);
-  return sectrue;
-}
-
-secbool flash_otp_write(uint8_t block, uint8_t offset, const uint8_t *data,
-                        uint8_t datalen) {
-  if (block >= FLASH_OTP_NUM_BLOCKS || offset != 0 ||
-      datalen != FLASH_OTP_BLOCK_SIZE) {
-    return secfalse;
-  }
-  uint32_t address = (uint32_t)flash_otp_data->flash_otp[block];
-  uint32_t flash_word[8];
-  memcpy(flash_word, data, datalen);
-  ensure(flash_unlock_write(), NULL);
-  if (HAL_OK != HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, address,
-                                  (uint32_t)&flash_word)) {
+    ensure(flash_erase_sectors(secotrs, 1, NULL), "erase data sector 15");
+    ensure(flash_unlock_write(), NULL);
+    ensure(flash_write_words(15, 0, (uint32_t*)buf), "write init flag");
     ensure(flash_lock_write(), NULL);
-    return secfalse;
-  }
-  ensure(flash_lock_write(), NULL);
-  return sectrue;
+    return;
+}
+void flash_otp_erase(void) {
+    uint8_t buf[32] = "erased";
+    uint8_t secotrs[1];
+    secotrs[0] = 15;
+
+    ensure(flash_erase_sectors(secotrs, 1, NULL), "erase data sector 15");
+    ensure(flash_unlock_write(), NULL);
+    ensure(flash_write_words(15, 0, (uint32_t*)buf), "write init flag");
+    ensure(flash_lock_write(), NULL);
+    return;
+}
+secbool flash_otp_read(uint8_t block, uint8_t offset, uint8_t* data, uint8_t datalen) {
+    if (block >= FLASH_OTP_NUM_BLOCKS || offset + datalen > FLASH_OTP_BLOCK_SIZE) {
+        return secfalse;
+    }
+    memcpy(data, flash_otp_data->flash_otp[block] + offset, datalen);
+    return sectrue;
 }
 
-secbool flash_otp_lock(uint8_t block) { return sectrue; }
+secbool flash_otp_write(uint8_t block, uint8_t offset, const uint8_t* data, uint8_t datalen) {
+    if (block >= FLASH_OTP_NUM_BLOCKS || offset != 0 || datalen != FLASH_OTP_BLOCK_SIZE) {
+        return secfalse;
+    }
+    uint32_t address = (uint32_t)flash_otp_data->flash_otp[block];
+    uint32_t flash_word[8];
+    memcpy(flash_word, data, datalen);
+    ensure(flash_unlock_write(), NULL);
+    if (HAL_OK != HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, address, (uint32_t)&flash_word)) {
+        ensure(flash_lock_write(), NULL);
+        return secfalse;
+    }
+    ensure(flash_lock_write(), NULL);
+    return sectrue;
+}
+
+secbool flash_otp_lock(uint8_t block) {
+    return sectrue;
+}
 
 secbool flash_otp_is_locked(uint8_t block) {
-  if (0 ==
-      memcmp(flash_otp_data->flash_otp[block],
-             "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF"
-             "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF",
-             FLASH_OTP_BLOCK_SIZE)) {
-    return secfalse;
-  }
-  return sectrue;
+    if (0 == memcmp(
+                 flash_otp_data->flash_otp[block],
+                 "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF"
+                 "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF",
+                 FLASH_OTP_BLOCK_SIZE
+             )) {
+        return secfalse;
+    }
+    return sectrue;
 }
 
 void flash_test(void) {
-  // static uint8_t data[32];
-  uint8_t sector = 15;
-  ensure(flash_unlock_write(), NULL);
-  ensure(flash_erase(sector), "erase failed");
-  // ensure(flash_write_word(sector, 64, 0x12345678), NULL);
-  // for (uint8_t i = 0; i < 32; i++) {
-  //   data[i] = i;
-  // }
+    // static uint8_t data[32];
+    uint8_t sector = 15;
+    ensure(flash_unlock_write(), NULL);
+    ensure(flash_erase(sector), "erase failed");
+    // ensure(flash_write_word(sector, 64, 0x12345678), NULL);
+    // for (uint8_t i = 0; i < 32; i++) {
+    //   data[i] = i;
+    // }
 
-  // ensure(flash_otp_write(0, 0, data, 32), NULL);
-  // memset(data, 0x00, 32);
-  // ensure(flash_otp_read(0, 0, data, 32), NULL);
-  ensure(flash_lock_write(), NULL);
-  while (1)
-    ;
+    // ensure(flash_otp_write(0, 0, data, 32), NULL);
+    // memset(data, 0x00, 32);
+    // ensure(flash_otp_read(0, 0, data, 32), NULL);
+    ensure(flash_lock_write(), NULL);
+    while (1)
+        ;
 }

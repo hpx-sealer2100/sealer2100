@@ -2,9 +2,11 @@
 #include "qspi_flash.h"
 #include "irq.h"
 
-#include "display.h"
 
 #include <string.h>
+#include <stdbool.h>
+
+#define AUTO_POLLING_INTERVAL 10
 
 static QSPI_HandleTypeDef hqspi;
 // static MDMA_HandleTypeDef hmdma;
@@ -165,7 +167,7 @@ static int qspi_flash_write_enable(void) {
   config.Mask = 0x02;
   config.MatchMode = QSPI_MATCH_MODE_AND;
   config.StatusBytesSize = 1;
-  config.Interval = 0x10;
+  config.Interval = AUTO_POLLING_INTERVAL;
   config.AutomaticStop = QSPI_AUTOMATIC_STOP_ENABLE;
 
   command.Instruction = READ_STATUS_REG_CMD;
@@ -199,7 +201,7 @@ static int qspi_flash_atuo_polling_mem_ready(void) {
   config.Match = 0x00;
   config.MatchMode = QSPI_MATCH_MODE_AND;
   config.StatusBytesSize = 1;
-  config.Interval = 0x10;
+  config.Interval = AUTO_POLLING_INTERVAL;
   config.AutomaticStop = QSPI_AUTOMATIC_STOP_ENABLE;
 
   if (HAL_QSPI_AutoPolling(&hqspi, &command, &config,

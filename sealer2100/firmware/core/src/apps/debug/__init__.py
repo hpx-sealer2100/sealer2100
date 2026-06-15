@@ -215,7 +215,8 @@ if __debug__:
         try:
             io.sdcard.power_on()
             if msg.format:
-                io.fatfs.mkfs()
+                raise wire.ProcessError("SD card format is not supported")
+                # io.fs.format()
             else:
                 # trash first 1 MB of data to destroy the FAT filesystem
                 assert io.sdcard.capacity() >= 1024 * 1024

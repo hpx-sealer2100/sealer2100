@@ -32,7 +32,7 @@ def compute_auth_tag(salt: bytes, auth_key: bytes) -> bytes:
 
 
 def _get_device_dir() -> str:
-    return f"1:/hypermate/device_{storage.device.get_device_id().lower()}"
+    return f"/user/salt/device_{storage.device.get_device_id().lower()}"
 
 
 def _get_salt_path(new: bool = False) -> str:
@@ -44,12 +44,12 @@ def _get_salt_path(new: bool = False) -> str:
 def _load_salt(auth_key: bytes, path: str) -> bytearray | None:
     # Load the salt file if it exists.
     try:
-        with io.fatfs.open(path, "r") as f:
+        with io.fs.open(path, "r") as f:
             salt = bytearray(SD_SALT_LEN_BYTES)
             stored_tag = bytearray(SD_SALT_AUTH_TAG_LEN_BYTES)
             f.read(salt)
             f.read(stored_tag)
-    except io.fatfs.FatFSError:
+    except io.fs.FSError:
         return None
 
     # Check the salt's authentication tag.
@@ -83,22 +83,22 @@ def load_sd_salt() -> bytearray | None:
     # SD salt regeneration was interrupted earlier. Bring into consistent state.
     # TODO Possibly overwrite salt file with random data.
     try:
-        io.fatfs.unlink(salt_path)
-    except io.fatfs.FatFSError:
+        io.fs.remove(salt_path)
+    except io.fs.FSError:
         pass
 
-    # io.fatfs.rename can fail with a write error, which falls through as an FatFSError.
+    # io.fs.rename can fail with a write error, which falls through as an FSError.
     # This should be handled in calling code, by allowing the user to retry.
-    io.fatfs.rename(new_salt_path, salt_path)
+    io.fs.rename(new_salt_path, salt_path)
     return salt
 
 
 @with_filesystem
 def set_sd_salt(salt: bytes, salt_tag: bytes, stage: bool = False) -> None:
     salt_path = _get_salt_path(stage)
-    io.fatfs.mkdir("1:/hypermate", True)
-    io.fatfs.mkdir(_get_device_dir(), True)
-    with io.fatfs.open(salt_path, "w") as f:
+    io.fs.mkdir("/user/salt")
+    io.fs.mkdir(_get_device_dir())
+    with io.fs.open(salt_path, "w") as f:
         f.write(salt)
         f.write(salt_tag)
 
@@ -109,14 +109,14 @@ def commit_sd_salt() -> None:
     new_salt_path = _get_salt_path(new=True)
 
     try:
-        io.fatfs.unlink(salt_path)
-    except io.fatfs.FatFSError:
+        io.fs.remove(salt_path)
+    except io.fs.FSError:
         pass
-    io.fatfs.rename(new_salt_path, salt_path)
+    io.fs.rename(new_salt_path, salt_path)
 
 
 @with_filesystem
 def remove_sd_salt() -> None:
     salt_path = _get_salt_path()
     # TODO Possibly overwrite salt file with random data.
-    io.fatfs.unlink(salt_path)
+    io.fs.remove(salt_path)

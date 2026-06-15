@@ -178,7 +178,7 @@ class FeeChange(TransactionBase):
         self.set_icon(icon)
 
         self.content.add_style(Styles.group, lv.PART.MAIN)
-        
+
         labeled = lambda label, text: self.labeled(self.content, label, text)
 
         # changed
@@ -201,7 +201,6 @@ class Processing(Modal):
         # icon
         self.img = container.add(lv.img)
         self.img.set_src(icon)
-        self.img.center()
 
         self.label = container.add(lv.label)
         self.label.set_text('')
@@ -248,7 +247,7 @@ class Processing(Modal):
     def set_label(self, txt):
         if txt != self.label.get_text():
             self.label.set_text(txt)
-            
+
     def set_icon(self, icon: str):
         self.img.set_src(icon)
 

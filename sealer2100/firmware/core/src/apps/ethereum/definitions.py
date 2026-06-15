@@ -158,7 +158,7 @@ class Definitions:
 
         # if we have a built-in definition, use it
         token = token_by_chain_address(self.network.chain_id, address)
-        if token is not None:
+        if token is not UNKNOWN_TOKEN:
             return token
 
         if address in self._tokens:

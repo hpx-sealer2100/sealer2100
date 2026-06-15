@@ -23,6 +23,7 @@
 #ifndef __USBD_MSC_H
 #define __USBD_MSC_H
 
+#include <stdint.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -71,11 +72,12 @@ extern "C" {
 typedef struct _USBD_STORAGE
 {
   int8_t (* Init)(uint8_t lun);
-  int8_t (* GetCapacity)(uint8_t lun, uint32_t *block_num, uint16_t *block_size);
+  int8_t (* GetCapacity)(uint8_t lun, uint32_t *block_num, uint32_t *block_size);
   int8_t (* IsReady)(uint8_t lun);
   int8_t (* IsWriteProtected)(uint8_t lun);
-  int8_t (* Read)(uint8_t lun, uint8_t *buf, uint32_t blk_addr, uint16_t blk_len);
-  int8_t (* Write)(uint8_t lun, uint8_t *buf, uint32_t blk_addr, uint16_t blk_len);
+  int8_t (* Read)(uint8_t lun, uint8_t *buf, uint32_t blk_addr, uint32_t blk_len);
+  int8_t (* Write)(uint8_t lun, uint8_t *buf, uint32_t blk_addr, uint32_t blk_len);
+  int8_t (* Erase)(uint8_t lun, uint32_t block);
   int8_t (* GetMaxLun)(void);
   int8_t *pInquiry;
 
@@ -98,7 +100,7 @@ typedef struct
   uint8_t                  scsi_sense_tail;
   uint8_t                  scsi_medium_state;
 
-  uint16_t                 scsi_blk_size;
+  uint32_t                 scsi_blk_size;
   uint32_t                 scsi_blk_nbr;
 
   uint32_t                 scsi_blk_addr;

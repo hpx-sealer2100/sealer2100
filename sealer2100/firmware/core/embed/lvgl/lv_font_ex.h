@@ -1,9 +1,8 @@
 #ifndef LV_FONT_EX_H
 #define LV_FONT_EX_H
 
+#include "fs.h"
 #include "lvgl.h"
-#include "ff.h"
-
 
 typedef struct {
   uint16_t min;
@@ -34,7 +33,8 @@ typedef struct {
 // the user data set to lv_font_t.user_data
 typedef struct {
   char* path;             // the font binary file
-  FIL* f;                 // the fatfs handle
+  // lv_fs_file_t* f;     // we can't use lvgl file system, because, font loading is before lvgl file system register
+  fs_file_t* f;
   uint32_t glyph_location;
   font_header_t xbf;
   font_cache_t cache;

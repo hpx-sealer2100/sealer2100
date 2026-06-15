@@ -44,7 +44,7 @@ void test_echo(void) {
     uint8_t resp[257] = {0};
     size_t resp_size = 0;
     thd89_result_t ret =
-        thd89_execute_command(cmd, sizeof(cmd), resp, sizeof(resp), &resp_size);
+        thd89_execute(cmd, sizeof(cmd), resp, sizeof(resp), &resp_size);
 
     count++;
     if (ret != THD89_SUCCESS) {

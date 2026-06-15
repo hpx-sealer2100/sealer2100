@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdio.h>
 #include STM32_HAL_H
 
 #include <string.h>
@@ -36,211 +37,102 @@
 #include "stm32h7xx_ll_utils.h"
 #endif
 
-#ifdef RGB16
-#define COLOR_FATAL_ERROR RGB16(0x7F, 0x00, 0x00)
-#else
-#define COLOR_FATAL_ERROR COLOR_BLACK
-#endif
-
-// clang-format off
-static const uint8_t toi_icon_warning[] = {
-    // magic
-    'T', 'O', 'I', 'f',
-    // width (16-bit), height (16-bit)
-    0x2e, 0x00, 0x28, 0x00,
-    // compressed data length (32-bit)
-    0x35, 0x01, 0x00, 0x00,
-    // compressed data
-    0xb5, 0xd2, 0xb1, 0x6d, 0xc3, 0x30, 0x10, 0x85, 0x61, 0x8e, 0xa0, 0x32, 0xe5, 0xad, 0xe0, 0x0d, 0x98, 0x15, 0x3c, 0x01, 0xa1, 0x11, 0xd4, 0xba, 0x11, 0x90, 0x52, 0x2b, 0xa4, 0x60, 0x91, 0xd2, 0x2b, 0x10, 0xb8, 0x05, 0x3c, 0x02, 0x01, 0x4d, 0xa0, 0x11, 0x88, 0x84, 0x45, 0x20, 0x89, 0x26, 0x7d, 0x47, 0xf2, 0xac, 0xd7, 0x09, 0xd0, 0x07, 0x42, 0xfc, 0x95, 0xe2, 0x3f, 0xa3, 0xf9, 0xb4, 0xea, 0x4d, 0x8f, 0x47, 0x8f, 0xef, 0x91, 0xa7, 0x35, 0xd8, 0x60, 0xa7, 0x55, 0x5e, 0x86, 0xbf, 0x33, 0x47, 0x7b, 0xd3, 0x83, 0x91, 0xb6, 0x7f, 0x20, 0xca, 0x71, 0x0b, 0x4a, 0x9f, 0xfa, 0x5f, 0x8e, 0xbb, 0x68, 0x49, 0xfb, 0x3e, 0x1f, 0x6d, 0x27, 0x28, 0x8f, 0xe6, 0x28, 0xc7, 0xc9, 0xb5, 0xe8, 0x31, 0xb5, 0x3d, 0xca, 0xdc, 0xe8, 0x4d, 0xa7, 0x72, 0xdc, 0x97, 0x96, 0x6b, 0x2f, 0x9d, 0x44, 0x8b, 0x7b, 0x7b, 0xe9, 0x7a, 0x5b, 0x04, 0x2c, 0xc9, 0xfd, 0x37, 0xfa, 0x30, 0xaf, 0x6c, 0x27, 0xd4, 0xde, 0xfe, 0xf6, 0xa8, 0x5f, 0x45, 0xda, 0xcb, 0xdb, 0xad, 0x2d, 0x9e, 0xdb, 0x53, 0x90, 0xb3, 0xdb, 0x5a, 0x04, 0xdc, 0x4e, 0xf6, 0x07, 0xe6, 0xed, 0x4d, 0x03, 0xf6, 0xb6, 0x37, 0xcc, 0x79, 0x3b, 0xd8, 0x6f, 0xe8, 0x6d, 0x2f, 0xff, 0xbf, 0x5b, 0x5a, 0xf4, 0x55, 0xb6, 0x6b, 0x6c, 0x8f, 0x63, 0x07, 0x3b, 0x32, 0x6b, 0x19, 0xcc, 0xf3, 0xa9, 0x29, 0x9b, 0xdb, 0xe2, 0xb9, 0x3d, 0x9e, 0xcd, 0x6b, 0x11, 0x30, 0xff, 0x2d, 0x65, 0x73, 0x5a, 0x4c, 0xdb, 0xe3, 0xda, 0xc1, 0xde, 0xe7, 0xd7, 0xf2, 0x45, 0x97, 0xbe, 0xa4, 0x6d, 0xaa, 0x45, 0x8f, 0x3d, 0xb6, 0xab, 0x6c, 0xaf, 0x6e, 0xd3, 0x5a, 0xba, 0xc5, 0xf2, 0xa9, 0xb9, 0xdb, 0x74, 0xbe, 0xc5, 0x9b, 0xee, 0x95, 0x4b, 0x2d, 0x02, 0x71, 0x66, 0xce, 0xff, 0x2e, 0xb5, 0x58, 0x6a, 0xaf, 0xd6, 0x7e, 0xbe, 0xd1, 0x2b, 0xf9, 0x05, 0xdf, 0x4e, 0x5b, 0xa4, 0x6f, 0xb1, 0xc6, 0x7e, 0x98, 0xba, 0xf6, 0x6a, 0xec, 0xbd, 0x45, 0x89, 0xf6, 0x4a, 0x2d, 0x2e, 0xe2, 0x72, 0xdc, 0x82, 0x74, 0x7b, 0xed, 0x03, 0xa4, 0xda, 0x6b, 0x9f, 0x53, 0xbf,
-};
-// clang-format on
-
-volatile uint32_t system_reset = 0;
 
 // from util.s
 extern void shutdown_privileged(void);
+// firmware/bootloader provide `__fatal`
+extern
+__attribute__((noreturn))
+void __fatal(const char* lines[]);
 
 void shutdown(void) {
-#ifdef USE_SVC_SHUTDOWN
-  svc_shutdown();
-#else
-  // It won't work properly unless called from the privileged mode
-  shutdown_privileged();
-#endif
+  pm_power_off();
 }
+
+// void shutdown(void) {
+// #ifdef USE_SVC_SHUTDOWN
+//   svc_shutdown();
+// #else
+//   // It won't work properly unless called from the privileged mode
+//   shutdown_privileged();
+// #endif
+// }
 
 void restart(void) {
   // power down modules
-  pm_power_down(POWER_MODULE_BLUETOOTH);
+  // pm_power_down(POWER_MODULE_BLUETOOTH);
   pm_power_down(POWER_MODULE_CAMERA);
   pm_power_down(POWER_MODULE_MOTOR);
   svc_reset_system();
 }
 
 void reboot_to_board(void) {
-  *STAY_IN_FLAG_ADDR = STAY_IN_BOARDLOADER_FLAG;
-  SCB_CleanDCache();
-  svc_reset_system();
+  device_set_run_mode(RUN_MODE_BOARDLOADER);
+  restart();
 }
 
 void reboot_to_boot(void) {
-  *STAY_IN_FLAG_ADDR = STAY_IN_BOOTLOADER_FLAG;
-  SCB_CleanDCache();
-  svc_reset_system();
+  device_set_run_mode(RUN_MODE_BOOTLOADER);
+  restart();
 }
 
 void __attribute__((noreturn))
 __fatal_error(const char *expr, const char *msg, const char *file, int line,
               const char *func) {
-  display_orientation(0);
-  display_backlight(255);
-  display_printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-  display_print_color(RGB16(0x69, 0x69, 0x69), COLOR_BLACK);
-  display_printf("\nFATAL ERROR:\n");
-  if (expr) {
-    display_printf("expr: %s\n", expr);
-  }
-  if (msg) {
-    display_printf("msg : %s\n", msg);
-  }
-  if (file) {
-    display_printf("file: %s:%d\n", file, line);
-  }
-  if (func) {
-    display_printf("func: %s\n", func);
-  }
-#ifdef SCM_REVISION
-  const uint8_t *rev = (const uint8_t *)SCM_REVISION;
-  display_printf("rev : %02x%02x%02x%02x%02x\n", rev[0], rev[1], rev[2], rev[3],
-                 rev[4]);
-#endif
+  char source[256] = {0};
+  char _expr[256] = {0};
+  char _func[256] = {0};
+  char _msg[256] = {0};
+
+  sprintf(source, "file: %s:%d", file, line);
+  sprintf(_expr, "expr: %s", expr);
+  sprintf(_func, "func: %s", func);
+  sprintf(_msg, "msg: %s", msg);
+
 #ifdef BUILD_ID
-  const uint8_t *id = (const uint8_t *)BUILD_ID;
-  display_printf("build id: %s\n", id);
+  const char *id = (const char *)BUILD_ID;
+  char _build_id[256] = {0};
+  sprintf(_build_id, "build id: %s", id);
+
 #endif
-  display_printf("\n\n");
-  display_image(9, 50, 46, 40, toi_icon_warning + 12,
-                sizeof(toi_icon_warning) - 12);
-  display_text(8, 140, "System problem detected.", -1, FONT_NORMAL, COLOR_WHITE,
-               COLOR_BLACK);
-  display_text(8, 784, "Tap to restart ...", -1, FONT_NORMAL, COLOR_WHITE,
-               COLOR_BLACK);
-  // shutdown();
-  // while (!touch_click()) {
-  // }
-  restart();
-  for (;;)
-    ;
+
+  const char* lines[] = {
+    "FATAL ERROR:",
+    _expr,
+    _msg,
+    source,
+    _func,
+#ifdef BUILD_ID
+    _build_id,
+#endif
+    NULL
+  };
+  __fatal(lines);
 }
 
 void __attribute__((noreturn))
 error_shutdown(const char *line1, const char *line2, const char *line3,
                const char *line4) {
-  display_orientation(0);
-#ifdef TREZOR_FONT_NORMAL_ENABLE
-  uint16_t font_color = RGB16(0x69, 0x69, 0x69);
-  display_clear();
-  display_image(9, 50, 46, 40, toi_icon_warning + 12,
-                sizeof(toi_icon_warning) - 12);
-  display_text(8, 140, "System problem detected.", -1, FONT_NORMAL, COLOR_WHITE,
-               COLOR_BLACK);
-  display_text(8, 784, "Tap to restart ...", -1, FONT_NORMAL, COLOR_WHITE,
-               COLOR_BLACK);
-
-  int y = 720;
-
-  if (line4) {
-    display_text(8, y, line4, -1, FONT_NORMAL, font_color, COLOR_BLACK);
-    y -= 32;
-  }
-  if (line3) {
-    display_text(8, y, line3, -1, FONT_NORMAL, font_color, COLOR_BLACK);
-    y -= 32;
-  }
-  if (line2) {
-    display_text(8, y, line2, -1, FONT_NORMAL, font_color, COLOR_BLACK);
-    y -= 32;
-  }
-  if (line1) {
-    display_text(8, y, line1, -1, FONT_NORMAL, font_color, COLOR_BLACK);
-    y -= 32;
-  }
-
-#else
-  display_print_color(COLOR_WHITE, COLOR_FATAL_ERROR);
-  if (line1) {
-    display_printf("%s\n", line1);
-  }
-  if (line2) {
-    display_printf("%s\n", line2);
-  }
-  if (line3) {
-    display_printf("%s\n", line3);
-  }
-  if (line4) {
-    display_printf("%s\n", line4);
-  }
-  display_printf("\nPlease unplug the device.\n");
-#endif
-  display_backlight(255);
-  // shutdown();
-  while (!touch_click()) {
-  }
-  restart();
-  for (;;)
-    ;
+  const char *lines[] = {
+    line1,
+    line2,
+    line3,
+    line4,
+    NULL
+  };
+  __fatal(lines);
 }
 
 void error_reset(const char *line1, const char *line2, const char *line3,
                  const char *line4) {
-  display_orientation(0);
-  display_printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-  display_print_color(RGB16(0x69, 0x69, 0x69), COLOR_BLACK);
-  if (line1) {
-    display_printf("%s\n", line1);
-  }
-  if (line2) {
-    display_printf("%s\n", line2);
-  }
-  if (line3) {
-    display_printf("%s\n", line3);
-  }
-  if (line4) {
-    display_printf("%s\n", line4);
-  }
-
-  display_backlight(255);
-  display_printf("\n\n");
-  display_image(9, 50, 46, 40, toi_icon_warning + 12,
-                sizeof(toi_icon_warning) - 12);
-  display_text(8, 140, "System problem detected.", -1, FONT_NORMAL, COLOR_WHITE,
-               COLOR_BLACK);
-  display_text(8, 784, "It will be restart 5s later.", -1, FONT_NORMAL,
-               COLOR_WHITE, COLOR_BLACK);
-
-  hal_delay(5000);
-  restart();
-}
-
-void error_pin_max(void) {
-  display_orientation(0);
-  display_printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-  display_print_color(RGB16(0x69, 0x69, 0x69), COLOR_BLACK);
-
-  display_backlight(255);
-  display_printf("\n\n");
-  display_image(9, 50, 46, 40, toi_icon_warning + 12,
-                sizeof(toi_icon_warning) - 12);
-  display_text(8, 140, "Too many wrong PIN attempts.Storage", -1, FONT_NORMAL,
-               COLOR_WHITE, COLOR_BLACK);
-  display_text(8, 164, "has been wiped.", -1, FONT_NORMAL, COLOR_WHITE,
-               COLOR_BLACK);
-
-  display_text(8, 784, "It will be restart 5s later.", -1, FONT_NORMAL,
-               COLOR_WHITE, COLOR_BLACK);
-
-  hal_delay(5000);
-  restart();
+  const char *lines[] = {
+    line1,
+    line2,
+    line3,
+    line4,
+    NULL
+  };
+  __fatal(lines);
 }
 
 #ifndef NDEBUG
@@ -325,13 +217,4 @@ bool check_all_zeros(const void *data, int len) {
   }
 
   return (result == 0x00);
-}
-
-// this function resets settings changed in one layer (bootloader/firmware),
-// which might be incompatible with the other layers older versions,
-// where this setting might be unknown
-void ensure_compatible_settings(void) {
-#ifdef TREZOR_MODEL_T
-  display_set_big_endian();
-#endif
 }

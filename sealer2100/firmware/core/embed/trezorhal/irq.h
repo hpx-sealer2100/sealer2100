@@ -126,6 +126,9 @@ static inline void restore_irq_pri(uint32_t state) {
 
 //#def  IRQ_PRI_SYSTICK         NVIC_EncodePriority(NVIC_PRIORITYGROUP_4, 0, 0)
 
+// The log UARTs have no FIFOs
+#define IRQ_PRI_LOG            NVIC_EncodePriority(NVIC_PRIORITYGROUP_4, 12, 0)
+
 // The UARTs have no FIFOs, so if they don't get serviced quickly then characters
 // get dropped. The handling for each character only consumes about 0.5 usec
 #define IRQ_PRI_UART            NVIC_EncodePriority(NVIC_PRIORITYGROUP_4, 1, 0)

@@ -5,10 +5,10 @@ from trezor.messages import FileInfo, FileInfoList, ListResDir
 async def list_dir(ctx: wire.Context, msg: ListResDir) -> FileInfoList:
     try:
         files = []
-        for size, attrs, name in io.fatfs.listdir(msg.path):
+        for size, attrs, name in io.fs.dir_open(msg.path):
             if attrs[1] != "h":
                 files.append(FileInfo(name=name, size=size))
-    except io.fatfs.FatFSError as e:
-        raise wire.DataError(f"Fatfs error {e}")
+    except io.fs.FSError as e:
+        raise wire.DataError(f"Fs error {e}")
 
     return FileInfoList(files=files)

@@ -1,14 +1,23 @@
-from trezor import utils, log
+from trezor import log
 from typing import TYPE_CHECKING
 
 from trezor.ui import i18n
 from trezor.airgap.ur.ur import UR
-from trezor.airgap.ur.ur_encoder import UREncoder
+from trezor.airgap.rust_ur.rust_ur import RustEncodedUR
+import ur_parser
 
 if TYPE_CHECKING:
     from typing import List, Iterator, Tuple
     from trezor.messages import EthereumPublicKey
     pass
+
+btc_legacy_path = ("m/44'/0'/0'", "secp256k1")
+btc_segwit_p2sh_path = ("m/49'/0'/0'", "secp256k1")
+btc_segwit_native_path = ("m/84'/0'/0'", "secp256k1")
+btc_taproot_path = ("m/86'/0'/0'", "secp256k1")
+eth_path = ("m/44'/60'/0'", "secp256k1")
+trx_path = ("m/44'/195'/0'", "secp256k1")
+sol_path = ("m/44'/501'/0'/0'", "ed25519")
 
 def parser_path(path: str) -> List[int]:
     # m/44'/60'/0'/0/0
@@ -35,129 +44,126 @@ def parser_path(path: str) -> List[int]:
     return list(convert(item) for item in items)
 
 
-class URIterator:
-    def __init__(self, ur: UR):
-        self.encoder = UREncoder(ur, 256)
-        self.have_yield = False
-
-    def __iter__(self) -> Iterator[str]:
-        return self
-
-    def __next__(self) -> str:
-        if self.encoder.is_single_part() and self.have_yield:
-            raise StopIteration
-        if self.encoder.is_single_part():
-            self.have_yield = True
-        return self.encoder.next_part().upper()
-
 class MetamaskAirgapWallet:
+    def __init__(self):
+        self.rust_encoder = RustEncodedUR()
     def wallet(self) -> str:
         return i18n.Title.connect_metamask_wallet
 
     def description(self) -> str:
-        return i18n.Subtitle.qr_connect_wallet_desc.format("MetaMask")
+        return i18n.Subtitle.qr_connect_wallet_desc_metamask
 
-    def get_path(self) -> str:
-        return "m/44'/60'/0'/0/0"
+    def get_paths(self) -> list[Tuple[str, str]]:
+        return [eth_path]
 
-    async def get_keys(self) -> Tuple[EthereumPublicKey, EthereumPublicKey]:
+    async def get_keys(self, have_initialize: bool = False) -> list[Tuple[str, str]]:
         """
         get `key` and `master key`
         """
         from trezor.wire import DUMMY_CONTEXT as ctx, ActionCancelled
         from apps.base import handle_Initialize
-        from trezor.messages import Initialize, EthereumGetPublicKey
+        from trezor.messages import Initialize, EthereumGetPublicKey,SolanaGetAddress
         from apps.ethereum.get_public_key import get_public_key
+        from apps.solana.get_address import get_address
+        from trezor.crypto import base58
+        from trezor.airgap.rust_ur.utils import bytes_to_hex
 
-        count = 5
-        # step 1: initialize
-        init = Initialize(session_id=b"\x00")
-        await handle_Initialize(ctx, init)
-        while count:
-            try:
-                # step 2: get public key
-                # path is m/44'/60'/0'/0/0
-                # we hope app can watch m/44'/60'/0'/0/*'
-                address_n = parser_path(self.get_path())
-                address_n = address_n[:3]
-                req = EthereumGetPublicKey(address_n=address_n)
-                key = await get_public_key(ctx, req)
+        try:
 
-                # step 2: get master key fingerprint
-                address_n = address_n[:1]
-                req = EthereumGetPublicKey(address_n=address_n)
-                master_key = await get_public_key(ctx, req)
-                return (key, master_key)
-            except ActionCancelled as e:
-                raise e
-            except Exception as e:
-                log.exception(__name__, e)
-                log.debug(__name__, "get public keys failed, retry")
-                count -= 1
-                continue
+            # step 1: initialize
+            if not have_initialize:
+                init = Initialize(session_id=b"\x00")
+                await handle_Initialize(ctx, init)
+            # step 2: get public key
+            paths = self.get_paths()
+            keys = []
+            for path in paths:
+                if(path[1] == "secp256k1"):
+                    address_n = parser_path(path[0])
+                    req = EthereumGetPublicKey(address_n=address_n)
+                    key = await get_public_key(ctx, req)
+                    keys.append((path[0], key.xpub))
+                else:
+                    # for ed25519, we only return the public key, because ed25519 has no master key
+                    address_n = parser_path(path[0])
+                    req = SolanaGetAddress(address_n=address_n)
+                    key = await get_address(ctx, req)
+                    keys.append((path[0], bytes_to_hex(base58.decode(key.address))))
 
-        raise Exception('generate keys failed')
+            return keys
+        except Exception as e:
+            log.exception(__name__, e)
+            raise Exception('generate keys failed')
 
-    async def airgap_address(self) -> Iterator[str]:
-        import_manager = utils.unimport()
-        with import_manager:
-            from trezor.wire import DUMMY_CONTEXT as ctx
-            key, master_key = await self.get_keys()
-            # step 3: generate airgap address, aka HDKey
-            from trezor.airgap.bc_types.coininfo import (
-                CoinInfo,
-                COIN_TYPE_ETH,
-                NETWORK_MAINNET,
-            )
-            from trezor.airgap.bc_types.hdkey import HDKey
-            from trezor.airgap.bc_types.keypath import KeyPath, PathComponent
-            from storage import device
 
-            coin_info = CoinInfo(COIN_TYPE_ETH, NETWORK_MAINNET)
-            # pk
-            key_data = key.node.public_key
-            # chain code
-            chain_code = key.node.chain_code
-            # source fingerprint
-            source_fingerprint = key.node.fingerprint
-            # path is m/44'/60'/0'/0/0
-            # we hope app can watch m/44'/60'/0'/0/*'
-            # origin path, all hardened
-            paths = PathComponent.parser_path(self.get_path())
-            origin = KeyPath(paths[:3], master_key.node.fingerprint, 3)
-            children = KeyPath([paths[3], PathComponent()], depth=0)
-            device_label = device.get_label()
-            sn = device.get_serial()
-            passphrase = "1" if (hasattr(ctx, "_have_passphrase") and ctx._have_passphrase) else "0"
-            device_id = device.get_device_id()
+    async def airgap_connect_ur_str(self) -> str:
+        from trezor.wire import DUMMY_CONTEXT as ctx
+        from apps.airgap import get_mfp
 
-            # add `default label` as device type
-            note = '|'.join([device_label, sn, passphrase, device_id, utils.DEFAULT_LABEL])
-            log.debug(__name__, f"HDKey note: {note}")
-            hdkey = HDKey.derived(
-                key_data,
-                chain_code=chain_code,
-                origin=origin,
-                parent_fingerprint=source_fingerprint,
-                children=children,
-                use_info=coin_info,
-                name=device_label,
-                note=note,
-            )
+        if self.rust_encoder.urEncodeResult is not None:
+            log.debug(__name__, "generate ur for the next part")
+            log.debug(__name__, f"is_multi_part: {self.rust_encoder.is_multi_part()}")
+            if self.rust_encoder.is_multi_part():
+                next_data = self.rust_encoder.get_next_data()
+                if next_data is not None:
+                    return next_data
+                else:
+                    raise Exception("get next part failed")
+            else:
+                return self.rust_encoder.data()
 
-            # UR encode
-            ur = UR(hdkey.type(), hdkey.cbor())
-            return URIterator(ur)
+        else:
+            log.debug(__name__, "generate ur for the first time")
+            keys = await self.get_keys()
+            mfp = await get_mfp(ctx)
+            ur_result = self.airgap_connect_ur(mfp, keys, 'Sealer2100')
+            if ur_result.error_code() == 0:
+                self.rust_encoder.encoding(ur_result)
+                return self.rust_encoder.data()
+            else:
+                log.debug(__name__, f"generate ur failed, error code: {ur_result.error_code()}")
+                log.debug(__name__, f"generate ur failed, error message: {ur_result.error_message()}")
+                raise Exception("generate ur failed")
+
+    def airgap_connect_ur(self,mfp,keys,origin) -> ur_parser.UREncodeResult:
+        return ur_parser.get_connect_metamask_ur(mfp, keys, origin)
+
+
 
 class HpxAirgapWallet(MetamaskAirgapWallet):
+    def __init__(self, paths: list[Tuple[str, str]]| None = None):
+        super().__init__()
+        self.paths = paths
+
     def wallet(self):
         return i18n.Title.connect_hpx_wallet
 
     def description(self) -> str:
-        return i18n.Subtitle.qr_connect_wallet_desc.format(i18n.Text.hpx_wallet)
+        return i18n.Subtitle.qr_connect_wallet_desc_hpx
+
+    def get_paths(self) -> list[Tuple[str, str]]:
+        return self.paths or [btc_legacy_path, btc_segwit_p2sh_path, btc_segwit_native_path, btc_taproot_path, eth_path, trx_path, sol_path]
+
+    def airgap_connect_ur(self,mfp, keys, origin)-> ur_parser.UREncodeResult:
+        from storage import device
+        from trezor.wire import DUMMY_CONTEXT as ctx
+        label = device.get_label()
+        device_id = device.get_device_id()
+        sn = device.get_serial()
+        passphrase_enabled = hasattr(ctx, "_have_passphrase") and ctx._have_passphrase
+        return ur_parser.get_connect_hpx_ur(mfp, keys, origin, device_id = device_id, label = label, sn = sn, passphrase = passphrase_enabled)
+
 class OkxAirgapWallet(MetamaskAirgapWallet):
     def wallet(self):
         return i18n.Title.connect_okx_wallet
 
     def description(self) -> str:
         return i18n.Subtitle.qr_connect_wallet_desc.format(i18n.Text.okx_wallet)
+
+    def get_paths(self) -> list[Tuple[str, str]]:
+        return [btc_legacy_path, btc_segwit_p2sh_path, btc_segwit_native_path, btc_taproot_path, eth_path, trx_path]
+
+class BtcAirgapWallet(MetamaskAirgapWallet):
+
+    def get_paths(self) -> list[Tuple[str, str]]:
+        return [btc_legacy_path, btc_segwit_p2sh_path, btc_segwit_native_path, btc_taproot_path]

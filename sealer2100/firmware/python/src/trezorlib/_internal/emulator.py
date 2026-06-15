@@ -61,6 +61,12 @@ class Emulator:
         elif not self.profile_dir.is_dir():
             raise ValueError("profile_dir is not a directory")
 
+        profile_user_dir = self.profile_dir / "HyperMateMax.user_data"
+        if not profile_user_dir.exists():
+            profile_user_dir.mkdir(parents=True)
+        elif not profile_user_dir.is_dir():
+            raise ValueError("profile_user_dir is not a directory")
+
         self.workdir = self.profile_dir
 
         self.storage = self.profile_dir / self.STORAGE_FILENAME

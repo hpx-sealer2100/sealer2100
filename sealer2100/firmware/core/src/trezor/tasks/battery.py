@@ -12,20 +12,23 @@ LOW_STATE_OF_CHARGE = 5
 
 async def updating_battery_state():
 
+    if not battery.exist():
+        log.debug(__name__, "battery not exist")
+        StatusBar.instance().show_battery_img(100, True)
+        return
+
     cached_charging = battery.charging()
     cached_state_of_charge = battery.state_of_charge()
 
     StatusBar.instance().show_battery_img(cached_state_of_charge, cached_charging)
     StatusBar.instance().show_charging(cached_charging)
 
-    if not battery.exist():
-        StatusBar.instance().show_battery_img(100, True)
-        return
-
     alert = LowPowerAlert()
     while True:
         await loop.sleep(1000)
         state_of_charge = battery.state_of_charge()
+        if state_of_charge is None:
+            continue
         charging = battery.charging()
 
         state_of_charge_changed = cached_state_of_charge != state_of_charge

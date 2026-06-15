@@ -20,103 +20,112 @@
 #ifndef __TREZORHAL_IMAGE_H__
 #define __TREZORHAL_IMAGE_H__
 
+#include <assert.h>
 #include <stdint.h>
+
+#include "flash.h"
+#include "keys.h"
 #include "secbool.h"
+#include "sha2.h"
 
-#define BOARDLOADER_START 0x08000000
-#define BOOTLOADER_START 0x08020000
-#define FIRMWARE_START 0x08060000
+#define IMAGE_HEADER_SIZE            0x400 // size of the bootloader or firmware header
+#define IMAGE_SIG_SIZE               64    // ed25519 signature size, R||S
 
-#define IMAGE_HEADER_SIZE 0x400  // size of the bootloader or firmware header
-#define IMAGE_SIG_SIZE 65
-#define IMAGE_CHUNK_SIZE (128 * 1024)
-#define IMAGE_INIT_CHUNK_SIZE (16 * 1024)
+#define IMAGE_MIN_REQUIRED_SIG_COUNT 1
 
-#define VENDORHEADER_IMAGE_MAGIC 0x56545048  // HPTV
+#define BOOTLOADER_START             0x08000000
+#define FIRMWARE_START               0x08060000
 
-#define BOOTLOADER_IMAGE_MAGIC 0x42545048  // HPTB
-#define BOOTLOADER_IMAGE_MAXSIZE (BOOTLOADER_SECTORS_COUNT * IMAGE_CHUNK_SIZE)
+#define BOOTLOADER_IMAGE_MAGIC       0x42545048 // HPTB
+#define BOOTLOADER_IMAGE_MAX_SIZE    (BOOTLOADER_SECTORS_COUNT * FLASH_BOOTLOADER_SECTOR_SIZE)
+#define FIRMWARE_IMAGE_MAGIC         0x46545048 // HPTF
+#define FIRMWARE_IMAGE_MAX_SIZE      (FIRMWARE_SECTORS_COUNT * FLASH_FIRMWARE_SECTOR_SIZE)
+#define BLE_IMAGE_MAGIC              0x33383235 // 5283
+#define SE_IMAGE_MAGIC               0x39384854 // TH89
+#define IRIS_IMAGE_MAGIC             0x53495249 // IRIS
 
-#define FIRMWARE_IMAGE_MAGIC 0x46545048  // HPTF
-#define FIRMWARE_IMAGE_MAXSIZE (FIRMWARE_SECTORS_COUNT * IMAGE_CHUNK_SIZE)
-
-#define FIRMWARE_IMAGE_MAGIC_BLE 0x33383235 // 5283
-#define FIRMWARE_IMAGE_MAXSIZE_BLE (128 * 1024)
-
-#define FIRMWARE_IMAGE_MAGIC_SE 0x6d636573 // SECM
-#define FIRMWARE_IMAGE_MAXSIZE_SE (128 * 1024)
-
-#define FIRMWARE_IMAGE_MAGIC_NORF 0x66726f6e // NORF
-#define FIRMWARE_IMAGE_MAXSIZE_NORF (128 * 1024)
-
-#define FIRMWARE_IMAGE_MAGIC_EMMC 0x636d6d65 // EMMC
-#define FIRMWARE_IMAGE_MAXSIZE_EMMC (512 * 1024)
+typedef enum {
+    IMAGE_TYPE_UNKNOWN,
+    IMAGE_TYPE_BOOTLOADER,
+    IMAGE_TYPE_FIRMWARE,
+    IMAGE_TYPE_SE,
+    IMAGE_TYPE_BLE,
+    IMAGE_TYPE_IRIS,
+} image_type_t;
 
 typedef struct {
-  uint32_t magic;
-  uint32_t hdrlen;
-  uint32_t expiry;
-  uint32_t codelen;
-  uint32_t version;
-  uint32_t fix_version;
-  uint32_t hypermate_version;
-  // uint8_t reserved[4];
-  uint8_t hashes[512];
-  // uint8_t reserved[415];
-  uint8_t sigmask;
-  uint8_t sig[64];
-  uint8_t fingerprint[32];
-} image_header;
-
-#define MAX_VENDOR_PUBLIC_KEYS 8
-
-#define VTRUST_WAIT 0x000F
-#define VTRUST_RED 0x0010
-#define VTRUST_CLICK 0x0020
-#define VTRUST_STRING 0x0040
-#define VTRUST_ALL (VTRUST_WAIT | VTRUST_RED | VTRUST_CLICK | VTRUST_STRING)
+    union {
+        uint32_t value;
+        struct {
+            uint8_t build;
+            uint8_t patch;
+            uint8_t minor;
+            uint8_t major;
+        };
+    };
+} image_version_t;
 
 typedef struct {
-  uint32_t magic;
-  uint32_t hdrlen;
-  uint32_t expiry;
-  uint16_t version;
-  uint8_t vsig_m;
-  uint8_t vsig_n;
-  uint16_t vtrust;
-  // uint8_t reserved[14];
-  const uint8_t *vpub[MAX_VENDOR_PUBLIC_KEYS];
-  uint8_t vstr_len;
-  const char *vstr;
-  const uint8_t *vimg;
-  uint8_t sigmask;
-  uint8_t sig[64];
-} vendor_header;
+    uint32_t magic;                // magic of the image, need be protected
+    image_version_t version;       // version of the image, need be protected
+    uint32_t header_size;          // size of the header, need be protected
+    uint32_t code_size;            // size of the code, need be protected
+    uint32_t required_sig_count;   // required signature count, need be protected
+    uint8_t _reserved[0x80 - 20];  // reserved, for future use
+    // filed under this filed, no need to be protected, fill 0x00 when compute the digest
+    uint8_t digest[32];                                       // digest of the image
+    uint32_t sig_mask;                                        // signature mask
+    uint8_t sigs[KEY_N][IMAGE_SIG_SIZE];                      // signatures of the image, ed25519 signature
+    uint8_t padding[0x380 - 32 - 4 - KEY_N * IMAGE_SIG_SIZE]; // padding to 0x400
+} image_header_t;
 
-secbool __wur load_image_header(const uint8_t *const data, const uint32_t magic,
-                                const uint32_t maxsize, uint8_t key_m,
-                                uint8_t key_n, const uint8_t *const *keys,
-                                image_header *const hdr);
+_Static_assert(
+    IMAGE_HEADER_SIZE == sizeof(image_header_t), "IMAGE_HEADER_SIZE must be equal to sizeof(image_header_t)"
+);
 
-secbool __wur load_ble_image_header(const uint8_t *const data,
-                                    const uint32_t magic,
-                                    const uint32_t maxsize,
-                                    image_header *const hdr);
+typedef struct {
+    uint8_t vector_table[0x400];
+    image_header_t header;
+    uint8_t code[0];
+} image_bootloader_t;
 
-secbool __wur load_vendor_header(const uint8_t *const data, uint8_t key_m,
-                                 uint8_t key_n, const uint8_t *const *keys,
-                                 vendor_header *const vhdr);
+typedef struct {
+    image_header_t header;
+    uint8_t code[0];
+} image_firmware_t;
 
-secbool __wur read_vendor_header(const uint8_t *const data,
-                                 vendor_header *const vhdr);
+#define BOOTLOADER ((const image_bootloader_t* const)BOOTLOADER_START)
+#define FIRMWARE ((const image_firmware_t* const)FIRMWARE_START)
 
-void vendor_header_hash(const vendor_header *const vhdr, uint8_t *hash);
+image_type_t image_get_type(const uint8_t* const data);
 
-secbool __wur check_single_hash(const uint8_t *const hash,
-                                const uint8_t *const data, int len);
+const char* image_get_desc_name(image_type_t image_type);
 
-secbool __wur check_image_contents(const image_header *const hdr,
-                                   uint32_t firstskip, const uint8_t *sectors,
-                                   int blocks);
+int image_version_parse(const char* str, image_version_t* version);
+void image_version_format(image_version_t version, char str[12]);
+
+// 0: a = b, +n: a > b, -n: a < b
+int image_version_compare(image_version_t* const a, image_version_t* const b);
+
+secbool __wur
+load_ble_image_header(const uint8_t* const data, const uint32_t maxsize, image_header_t* const hdr);
+
+static inline secbool __wur image_is_bootloader(uint32_t address) {
+    return ((image_bootloader_t*)address)->header.magic == BOOTLOADER_IMAGE_MAGIC;
+}
+
+static inline secbool __wur image_is_firmware(uint32_t address) {
+    return ((image_firmware_t*)address)->header.magic == FIRMWARE_IMAGE_MAGIC;
+}
+
+void image_print_header(const image_header_t* const header);
+
+void image_header_hash_update(SHA256_CTX* ctx, const image_header_t* const header);
+
+secbool __wur image_header_verify(const image_header_t* const header);
+
+secbool __wur image_verify_bootloader(uint32_t address);
+
+secbool __wur image_verify_firmware(uint32_t address);
 
 #endif
