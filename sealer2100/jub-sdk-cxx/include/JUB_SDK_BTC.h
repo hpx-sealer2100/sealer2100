@@ -102,6 +102,9 @@ typedef enum {
     P2SH_MULTISIG = 0x02,
     QRC20 = 0x03,
     P2WSH_MULTISIG = 0x04,
+    P2SH_P2WPKH = 0x05,
+    P2WPKH = 0x06,
+    TAPROOT = 0x07
 } SCRIPT_BTC_TYPE;
 
 

@@ -155,7 +155,7 @@ public:
     virtual JUB_RV SelectAppletETH() override;
     virtual JUB_RV GetAppletVersionETH(stVersion& version) override;
 
-    virtual JUB_RV GetAddressETH(const std::string& path, const JUB_UINT16 tag, std::string& address) override;
+    virtual JUB_RV GetAddressETH(const std::string& path, uint64_t chainId, const JUB_UINT16 tag, std::string& address) override;
 
     virtual JUB_RV GetHDNodeETH(const JUB_BYTE format, const std::string& path, std::string& pubkey) override;
 

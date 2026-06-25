@@ -17,7 +17,7 @@ extern "C" {
 
 
 typedef struct stContextCfgETH : stContextCfg {
-    uint32_t chainID;
+    uint64_t chainID;
 
     stContextCfgETH() {
         chainID = 0;
@@ -37,6 +37,20 @@ typedef struct stERC20TokenInfo {
     virtual ~stERC20TokenInfo() {}
 } ERC20_TOKEN_INFO;
 
+typedef struct {
+    uint64_t chainID;      // Chain ID of the network, must match CONTEXT_CONFIG_ETH.chainID
+    uint64_t slip44ID;     // SLIP-0044 coin type of the network (reserved, currently unused)
+    JUB_CHAR_CPTR name;    // Network name
+    JUB_CHAR_CPTR symbol;  // Native currency symbol of the network
+} JUB_ETH_NETWORK_INFO;
+
+typedef struct {
+    uint64_t chainID;      // Chain ID of the network to which the token belongs
+    JUB_CHAR_CPTR name;    // Token name
+    JUB_CHAR_CPTR symbol;  // Token symbol
+    JUB_CHAR_CPTR address; // Token contract address
+    JUB_UINT32 decimals;   // Token decimal precision
+} JUB_ERC20_TOKEN_INFO;
 
 /*****************************************************************************
  * @function name : JUB_CreateContextETH
@@ -163,19 +177,64 @@ JUB_RV JUB_SetERC20TokensETH(IN JUB_UINT16 contextID,
 
 /*****************************************************************************
  * @function name : JUB_SetERC20TokenETH
- * @in  param : contextID - context ID
- *            : tokenName - ETH token name
- *            : unitDP - unit decimal place
- *            : contractAddress - contract address
- * @out param : none.
- * @last change :
+ * @description   : Set ERC20 token information for the current ETH context.
+ *                  (Deprecated, use JUB_SetERC20TokenETHV2 instead.)
+ *
+ * @in  param     : contextID        - Context ID
+ *                : tokenName        - ERC20 token name
+ *                : unitDP           - Token decimal precision
+ *                : contractAddress  - ERC20 token contract address
+ *
+ * @out param     : none
+ *
+ * @return        : JUB_RV           - Result code
+ *
+ * @last change   :
  *****************************************************************************/
+JUB_DEPRECATED
 JUB_COINCORE_DLL_EXPORT
 JUB_RV JUB_SetERC20TokenETH(IN JUB_UINT16 contextID,
                             IN JUB_CHAR_CPTR tokenName,
                             IN JUB_UINT16 unitDP,
                             IN JUB_CHAR_CPTR contractAddress);
 
+
+/*****************************************************************************
+ * @function name : JUB_SetERC20TokenETHV2
+ * @note This only works on firmware versions >= 1.2.35.
+ * @description   : Set ERC20 token information with network configuration
+ *                  for the current ETH context.
+ *
+ * @in  param     : contextID        - Context ID
+ *                : networkInfo      - Network information (chain ID, name, symbol)
+ *                : tokenInfo        - ERC20 token information
+ *
+ * @out param     : none
+ *
+ * @return        : JUB_RV           - Result code
+ *
+ * @last change   :
+ *****************************************************************************/
+JUB_RV JUB_SetERC20TokenETHV2(IN JUB_UINT16 contextID,
+                              IN JUB_ETH_NETWORK_INFO networkInfo,
+                              IN JUB_ERC20_TOKEN_INFO tokenInfo);
+
+
+/*****************************************************************************
+ * @function name : JUB_SetNetworkETHV2
+ * @description   : Set network information for the current ETH context.
+ * @note This only works on firmware versions >= 1.2.35.
+ * @in  param     : contextID        - Context ID
+ *                : networkInfo          - Network information (chain ID, name, symbol)
+ *
+ * @out param     : none
+ *
+ * @return        : JUB_RV           - Result code
+ *
+ * @last change   :
+ *****************************************************************************/
+JUB_RV JUB_SetNetworkETHV2(IN JUB_UINT16 contextID,
+                           IN JUB_ETH_NETWORK_INFO networkInfo);
 
 /*****************************************************************************
  * @function name : JUB_BuildERC20TransferAbiETH

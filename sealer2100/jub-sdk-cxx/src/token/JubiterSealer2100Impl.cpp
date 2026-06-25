@@ -23,7 +23,8 @@ using nlohmann::json;
 
 using namespace hw::trezor::messages::common;
 using namespace hw::trezor::messages::management;
-using namespace hw::trezor::messages::FirmwareUpdate;
+using namespace hw::trezor::messages::bootloader;
+using namespace hw::trezor::messages::emmc;
 
 namespace jub {
 
@@ -174,7 +175,10 @@ JUB_RV JubiterSealer2100Impl::Get_Features(Features * msg_Features){
         // Decode the message using standard protobuf
         if (!msg_Features->ParseFromString(msgOutPb)) {
             return JUBR_ERROR;
-        }            
+        }
+
+        // cache features
+        features = *msg_Features;
     }
     catch (...) {
         return JUBR_ARGUMENTS_BAD;
@@ -991,6 +995,9 @@ JUB_RV JubiterSealer2100Impl::IrisUpdateFirmware(IN JUB_BYTE_PTR firmwareFilePay
                                                  IN JUB_UINT32 firmwareFileSize,
                                                  IN bool reboot_on_success)
 {
+    if (memcmp(firmwareFilePayload+1024, "HPTB", 4) == 0) {
+        return updateBootloader(firmwareFilePayload, firmwareFileSize, reboot_on_success);
+    }
     if (memcmp(firmwareFilePayload, "HPTB", 4) == 0) {
         return updateBootloader(firmwareFilePayload, firmwareFileSize, reboot_on_success);
     }
@@ -1788,11 +1795,11 @@ JUB_RV JubiterSealer2100Impl::GetFwVersion(JUB_BYTE fwVersion[4]) {
     if (JUBR_OK != rv) {
         return rv;
     }
-    if(!msg_Features.has_digitalshield_version()){
+    if(!msg_Features.has_hypermate_version()){
         return JUBR_ARGUMENTS_BAD;
     }
     memset(fwVersion,0x00,4);
-    std::string strVer = msg_Features.digitalshield_version();
+    std::string strVer = msg_Features.hypermate_version();
     size_t iLength = (strVer.length() < 4) ? strVer.length() : 4;
     memcpy(fwVersion,strVer.data(),iLength);
     return rv;

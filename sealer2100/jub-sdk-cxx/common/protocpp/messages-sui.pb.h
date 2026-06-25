@@ -516,6 +516,8 @@ class SuiSignTx :
   enum : int {
     kAddressNFieldNumber = 1,
     kRawTxFieldNumber = 2,
+    kDestinationFieldNumber = 3,
+    kSuiAmountFieldNumber = 4,
   };
   // repeated uint32 address_n = 1;
   int address_n_size() const;
@@ -540,15 +542,38 @@ class SuiSignTx :
   std::string* release_raw_tx();
   void set_allocated_raw_tx(std::string* raw_tx);
 
+  // required string destination = 3;
+  bool has_destination() const;
+  void clear_destination();
+  const std::string& destination() const;
+  void set_destination(const std::string& value);
+  void set_destination(std::string&& value);
+  void set_destination(const char* value);
+  void set_destination(const char* value, size_t size);
+  std::string* mutable_destination();
+  std::string* release_destination();
+  void set_allocated_destination(std::string* destination);
+
+  // required uint64 sui_amount = 4;
+  bool has_sui_amount() const;
+  void clear_sui_amount();
+  ::PROTOBUF_NAMESPACE_ID::uint64 sui_amount() const;
+  void set_sui_amount(::PROTOBUF_NAMESPACE_ID::uint64 value);
+
   // @@protoc_insertion_point(class_scope:hw.trezor.messages.sui.SuiSignTx)
  private:
   class _Internal;
+
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint32 > address_n_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr raw_tx_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr destination_;
+  ::PROTOBUF_NAMESPACE_ID::uint64 sui_amount_;
   friend struct ::TableStruct_messages_2dsui_2eproto;
 };
 // -------------------------------------------------------------------
@@ -1247,6 +1272,82 @@ inline void SuiSignTx::set_allocated_raw_tx(std::string* raw_tx) {
   }
   raw_tx_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), raw_tx);
   // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.sui.SuiSignTx.raw_tx)
+}
+
+// required string destination = 3;
+inline bool SuiSignTx::has_destination() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void SuiSignTx::clear_destination() {
+  destination_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline const std::string& SuiSignTx::destination() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.sui.SuiSignTx.destination)
+  return destination_.GetNoArena();
+}
+inline void SuiSignTx::set_destination(const std::string& value) {
+  _has_bits_[0] |= 0x00000002u;
+  destination_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.sui.SuiSignTx.destination)
+}
+inline void SuiSignTx::set_destination(std::string&& value) {
+  _has_bits_[0] |= 0x00000002u;
+  destination_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.sui.SuiSignTx.destination)
+}
+inline void SuiSignTx::set_destination(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000002u;
+  destination_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.sui.SuiSignTx.destination)
+}
+inline void SuiSignTx::set_destination(const char* value, size_t size) {
+  _has_bits_[0] |= 0x00000002u;
+  destination_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.sui.SuiSignTx.destination)
+}
+inline std::string* SuiSignTx::mutable_destination() {
+  _has_bits_[0] |= 0x00000002u;
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.sui.SuiSignTx.destination)
+  return destination_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* SuiSignTx::release_destination() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.sui.SuiSignTx.destination)
+  if (!has_destination()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000002u;
+  return destination_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void SuiSignTx::set_allocated_destination(std::string* destination) {
+  if (destination != nullptr) {
+    _has_bits_[0] |= 0x00000002u;
+  } else {
+    _has_bits_[0] &= ~0x00000002u;
+  }
+  destination_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), destination);
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.sui.SuiSignTx.destination)
+}
+
+// required uint64 sui_amount = 4;
+inline bool SuiSignTx::has_sui_amount() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void SuiSignTx::clear_sui_amount() {
+  sui_amount_ = PROTOBUF_ULONGLONG(0);
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint64 SuiSignTx::sui_amount() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.sui.SuiSignTx.sui_amount)
+  return sui_amount_;
+}
+inline void SuiSignTx::set_sui_amount(::PROTOBUF_NAMESPACE_ID::uint64 value) {
+  _has_bits_[0] |= 0x00000004u;
+  sui_amount_ = value;
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.sui.SuiSignTx.sui_amount)
 }
 
 // -------------------------------------------------------------------

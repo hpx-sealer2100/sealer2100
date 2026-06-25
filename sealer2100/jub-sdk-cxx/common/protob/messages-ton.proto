@@ -37,8 +37,7 @@ message TonGetAddress {
  * @end
  */
 message TonAddress {
-    required bytes public_key = 1;
-    required string address = 2;        // ton base64 user-friendly url-safe address
+    required string address = 1;        // ton base64 user-friendly url-safe address
 }
 
 /**
@@ -82,6 +81,49 @@ message TonSignMessage {
 message TonSignedMessage {
     optional bytes signature = 1;                   // signed transaction message
     optional bytes signning_message = 2;            // message to sign
+    optional uint32 init_data_length = 3;           // data length
+}
+
+/**
+ * Request: Require Device to sign toncoin/jetton message
+ * @start
+ * @next TonSignedTx
+ * @next Failure
+ */
+message TonSignTx {
+    repeated uint32 address_n = 1;                                  // BIP-32 path to derive the key from master node
+    required string address = 2;                                // destination address of the message
+    optional string jetton_master_address = 3;                      // Jetton master smart contract address
+    optional string jetton_wallet_address = 4;                      // Jetton wallet smart contract address 
+    required uint64 amount = 5;                                 // TON value for gas
+    optional uint64 jetton_amount = 6;                              // jetton value
+    optional uint64 fwd_fee = 7 [default=0];                        // toncoin is needed to transfer notification message
+    optional string comment = 8;                                    // message comment
+    optional bool is_raw_data = 9 [default=false];                  // raw data flag
+    optional uint32 mode = 10 [default=3];                          // message modes
+    optional uint32 seqno = 11;                                     // message sequence number
+    required uint64 valid_until = 12;                                // message expiration time
+    optional TonWalletVersion wallet_version = 13 [default=V4R2];   // ton wallet version
+    optional uint32 wallet_id = 14 [default=698983191];             // 698983191 is the default subwallet_id value
+    optional TonWorkChain workchain = 15 [default=BASECHAIN];       // 0: BaseChain, 1: MasterChain
+    optional bool is_bounceable = 16 [default=false];               // bounceable flag
+    optional bool is_testnet_only = 17 [default=false];             // testnet only flag
+    repeated string ext_destination = 18;
+    repeated uint64 ext_ton_amount = 19;
+    repeated string ext_payload = 20;
+    optional bytes jetton_amount_bytes = 21;                        // jetton value in bytes
+    optional bytes init_data_initial_chunk=22;
+    optional uint32 init_data_length = 23;                         // data length
+    optional bytes signing_message_repr = 24;                       // signing message hash
+}
+/**
+ * Response: transaction signature corresponding to TonSignTx
+ * @end
+ * @next TonSignedTx
+ */
+message TonSignedTx {
+    optional bytes signature = 1;                   // signed transaction message
+    optional bytes serialized_tx = 2;            // message to sign
     optional uint32 init_data_length = 3;           // data length
 }
 

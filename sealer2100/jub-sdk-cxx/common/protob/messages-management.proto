@@ -113,14 +113,14 @@ message Features {
     optional bool experimental_features = 40;   // are experimental message types enabled?
 
     optional uint32 offset = 500;
-    optional string ble_name = 501;             // Digitalshield BLE name
+    optional string ble_name = 501;             // Hypermate BLE name
     optional string ble_ver = 502;
     optional bool ble_enable = 503;
     optional bool se_enable = 504;
     optional string se_ver = 506;
     optional bool backup_only = 507;
-    optional string digitalshield_version = 508;       // Digitalshield version
-    optional string digitalshield_serial = 509;
+    optional string hypermate_version = 508;       // Hypermate version
+    optional string hypermate_serial = 509;
     optional string bootloader_version = 510;
 
     optional string serial_no= 511;
@@ -137,7 +137,6 @@ message Features {
     optional uint32 battery = 601;          // battery state of charage [0, 100]
     optional bool busy = 41;                    // is the device busy, showing "Do not disconnect"?
 }
-
 /**
  * Request: soft-lock the device. Following actions will require PIN. Passphrases remain cached.
  * @start
@@ -594,6 +593,34 @@ message SESignMessage {
  */
 message SEMessageSignature {
     required bytes signature = 1;   // signature of the message
+}
+
+/**
+ * Request: SE erase storage
+ * @end
+ */
+message SEInitialize {
+}
+
+ /**
+  * Request: SE Initialize done
+  * @end
+  */
+ message SEInitializeDone {
+ }
+
+ /**
+  * Request: SE back to rom boot
+  * @end
+  */
+ message SEBackToRomBoot {
+ }
+
+ /**
+  * Request: Wipe SE user storage
+  * @end
+  */
+message SEWipeUserStorage{
 }
 
 /**

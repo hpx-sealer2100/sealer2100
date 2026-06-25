@@ -219,27 +219,7 @@ enum MessageType {
     MessageType_EthereumTypedDataValueAck = 468 [(wire_in) = true];
     MessageType_EthereumTypedDataSignature = 469 [(wire_out) = true];
     MessageType_EthereumSignTypedHash = 470 [(wire_in) = true];
-
-    // Ethereum Digitalshield
-    MessageType_EthereumGetPublicKeyDigitalshield = 20100 [(wire_in) = true];
-    MessageType_EthereumPublicKeyDigitalshield = 20101 [(wire_out) = true];
-    MessageType_EthereumGetAddressDigitalshield = 20102 [(wire_in) = true];
-    MessageType_EthereumAddressDigitalshield = 20103 [(wire_out) = true];
-    MessageType_EthereumSignTxDigitalshield = 20104 [(wire_in) = true];
-    MessageType_EthereumSignTxEIP1559Digitalshield = 20105 [(wire_in) = true];
-    MessageType_EthereumTxRequestDigitalshield = 20106 [(wire_out) = true];
-    MessageType_EthereumTxAckDigitalshield = 20107 [(wire_in) = true];
-    MessageType_EthereumSignMessageDigitalshield = 20108 [(wire_in) = true];
-    MessageType_EthereumVerifyMessageDigitalshield = 20109 [(wire_in) = true];
-    MessageType_EthereumMessageSignatureDigitalshield = 20110 [(wire_out) = true];
-    MessageType_EthereumSignTypedDataDigitalshield = 20111 [(wire_in) = true];
-    MessageType_EthereumTypedDataStructRequestDigitalshield = 20112 [(wire_out) = true];
-    MessageType_EthereumTypedDataStructAckDigitalshield = 20113 [(wire_in) = true];
-    MessageType_EthereumTypedDataValueRequestDigitalshield = 20114 [(wire_out) = true];
-    MessageType_EthereumTypedDataValueAckDigitalshield = 20115 [(wire_in) = true];
-    MessageType_EthereumTypedDataSignatureDigitalshield = 20116 [(wire_out) = true];
-    MessageType_EthereumSignTypedHashDigitalshield = 20117 [(wire_in) = true];
-    MessageType_EthereumSignMessageEIP712 = 10200 [(wire_in) = true];
+    MessageType_EthereumStoreDefinition = 471 [(wire_in) = true];
 
     // NEM
     MessageType_NEMGetAddress = 67 [(wire_in) = true];
@@ -422,6 +402,8 @@ enum MessageType {
     MessageType_TonSignProof = 11905 [(wire_in) = true];
     MessageType_TonSignedProof = 11906 [(wire_out) = true];
     MessageType_TonTxAck = 11907 [(wire_in) = true];
+    MessageType_TonSignTx = 11908 [(wire_in) = true];
+    MessageType_TonSignedTx = 11909 [(wire_out) = true];
 
     // tron
     MessageType_TronGetAddress = 10501 [(wire_in) = true];
@@ -496,7 +478,7 @@ enum MessageType {
     MessageType_KaspaSignedTx = 11303 [(wire_out) = true];
     MessageType_KaspaTxInputRequest = 11304 [(wire_out) = true];
     MessageType_KaspaTxInputAck = 11305 [(wire_in) = true];
-    
+
     // Nexa
     MessageType_NexaGetAddress = 11400 [(wire_in) = true];
     MessageType_NexaAddress = 11401 [(wire_out) = true];
@@ -505,7 +487,7 @@ enum MessageType {
     MessageType_NexaTxInputRequest = 11404 [(wire_out) = true];
     MessageType_NexaTxInputAck = 11405 [(wire_in) = true];
 
-    //Digitalshield
+    //Hypermate
     MessageType_DeviceBackToBoot = 903 [(wire_in) = true];
     MessageType_RebootToBoardloader = 904 [(wire_in) = true];
 
@@ -531,4 +513,8 @@ enum MessageType {
     MessageType_ResourceUpdate = 10022 [(wire_in) = true];
     MessageType_ListResDir = 10023 [(wire_in) = true];
     MessageType_FileInfoList = 10024 [(wire_out) = true];
+    MessageType_SEInitialize = 10025 [(wire_in) = true, (wire_bootloader) = true];
+    MessageType_SEInitializeDone = 10026 [(wire_in) = true, (wire_bootloader) = true];
+    MessageType_SEBackToRomBoot = 10027 [(wire_in) = true, (wire_bootloader) = true];
+    MessageType_SEWipeUserStorage = 10028 [(wire_in) = true, (wire_bootloader) = true];
 }

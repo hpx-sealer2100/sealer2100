@@ -37,6 +37,21 @@ extern JUB_ENUM_PUB_FORMAT (^inlinePubFormat)(JUB_NS_ENUM_PUB_FORMAT);
 @synthesize contractAddress;
 @end
 
+@implementation ETHNetworkInfoV2
+@synthesize name;
+@synthesize symbol;
+@synthesize chain_id;
+@synthesize slip44_id;
+@end
+
+@implementation ERC20TokenInfoV2
+@synthesize name;
+@synthesize symbol;
+@synthesize chain_id;
+@synthesize address;
+@synthesize decimals;
+@end
+
 // ERC20TokenInfo* -> ERC20_TOKEN_INFO
 ERC20_TOKEN_INFO (^inlineERC20TokenInfo)(ERC20TokenInfo*) = ^(ERC20TokenInfo* tokenInfo) {
     ERC20_TOKEN_INFO token;
@@ -365,6 +380,45 @@ ERC20TokenInfo* (^inlineNSERC20TokenInfo)(ERC20_TOKEN_INFO) = ^(ERC20_TOKEN_INFO
     }
     
     JUB_RV rv = JUB_SetERC20TokenETH(contextID, pTokenName, unitDP, pContractAddress);
+    if (JUBR_OK != rv) {
+        self.lastError = rv;
+    }
+}
+
+- (void)JUB_SetETHV2:(NSUInteger)contextID
+             network:(ETHNetworkInfoV2*)network
+{
+    JUB_ETH_NETWORK_INFO _network = {
+        .chainID = static_cast<uint64_t>(network.chain_id),
+        .slip44ID = static_cast<uint64_t>(network.slip44_id),
+        .name = [network.name UTF8String],
+        .symbol = [network.symbol UTF8String],
+    };
+    auto rv = JUB_SetNetworkETHV2(contextID, _network);
+    if (JUBR_OK != rv) {
+        self.lastError = rv;
+    }
+}
+
+- (void)JUB_SetETHV2:(NSUInteger)contextID
+             network:(ETHNetworkInfoV2*)network
+               token:(ERC20TokenInfoV2*)token;
+{
+    JUB_ETH_NETWORK_INFO _network = {
+        .name = [network.name UTF8String],
+        .symbol = [network.symbol UTF8String],
+        .chainID = static_cast<uint64_t>(network.chain_id),
+        .slip44ID = static_cast<uint64_t>(network.slip44_id),
+    };
+    
+    JUB_ERC20_TOKEN_INFO _token = {
+        .name = [token.name UTF8String],
+        .symbol = [token.symbol UTF8String],
+        .address = [token.address UTF8String],
+        .chainID = static_cast<uint64_t>(network.chain_id),
+        .decimals = static_cast<JUB_UINT32>(token.decimals),
+    };
+    auto rv = JUB_SetERC20TokenETHV2(contextID, _network, _token);
     if (JUBR_OK != rv) {
         self.lastError = rv;
     }

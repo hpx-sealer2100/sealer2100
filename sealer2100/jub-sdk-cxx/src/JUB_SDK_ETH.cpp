@@ -256,6 +256,7 @@ JUB_RV JUB_SetERC20TokensETH(IN JUB_UINT16 contextID,
  * @out param : none.
  * @last change :
  *****************************************************************************/
+JUB_DEPRECATED
 JUB_COINCORE_DLL_EXPORT
 JUB_RV JUB_SetERC20TokenETH(IN JUB_UINT16 contextID,
                             IN JUB_CHAR_CPTR tokenName,
@@ -271,6 +272,58 @@ JUB_RV JUB_SetERC20TokenETH(IN JUB_UINT16 contextID,
 
     return JUBR_OK;
 }
+
+/*****************************************************************************
+ * @function name : JUB_SetERC20TokenETHV2
+ * @description   : Set ERC20 token information with network configuration
+ *                  for the current ETH context.
+ *
+ * @in  param     : contextID        - Context ID
+ *                : networkInfo      - Network information (chain ID, name, symbol)
+ *                : tokenInfo        - ERC20 token information
+ *
+ * @out param     : none
+ *
+ * @return        : JUB_RV           - Result code
+ *
+ * @last change   :
+ *****************************************************************************/
+JUB_RV JUB_SetERC20TokenETHV2(IN JUB_UINT16 contextID,
+                              IN JUB_ETH_NETWORK_INFO networkInfo,
+                              IN JUB_ERC20_TOKEN_INFO tokenInfo) {
+    JUB_CHECK_CONTEXT_ETH(contextID);
+
+    auto context = (jub::ContextETH*)jub::ContextManager::GetInstance()->GetOne(contextID);
+    JUB_CHECK_NULL(context);
+    JUB_VERIFY_RV(context->StoreDefinition(networkInfo, tokenInfo));
+
+    return JUBR_OK;
+}
+
+/*****************************************************************************
+ * @function name : JUB_SetNetworkETHV2
+ * @description   : Set network information for the current ETH context.
+ *
+ * @in  param     : contextID        - Context ID
+ *                : networkInfo          - Network information (chain ID, name, symbol)
+ *
+ * @out param     : none
+ *
+ * @return        : JUB_RV           - Result code
+ *
+ * @last change   :
+ *****************************************************************************/
+JUB_RV JUB_SetNetworkETHV2(IN JUB_UINT16 contextID,
+                           IN JUB_ETH_NETWORK_INFO networkInfo) {
+    JUB_CHECK_CONTEXT_ETH(contextID);
+
+    auto context = (jub::ContextETH*)jub::ContextManager::GetInstance()->GetOne(contextID);
+    JUB_CHECK_NULL(context);
+    JUB_VERIFY_RV(context->StoreDefinition(networkInfo, {}));
+
+    return JUBR_OK;
+}
+
 
 
 /*****************************************************************************

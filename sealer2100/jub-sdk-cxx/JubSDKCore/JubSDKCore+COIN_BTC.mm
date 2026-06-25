@@ -164,6 +164,18 @@ SCRIPT_BTC_TYPE (^inlineScriptBTCType)(JUB_NS_SCRIPT_BTC_TYPE) = ^(JUB_NS_SCRIPT
         case NS_QRC20:
             type = QRC20;
             break;
+        case NS_P2WSH_MULTISIG:
+            type = P2WSH_MULTISIG;
+            break;
+        case NS_P2SH_P2WPKH:
+            type = P2SH_P2WPKH;
+            break;
+        case NS_P2WPKH:
+            type = P2WPKH;
+            break;
+        case NS_TAPROOT:
+            type = TAPROOT;
+            break;
         default:
             type = P2PKH;
             break;
@@ -355,6 +367,9 @@ OUTPUT_BTC (^inlineTransOutputBTC)(OutputBTC*) = ^(OutputBTC* outputBTC) {
     switch (outputBTC.type) {
         case NS_P2PKH:
         case NS_P2SH_MULTISIG:
+        case NS_P2SH_P2WPKH:
+        case NS_P2WPKH:
+        case NS_TAPROOT:
             if (nil != outputBTC.stdOutput.address) {
                 output.stdOutput.address = (JUB_CHAR_PTR)[outputBTC.stdOutput.address UTF8String];
             }

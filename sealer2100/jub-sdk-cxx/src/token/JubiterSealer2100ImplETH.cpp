@@ -20,6 +20,7 @@
 
 using namespace hw::trezor::messages::ethereum;
 using namespace hw::trezor::messages::ethereum_eip712;
+using namespace hw::trezor::messages::ethereum_definitions;
 
 namespace jub
 {
@@ -43,6 +44,7 @@ namespace jub
         JUB_ENUM_PROTOCOL_ETH_TYPEDDATA_ValueRequest = 467,
         JUB_ENUM_PROTOCOL_ETH_TYPEDDATA_ValueAck = 468,
         JUB_ENUM_PROTOCOL_ETH_TYPEDDATA_Signature = 469,
+        JUB_ENUM_PROTOCOL_ETH_StoreDefinition = 471,
 
     };
 
@@ -129,7 +131,7 @@ namespace jub
         return JUBR_OK;
     }
 
-    JUB_RV JubiterSealer2100Impl::GetAddressETH(const std::string &path, const JUB_UINT16 tag, std::string &address)
+    JUB_RV JubiterSealer2100Impl::GetAddressETH(const std::string &path, uint64_t chainId, const JUB_UINT16 tag, std::string &address)
     {
         std::string msgInPb;
         std::string msgOutPb;
@@ -150,6 +152,7 @@ namespace jub
                 msgToBeEncode.set_show_display(false);
             else
                 msgToBeEncode.set_show_display(true);
+            msgToBeEncode.set_chain_id(chainId);
 
             // Encode the message using standard protobuf
             if (!msgToBeEncode.SerializeToString(&msgInPb))
@@ -214,6 +217,57 @@ namespace jub
     {
         return JUBR_OK;
     }
+    JUB_RV JubiterSealer2100Impl::StoreETHDefinition(JUB_ETH_NETWORK_INFO networkInfo,
+                                                     std::optional<JUB_ERC20_TOKEN_INFO> tokenInfo) {
+        // check version
+        if (features) {
+            // 1.2.35
+            const static uint32_t kAvailableVersion = 0x01022300;
+            uint32_t version = 0;
+            version |= features->major_version() << 24;
+            version |= features->minor_version() << 16;
+            version |= features->patch_version() << 8;
+            if (version < kAvailableVersion) {
+                return JUBR_OK;
+            }
+        }
+        EthereumStoreDefinition msgToBeEncode = {};
+
+        // network
+        auto* network = new EthereumNetworkInfo();
+        network->set_name(networkInfo.name);
+        network->set_symbol(networkInfo.symbol);
+        network->set_chain_id(networkInfo.chainID);
+        network->set_slip44(networkInfo.slip44ID);
+
+        msgToBeEncode.set_allocated_network(network);
+
+        // token
+        if (tokenInfo) {
+            auto token = new EthereumTokenInfo();
+            token->set_chain_id(tokenInfo->chainID);
+            token->set_name(tokenInfo->name);
+            token->set_symbol(tokenInfo->symbol);
+            token->set_decimals(tokenInfo->decimals);
+
+            auto address = jub::ETHHexStr2CharPtr(tokenInfo->address);
+            token->set_address(address.data(), address.size());
+            msgToBeEncode.set_allocated_token(token);
+        }
+
+        auto vMsgInPb = msgToBeEncode.SerializeAsString();
+
+        JUB_UINT16 recvType;
+        std::string vMsgOutPb;
+        JUB_RV rv = sendProtocolData(JUB_ENUM_PROTOCOL_ETH_StoreDefinition, vMsgInPb, &recvType, vMsgOutPb);
+        if( JUBR_OK != rv) {
+            return rv;
+        }
+        if (recvType != JUB_ENUM_PROTOCOL_MessageType_Success) {
+            return JUBR_ERROR;
+        }
+        return JUBR_OK;
+    }
 
     JUB_RV JubiterSealer2100Impl::SignTXETH(const int erc,
                                             const std::vector<JUB_BYTE> &vNonce,
@@ -265,7 +319,7 @@ namespace jub
             }
             if (!vChainID.empty())
             {
-                uint32_t chainId = TW::decode32BE(&vChainID[0],vChainID.size());
+                uint64_t chainId = TW::decode64BE(&vChainID[0],vChainID.size());
                 msgToBeEncode.set_chain_id(chainId);
             }
             if (!vTo.empty())

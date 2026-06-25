@@ -232,7 +232,6 @@ class EthereumNetworkInfo :
     kIconFieldNumber = 101,
     kChainIdFieldNumber = 1,
     kSlip44FieldNumber = 3,
-    kPrimaryColorFieldNumber = 102,
   };
   // required string symbol = 2;
   bool has_symbol() const;
@@ -282,12 +281,6 @@ class EthereumNetworkInfo :
   ::PROTOBUF_NAMESPACE_ID::uint32 slip44() const;
   void set_slip44(::PROTOBUF_NAMESPACE_ID::uint32 value);
 
-  // optional uint64 primary_color = 102;
-  bool has_primary_color() const;
-  void clear_primary_color();
-  ::PROTOBUF_NAMESPACE_ID::uint64 primary_color() const;
-  void set_primary_color(::PROTOBUF_NAMESPACE_ID::uint64 value);
-
   // @@protoc_insertion_point(class_scope:hw.trezor.messages.ethereum_definitions.EthereumNetworkInfo)
  private:
   class _Internal;
@@ -303,7 +296,6 @@ class EthereumNetworkInfo :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr icon_;
   ::PROTOBUF_NAMESPACE_ID::uint64 chain_id_;
   ::PROTOBUF_NAMESPACE_ID::uint32 slip44_;
-  ::PROTOBUF_NAMESPACE_ID::uint64 primary_color_;
   friend struct ::TableStruct_messages_2dethereum_2ddefinitions_2eproto;
 };
 // -------------------------------------------------------------------
@@ -878,24 +870,6 @@ inline void EthereumNetworkInfo::set_allocated_icon(std::string* icon) {
   }
   icon_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), icon);
   // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.ethereum_definitions.EthereumNetworkInfo.icon)
-}
-
-// optional uint64 primary_color = 102;
-inline bool EthereumNetworkInfo::has_primary_color() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
-}
-inline void EthereumNetworkInfo::clear_primary_color() {
-  primary_color_ = PROTOBUF_ULONGLONG(0);
-  _has_bits_[0] &= ~0x00000020u;
-}
-inline ::PROTOBUF_NAMESPACE_ID::uint64 EthereumNetworkInfo::primary_color() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.ethereum_definitions.EthereumNetworkInfo.primary_color)
-  return primary_color_;
-}
-inline void EthereumNetworkInfo::set_primary_color(::PROTOBUF_NAMESPACE_ID::uint64 value) {
-  _has_bits_[0] |= 0x00000020u;
-  primary_color_ = value;
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.ethereum_definitions.EthereumNetworkInfo.primary_color)
 }
 
 // -------------------------------------------------------------------

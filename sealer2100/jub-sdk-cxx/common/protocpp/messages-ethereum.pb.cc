@@ -18,6 +18,8 @@
 extern PROTOBUF_INTERNAL_EXPORT_messages_2dcommon_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_HDNodeType_messages_2dcommon_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_messages_2dethereum_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_EthereumSignTxEIP1559_EthereumAccessList_messages_2dethereum_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_messages_2dethereum_2ddefinitions_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_EthereumDefinitions_messages_2dethereum_2ddefinitions_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_messages_2dethereum_2ddefinitions_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_EthereumNetworkInfo_messages_2dethereum_2ddefinitions_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_messages_2dethereum_2ddefinitions_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_EthereumTokenInfo_messages_2dethereum_2ddefinitions_2eproto;
 namespace hw {
 namespace trezor {
 namespace messages {
@@ -78,6 +80,10 @@ class EthereumTypedDataSignatureDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<EthereumTypedDataSignature> _instance;
 } _EthereumTypedDataSignature_default_instance_;
+class EthereumStoreDefinitionDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<EthereumStoreDefinition> _instance;
+} _EthereumStoreDefinition_default_instance_;
 }  // namespace ethereum
 }  // namespace messages
 }  // namespace trezor
@@ -226,6 +232,22 @@ static void InitDefaultsscc_info_EthereumSignTypedHash_messages_2dethereum_2epro
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_EthereumSignTypedHash_messages_2dethereum_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_EthereumSignTypedHash_messages_2dethereum_2eproto}, {}};
 
+static void InitDefaultsscc_info_EthereumStoreDefinition_messages_2dethereum_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::hw::trezor::messages::ethereum::_EthereumStoreDefinition_default_instance_;
+    new (ptr) ::hw::trezor::messages::ethereum::EthereumStoreDefinition();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::hw::trezor::messages::ethereum::EthereumStoreDefinition::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<2> scc_info_EthereumStoreDefinition_messages_2dethereum_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 2, InitDefaultsscc_info_EthereumStoreDefinition_messages_2dethereum_2eproto}, {
+      &scc_info_EthereumNetworkInfo_messages_2dethereum_2ddefinitions_2eproto.base,
+      &scc_info_EthereumTokenInfo_messages_2dethereum_2ddefinitions_2eproto.base,}};
+
 static void InitDefaultsscc_info_EthereumTxAck_messages_2dethereum_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -282,7 +304,7 @@ static void InitDefaultsscc_info_EthereumVerifyMessage_messages_2dethereum_2epro
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_EthereumVerifyMessage_messages_2dethereum_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_EthereumVerifyMessage_messages_2dethereum_2eproto}, {}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_messages_2dethereum_2eproto[14];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_messages_2dethereum_2eproto[15];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_messages_2dethereum_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_messages_2dethereum_2eproto = nullptr;
 
@@ -313,9 +335,11 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_messages_2dethereum_2eproto::o
   PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::ethereum::EthereumGetAddress, address_n_),
   PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::ethereum::EthereumGetAddress, show_display_),
   PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::ethereum::EthereumGetAddress, encoded_network_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::ethereum::EthereumGetAddress, chain_id_),
   ~0u,
-  1,
+  2,
   0,
+  1,
   PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::ethereum::EthereumAddress, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::ethereum::EthereumAddress, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -463,22 +487,32 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_messages_2dethereum_2eproto::o
   PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::ethereum::EthereumTypedDataSignature, address_),
   0,
   1,
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::ethereum::EthereumStoreDefinition, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::ethereum::EthereumStoreDefinition, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::ethereum::EthereumStoreDefinition, network_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::ethereum::EthereumStoreDefinition, token_),
+  0,
+  1,
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, 7, sizeof(::hw::trezor::messages::ethereum::EthereumGetPublicKey)},
   { 9, 16, sizeof(::hw::trezor::messages::ethereum::EthereumPublicKey)},
-  { 18, 26, sizeof(::hw::trezor::messages::ethereum::EthereumGetAddress)},
-  { 29, 36, sizeof(::hw::trezor::messages::ethereum::EthereumAddress)},
-  { 38, 54, sizeof(::hw::trezor::messages::ethereum::EthereumSignTx)},
-  { 65, 72, sizeof(::hw::trezor::messages::ethereum::EthereumSignTxEIP1559_EthereumAccessList)},
-  { 74, 91, sizeof(::hw::trezor::messages::ethereum::EthereumSignTxEIP1559)},
-  { 103, 112, sizeof(::hw::trezor::messages::ethereum::EthereumTxRequest)},
-  { 116, 122, sizeof(::hw::trezor::messages::ethereum::EthereumTxAck)},
-  { 123, 131, sizeof(::hw::trezor::messages::ethereum::EthereumSignMessage)},
-  { 134, 141, sizeof(::hw::trezor::messages::ethereum::EthereumMessageSignature)},
-  { 143, 151, sizeof(::hw::trezor::messages::ethereum::EthereumVerifyMessage)},
-  { 154, 163, sizeof(::hw::trezor::messages::ethereum::EthereumSignTypedHash)},
-  { 167, 174, sizeof(::hw::trezor::messages::ethereum::EthereumTypedDataSignature)},
+  { 18, 27, sizeof(::hw::trezor::messages::ethereum::EthereumGetAddress)},
+  { 31, 38, sizeof(::hw::trezor::messages::ethereum::EthereumAddress)},
+  { 40, 56, sizeof(::hw::trezor::messages::ethereum::EthereumSignTx)},
+  { 67, 74, sizeof(::hw::trezor::messages::ethereum::EthereumSignTxEIP1559_EthereumAccessList)},
+  { 76, 93, sizeof(::hw::trezor::messages::ethereum::EthereumSignTxEIP1559)},
+  { 105, 114, sizeof(::hw::trezor::messages::ethereum::EthereumTxRequest)},
+  { 118, 124, sizeof(::hw::trezor::messages::ethereum::EthereumTxAck)},
+  { 125, 133, sizeof(::hw::trezor::messages::ethereum::EthereumSignMessage)},
+  { 136, 143, sizeof(::hw::trezor::messages::ethereum::EthereumMessageSignature)},
+  { 145, 153, sizeof(::hw::trezor::messages::ethereum::EthereumVerifyMessage)},
+  { 156, 165, sizeof(::hw::trezor::messages::ethereum::EthereumSignTypedHash)},
+  { 169, 176, sizeof(::hw::trezor::messages::ethereum::EthereumTypedDataSignature)},
+  { 178, 185, sizeof(::hw::trezor::messages::ethereum::EthereumStoreDefinition)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -496,6 +530,7 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::ethereum::_EthereumVerifyMessage_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::ethereum::_EthereumSignTypedHash_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::ethereum::_EthereumTypedDataSignature_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::ethereum::_EthereumStoreDefinition_default_instance_),
 };
 
 const char descriptor_table_protodef_messages_2dethereum_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -505,51 +540,56 @@ const char descriptor_table_protodef_messages_2dethereum_2eproto[] PROTOBUF_SECT
   "hereumGetPublicKey\022\021\n\taddress_n\030\001 \003(\r\022\024\n"
   "\014show_display\030\002 \001(\010\"V\n\021EthereumPublicKey"
   "\0223\n\004node\030\001 \002(\0132%.hw.trezor.messages.comm"
-  "on.HDNodeType\022\014\n\004xpub\030\002 \002(\t\"V\n\022EthereumG"
+  "on.HDNodeType\022\014\n\004xpub\030\002 \002(\t\"h\n\022EthereumG"
   "etAddress\022\021\n\taddress_n\030\001 \003(\r\022\024\n\014show_dis"
-  "play\030\002 \001(\010\022\027\n\017encoded_network\030\003 \001(\014\"<\n\017E"
-  "thereumAddress\022\030\n\014_old_address\030\001 \001(\014B\002\030\001"
-  "\022\017\n\007address\030\002 \001(\t\"\245\002\n\016EthereumSignTx\022\021\n\t"
-  "address_n\030\001 \003(\r\022\017\n\005nonce\030\002 \001(\014:\000\022\021\n\tgas_"
-  "price\030\003 \002(\014\022\021\n\tgas_limit\030\004 \002(\014\022\014\n\002to\030\013 \001"
-  "(\t:\000\022\017\n\005value\030\006 \001(\014:\000\022\034\n\022data_initial_ch"
-  "unk\030\007 \001(\014:\000\022\026\n\013data_length\030\010 \001(\r:\0010\022\020\n\010c"
-  "hain_id\030\t \002(\004\022\017\n\007tx_type\030\n \001(\r\022Q\n\013defini"
-  "tions\030\014 \001(\0132<.hw.trezor.messages.ethereu"
-  "m_definitions.EthereumDefinitions\"\311\003\n\025Et"
-  "hereumSignTxEIP1559\022\021\n\taddress_n\030\001 \003(\r\022\r"
-  "\n\005nonce\030\002 \002(\014\022\023\n\013max_gas_fee\030\003 \002(\014\022\030\n\020ma"
-  "x_priority_fee\030\004 \002(\014\022\021\n\tgas_limit\030\005 \002(\014\022"
-  "\014\n\002to\030\006 \001(\t:\000\022\r\n\005value\030\007 \002(\014\022\034\n\022data_ini"
-  "tial_chunk\030\010 \001(\014:\000\022\023\n\013data_length\030\t \002(\r\022"
-  "\020\n\010chain_id\030\n \002(\004\022Z\n\013access_list\030\013 \003(\0132E"
-  ".hw.trezor.messages.ethereum.EthereumSig"
-  "nTxEIP1559.EthereumAccessList\022Q\n\013definit"
-  "ions\030\014 \001(\0132<.hw.trezor.messages.ethereum"
-  "_definitions.EthereumDefinitions\032;\n\022Ethe"
-  "reumAccessList\022\017\n\007address\030\001 \002(\t\022\024\n\014stora"
-  "ge_keys\030\002 \003(\014\"g\n\021EthereumTxRequest\022\023\n\013da"
-  "ta_length\030\001 \001(\r\022\023\n\013signature_v\030\002 \001(\r\022\023\n\013"
-  "signature_r\030\003 \001(\014\022\023\n\013signature_s\030\004 \001(\014\"#"
-  "\n\rEthereumTxAck\022\022\n\ndata_chunk\030\001 \002(\014\"R\n\023E"
-  "thereumSignMessage\022\021\n\taddress_n\030\001 \003(\r\022\017\n"
-  "\007message\030\002 \002(\014\022\027\n\017encoded_network\030\003 \001(\014\""
-  ">\n\030EthereumMessageSignature\022\021\n\tsignature"
-  "\030\002 \002(\014\022\017\n\007address\030\003 \002(\t\"L\n\025EthereumVerif"
-  "yMessage\022\021\n\tsignature\030\002 \002(\014\022\017\n\007message\030\003"
-  " \002(\014\022\017\n\007address\030\004 \002(\t\"x\n\025EthereumSignTyp"
-  "edHash\022\021\n\taddress_n\030\001 \003(\r\022\035\n\025domain_sepa"
-  "rator_hash\030\002 \002(\014\022\024\n\014message_hash\030\003 \001(\014\022\027"
-  "\n\017encoded_network\030\004 \001(\014\"@\n\032EthereumTyped"
-  "DataSignature\022\021\n\tsignature\030\001 \002(\014\022\017\n\007addr"
-  "ess\030\002 \002(\tB<\n#com.satoshilabs.trezor.lib."
+  "play\030\002 \001(\010\022\027\n\017encoded_network\030\003 \001(\014\022\020\n\010c"
+  "hain_id\030\004 \001(\004\"<\n\017EthereumAddress\022\030\n\014_old"
+  "_address\030\001 \001(\014B\002\030\001\022\017\n\007address\030\002 \001(\t\"\245\002\n\016"
+  "EthereumSignTx\022\021\n\taddress_n\030\001 \003(\r\022\017\n\005non"
+  "ce\030\002 \001(\014:\000\022\021\n\tgas_price\030\003 \002(\014\022\021\n\tgas_lim"
+  "it\030\004 \002(\014\022\014\n\002to\030\013 \001(\t:\000\022\017\n\005value\030\006 \001(\014:\000\022"
+  "\034\n\022data_initial_chunk\030\007 \001(\014:\000\022\026\n\013data_le"
+  "ngth\030\010 \001(\r:\0010\022\020\n\010chain_id\030\t \002(\004\022\017\n\007tx_ty"
+  "pe\030\n \001(\r\022Q\n\013definitions\030\014 \001(\0132<.hw.trezo"
+  "r.messages.ethereum_definitions.Ethereum"
+  "Definitions\"\311\003\n\025EthereumSignTxEIP1559\022\021\n"
+  "\taddress_n\030\001 \003(\r\022\r\n\005nonce\030\002 \002(\014\022\023\n\013max_g"
+  "as_fee\030\003 \002(\014\022\030\n\020max_priority_fee\030\004 \002(\014\022\021"
+  "\n\tgas_limit\030\005 \002(\014\022\014\n\002to\030\006 \001(\t:\000\022\r\n\005value"
+  "\030\007 \002(\014\022\034\n\022data_initial_chunk\030\010 \001(\014:\000\022\023\n\013"
+  "data_length\030\t \002(\r\022\020\n\010chain_id\030\n \002(\004\022Z\n\013a"
+  "ccess_list\030\013 \003(\0132E.hw.trezor.messages.et"
+  "hereum.EthereumSignTxEIP1559.EthereumAcc"
+  "essList\022Q\n\013definitions\030\014 \001(\0132<.hw.trezor"
+  ".messages.ethereum_definitions.EthereumD"
+  "efinitions\032;\n\022EthereumAccessList\022\017\n\007addr"
+  "ess\030\001 \002(\t\022\024\n\014storage_keys\030\002 \003(\014\"g\n\021Ether"
+  "eumTxRequest\022\023\n\013data_length\030\001 \001(\r\022\023\n\013sig"
+  "nature_v\030\002 \001(\r\022\023\n\013signature_r\030\003 \001(\014\022\023\n\013s"
+  "ignature_s\030\004 \001(\014\"#\n\rEthereumTxAck\022\022\n\ndat"
+  "a_chunk\030\001 \002(\014\"R\n\023EthereumSignMessage\022\021\n\t"
+  "address_n\030\001 \003(\r\022\017\n\007message\030\002 \002(\014\022\027\n\017enco"
+  "ded_network\030\003 \001(\014\">\n\030EthereumMessageSign"
+  "ature\022\021\n\tsignature\030\002 \002(\014\022\017\n\007address\030\003 \002("
+  "\t\"L\n\025EthereumVerifyMessage\022\021\n\tsignature\030"
+  "\002 \002(\014\022\017\n\007message\030\003 \002(\014\022\017\n\007address\030\004 \002(\t\""
+  "x\n\025EthereumSignTypedHash\022\021\n\taddress_n\030\001 "
+  "\003(\r\022\035\n\025domain_separator_hash\030\002 \002(\014\022\024\n\014me"
+  "ssage_hash\030\003 \001(\014\022\027\n\017encoded_network\030\004 \001("
+  "\014\"@\n\032EthereumTypedDataSignature\022\021\n\tsigna"
+  "ture\030\001 \002(\014\022\017\n\007address\030\002 \002(\t\"\263\001\n\027Ethereum"
+  "StoreDefinition\022M\n\007network\030\001 \002(\0132<.hw.tr"
+  "ezor.messages.ethereum_definitions.Ether"
+  "eumNetworkInfo\022I\n\005token\030\002 \001(\0132:.hw.trezo"
+  "r.messages.ethereum_definitions.Ethereum"
+  "TokenInfoB<\n#com.satoshilabs.trezor.lib."
   "protobufB\025TrezorMessageEthereum"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_messages_2dethereum_2eproto_deps[2] = {
   &::descriptor_table_messages_2dcommon_2eproto,
   &::descriptor_table_messages_2dethereum_2ddefinitions_2eproto,
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_messages_2dethereum_2eproto_sccs[14] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_messages_2dethereum_2eproto_sccs[15] = {
   &scc_info_EthereumAddress_messages_2dethereum_2eproto.base,
   &scc_info_EthereumGetAddress_messages_2dethereum_2eproto.base,
   &scc_info_EthereumGetPublicKey_messages_2dethereum_2eproto.base,
@@ -560,6 +600,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_mes
   &scc_info_EthereumSignTxEIP1559_messages_2dethereum_2eproto.base,
   &scc_info_EthereumSignTxEIP1559_EthereumAccessList_messages_2dethereum_2eproto.base,
   &scc_info_EthereumSignTypedHash_messages_2dethereum_2eproto.base,
+  &scc_info_EthereumStoreDefinition_messages_2dethereum_2eproto.base,
   &scc_info_EthereumTxAck_messages_2dethereum_2eproto.base,
   &scc_info_EthereumTxRequest_messages_2dethereum_2eproto.base,
   &scc_info_EthereumTypedDataSignature_messages_2dethereum_2eproto.base,
@@ -568,10 +609,10 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_mes
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_messages_2dethereum_2eproto_once;
 static bool descriptor_table_messages_2dethereum_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_messages_2dethereum_2eproto = {
-  &descriptor_table_messages_2dethereum_2eproto_initialized, descriptor_table_protodef_messages_2dethereum_2eproto, "messages-ethereum.proto", 1791,
-  &descriptor_table_messages_2dethereum_2eproto_once, descriptor_table_messages_2dethereum_2eproto_sccs, descriptor_table_messages_2dethereum_2eproto_deps, 14, 2,
+  &descriptor_table_messages_2dethereum_2eproto_initialized, descriptor_table_protodef_messages_2dethereum_2eproto, "messages-ethereum.proto", 1991,
+  &descriptor_table_messages_2dethereum_2eproto_once, descriptor_table_messages_2dethereum_2eproto_sccs, descriptor_table_messages_2dethereum_2eproto_deps, 15, 2,
   schemas, file_default_instances, TableStruct_messages_2dethereum_2eproto::offsets,
-  file_level_metadata_messages_2dethereum_2eproto, 14, file_level_enum_descriptors_messages_2dethereum_2eproto, file_level_service_descriptors_messages_2dethereum_2eproto,
+  file_level_metadata_messages_2dethereum_2eproto, 15, file_level_enum_descriptors_messages_2dethereum_2eproto, file_level_service_descriptors_messages_2dethereum_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -1282,10 +1323,13 @@ class EthereumGetAddress::_Internal {
  public:
   using HasBits = decltype(std::declval<EthereumGetAddress>()._has_bits_);
   static void set_has_show_display(HasBits* has_bits) {
-    (*has_bits)[0] |= 2u;
+    (*has_bits)[0] |= 4u;
   }
   static void set_has_encoded_network(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
+  }
+  static void set_has_chain_id(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
   }
 };
 
@@ -1304,14 +1348,18 @@ EthereumGetAddress::EthereumGetAddress(const EthereumGetAddress& from)
   if (from.has_encoded_network()) {
     encoded_network_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.encoded_network_);
   }
-  show_display_ = from.show_display_;
+  ::memcpy(&chain_id_, &from.chain_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&show_display_) -
+    reinterpret_cast<char*>(&chain_id_)) + sizeof(show_display_));
   // @@protoc_insertion_point(copy_constructor:hw.trezor.messages.ethereum.EthereumGetAddress)
 }
 
 void EthereumGetAddress::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_EthereumGetAddress_messages_2dethereum_2eproto.base);
   encoded_network_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  show_display_ = false;
+  ::memset(&chain_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&show_display_) -
+      reinterpret_cast<char*>(&chain_id_)) + sizeof(show_display_));
 }
 
 EthereumGetAddress::~EthereumGetAddress() {
@@ -1343,7 +1391,11 @@ void EthereumGetAddress::Clear() {
   if (cached_has_bits & 0x00000001u) {
     encoded_network_.ClearNonDefaultToEmptyNoArena();
   }
-  show_display_ = false;
+  if (cached_has_bits & 0x00000006u) {
+    ::memset(&chain_id_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&show_display_) -
+        reinterpret_cast<char*>(&chain_id_)) + sizeof(show_display_));
+  }
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
@@ -1384,6 +1436,14 @@ const char* EthereumGetAddress::_InternalParse(const char* ptr, ::PROTOBUF_NAMES
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(mutable_encoded_network(), ptr, ctx);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional uint64 chain_id = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
+          _Internal::set_has_chain_id(&has_bits);
+          chain_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -1458,6 +1518,19 @@ bool EthereumGetAddress::MergePartialFromCodedStream(
         break;
       }
 
+      // optional uint64 chain_id = 4;
+      case 4: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (32 & 0xFF)) {
+          _Internal::set_has_chain_id(&_has_bits_);
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::uint64, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &chain_id_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -1493,7 +1566,7 @@ void EthereumGetAddress::SerializeWithCachedSizes(
 
   cached_has_bits = _has_bits_[0];
   // optional bool show_display = 2;
-  if (cached_has_bits & 0x00000002u) {
+  if (cached_has_bits & 0x00000004u) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBool(2, this->show_display(), output);
   }
 
@@ -1501,6 +1574,11 @@ void EthereumGetAddress::SerializeWithCachedSizes(
   if (cached_has_bits & 0x00000001u) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBytesMaybeAliased(
       3, this->encoded_network(), output);
+  }
+
+  // optional uint64 chain_id = 4;
+  if (cached_has_bits & 0x00000002u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64(4, this->chain_id(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1522,7 +1600,7 @@ void EthereumGetAddress::SerializeWithCachedSizes(
 
   cached_has_bits = _has_bits_[0];
   // optional bool show_display = 2;
-  if (cached_has_bits & 0x00000002u) {
+  if (cached_has_bits & 0x00000004u) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(2, this->show_display(), target);
   }
 
@@ -1531,6 +1609,11 @@ void EthereumGetAddress::SerializeWithCachedSizes(
     target =
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBytesToArray(
         3, this->encoded_network(), target);
+  }
+
+  // optional uint64 chain_id = 4;
+  if (cached_has_bits & 0x00000002u) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(4, this->chain_id(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1564,7 +1647,7 @@ size_t EthereumGetAddress::ByteSizeLong() const {
   }
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
+  if (cached_has_bits & 0x00000007u) {
     // optional bytes encoded_network = 3;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
@@ -1572,8 +1655,15 @@ size_t EthereumGetAddress::ByteSizeLong() const {
           this->encoded_network());
     }
 
-    // optional bool show_display = 2;
+    // optional uint64 chain_id = 4;
     if (cached_has_bits & 0x00000002u) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64Size(
+          this->chain_id());
+    }
+
+    // optional bool show_display = 2;
+    if (cached_has_bits & 0x00000004u) {
       total_size += 1 + 1;
     }
 
@@ -1607,12 +1697,15 @@ void EthereumGetAddress::MergeFrom(const EthereumGetAddress& from) {
 
   address_n_.MergeFrom(from.address_n_);
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
+  if (cached_has_bits & 0x00000007u) {
     if (cached_has_bits & 0x00000001u) {
       _has_bits_[0] |= 0x00000001u;
       encoded_network_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.encoded_network_);
     }
     if (cached_has_bits & 0x00000002u) {
+      chain_id_ = from.chain_id_;
+    }
+    if (cached_has_bits & 0x00000004u) {
       show_display_ = from.show_display_;
     }
     _has_bits_[0] |= cached_has_bits;
@@ -1644,6 +1737,7 @@ void EthereumGetAddress::InternalSwap(EthereumGetAddress* other) {
   address_n_.InternalSwap(&other->address_n_);
   encoded_network_.Swap(&other->encoded_network_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
+  swap(chain_id_, other->chain_id_);
   swap(show_display_, other->show_display_);
 }
 
@@ -6848,6 +6942,368 @@ void EthereumTypedDataSignature::InternalSwap(EthereumTypedDataSignature* other)
 }
 
 
+// ===================================================================
+
+void EthereumStoreDefinition::InitAsDefaultInstance() {
+  ::hw::trezor::messages::ethereum::_EthereumStoreDefinition_default_instance_._instance.get_mutable()->network_ = const_cast< ::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo*>(
+      ::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo::internal_default_instance());
+  ::hw::trezor::messages::ethereum::_EthereumStoreDefinition_default_instance_._instance.get_mutable()->token_ = const_cast< ::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo*>(
+      ::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo::internal_default_instance());
+}
+class EthereumStoreDefinition::_Internal {
+ public:
+  using HasBits = decltype(std::declval<EthereumStoreDefinition>()._has_bits_);
+  static const ::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo& network(const EthereumStoreDefinition* msg);
+  static void set_has_network(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+  static const ::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo& token(const EthereumStoreDefinition* msg);
+  static void set_has_token(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
+  }
+};
+
+const ::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo&
+EthereumStoreDefinition::_Internal::network(const EthereumStoreDefinition* msg) {
+  return *msg->network_;
+}
+const ::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo&
+EthereumStoreDefinition::_Internal::token(const EthereumStoreDefinition* msg) {
+  return *msg->token_;
+}
+void EthereumStoreDefinition::clear_network() {
+  if (network_ != nullptr) network_->Clear();
+  _has_bits_[0] &= ~0x00000001u;
+}
+void EthereumStoreDefinition::clear_token() {
+  if (token_ != nullptr) token_->Clear();
+  _has_bits_[0] &= ~0x00000002u;
+}
+EthereumStoreDefinition::EthereumStoreDefinition()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:hw.trezor.messages.ethereum.EthereumStoreDefinition)
+}
+EthereumStoreDefinition::EthereumStoreDefinition(const EthereumStoreDefinition& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr),
+      _has_bits_(from._has_bits_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  if (from.has_network()) {
+    network_ = new ::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo(*from.network_);
+  } else {
+    network_ = nullptr;
+  }
+  if (from.has_token()) {
+    token_ = new ::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo(*from.token_);
+  } else {
+    token_ = nullptr;
+  }
+  // @@protoc_insertion_point(copy_constructor:hw.trezor.messages.ethereum.EthereumStoreDefinition)
+}
+
+void EthereumStoreDefinition::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_EthereumStoreDefinition_messages_2dethereum_2eproto.base);
+  ::memset(&network_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&token_) -
+      reinterpret_cast<char*>(&network_)) + sizeof(token_));
+}
+
+EthereumStoreDefinition::~EthereumStoreDefinition() {
+  // @@protoc_insertion_point(destructor:hw.trezor.messages.ethereum.EthereumStoreDefinition)
+  SharedDtor();
+}
+
+void EthereumStoreDefinition::SharedDtor() {
+  if (this != internal_default_instance()) delete network_;
+  if (this != internal_default_instance()) delete token_;
+}
+
+void EthereumStoreDefinition::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const EthereumStoreDefinition& EthereumStoreDefinition::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_EthereumStoreDefinition_messages_2dethereum_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void EthereumStoreDefinition::Clear() {
+// @@protoc_insertion_point(message_clear_start:hw.trezor.messages.ethereum.EthereumStoreDefinition)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      GOOGLE_DCHECK(network_ != nullptr);
+      network_->Clear();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      GOOGLE_DCHECK(token_ != nullptr);
+      token_->Clear();
+    }
+  }
+  _has_bits_.Clear();
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* EthereumStoreDefinition::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // required .hw.trezor.messages.ethereum_definitions.EthereumNetworkInfo network = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr = ctx->ParseMessage(mutable_network(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional .hw.trezor.messages.ethereum_definitions.EthereumTokenInfo token = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          ptr = ctx->ParseMessage(mutable_token(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  _has_bits_.Or(has_bits);
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool EthereumStoreDefinition::MergePartialFromCodedStream(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+  // @@protoc_insertion_point(parse_start:hw.trezor.messages.ethereum.EthereumStoreDefinition)
+  for (;;) {
+    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required .hw.trezor.messages.ethereum_definitions.EthereumNetworkInfo network = 1;
+      case 1: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (10 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadMessage(
+               input, mutable_network()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional .hw.trezor.messages.ethereum_definitions.EthereumTokenInfo token = 2;
+      case 2: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (18 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadMessage(
+               input, mutable_token()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:hw.trezor.messages.ethereum.EthereumStoreDefinition)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:hw.trezor.messages.ethereum.EthereumStoreDefinition)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void EthereumStoreDefinition::SerializeWithCachedSizes(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:hw.trezor.messages.ethereum.EthereumStoreDefinition)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // required .hw.trezor.messages.ethereum_definitions.EthereumNetworkInfo network = 1;
+  if (cached_has_bits & 0x00000001u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, _Internal::network(this), output);
+  }
+
+  // optional .hw.trezor.messages.ethereum_definitions.EthereumTokenInfo token = 2;
+  if (cached_has_bits & 0x00000002u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteMessageMaybeToArray(
+      2, _Internal::token(this), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:hw.trezor.messages.ethereum.EthereumStoreDefinition)
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* EthereumStoreDefinition::InternalSerializeWithCachedSizesToArray(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:hw.trezor.messages.ethereum.EthereumStoreDefinition)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // required .hw.trezor.messages.ethereum_definitions.EthereumNetworkInfo network = 1;
+  if (cached_has_bits & 0x00000001u) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        1, _Internal::network(this), target);
+  }
+
+  // optional .hw.trezor.messages.ethereum_definitions.EthereumTokenInfo token = 2;
+  if (cached_has_bits & 0x00000002u) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        2, _Internal::token(this), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:hw.trezor.messages.ethereum.EthereumStoreDefinition)
+  return target;
+}
+
+size_t EthereumStoreDefinition::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:hw.trezor.messages.ethereum.EthereumStoreDefinition)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  // required .hw.trezor.messages.ethereum_definitions.EthereumNetworkInfo network = 1;
+  if (has_network()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *network_);
+  }
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // optional .hw.trezor.messages.ethereum_definitions.EthereumTokenInfo token = 2;
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000002u) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *token_);
+  }
+
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void EthereumStoreDefinition::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:hw.trezor.messages.ethereum.EthereumStoreDefinition)
+  GOOGLE_DCHECK_NE(&from, this);
+  const EthereumStoreDefinition* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<EthereumStoreDefinition>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:hw.trezor.messages.ethereum.EthereumStoreDefinition)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:hw.trezor.messages.ethereum.EthereumStoreDefinition)
+    MergeFrom(*source);
+  }
+}
+
+void EthereumStoreDefinition::MergeFrom(const EthereumStoreDefinition& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:hw.trezor.messages.ethereum.EthereumStoreDefinition)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      mutable_network()->::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo::MergeFrom(from.network());
+    }
+    if (cached_has_bits & 0x00000002u) {
+      mutable_token()->::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo::MergeFrom(from.token());
+    }
+  }
+}
+
+void EthereumStoreDefinition::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:hw.trezor.messages.ethereum.EthereumStoreDefinition)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void EthereumStoreDefinition::CopyFrom(const EthereumStoreDefinition& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:hw.trezor.messages.ethereum.EthereumStoreDefinition)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool EthereumStoreDefinition::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+  if (has_network()) {
+    if (!this->network_->IsInitialized()) return false;
+  }
+  if (has_token()) {
+    if (!this->token_->IsInitialized()) return false;
+  }
+  return true;
+}
+
+void EthereumStoreDefinition::InternalSwap(EthereumStoreDefinition* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  swap(network_, other->network_);
+  swap(token_, other->token_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata EthereumStoreDefinition::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace ethereum
 }  // namespace messages
@@ -6895,6 +7351,9 @@ template<> PROTOBUF_NOINLINE ::hw::trezor::messages::ethereum::EthereumSignTyped
 }
 template<> PROTOBUF_NOINLINE ::hw::trezor::messages::ethereum::EthereumTypedDataSignature* Arena::CreateMaybeMessage< ::hw::trezor::messages::ethereum::EthereumTypedDataSignature >(Arena* arena) {
   return Arena::CreateInternal< ::hw::trezor::messages::ethereum::EthereumTypedDataSignature >(arena);
+}
+template<> PROTOBUF_NOINLINE ::hw::trezor::messages::ethereum::EthereumStoreDefinition* Arena::CreateMaybeMessage< ::hw::trezor::messages::ethereum::EthereumStoreDefinition >(Arena* arena) {
+  return Arena::CreateInternal< ::hw::trezor::messages::ethereum::EthereumStoreDefinition >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

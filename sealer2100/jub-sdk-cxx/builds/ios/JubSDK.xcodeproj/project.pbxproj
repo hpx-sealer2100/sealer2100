@@ -19,13 +19,11 @@
 		3BB3C28A2DFEB6A300DED473 /* messages-ton.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C24B2DFEB69F00DED473 /* messages-ton.pb.cc */; };
 		3BB3C28B2DFEB6A300DED473 /* messages-monero.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C24C2DFEB69F00DED473 /* messages-monero.pb.cc */; };
 		3BB3C28C2DFEB6A300DED473 /* messages-tezos.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C24D2DFEB69F00DED473 /* messages-tezos.pb.cc */; };
-		3BB3C28D2DFEB6A300DED473 /* messages-ethereum-eip712-digitalshield.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C2502DFEB69F00DED473 /* messages-ethereum-eip712-digitalshield.pb.cc */; };
 		3BB3C28E2DFEB6A300DED473 /* messages.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C2512DFEB69F00DED473 /* messages.pb.cc */; };
 		3BB3C28F2DFEB6A300DED473 /* messages-emmc.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C2542DFEB69F00DED473 /* messages-emmc.pb.cc */; };
 		3BB3C2902DFEB6A300DED473 /* messages-cosmos.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C2562DFEB6A000DED473 /* messages-cosmos.pb.cc */; };
 		3BB3C2912DFEB6A300DED473 /* messages-algorand.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C2592DFEB6A000DED473 /* messages-algorand.pb.cc */; };
 		3BB3C2922DFEB6A300DED473 /* messages-stellar.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C25A2DFEB6A000DED473 /* messages-stellar.pb.cc */; };
-		3BB3C2932DFEB6A300DED473 /* messages-ethereum-digitalshield.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C25C2DFEB6A000DED473 /* messages-ethereum-digitalshield.pb.cc */; };
 		3BB3C2942DFEB6A300DED473 /* messages-aptos.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C25D2DFEB6A000DED473 /* messages-aptos.pb.cc */; };
 		3BB3C2952DFEB6A300DED473 /* messages-nexa.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C25E2DFEB6A000DED473 /* messages-nexa.pb.cc */; };
 		3BB3C2962DFEB6A300DED473 /* messages-polkadot.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C25F2DFEB6A000DED473 /* messages-polkadot.pb.cc */; };
@@ -244,7 +242,6 @@
 		9EEB8DB92DC90CD000CFA49C /* Address.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9EEB8DB72DC90CD000CFA49C /* Address.cpp */; };
 		9EEB8DBC2DC90D0D00CFA49C /* Signer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9EEB8DBA2DC90D0D00CFA49C /* Signer.cpp */; };
 		F4768D022E4855800002CD1F /* JUB_SDK_SOL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F4768D012E4855800002CD1F /* JUB_SDK_SOL.cpp */; };
-		F4CC51B82E349155003AE094 /* FirmwareUpdate.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = F4CC51B72E349155003AE094 /* FirmwareUpdate.pb.cc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -273,7 +270,6 @@
 		3BB3C2412DFEB69E00DED473 /* messages-ethereum-definitions.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-ethereum-definitions.pb.cc"; path = "../../common/protocpp/messages-ethereum-definitions.pb.cc"; sourceTree = "<group>"; };
 		3BB3C2422DFEB69E00DED473 /* messages-crypto.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-crypto.pb.cc"; path = "../../common/protocpp/messages-crypto.pb.cc"; sourceTree = "<group>"; };
 		3BB3C2432DFEB69E00DED473 /* messages-common.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-common.pb.cc"; path = "../../common/protocpp/messages-common.pb.cc"; sourceTree = "<group>"; };
-		3BB3C2442DFEB69F00DED473 /* messages-ethereum-digitalshield.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-ethereum-digitalshield.pb.h"; path = "../../common/protocpp/messages-ethereum-digitalshield.pb.h"; sourceTree = "<group>"; };
 		3BB3C2452DFEB69F00DED473 /* messages-bootloader.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-bootloader.pb.cc"; path = "../../common/protocpp/messages-bootloader.pb.cc"; sourceTree = "<group>"; };
 		3BB3C2462DFEB69F00DED473 /* messages-polkadot.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-polkadot.pb.h"; path = "../../common/protocpp/messages-polkadot.pb.h"; sourceTree = "<group>"; };
 		3BB3C2472DFEB69F00DED473 /* messages-ripple.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-ripple.pb.h"; path = "../../common/protocpp/messages-ripple.pb.h"; sourceTree = "<group>"; };
@@ -285,7 +281,6 @@
 		3BB3C24D2DFEB69F00DED473 /* messages-tezos.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-tezos.pb.cc"; path = "../../common/protocpp/messages-tezos.pb.cc"; sourceTree = "<group>"; };
 		3BB3C24E2DFEB69F00DED473 /* messages-aptos.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-aptos.pb.h"; path = "../../common/protocpp/messages-aptos.pb.h"; sourceTree = "<group>"; };
 		3BB3C24F2DFEB69F00DED473 /* messages-ethereum-definitions.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-ethereum-definitions.pb.h"; path = "../../common/protocpp/messages-ethereum-definitions.pb.h"; sourceTree = "<group>"; };
-		3BB3C2502DFEB69F00DED473 /* messages-ethereum-eip712-digitalshield.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-ethereum-eip712-digitalshield.pb.cc"; path = "../../common/protocpp/messages-ethereum-eip712-digitalshield.pb.cc"; sourceTree = "<group>"; };
 		3BB3C2512DFEB69F00DED473 /* messages.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = messages.pb.cc; path = ../../common/protocpp/messages.pb.cc; sourceTree = "<group>"; };
 		3BB3C2522DFEB69F00DED473 /* messages-solana.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-solana.pb.h"; path = "../../common/protocpp/messages-solana.pb.h"; sourceTree = "<group>"; };
 		3BB3C2532DFEB69F00DED473 /* messages-filecoin.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-filecoin.pb.h"; path = "../../common/protocpp/messages-filecoin.pb.h"; sourceTree = "<group>"; };
@@ -297,7 +292,6 @@
 		3BB3C2592DFEB6A000DED473 /* messages-algorand.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-algorand.pb.cc"; path = "../../common/protocpp/messages-algorand.pb.cc"; sourceTree = "<group>"; };
 		3BB3C25A2DFEB6A000DED473 /* messages-stellar.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-stellar.pb.cc"; path = "../../common/protocpp/messages-stellar.pb.cc"; sourceTree = "<group>"; };
 		3BB3C25B2DFEB6A000DED473 /* messages-tezos.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-tezos.pb.h"; path = "../../common/protocpp/messages-tezos.pb.h"; sourceTree = "<group>"; };
-		3BB3C25C2DFEB6A000DED473 /* messages-ethereum-digitalshield.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-ethereum-digitalshield.pb.cc"; path = "../../common/protocpp/messages-ethereum-digitalshield.pb.cc"; sourceTree = "<group>"; };
 		3BB3C25D2DFEB6A000DED473 /* messages-aptos.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-aptos.pb.cc"; path = "../../common/protocpp/messages-aptos.pb.cc"; sourceTree = "<group>"; };
 		3BB3C25E2DFEB6A000DED473 /* messages-nexa.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-nexa.pb.cc"; path = "../../common/protocpp/messages-nexa.pb.cc"; sourceTree = "<group>"; };
 		3BB3C25F2DFEB6A000DED473 /* messages-polkadot.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-polkadot.pb.cc"; path = "../../common/protocpp/messages-polkadot.pb.cc"; sourceTree = "<group>"; };
@@ -318,7 +312,6 @@
 		3BB3C26E2DFEB6A100DED473 /* messages-near.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-near.pb.h"; path = "../../common/protocpp/messages-near.pb.h"; sourceTree = "<group>"; };
 		3BB3C26F2DFEB6A100DED473 /* messages-ethereum-eip712.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-ethereum-eip712.pb.h"; path = "../../common/protocpp/messages-ethereum-eip712.pb.h"; sourceTree = "<group>"; };
 		3BB3C2702DFEB6A100DED473 /* messages-ethereum-eip712.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-ethereum-eip712.pb.cc"; path = "../../common/protocpp/messages-ethereum-eip712.pb.cc"; sourceTree = "<group>"; };
-		3BB3C2712DFEB6A200DED473 /* messages-ethereum-eip712-digitalshield.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-ethereum-eip712-digitalshield.pb.h"; path = "../../common/protocpp/messages-ethereum-eip712-digitalshield.pb.h"; sourceTree = "<group>"; };
 		3BB3C2722DFEB6A200DED473 /* messages-nexa.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-nexa.pb.h"; path = "../../common/protocpp/messages-nexa.pb.h"; sourceTree = "<group>"; };
 		3BB3C2732DFEB6A200DED473 /* messages-cardano.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-cardano.pb.cc"; path = "../../common/protocpp/messages-cardano.pb.cc"; sourceTree = "<group>"; };
 		3BB3C2742DFEB6A200DED473 /* messages-kaspa.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-kaspa.pb.cc"; path = "../../common/protocpp/messages-kaspa.pb.cc"; sourceTree = "<group>"; };
@@ -766,8 +759,6 @@
 		EADCCD7322A7B380008F2EF5 /* libJubSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libJubSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4768CFE2E484D680002CD1F /* JUB_SDK_SOL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JUB_SDK_SOL.h; path = ../../include/JUB_SDK_SOL.h; sourceTree = "<group>"; };
 		F4768D012E4855800002CD1F /* JUB_SDK_SOL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JUB_SDK_SOL.cpp; path = ../../src/JUB_SDK_SOL.cpp; sourceTree = "<group>"; };
-		F4CC51B62E349155003AE094 /* FirmwareUpdate.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FirmwareUpdate.pb.h; path = ../../common/protocpp/FirmwareUpdate.pb.h; sourceTree = "<group>"; };
-		F4CC51B72E349155003AE094 /* FirmwareUpdate.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FirmwareUpdate.pb.cc; path = ../../common/protocpp/FirmwareUpdate.pb.cc; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1870,8 +1861,6 @@
 		9E91A45F2DDC46B800AEA834 /* protocpp */ = {
 			isa = PBXGroup;
 			children = (
-				F4CC51B62E349155003AE094 /* FirmwareUpdate.pb.h */,
-				F4CC51B72E349155003AE094 /* FirmwareUpdate.pb.cc */,
 				3BB3C2592DFEB6A000DED473 /* messages-algorand.pb.cc */,
 				3BB3C23C2DFEB69E00DED473 /* messages-algorand.pb.h */,
 				3BB3C25D2DFEB6A000DED473 /* messages-aptos.pb.cc */,
@@ -1900,10 +1889,6 @@
 				3BB3C23F2DFEB69E00DED473 /* messages-eos.pb.h */,
 				3BB3C2412DFEB69E00DED473 /* messages-ethereum-definitions.pb.cc */,
 				3BB3C24F2DFEB69F00DED473 /* messages-ethereum-definitions.pb.h */,
-				3BB3C25C2DFEB6A000DED473 /* messages-ethereum-digitalshield.pb.cc */,
-				3BB3C2442DFEB69F00DED473 /* messages-ethereum-digitalshield.pb.h */,
-				3BB3C2502DFEB69F00DED473 /* messages-ethereum-eip712-digitalshield.pb.cc */,
-				3BB3C2712DFEB6A200DED473 /* messages-ethereum-eip712-digitalshield.pb.h */,
 				3BB3C2702DFEB6A100DED473 /* messages-ethereum-eip712.pb.cc */,
 				3BB3C26F2DFEB6A100DED473 /* messages-ethereum-eip712.pb.h */,
 				3BB3C27A2DFEB6A200DED473 /* messages-ethereum.pb.cc */,
@@ -2072,7 +2057,6 @@
 				3BB3C2A32DFEB6A300DED473 /* messages-binance.pb.cc in Sources */,
 				67C29C0C2363096C00E36619 /* PublicKey.cpp in Sources */,
 				67C29C6223630ACE00E36619 /* memzero.c in Sources */,
-				3BB3C28D2DFEB6A300DED473 /* messages-ethereum-eip712-digitalshield.pb.cc in Sources */,
 				3BB3C29C2DFEB6A300DED473 /* messages-ethereum-eip712.pb.cc in Sources */,
 				67C29C7923630AF000E36619 /* ed25519-keccak.c in Sources */,
 				67C29C30236309A100E36619 /* Address.cpp in Sources */,
@@ -2226,14 +2210,12 @@
 				67C29D7F2363102F00E36619 /* JUB_SDK_ETH.cpp in Sources */,
 				67C29C6323630ACE00E36619 /* rand.c in Sources */,
 				67B032992588D8E00070F716 /* pb_length_delimited.cpp in Sources */,
-				3BB3C2932DFEB6A300DED473 /* messages-ethereum-digitalshield.pb.cc in Sources */,
 				67C29CA223630B2700E36619 /* aeskey.c in Sources */,
 				9EEB8DB52DC9022C00CFA49C /* JubiterSealer2100ImplSUI.cpp in Sources */,
 				67C29CFA23630D9700E36619 /* bech32.cpp in Sources */,
 				772BC0CE26DF802900723878 /* Transaction.cpp in Sources */,
 				772BC0C726DF802900723878 /* TransactionRaw.cpp in Sources */,
 				3BB3C2962DFEB6A300DED473 /* messages-polkadot.pb.cc in Sources */,
-				F4CC51B82E349155003AE094 /* FirmwareUpdate.pb.cc in Sources */,
 				67B0328B2588D8A90070F716 /* libTRX.cpp in Sources */,
 				9E91A4652DDC47AA00AEA834 /* messages-ethereum.pb.cc in Sources */,
 				6755AD26239A455700B07BB0 /* ContextXRP.cpp in Sources */,

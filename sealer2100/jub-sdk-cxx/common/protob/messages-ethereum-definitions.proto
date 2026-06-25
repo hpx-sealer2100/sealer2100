@@ -31,7 +31,6 @@ message EthereumNetworkInfo {
     required uint32 slip44 = 3;
     required string name = 4;
     optional string icon = 101;
-    optional uint64 primary_color = 102;
 }
 
 /**

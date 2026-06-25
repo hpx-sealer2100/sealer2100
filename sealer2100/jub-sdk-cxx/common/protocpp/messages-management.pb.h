@@ -49,7 +49,7 @@ struct TableStruct_messages_2dmanagement_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[57]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[61]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -189,6 +189,15 @@ extern ResourceUpdateDefaultTypeInternal _ResourceUpdate_default_instance_;
 class ResourceUpload;
 class ResourceUploadDefaultTypeInternal;
 extern ResourceUploadDefaultTypeInternal _ResourceUpload_default_instance_;
+class SEBackToRomBoot;
+class SEBackToRomBootDefaultTypeInternal;
+extern SEBackToRomBootDefaultTypeInternal _SEBackToRomBoot_default_instance_;
+class SEInitialize;
+class SEInitializeDefaultTypeInternal;
+extern SEInitializeDefaultTypeInternal _SEInitialize_default_instance_;
+class SEInitializeDone;
+class SEInitializeDoneDefaultTypeInternal;
+extern SEInitializeDoneDefaultTypeInternal _SEInitializeDone_default_instance_;
 class SEMessageSignature;
 class SEMessageSignatureDefaultTypeInternal;
 extern SEMessageSignatureDefaultTypeInternal _SEMessageSignature_default_instance_;
@@ -201,6 +210,9 @@ extern SEPublicKeyDefaultTypeInternal _SEPublicKey_default_instance_;
 class SESignMessage;
 class SESignMessageDefaultTypeInternal;
 extern SESignMessageDefaultTypeInternal _SESignMessage_default_instance_;
+class SEWipeUserStorage;
+class SEWipeUserStorageDefaultTypeInternal;
+extern SEWipeUserStorageDefaultTypeInternal _SEWipeUserStorage_default_instance_;
 class SdProtect;
 class SdProtectDefaultTypeInternal;
 extern SdProtectDefaultTypeInternal _SdProtect_default_instance_;
@@ -279,10 +291,14 @@ template<> ::hw::trezor::messages::management::ResourceAck* Arena::CreateMaybeMe
 template<> ::hw::trezor::messages::management::ResourceRequest* Arena::CreateMaybeMessage<::hw::trezor::messages::management::ResourceRequest>(Arena*);
 template<> ::hw::trezor::messages::management::ResourceUpdate* Arena::CreateMaybeMessage<::hw::trezor::messages::management::ResourceUpdate>(Arena*);
 template<> ::hw::trezor::messages::management::ResourceUpload* Arena::CreateMaybeMessage<::hw::trezor::messages::management::ResourceUpload>(Arena*);
+template<> ::hw::trezor::messages::management::SEBackToRomBoot* Arena::CreateMaybeMessage<::hw::trezor::messages::management::SEBackToRomBoot>(Arena*);
+template<> ::hw::trezor::messages::management::SEInitialize* Arena::CreateMaybeMessage<::hw::trezor::messages::management::SEInitialize>(Arena*);
+template<> ::hw::trezor::messages::management::SEInitializeDone* Arena::CreateMaybeMessage<::hw::trezor::messages::management::SEInitializeDone>(Arena*);
 template<> ::hw::trezor::messages::management::SEMessageSignature* Arena::CreateMaybeMessage<::hw::trezor::messages::management::SEMessageSignature>(Arena*);
 template<> ::hw::trezor::messages::management::SEPublicCert* Arena::CreateMaybeMessage<::hw::trezor::messages::management::SEPublicCert>(Arena*);
 template<> ::hw::trezor::messages::management::SEPublicKey* Arena::CreateMaybeMessage<::hw::trezor::messages::management::SEPublicKey>(Arena*);
 template<> ::hw::trezor::messages::management::SESignMessage* Arena::CreateMaybeMessage<::hw::trezor::messages::management::SESignMessage>(Arena*);
+template<> ::hw::trezor::messages::management::SEWipeUserStorage* Arena::CreateMaybeMessage<::hw::trezor::messages::management::SEWipeUserStorage>(Arena*);
 template<> ::hw::trezor::messages::management::SdProtect* Arena::CreateMaybeMessage<::hw::trezor::messages::management::SdProtect>(Arena*);
 template<> ::hw::trezor::messages::management::SetBusy* Arena::CreateMaybeMessage<::hw::trezor::messages::management::SetBusy>(Arena*);
 template<> ::hw::trezor::messages::management::SetU2FCounter* Arena::CreateMaybeMessage<::hw::trezor::messages::management::SetU2FCounter>(Arena*);
@@ -966,8 +982,8 @@ class Features :
     kBleNameFieldNumber = 501,
     kBleVerFieldNumber = 502,
     kSeVerFieldNumber = 506,
-    kDigitalshieldVersionFieldNumber = 508,
-    kDigitalshieldSerialFieldNumber = 509,
+    kHypermateVersionFieldNumber = 508,
+    kHypermateSerialFieldNumber = 509,
     kBootloaderVersionFieldNumber = 510,
     kSerialNoFieldNumber = 511,
     kSpiFlashFieldNumber = 512,
@@ -1167,29 +1183,29 @@ class Features :
   std::string* release_se_ver();
   void set_allocated_se_ver(std::string* se_ver);
 
-  // optional string digitalshield_version = 508;
-  bool has_digitalshield_version() const;
-  void clear_digitalshield_version();
-  const std::string& digitalshield_version() const;
-  void set_digitalshield_version(const std::string& value);
-  void set_digitalshield_version(std::string&& value);
-  void set_digitalshield_version(const char* value);
-  void set_digitalshield_version(const char* value, size_t size);
-  std::string* mutable_digitalshield_version();
-  std::string* release_digitalshield_version();
-  void set_allocated_digitalshield_version(std::string* digitalshield_version);
+  // optional string hypermate_version = 508;
+  bool has_hypermate_version() const;
+  void clear_hypermate_version();
+  const std::string& hypermate_version() const;
+  void set_hypermate_version(const std::string& value);
+  void set_hypermate_version(std::string&& value);
+  void set_hypermate_version(const char* value);
+  void set_hypermate_version(const char* value, size_t size);
+  std::string* mutable_hypermate_version();
+  std::string* release_hypermate_version();
+  void set_allocated_hypermate_version(std::string* hypermate_version);
 
-  // optional string digitalshield_serial = 509;
-  bool has_digitalshield_serial() const;
-  void clear_digitalshield_serial();
-  const std::string& digitalshield_serial() const;
-  void set_digitalshield_serial(const std::string& value);
-  void set_digitalshield_serial(std::string&& value);
-  void set_digitalshield_serial(const char* value);
-  void set_digitalshield_serial(const char* value, size_t size);
-  std::string* mutable_digitalshield_serial();
-  std::string* release_digitalshield_serial();
-  void set_allocated_digitalshield_serial(std::string* digitalshield_serial);
+  // optional string hypermate_serial = 509;
+  bool has_hypermate_serial() const;
+  void clear_hypermate_serial();
+  const std::string& hypermate_serial() const;
+  void set_hypermate_serial(const std::string& value);
+  void set_hypermate_serial(std::string&& value);
+  void set_hypermate_serial(const char* value);
+  void set_hypermate_serial(const char* value, size_t size);
+  std::string* mutable_hypermate_serial();
+  std::string* release_hypermate_serial();
+  void set_allocated_hypermate_serial(std::string* hypermate_serial);
 
   // optional string bootloader_version = 510;
   bool has_bootloader_version() const;
@@ -1538,8 +1554,8 @@ class Features :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr ble_name_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr ble_ver_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr se_ver_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr digitalshield_version_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr digitalshield_serial_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr hypermate_version_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr hypermate_serial_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr bootloader_version_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr serial_no_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr spi_flash_;
@@ -8212,6 +8228,526 @@ class SEMessageSignature :
 };
 // -------------------------------------------------------------------
 
+class SEInitialize :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hw.trezor.messages.management.SEInitialize) */ {
+ public:
+  SEInitialize();
+  virtual ~SEInitialize();
+
+  SEInitialize(const SEInitialize& from);
+  SEInitialize(SEInitialize&& from) noexcept
+    : SEInitialize() {
+    *this = ::std::move(from);
+  }
+
+  inline SEInitialize& operator=(const SEInitialize& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SEInitialize& operator=(SEInitialize&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const SEInitialize& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const SEInitialize* internal_default_instance() {
+    return reinterpret_cast<const SEInitialize*>(
+               &_SEInitialize_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    47;
+
+  friend void swap(SEInitialize& a, SEInitialize& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SEInitialize* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SEInitialize* New() const final {
+    return CreateMaybeMessage<SEInitialize>(nullptr);
+  }
+
+  SEInitialize* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SEInitialize>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const SEInitialize& from);
+  void MergeFrom(const SEInitialize& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SEInitialize* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "hw.trezor.messages.management.SEInitialize";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_messages_2dmanagement_2eproto);
+    return ::descriptor_table_messages_2dmanagement_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:hw.trezor.messages.management.SEInitialize)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_messages_2dmanagement_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SEInitializeDone :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hw.trezor.messages.management.SEInitializeDone) */ {
+ public:
+  SEInitializeDone();
+  virtual ~SEInitializeDone();
+
+  SEInitializeDone(const SEInitializeDone& from);
+  SEInitializeDone(SEInitializeDone&& from) noexcept
+    : SEInitializeDone() {
+    *this = ::std::move(from);
+  }
+
+  inline SEInitializeDone& operator=(const SEInitializeDone& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SEInitializeDone& operator=(SEInitializeDone&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const SEInitializeDone& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const SEInitializeDone* internal_default_instance() {
+    return reinterpret_cast<const SEInitializeDone*>(
+               &_SEInitializeDone_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    48;
+
+  friend void swap(SEInitializeDone& a, SEInitializeDone& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SEInitializeDone* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SEInitializeDone* New() const final {
+    return CreateMaybeMessage<SEInitializeDone>(nullptr);
+  }
+
+  SEInitializeDone* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SEInitializeDone>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const SEInitializeDone& from);
+  void MergeFrom(const SEInitializeDone& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SEInitializeDone* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "hw.trezor.messages.management.SEInitializeDone";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_messages_2dmanagement_2eproto);
+    return ::descriptor_table_messages_2dmanagement_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:hw.trezor.messages.management.SEInitializeDone)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_messages_2dmanagement_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SEBackToRomBoot :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hw.trezor.messages.management.SEBackToRomBoot) */ {
+ public:
+  SEBackToRomBoot();
+  virtual ~SEBackToRomBoot();
+
+  SEBackToRomBoot(const SEBackToRomBoot& from);
+  SEBackToRomBoot(SEBackToRomBoot&& from) noexcept
+    : SEBackToRomBoot() {
+    *this = ::std::move(from);
+  }
+
+  inline SEBackToRomBoot& operator=(const SEBackToRomBoot& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SEBackToRomBoot& operator=(SEBackToRomBoot&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const SEBackToRomBoot& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const SEBackToRomBoot* internal_default_instance() {
+    return reinterpret_cast<const SEBackToRomBoot*>(
+               &_SEBackToRomBoot_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    49;
+
+  friend void swap(SEBackToRomBoot& a, SEBackToRomBoot& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SEBackToRomBoot* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SEBackToRomBoot* New() const final {
+    return CreateMaybeMessage<SEBackToRomBoot>(nullptr);
+  }
+
+  SEBackToRomBoot* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SEBackToRomBoot>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const SEBackToRomBoot& from);
+  void MergeFrom(const SEBackToRomBoot& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SEBackToRomBoot* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "hw.trezor.messages.management.SEBackToRomBoot";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_messages_2dmanagement_2eproto);
+    return ::descriptor_table_messages_2dmanagement_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:hw.trezor.messages.management.SEBackToRomBoot)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_messages_2dmanagement_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SEWipeUserStorage :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hw.trezor.messages.management.SEWipeUserStorage) */ {
+ public:
+  SEWipeUserStorage();
+  virtual ~SEWipeUserStorage();
+
+  SEWipeUserStorage(const SEWipeUserStorage& from);
+  SEWipeUserStorage(SEWipeUserStorage&& from) noexcept
+    : SEWipeUserStorage() {
+    *this = ::std::move(from);
+  }
+
+  inline SEWipeUserStorage& operator=(const SEWipeUserStorage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SEWipeUserStorage& operator=(SEWipeUserStorage&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const SEWipeUserStorage& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const SEWipeUserStorage* internal_default_instance() {
+    return reinterpret_cast<const SEWipeUserStorage*>(
+               &_SEWipeUserStorage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    50;
+
+  friend void swap(SEWipeUserStorage& a, SEWipeUserStorage& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SEWipeUserStorage* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SEWipeUserStorage* New() const final {
+    return CreateMaybeMessage<SEWipeUserStorage>(nullptr);
+  }
+
+  SEWipeUserStorage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SEWipeUserStorage>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const SEWipeUserStorage& from);
+  void MergeFrom(const SEWipeUserStorage& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SEWipeUserStorage* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "hw.trezor.messages.management.SEWipeUserStorage";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_messages_2dmanagement_2eproto);
+    return ::descriptor_table_messages_2dmanagement_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:hw.trezor.messages.management.SEWipeUserStorage)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_messages_2dmanagement_2eproto;
+};
+// -------------------------------------------------------------------
+
 class ResourceUpload :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hw.trezor.messages.management.ResourceUpload) */ {
  public:
@@ -8261,7 +8797,7 @@ class ResourceUpload :
                &_ResourceUpload_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    47;
+    51;
 
   friend void swap(ResourceUpload& a, ResourceUpload& b) {
     a.Swap(&b);
@@ -8492,7 +9028,7 @@ class ZoomRequest :
                &_ZoomRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    48;
+    52;
 
   friend void swap(ZoomRequest& a, ZoomRequest& b) {
     a.Swap(&b);
@@ -8640,7 +9176,7 @@ class ResourceRequest :
                &_ResourceRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    49;
+    53;
 
   friend void swap(ResourceRequest& a, ResourceRequest& b) {
     a.Swap(&b);
@@ -8788,7 +9324,7 @@ class ResourceAck :
                &_ResourceAck_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    50;
+    54;
 
   friend void swap(ResourceAck& a, ResourceAck& b) {
     a.Swap(&b);
@@ -8948,7 +9484,7 @@ class ResourceUpdate :
                &_ResourceUpdate_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    51;
+    55;
 
   friend void swap(ResourceUpdate& a, ResourceUpdate& b) {
     a.Swap(&b);
@@ -9133,7 +9669,7 @@ class ListResDir :
                &_ListResDir_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    52;
+    56;
 
   friend void swap(ListResDir& a, ListResDir& b) {
     a.Swap(&b);
@@ -9279,7 +9815,7 @@ class FileInfoList_FileInfo :
                &_FileInfoList_FileInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    53;
+    57;
 
   friend void swap(FileInfoList_FileInfo& a, FileInfoList_FileInfo& b) {
     a.Swap(&b);
@@ -9436,7 +9972,7 @@ class FileInfoList :
                &_FileInfoList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    54;
+    58;
 
   friend void swap(FileInfoList& a, FileInfoList& b) {
     a.Swap(&b);
@@ -9583,7 +10119,7 @@ class UnlockPath :
                &_UnlockPath_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    55;
+    59;
 
   friend void swap(UnlockPath& a, UnlockPath& b) {
     a.Swap(&b);
@@ -9742,7 +10278,7 @@ class UnlockedPathRequest :
                &_UnlockedPathRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    56;
+    60;
 
   friend void swap(UnlockedPathRequest& a, UnlockedPathRequest& b) {
     a.Swap(&b);
@@ -11256,120 +11792,120 @@ inline void Features::set_backup_only(bool value) {
   // @@protoc_insertion_point(field_set:hw.trezor.messages.management.Features.backup_only)
 }
 
-// optional string digitalshield_version = 508;
-inline bool Features::has_digitalshield_version() const {
+// optional string hypermate_version = 508;
+inline bool Features::has_hypermate_version() const {
   return (_has_bits_[0] & 0x00001000u) != 0;
 }
-inline void Features::clear_digitalshield_version() {
-  digitalshield_version_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+inline void Features::clear_hypermate_version() {
+  hypermate_version_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   _has_bits_[0] &= ~0x00001000u;
 }
-inline const std::string& Features::digitalshield_version() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.Features.digitalshield_version)
-  return digitalshield_version_.GetNoArena();
+inline const std::string& Features::hypermate_version() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.Features.hypermate_version)
+  return hypermate_version_.GetNoArena();
 }
-inline void Features::set_digitalshield_version(const std::string& value) {
+inline void Features::set_hypermate_version(const std::string& value) {
   _has_bits_[0] |= 0x00001000u;
-  digitalshield_version_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.Features.digitalshield_version)
+  hypermate_version_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.Features.hypermate_version)
 }
-inline void Features::set_digitalshield_version(std::string&& value) {
+inline void Features::set_hypermate_version(std::string&& value) {
   _has_bits_[0] |= 0x00001000u;
-  digitalshield_version_.SetNoArena(
+  hypermate_version_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.management.Features.digitalshield_version)
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.management.Features.hypermate_version)
 }
-inline void Features::set_digitalshield_version(const char* value) {
+inline void Features::set_hypermate_version(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   _has_bits_[0] |= 0x00001000u;
-  digitalshield_version_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.management.Features.digitalshield_version)
+  hypermate_version_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.management.Features.hypermate_version)
 }
-inline void Features::set_digitalshield_version(const char* value, size_t size) {
+inline void Features::set_hypermate_version(const char* value, size_t size) {
   _has_bits_[0] |= 0x00001000u;
-  digitalshield_version_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+  hypermate_version_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.management.Features.digitalshield_version)
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.management.Features.hypermate_version)
 }
-inline std::string* Features::mutable_digitalshield_version() {
+inline std::string* Features::mutable_hypermate_version() {
   _has_bits_[0] |= 0x00001000u;
-  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.Features.digitalshield_version)
-  return digitalshield_version_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.Features.hypermate_version)
+  return hypermate_version_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline std::string* Features::release_digitalshield_version() {
-  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.Features.digitalshield_version)
-  if (!has_digitalshield_version()) {
+inline std::string* Features::release_hypermate_version() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.Features.hypermate_version)
+  if (!has_hypermate_version()) {
     return nullptr;
   }
   _has_bits_[0] &= ~0x00001000u;
-  return digitalshield_version_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  return hypermate_version_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline void Features::set_allocated_digitalshield_version(std::string* digitalshield_version) {
-  if (digitalshield_version != nullptr) {
+inline void Features::set_allocated_hypermate_version(std::string* hypermate_version) {
+  if (hypermate_version != nullptr) {
     _has_bits_[0] |= 0x00001000u;
   } else {
     _has_bits_[0] &= ~0x00001000u;
   }
-  digitalshield_version_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), digitalshield_version);
-  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.Features.digitalshield_version)
+  hypermate_version_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), hypermate_version);
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.Features.hypermate_version)
 }
 
-// optional string digitalshield_serial = 509;
-inline bool Features::has_digitalshield_serial() const {
+// optional string hypermate_serial = 509;
+inline bool Features::has_hypermate_serial() const {
   return (_has_bits_[0] & 0x00002000u) != 0;
 }
-inline void Features::clear_digitalshield_serial() {
-  digitalshield_serial_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+inline void Features::clear_hypermate_serial() {
+  hypermate_serial_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   _has_bits_[0] &= ~0x00002000u;
 }
-inline const std::string& Features::digitalshield_serial() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.Features.digitalshield_serial)
-  return digitalshield_serial_.GetNoArena();
+inline const std::string& Features::hypermate_serial() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.Features.hypermate_serial)
+  return hypermate_serial_.GetNoArena();
 }
-inline void Features::set_digitalshield_serial(const std::string& value) {
+inline void Features::set_hypermate_serial(const std::string& value) {
   _has_bits_[0] |= 0x00002000u;
-  digitalshield_serial_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.Features.digitalshield_serial)
+  hypermate_serial_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.Features.hypermate_serial)
 }
-inline void Features::set_digitalshield_serial(std::string&& value) {
+inline void Features::set_hypermate_serial(std::string&& value) {
   _has_bits_[0] |= 0x00002000u;
-  digitalshield_serial_.SetNoArena(
+  hypermate_serial_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.management.Features.digitalshield_serial)
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.management.Features.hypermate_serial)
 }
-inline void Features::set_digitalshield_serial(const char* value) {
+inline void Features::set_hypermate_serial(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   _has_bits_[0] |= 0x00002000u;
-  digitalshield_serial_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.management.Features.digitalshield_serial)
+  hypermate_serial_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.management.Features.hypermate_serial)
 }
-inline void Features::set_digitalshield_serial(const char* value, size_t size) {
+inline void Features::set_hypermate_serial(const char* value, size_t size) {
   _has_bits_[0] |= 0x00002000u;
-  digitalshield_serial_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+  hypermate_serial_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.management.Features.digitalshield_serial)
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.management.Features.hypermate_serial)
 }
-inline std::string* Features::mutable_digitalshield_serial() {
+inline std::string* Features::mutable_hypermate_serial() {
   _has_bits_[0] |= 0x00002000u;
-  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.Features.digitalshield_serial)
-  return digitalshield_serial_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.Features.hypermate_serial)
+  return hypermate_serial_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline std::string* Features::release_digitalshield_serial() {
-  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.Features.digitalshield_serial)
-  if (!has_digitalshield_serial()) {
+inline std::string* Features::release_hypermate_serial() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.Features.hypermate_serial)
+  if (!has_hypermate_serial()) {
     return nullptr;
   }
   _has_bits_[0] &= ~0x00002000u;
-  return digitalshield_serial_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  return hypermate_serial_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline void Features::set_allocated_digitalshield_serial(std::string* digitalshield_serial) {
-  if (digitalshield_serial != nullptr) {
+inline void Features::set_allocated_hypermate_serial(std::string* hypermate_serial) {
+  if (hypermate_serial != nullptr) {
     _has_bits_[0] |= 0x00002000u;
   } else {
     _has_bits_[0] &= ~0x00002000u;
   }
-  digitalshield_serial_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), digitalshield_serial);
-  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.Features.digitalshield_serial)
+  hypermate_serial_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), hypermate_serial);
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.Features.hypermate_serial)
 }
 
 // optional string bootloader_version = 510;
@@ -14678,6 +15214,22 @@ inline void SEMessageSignature::set_allocated_signature(std::string* signature) 
 
 // -------------------------------------------------------------------
 
+// SEInitialize
+
+// -------------------------------------------------------------------
+
+// SEInitializeDone
+
+// -------------------------------------------------------------------
+
+// SEBackToRomBoot
+
+// -------------------------------------------------------------------
+
+// SEWipeUserStorage
+
+// -------------------------------------------------------------------
+
 // ResourceUpload
 
 // required string extension = 1;
@@ -15638,6 +16190,14 @@ inline void UnlockedPathRequest::set_allocated_mac(std::string* mac) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

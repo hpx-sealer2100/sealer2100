@@ -10,7 +10,7 @@
 
 //typedef struct {
 //    JUB_CHAR_PTR    main_path;
-//    uint32_t        chainID;
+//    uint64_t        chainID;
 //} CONTEXT_CONFIG_ETH;
 @interface ContextConfigETH : NSObject
 @property (atomic, copy  ) NSString* _Nonnull mainPath;
@@ -31,6 +31,35 @@
 @property (atomic, copy  ) NSString* _Nonnull tokenName;
 @property (atomic, assign) NSInteger unitDP;
 @property (atomic, copy  ) NSString* _Nonnull contractAddress;
+@end
+
+//typedef struct {
+//    uint64_t chainID;      // Chain ID of the network, must match CONTEXT_CONFIG_ETH.chainID
+//    uint64_t slip44ID;     // SLIP-0044 coin type of the network (reserved, currently unused)
+//    JUB_CHAR_CPTR name;    // Network name
+//    JUB_CHAR_CPTR symbol;  // Native currency symbol of the network
+//} JUB_ETH_NETWORK_INFO;
+//
+@interface ETHNetworkInfoV2 : NSObject
+@property (atomic, copy) NSString* _Nonnull name;
+@property (atomic, copy) NSString* _Nonnull symbol;
+@property (atomic, assign) NSInteger chain_id;
+@property (atomic, assign) NSInteger slip44_id;
+@end
+
+//typedef struct {
+//    uint64_t chainID;      // Chain ID of the network to which the token belongs
+//    JUB_CHAR_CPTR name;    // Token name
+//    JUB_CHAR_CPTR symbol;  // Token symbol
+//    JUB_CHAR_CPTR address; // Token contract address
+//    JUB_UINT32 decimals;   // Token decimal precision
+//} JUB_ERC20_TOKEN_INFO;
+@interface ERC20TokenInfoV2 : NSObject
+@property (atomic, copy) NSString* _Nonnull name;
+@property (atomic, copy) NSString* _Nonnull symbol;
+@property (atomic, copy) NSString* _Nonnull address;
+@property (atomic, assign) NSInteger chain_id;
+@property (atomic, assign) NSInteger decimals;
 @end
 
 NS_ASSUME_NONNULL_BEGIN
@@ -108,6 +137,13 @@ NS_ASSUME_NONNULL_BEGIN
                    tokenName:(NSString*)tokenName
                       unitDP:(NSUInteger)unitDP
              contractAddress:(NSString*)contractAddress;
+
+- (void)JUB_SetETHV2: (NSUInteger)contextID
+             network:(ETHNetworkInfoV2*)network;
+
+- (void)JUB_SetETHV2:(NSUInteger)contextID
+             network:(ETHNetworkInfoV2*)network
+               token:(ERC20TokenInfoV2*)token;
 
 //JUB_RV JUB_BuildERC20TransferAbiETH(IN JUB_UINT16 contextID,
 //                                    IN JUB_CHAR_CPTR tokenTo, IN JUB_CHAR_CPTR tokenValue,

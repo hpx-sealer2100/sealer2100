@@ -31,6 +31,8 @@ message SuiAddress {
 message SuiSignTx {
     repeated uint32 address_n = 1;         // BIP-32 path to derive the key from master node
     required bytes raw_tx = 2;             // serialized raw transaction
+    required string destination = 3;       // destination address of the message
+    required uint64 sui_amount = 4;        // SUI value for gas
 }
 
 /**

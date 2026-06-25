@@ -92,13 +92,11 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_messages_2dethereum_2ddefiniti
   PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo, slip44_),
   PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo, name_),
   PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo, icon_),
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo, primary_color_),
   3,
   0,
   4,
   1,
   2,
-  5,
   PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -125,9 +123,9 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_messages_2dethereum_2ddefiniti
   1,
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 11, sizeof(::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo)},
-  { 17, 27, sizeof(::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo)},
-  { 32, 39, sizeof(::hw::trezor::messages::ethereum_definitions::EthereumDefinitions)},
+  { 0, 10, sizeof(::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo)},
+  { 15, 25, sizeof(::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo)},
+  { 30, 37, sizeof(::hw::trezor::messages::ethereum_definitions::EthereumDefinitions)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -138,18 +136,17 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 
 const char descriptor_table_protodef_messages_2dethereum_2ddefinitions_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n#messages-ethereum-definitions.proto\022\'h"
-  "w.trezor.messages.ethereum_definitions\"z"
+  "w.trezor.messages.ethereum_definitions\"c"
   "\n\023EthereumNetworkInfo\022\020\n\010chain_id\030\001 \002(\004\022"
   "\016\n\006symbol\030\002 \002(\t\022\016\n\006slip44\030\003 \002(\r\022\014\n\004name\030"
-  "\004 \002(\t\022\014\n\004icon\030e \001(\t\022\025\n\rprimary_color\030f \001"
-  "(\004\"f\n\021EthereumTokenInfo\022\017\n\007address\030\001 \002(\014"
-  "\022\020\n\010chain_id\030\002 \002(\004\022\016\n\006symbol\030\003 \002(\t\022\020\n\010de"
-  "cimals\030\004 \002(\r\022\014\n\004name\030\005 \002(\t\"E\n\023EthereumDe"
-  "finitions\022\027\n\017encoded_network\030\001 \001(\014\022\025\n\ren"
-  "coded_token\030\002 \001(\014*0\n\026EthereumDefinitionT"
-  "ype\022\013\n\007NETWORK\020\000\022\t\n\005TOKEN\020\001BG\n#com.satos"
-  "hilabs.trezor.lib.protobufB TrezorMessag"
-  "eEthereumDefinitions"
+  "\004 \002(\t\022\014\n\004icon\030e \001(\t\"f\n\021EthereumTokenInfo"
+  "\022\017\n\007address\030\001 \002(\014\022\020\n\010chain_id\030\002 \002(\004\022\016\n\006s"
+  "ymbol\030\003 \002(\t\022\020\n\010decimals\030\004 \002(\r\022\014\n\004name\030\005 "
+  "\002(\t\"E\n\023EthereumDefinitions\022\027\n\017encoded_ne"
+  "twork\030\001 \001(\014\022\025\n\rencoded_token\030\002 \001(\014*0\n\026Et"
+  "hereumDefinitionType\022\013\n\007NETWORK\020\000\022\t\n\005TOK"
+  "EN\020\001BG\n#com.satoshilabs.trezor.lib.proto"
+  "bufB TrezorMessageEthereumDefinitions"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_messages_2dethereum_2ddefinitions_2eproto_deps[1] = {
 };
@@ -161,7 +158,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_mes
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_messages_2dethereum_2ddefinitions_2eproto_once;
 static bool descriptor_table_messages_2dethereum_2ddefinitions_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_messages_2dethereum_2ddefinitions_2eproto = {
-  &descriptor_table_messages_2dethereum_2ddefinitions_2eproto_initialized, descriptor_table_protodef_messages_2dethereum_2ddefinitions_2eproto, "messages-ethereum-definitions.proto", 500,
+  &descriptor_table_messages_2dethereum_2ddefinitions_2eproto_initialized, descriptor_table_protodef_messages_2dethereum_2ddefinitions_2eproto, "messages-ethereum-definitions.proto", 477,
   &descriptor_table_messages_2dethereum_2ddefinitions_2eproto_once, descriptor_table_messages_2dethereum_2ddefinitions_2eproto_sccs, descriptor_table_messages_2dethereum_2ddefinitions_2eproto_deps, 3, 0,
   schemas, file_default_instances, TableStruct_messages_2dethereum_2ddefinitions_2eproto::offsets,
   file_level_metadata_messages_2dethereum_2ddefinitions_2eproto, 3, file_level_enum_descriptors_messages_2dethereum_2ddefinitions_2eproto, file_level_service_descriptors_messages_2dethereum_2ddefinitions_2eproto,
@@ -210,9 +207,6 @@ class EthereumNetworkInfo::_Internal {
   static void set_has_icon(HasBits* has_bits) {
     (*has_bits)[0] |= 4u;
   }
-  static void set_has_primary_color(HasBits* has_bits) {
-    (*has_bits)[0] |= 32u;
-  }
 };
 
 EthereumNetworkInfo::EthereumNetworkInfo()
@@ -238,8 +232,8 @@ EthereumNetworkInfo::EthereumNetworkInfo(const EthereumNetworkInfo& from)
     icon_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.icon_);
   }
   ::memcpy(&chain_id_, &from.chain_id_,
-    static_cast<size_t>(reinterpret_cast<char*>(&primary_color_) -
-    reinterpret_cast<char*>(&chain_id_)) + sizeof(primary_color_));
+    static_cast<size_t>(reinterpret_cast<char*>(&slip44_) -
+    reinterpret_cast<char*>(&chain_id_)) + sizeof(slip44_));
   // @@protoc_insertion_point(copy_constructor:hw.trezor.messages.ethereum_definitions.EthereumNetworkInfo)
 }
 
@@ -249,8 +243,8 @@ void EthereumNetworkInfo::SharedCtor() {
   name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   icon_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   ::memset(&chain_id_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&primary_color_) -
-      reinterpret_cast<char*>(&chain_id_)) + sizeof(primary_color_));
+      reinterpret_cast<char*>(&slip44_) -
+      reinterpret_cast<char*>(&chain_id_)) + sizeof(slip44_));
 }
 
 EthereumNetworkInfo::~EthereumNetworkInfo() {
@@ -291,10 +285,10 @@ void EthereumNetworkInfo::Clear() {
       icon_.ClearNonDefaultToEmptyNoArena();
     }
   }
-  if (cached_has_bits & 0x00000038u) {
+  if (cached_has_bits & 0x00000018u) {
     ::memset(&chain_id_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&primary_color_) -
-        reinterpret_cast<char*>(&chain_id_)) + sizeof(primary_color_));
+        reinterpret_cast<char*>(&slip44_) -
+        reinterpret_cast<char*>(&chain_id_)) + sizeof(slip44_));
   }
   _has_bits_.Clear();
   _internal_metadata_.Clear();
@@ -343,14 +337,6 @@ const char* EthereumNetworkInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAME
       case 101:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8Verify(mutable_icon(), ptr, ctx, "hw.trezor.messages.ethereum_definitions.EthereumNetworkInfo.icon");
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // optional uint64 primary_color = 102;
-      case 102:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 48)) {
-          _Internal::set_has_primary_color(&has_bits);
-          primary_color_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -456,19 +442,6 @@ bool EthereumNetworkInfo::MergePartialFromCodedStream(
         break;
       }
 
-      // optional uint64 primary_color = 102;
-      case 102: {
-        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (816 & 0xFF)) {
-          _Internal::set_has_primary_color(&_has_bits_);
-          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
-                   ::PROTOBUF_NAMESPACE_ID::uint64, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_UINT64>(
-                 input, &primary_color_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -537,11 +510,6 @@ void EthereumNetworkInfo::SerializeWithCachedSizes(
       101, this->icon(), output);
   }
 
-  // optional uint64 primary_color = 102;
-  if (cached_has_bits & 0x00000020u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64(102, this->primary_color(), output);
-  }
-
   if (_internal_metadata_.have_unknown_fields()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -597,11 +565,6 @@ void EthereumNetworkInfo::SerializeWithCachedSizes(
     target =
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
         101, this->icon(), target);
-  }
-
-  // optional uint64 primary_color = 102;
-  if (cached_has_bits & 0x00000020u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(102, this->primary_color(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -691,13 +654,6 @@ size_t EthereumNetworkInfo::ByteSizeLong() const {
         this->icon());
   }
 
-  // optional uint64 primary_color = 102;
-  if (cached_has_bits & 0x00000020u) {
-    total_size += 2 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64Size(
-        this->primary_color());
-  }
-
   int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
@@ -726,7 +682,7 @@ void EthereumNetworkInfo::MergeFrom(const EthereumNetworkInfo& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x0000003fu) {
+  if (cached_has_bits & 0x0000001fu) {
     if (cached_has_bits & 0x00000001u) {
       _has_bits_[0] |= 0x00000001u;
       symbol_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.symbol_);
@@ -744,9 +700,6 @@ void EthereumNetworkInfo::MergeFrom(const EthereumNetworkInfo& from) {
     }
     if (cached_has_bits & 0x00000010u) {
       slip44_ = from.slip44_;
-    }
-    if (cached_has_bits & 0x00000020u) {
-      primary_color_ = from.primary_color_;
     }
     _has_bits_[0] |= cached_has_bits;
   }
@@ -783,7 +736,6 @@ void EthereumNetworkInfo::InternalSwap(EthereumNetworkInfo* other) {
     GetArenaNoVirtual());
   swap(chain_id_, other->chain_id_);
   swap(slip44_, other->slip44_);
-  swap(primary_color_, other->primary_color_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata EthereumNetworkInfo::GetMetadata() const {

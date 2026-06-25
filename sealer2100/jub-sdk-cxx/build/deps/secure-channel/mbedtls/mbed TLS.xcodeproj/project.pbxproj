@@ -1,0 +1,2088 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		7F4201D89D309979954645B1 /* ZERO_CHECK */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 69E89AF162D3470CBB224DE3 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
+			buildPhases = (
+				543851F9D504548313CE16BD /* Generate CMakeFiles/ZERO_CHECK */,
+			);
+			dependencies = (
+			);
+			name = ZERO_CHECK;
+			productName = ZERO_CHECK;
+		};
+		A86CA3D072C5087122B2C35D /* ALL_BUILD */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 374E1BFB6F5F4C6F9B07D74B /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
+			buildPhases = (
+				8C55BCDA463C237637446222 /* Generate CMakeFiles/ALL_BUILD */,
+			);
+			dependencies = (
+				B386E10A99474576B2FAA935 /* PBXTargetDependency */,
+				632B8753840E4A24918D0AAD /* PBXTargetDependency */,
+				8781982DB6BB4B0E8702145A /* PBXTargetDependency */,
+				FCDFA8A2ED6F4DADAFDBA327 /* PBXTargetDependency */,
+			);
+			name = ALL_BUILD;
+			productName = ALL_BUILD;
+		};
+		B260333EDA3DD2EE36BC03C0 /* lib */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 0E92B0514D3F480C851EAE78 /* Build configuration list for PBXAggregateTarget "lib" */;
+			buildPhases = (
+				DD0649BCEA1244EDC714A6D3 /* Generate library/CMakeFiles/lib */,
+			);
+			dependencies = (
+				99C680DD4FCA4282B3803225 /* PBXTargetDependency */,
+				353E3FA87BEC4B5FBB73E1A8 /* PBXTargetDependency */,
+				779AEBBDDDE645B4B573C732 /* PBXTargetDependency */,
+				12FC201D06DF4F3385BB7EA8 /* PBXTargetDependency */,
+			);
+			name = lib;
+			productName = lib;
+		};
+		C12AD2E9BEF927A2395ABD5F /* install */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 3E6A78C59394449B9D93058A /* Build configuration list for PBXAggregateTarget "install" */;
+			buildPhases = (
+				93426DA6A4AC2C2AC9CE883C /* CMake PostBuild Rules */,
+			);
+			dependencies = (
+				10E6A4B8778441749F67A950 /* PBXTargetDependency */,
+			);
+			name = install;
+			productName = install;
+		};
+		DDA976E0AFB2F9719CD7485C /* apidoc */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = F0DE4CD15AF14E96B17570FE /* Build configuration list for PBXAggregateTarget "apidoc" */;
+			buildPhases = (
+				855A34E17A4170FDA398B8BA /* Generate CMakeFiles/apidoc */,
+			);
+			dependencies = (
+				1CDBB3B85477446CB51AAD6B /* PBXTargetDependency */,
+			);
+			name = apidoc;
+			productName = apidoc;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		03EF1E69881D4DC88657046E /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pk.c */ = {isa = PBXBuildFile; fileRef = 41335BE99F824EADB43EF9EC /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pk.c */; };
+		03F60D3CF1B7480687B3C8D3 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md4.c */ = {isa = PBXBuildFile; fileRef = 90E42CCB8BE24B4AA92F3243 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md4.c */; };
+		0ADFA43322E14C60A06EECF5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/memory_buffer_alloc.c */ = {isa = PBXBuildFile; fileRef = 91DC6EBE001C4798BDD91D7D /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/memory_buffer_alloc.c */; };
+		0C61D42E31E34237B3FA6930 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecp.c */ = {isa = PBXBuildFile; fileRef = DA393FF6EF53438FB7233876 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecp.c */; };
+		0DCC3ABA6EAC49A1BAFEBC84 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_tls.c */ = {isa = PBXBuildFile; fileRef = E0B4CA39243840CEA0366FED /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_tls.c */; };
+		163BDCE945E24FB2B02A501E /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/aes.c */ = {isa = PBXBuildFile; fileRef = 5DB6B28B1DED456895F6C6EF /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/aes.c */; };
+		1D9A095DE88948CB883A1B6A /* /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/library/CMakeFiles/mbedtls.dir/Info.plist */ = {isa = PBXBuildFile; fileRef = FCC5C42FCA4746D5837F14AC /* /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/library/CMakeFiles/mbedtls.dir/Info.plist */; };
+		2492483255534822B25A1556 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/version_features.c */ = {isa = PBXBuildFile; fileRef = 64C67510A8214CD092B65D15 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/version_features.c */; };
+		2664911E3F3A48C7840D1533 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ccm.c */ = {isa = PBXBuildFile; fileRef = 6D74674C5F514E7D83E43EDE /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ccm.c */; };
+		26CA907BE7B646688D075FFC /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/hmac_drbg.c */ = {isa = PBXBuildFile; fileRef = EA5215BF473840CE813FFD35 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/hmac_drbg.c */; };
+		287C06C93A6546769E6802E3 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/cmac.c */ = {isa = PBXBuildFile; fileRef = 85D654E1BE4643E2B1DF4112 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/cmac.c */; };
+		28DCFB7B24894625BC2FE373 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/havege.c */ = {isa = PBXBuildFile; fileRef = E51A84A0AA0D4EC6807D64B6 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/havege.c */; };
+		303C7FB1A04A4DC4828DEEA7 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/blowfish.c */ = {isa = PBXBuildFile; fileRef = 22DC7084BC5546DA8A0A85E5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/blowfish.c */; };
+		3B8FEC1B5DE2412B8C755990 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/rsa.c */ = {isa = PBXBuildFile; fileRef = 507068BA50A64C3FB95D807D /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/rsa.c */; };
+		3D89E9D927844A01BCE7F2ED /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_cli.c */ = {isa = PBXBuildFile; fileRef = 3ACFC6A128A04986826C8601 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_cli.c */; };
+		3E6D655164C24B2B8D1B6579 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/dhm.c */ = {isa = PBXBuildFile; fileRef = 9B390E66ADE44DB3AC8CB428 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/dhm.c */; };
+		46200F4A13A049998CC83E4A /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_ticket.c */ = {isa = PBXBuildFile; fileRef = 3F02562BE94541D28B122F0D /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_ticket.c */; };
+		4B63DCE0EEDA4C508A619DA5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/camellia.c */ = {isa = PBXBuildFile; fileRef = AA2FA5C758864A6B996C727D /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/camellia.c */; };
+		4F9BA5BF9ED64441801453F1 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509_create.c */ = {isa = PBXBuildFile; fileRef = 785DC9CE9E1E4CE6B808D396 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509_create.c */; };
+		5084741B2DC0465C97DE2103 /* /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/library/CMakeFiles/mbedcrypto.dir/Info.plist */ = {isa = PBXBuildFile; fileRef = 478270B29126456CB98BA0E8 /* /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/library/CMakeFiles/mbedcrypto.dir/Info.plist */; };
+		5239BB262AB74EF1ABCF9A80 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/sha1.c */ = {isa = PBXBuildFile; fileRef = BF426F84B9AD4647807044BE /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/sha1.c */; };
+		54392E9D4C314794A08BF4C2 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/bignum.c */ = {isa = PBXBuildFile; fileRef = FBE9B55074B942EEA778A5DA /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/bignum.c */; };
+		58E650E7431A40409F05F51C /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecp_curves.c */ = {isa = PBXBuildFile; fileRef = 7473EC344FDA4F30A086F5DF /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecp_curves.c */; };
+		5ACBD861246C405381519168 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pk_wrap.c */ = {isa = PBXBuildFile; fileRef = 364854BE60814AA8B402B5FA /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pk_wrap.c */; };
+		5C5CB41EDCC94F36907DB56D /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pem.c */ = {isa = PBXBuildFile; fileRef = B35E1C8B0F1943AA959E2B44 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pem.c */; };
+		5F85F98C7DD540B59B18E321 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ripemd160.c */ = {isa = PBXBuildFile; fileRef = D59D4C668EA3473595049036 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ripemd160.c */; };
+		611F76C7EF484777B5A2161E /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecdh.c */ = {isa = PBXBuildFile; fileRef = 673CBAE9561644A5980E0CCF /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecdh.c */; };
+		67D420BCA4D14079AA07E149 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/cipher_wrap.c */ = {isa = PBXBuildFile; fileRef = DC82D1408836474F8A17287A /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/cipher_wrap.c */; };
+		687F07BF7C8D413282CC6C51 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/platform.c */ = {isa = PBXBuildFile; fileRef = 3526674DE075469AA1FA6D55 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/platform.c */; };
+		6C4DB793C1BE439A80524D36 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/xtea.c */ = {isa = PBXBuildFile; fileRef = 6CD03DA3F53F4BCC91D0D73E /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/xtea.c */; };
+		70B9A51C521C4A818317FC67 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecjpake.c */ = {isa = PBXBuildFile; fileRef = 77BECA972BBC426EB5C05A70 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecjpake.c */; };
+		71906ECB0B8D44B4B10CED60 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecdsa.c */ = {isa = PBXBuildFile; fileRef = 345BCD4F97C24416A0A45CEE /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecdsa.c */; };
+		71BC0226E9FD472590F5CCFE /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/timing.c */ = {isa = PBXBuildFile; fileRef = 4CE7EC240D4D4DF085AC70FD /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/timing.c */; };
+		79914E638A5340E9AAA6A701 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md5.c */ = {isa = PBXBuildFile; fileRef = 5C55BFDCE3F74CAD9BF097FE /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md5.c */; };
+		7C8F02F88CF1414AAC866C55 /* /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/library/CMakeFiles/mbedx509.dir/Info.plist */ = {isa = PBXBuildFile; fileRef = 498FC99B5D8C4972A2EB6EAB /* /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/library/CMakeFiles/mbedx509.dir/Info.plist */; };
+		7F98195D2CC942C8ADE061CD /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md_wrap.c */ = {isa = PBXBuildFile; fileRef = 9A7C27B209A84022861CAD30 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md_wrap.c */; };
+		800082BCCEE84F96A1020A9F /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/asn1write.c */ = {isa = PBXBuildFile; fileRef = FFDD599DE33B4D64980A9AF7 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/asn1write.c */; };
+		825E42D4B5E74870B5684987 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = EA9F7B57657548119B0702D5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/CMakeLists.txt */; };
+		856C8B7535AD4FF6A441E761 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509_crt.c */ = {isa = PBXBuildFile; fileRef = A27BCF5AA76B4B6CB46BD79A /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509_crt.c */; };
+		868B063070E04B70855AAAE8 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/asn1parse.c */ = {isa = PBXBuildFile; fileRef = 4A8678F9944F45AC90AD9556 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/asn1parse.c */; };
+		879B387222414ED08B31D504 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/sha256.c */ = {isa = PBXBuildFile; fileRef = 6E56383DEA3B4F53B1471877 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/sha256.c */; };
+		881218BFED96437A8FE51788 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md.c */ = {isa = PBXBuildFile; fileRef = F86F5C6DF4F64BDD81175A3C /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md.c */; };
+		8BB08AB5C548417EA1323193 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/entropy.c */ = {isa = PBXBuildFile; fileRef = A8B080FBA754485185B6F433 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/entropy.c */; };
+		95417C4AD29D449D80810640 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509write_csr.c */ = {isa = PBXBuildFile; fileRef = E9E14EB445A4443DBE4B7381 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509write_csr.c */; };
+		9BFAB26C16D6434EAD5198E5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_cache.c */ = {isa = PBXBuildFile; fileRef = 31C11439FDAA44228C9D7BC7 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_cache.c */; };
+		9C5F6F3B92454DFFA1B9AA1C /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkwrite.c */ = {isa = PBXBuildFile; fileRef = D8764D32CC984A1C9A2D6F31 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkwrite.c */; };
+		A329D765F9C94A43ACB43C0B /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/base64.c */ = {isa = PBXBuildFile; fileRef = B4D0BB2BE9214996B58EC01E /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/base64.c */; };
+		A54E9F8D4C00403EB2F885E2 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/debug.c */ = {isa = PBXBuildFile; fileRef = 2D5DD09B2D014826AFA79993 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/debug.c */; };
+		A9F8E93922F84AE59D3F4B43 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/oid.c */ = {isa = PBXBuildFile; fileRef = 166E55B0FA6A417181C5F5FF /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/oid.c */; };
+		B1AB39014A4D40A68C5AD0B9 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkcs11.c */ = {isa = PBXBuildFile; fileRef = 716E32C3AC184B539D64A12C /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkcs11.c */; };
+		B468D94F5DCA46E6B457198F /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_cookie.c */ = {isa = PBXBuildFile; fileRef = 396628D7085542A69A7B51CC /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_cookie.c */; };
+		B8219F00C5FD4AE08815F429 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/net_sockets.c */ = {isa = PBXBuildFile; fileRef = D0434921A8084A3AB77B89CD /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/net_sockets.c */; };
+		B93006B25EA34B06B8885894 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/padlock.c */ = {isa = PBXBuildFile; fileRef = 0D440723B3484BCE8DAABE92 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/padlock.c */; };
+		BDCD4E3D9C2C4AF382B6106F /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/threading.c */ = {isa = PBXBuildFile; fileRef = DF128870E03C44A887B56C32 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/threading.c */; };
+		C598B1F9B4F04D95B96E90F1 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509_csr.c */ = {isa = PBXBuildFile; fileRef = A73D6EC794DA4A54990DC34B /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509_csr.c */; };
+		C92D07BE00C44737B29F866F /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_ciphersuites.c */ = {isa = PBXBuildFile; fileRef = 0C12404651D64368ADEDE240 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_ciphersuites.c */; };
+		CAE8FE0389BE48E49907F3CE /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509write_crt.c */ = {isa = PBXBuildFile; fileRef = 7B27773140BE41F497417422 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509write_crt.c */; };
+		D1542A2388CB4C24BB8524EE /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/gcm.c */ = {isa = PBXBuildFile; fileRef = 0C599875D9ED4BD3A0EF6738 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/gcm.c */; };
+		D37F43AFE8AC43CDBD1D966A /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509_crl.c */ = {isa = PBXBuildFile; fileRef = FB9933D2D9F24452B8CD73AF /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509_crl.c */; };
+		D52F83616C1047BB989EB1FF /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = 893996B8382E474C92412E77 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/CMakeLists.txt */; };
+		D707B41FFDB14852A1F9821B /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/sha512.c */ = {isa = PBXBuildFile; fileRef = 62BC83A260F343C59C9CD312 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/sha512.c */; };
+		DB908BE632CA4F36B7A3BAF2 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/des.c */ = {isa = PBXBuildFile; fileRef = 05D4858D9318496CB51B56A9 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/des.c */; };
+		DF8E0C6F9A34421490876889 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/entropy_poll.c */ = {isa = PBXBuildFile; fileRef = F828C41410A04FF5A5E2A4B4 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/entropy_poll.c */; };
+		E159AECEE63E4F4FA533E4E5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/version.c */ = {isa = PBXBuildFile; fileRef = 2B0BAA60008E4EF2AB05FD62 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/version.c */; };
+		E1A30E7A6FB64387851E6B72 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ctr_drbg.c */ = {isa = PBXBuildFile; fileRef = 0CE45A9B1EDC4EBDB39115CF /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ctr_drbg.c */; };
+		E6C6355294764DA1B2C8DEB5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/certs.c */ = {isa = PBXBuildFile; fileRef = DF1D6845ADD148189011360B /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/certs.c */; };
+		E6C8D3A74D324F278F014FEB /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509.c */ = {isa = PBXBuildFile; fileRef = D4ABF1C6E0934AF990C8FCB4 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509.c */; };
+		E77949CE371341A88D28E8D8 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkparse.c */ = {isa = PBXBuildFile; fileRef = 4695D97A93B44F7984373DD4 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkparse.c */; };
+		E7DCB55E48D045C8851A1711 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = 74C58F23DC6543F2B1414AE6 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/CMakeLists.txt */; };
+		EF8331B01B0A4B61949D7E84 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkcs12.c */ = {isa = PBXBuildFile; fileRef = A9295B171BC2400C895E9A3A /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkcs12.c */; };
+		F1510FE773F048F2BD4F81C0 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/cipher.c */ = {isa = PBXBuildFile; fileRef = E85B78857F164545B5A5890C /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/cipher.c */; };
+		F254CFE37B4D4DE0B776BC94 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/arc4.c */ = {isa = PBXBuildFile; fileRef = 30DE930817BA4ABC92873845 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/arc4.c */; };
+		F3B5C2E388154412ADB1FB1D /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/aesni.c */ = {isa = PBXBuildFile; fileRef = 27D098D0A8F142B3809A220E /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/aesni.c */; };
+		F79EAAC9376A4DB3AD0C29EE /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_srv.c */ = {isa = PBXBuildFile; fileRef = 3C4ED7B5D1774FF48B0C31F5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_srv.c */; };
+		F804AE6B4EED4BAC93296DF5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/error.c */ = {isa = PBXBuildFile; fileRef = 9BB5D299DC024F5EB8D4B097 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/error.c */; };
+		FAD7B6AC0FBE4809A6DAC696 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkcs5.c */ = {isa = PBXBuildFile; fileRef = 558C603F1D9D478EB524FEEA /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkcs5.c */; };
+		FE61E94FCEE44FC09CBB2AAC /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md2.c */ = {isa = PBXBuildFile; fileRef = 931D952563714CD7928303D9 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md2.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		013C380F87674CA5BE8C0EC3 /* Release */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Release;
+		};
+		18E128F02BD74C25A042F861 /* RelWithDebInfo */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = RelWithDebInfo;
+		};
+		33E37A696E7A4A259133F8F6 /* MinSizeRel */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = MinSizeRel;
+		};
+		58825A23B3E74174B099A8F6 /* Debug */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Debug;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXContainerItemProxy section */
+		0328D82027024F59A386AE53 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 519001C89F8348798E38BF41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1F84153665473841408B230A;
+			remoteInfo = mbedcrypto;
+		};
+		13470D821A8743C48381E16C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 519001C89F8348798E38BF41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1F84153665473841408B230A;
+			remoteInfo = mbedcrypto;
+		};
+		1D2FCAA54F8A49C7BAB9D9F0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 519001C89F8348798E38BF41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7F4201D89D309979954645B1;
+			remoteInfo = ZERO_CHECK;
+		};
+		2183F382241546B49BDF6AA9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 519001C89F8348798E38BF41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 91C5EDAFCB57B26C9717C8DD;
+			remoteInfo = mbedtls;
+		};
+		2876343E32AD4E3E8AFABEE8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 519001C89F8348798E38BF41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7F4201D89D309979954645B1;
+			remoteInfo = ZERO_CHECK;
+		};
+		480D9A0F222E4DC5BCB640BD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 519001C89F8348798E38BF41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1F84153665473841408B230A;
+			remoteInfo = mbedcrypto;
+		};
+		662711B21ACE4A4B9FB2254F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 519001C89F8348798E38BF41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7F4201D89D309979954645B1;
+			remoteInfo = ZERO_CHECK;
+		};
+		77341EC031A94B1F9D686576 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 519001C89F8348798E38BF41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 29EA2ADC5B66CAD17339D69A;
+			remoteInfo = mbedx509;
+		};
+		7E4CA194C45C4EC7AC15C110 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 519001C89F8348798E38BF41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A86CA3D072C5087122B2C35D;
+			remoteInfo = ALL_BUILD;
+		};
+		857AF07BB982400590602D1F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 519001C89F8348798E38BF41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 29EA2ADC5B66CAD17339D69A;
+			remoteInfo = mbedx509;
+		};
+		8844BAF58725438C8E1DD36E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 519001C89F8348798E38BF41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1F84153665473841408B230A;
+			remoteInfo = mbedcrypto;
+		};
+		A19A4690F92F437794F5E582 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 519001C89F8348798E38BF41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7F4201D89D309979954645B1;
+			remoteInfo = ZERO_CHECK;
+		};
+		A2133865730B4275A595B1FD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 519001C89F8348798E38BF41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 91C5EDAFCB57B26C9717C8DD;
+			remoteInfo = mbedtls;
+		};
+		BB26F2DD2CC34FCCA2C5E7A1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 519001C89F8348798E38BF41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7F4201D89D309979954645B1;
+			remoteInfo = ZERO_CHECK;
+		};
+		C698D3AC2B294AD18C0DDBFB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 519001C89F8348798E38BF41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7F4201D89D309979954645B1;
+			remoteInfo = ZERO_CHECK;
+		};
+		C7A6AFCCAC1148DEB568CBEF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 519001C89F8348798E38BF41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 29EA2ADC5B66CAD17339D69A;
+			remoteInfo = mbedx509;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		05D4858D9318496CB51B56A9 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/des.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = des.c; path = library/des.c; sourceTree = SOURCE_ROOT; };
+		0C12404651D64368ADEDE240 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_ciphersuites.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ssl_ciphersuites.c; path = library/ssl_ciphersuites.c; sourceTree = SOURCE_ROOT; };
+		0C599875D9ED4BD3A0EF6738 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/gcm.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = gcm.c; path = library/gcm.c; sourceTree = SOURCE_ROOT; };
+		0CE45A9B1EDC4EBDB39115CF /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ctr_drbg.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ctr_drbg.c; path = library/ctr_drbg.c; sourceTree = SOURCE_ROOT; };
+		0D440723B3484BCE8DAABE92 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/padlock.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = padlock.c; path = library/padlock.c; sourceTree = SOURCE_ROOT; };
+		166E55B0FA6A417181C5F5FF /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/oid.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = oid.c; path = library/oid.c; sourceTree = SOURCE_ROOT; };
+		1E021659FF994C0F88D8BCD4 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		22DC7084BC5546DA8A0A85E5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/blowfish.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = blowfish.c; path = library/blowfish.c; sourceTree = SOURCE_ROOT; };
+		27D098D0A8F142B3809A220E /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/aesni.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = aesni.c; path = library/aesni.c; sourceTree = SOURCE_ROOT; };
+		2B0BAA60008E4EF2AB05FD62 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/version.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = version.c; path = library/version.c; sourceTree = SOURCE_ROOT; };
+		2D5DD09B2D014826AFA79993 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/debug.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = debug.c; path = library/debug.c; sourceTree = SOURCE_ROOT; };
+		30DE930817BA4ABC92873845 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/arc4.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = arc4.c; path = library/arc4.c; sourceTree = SOURCE_ROOT; };
+		31C11439FDAA44228C9D7BC7 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_cache.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ssl_cache.c; path = library/ssl_cache.c; sourceTree = SOURCE_ROOT; };
+		345BCD4F97C24416A0A45CEE /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecdsa.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ecdsa.c; path = library/ecdsa.c; sourceTree = SOURCE_ROOT; };
+		3526674DE075469AA1FA6D55 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/platform.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = platform.c; path = library/platform.c; sourceTree = SOURCE_ROOT; };
+		364854BE60814AA8B402B5FA /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pk_wrap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = pk_wrap.c; path = library/pk_wrap.c; sourceTree = SOURCE_ROOT; };
+		396628D7085542A69A7B51CC /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_cookie.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ssl_cookie.c; path = library/ssl_cookie.c; sourceTree = SOURCE_ROOT; };
+		3ACFC6A128A04986826C8601 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_cli.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ssl_cli.c; path = library/ssl_cli.c; sourceTree = SOURCE_ROOT; };
+		3C4ED7B5D1774FF48B0C31F5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_srv.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ssl_srv.c; path = library/ssl_srv.c; sourceTree = SOURCE_ROOT; };
+		3F02562BE94541D28B122F0D /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_ticket.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ssl_ticket.c; path = library/ssl_ticket.c; sourceTree = SOURCE_ROOT; };
+		41335BE99F824EADB43EF9EC /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pk.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = pk.c; path = library/pk.c; sourceTree = SOURCE_ROOT; };
+		4695D97A93B44F7984373DD4 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkparse.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = pkparse.c; path = library/pkparse.c; sourceTree = SOURCE_ROOT; };
+		478270B29126456CB98BA0E8 /* /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/library/CMakeFiles/mbedcrypto.dir/Info.plist */ = {isa = PBXFileReference; explicitFileType = sourcecode.text.plist; fileEncoding = 4; name = Info.plist; path = "/Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/library/CMakeFiles/mbedcrypto.dir/Info.plist"; sourceTree = "<absolute>"; };
+		498FC99B5D8C4972A2EB6EAB /* /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/library/CMakeFiles/mbedx509.dir/Info.plist */ = {isa = PBXFileReference; explicitFileType = sourcecode.text.plist; fileEncoding = 4; name = Info.plist; path = "/Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/library/CMakeFiles/mbedx509.dir/Info.plist"; sourceTree = "<absolute>"; };
+		4A8678F9944F45AC90AD9556 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/asn1parse.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = asn1parse.c; path = library/asn1parse.c; sourceTree = SOURCE_ROOT; };
+		4CE7EC240D4D4DF085AC70FD /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/timing.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = timing.c; path = library/timing.c; sourceTree = SOURCE_ROOT; };
+		507068BA50A64C3FB95D807D /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/rsa.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = rsa.c; path = library/rsa.c; sourceTree = SOURCE_ROOT; };
+		558C603F1D9D478EB524FEEA /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkcs5.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = pkcs5.c; path = library/pkcs5.c; sourceTree = SOURCE_ROOT; };
+		5C55BFDCE3F74CAD9BF097FE /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md5.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = md5.c; path = library/md5.c; sourceTree = SOURCE_ROOT; };
+		5DB6B28B1DED456895F6C6EF /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/aes.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = aes.c; path = library/aes.c; sourceTree = SOURCE_ROOT; };
+		5E6633D3EBF145699C01C67F /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		60EA78180F8540029EC2B265 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = library/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		62BC83A260F343C59C9CD312 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/sha512.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sha512.c; path = library/sha512.c; sourceTree = SOURCE_ROOT; };
+		64C67510A8214CD092B65D15 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/version_features.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = version_features.c; path = library/version_features.c; sourceTree = SOURCE_ROOT; };
+		673CBAE9561644A5980E0CCF /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecdh.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ecdh.c; path = library/ecdh.c; sourceTree = SOURCE_ROOT; };
+		6CD03DA3F53F4BCC91D0D73E /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/xtea.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = xtea.c; path = library/xtea.c; sourceTree = SOURCE_ROOT; };
+		6D74674C5F514E7D83E43EDE /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ccm.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ccm.c; path = library/ccm.c; sourceTree = SOURCE_ROOT; };
+		6E56383DEA3B4F53B1471877 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/sha256.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sha256.c; path = library/sha256.c; sourceTree = SOURCE_ROOT; };
+		716E32C3AC184B539D64A12C /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkcs11.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = pkcs11.c; path = library/pkcs11.c; sourceTree = SOURCE_ROOT; };
+		7473EC344FDA4F30A086F5DF /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecp_curves.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ecp_curves.c; path = library/ecp_curves.c; sourceTree = SOURCE_ROOT; };
+		74C58F23DC6543F2B1414AE6 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = library/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		77BECA972BBC426EB5C05A70 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecjpake.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ecjpake.c; path = library/ecjpake.c; sourceTree = SOURCE_ROOT; };
+		785DC9CE9E1E4CE6B808D396 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509_create.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = x509_create.c; path = library/x509_create.c; sourceTree = SOURCE_ROOT; };
+		7B27773140BE41F497417422 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509write_crt.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = x509write_crt.c; path = library/x509write_crt.c; sourceTree = SOURCE_ROOT; };
+		85D654E1BE4643E2B1DF4112 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/cmac.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = cmac.c; path = library/cmac.c; sourceTree = SOURCE_ROOT; };
+		893996B8382E474C92412E77 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = library/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		90E42CCB8BE24B4AA92F3243 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md4.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = md4.c; path = library/md4.c; sourceTree = SOURCE_ROOT; };
+		91DC6EBE001C4798BDD91D7D /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/memory_buffer_alloc.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = memory_buffer_alloc.c; path = library/memory_buffer_alloc.c; sourceTree = SOURCE_ROOT; };
+		931D952563714CD7928303D9 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md2.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = md2.c; path = library/md2.c; sourceTree = SOURCE_ROOT; };
+		943C6336DD2E4A8B84F62244 /* mbedx509 */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libmbedx509.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A7C27B209A84022861CAD30 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md_wrap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = md_wrap.c; path = library/md_wrap.c; sourceTree = SOURCE_ROOT; };
+		9B390E66ADE44DB3AC8CB428 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/dhm.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = dhm.c; path = library/dhm.c; sourceTree = SOURCE_ROOT; };
+		9BB5D299DC024F5EB8D4B097 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/error.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = error.c; path = library/error.c; sourceTree = SOURCE_ROOT; };
+		9FB8F9401D5045968E15B7BB /* mbedcrypto */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libmbedcrypto.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A27BCF5AA76B4B6CB46BD79A /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509_crt.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = x509_crt.c; path = library/x509_crt.c; sourceTree = SOURCE_ROOT; };
+		A73D6EC794DA4A54990DC34B /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509_csr.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = x509_csr.c; path = library/x509_csr.c; sourceTree = SOURCE_ROOT; };
+		A8B080FBA754485185B6F433 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/entropy.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = entropy.c; path = library/entropy.c; sourceTree = SOURCE_ROOT; };
+		A9295B171BC2400C895E9A3A /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkcs12.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = pkcs12.c; path = library/pkcs12.c; sourceTree = SOURCE_ROOT; };
+		AA2FA5C758864A6B996C727D /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/camellia.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = camellia.c; path = library/camellia.c; sourceTree = SOURCE_ROOT; };
+		B35E1C8B0F1943AA959E2B44 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pem.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = pem.c; path = library/pem.c; sourceTree = SOURCE_ROOT; };
+		B4D0BB2BE9214996B58EC01E /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/base64.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = base64.c; path = library/base64.c; sourceTree = SOURCE_ROOT; };
+		BF426F84B9AD4647807044BE /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/sha1.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sha1.c; path = library/sha1.c; sourceTree = SOURCE_ROOT; };
+		CBB8793AC8484523A1699F8D /* mbedtls */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libmbedtls.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0434921A8084A3AB77B89CD /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/net_sockets.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = net_sockets.c; path = library/net_sockets.c; sourceTree = SOURCE_ROOT; };
+		D4ABF1C6E0934AF990C8FCB4 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = x509.c; path = library/x509.c; sourceTree = SOURCE_ROOT; };
+		D59D4C668EA3473595049036 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ripemd160.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ripemd160.c; path = library/ripemd160.c; sourceTree = SOURCE_ROOT; };
+		D8764D32CC984A1C9A2D6F31 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkwrite.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = pkwrite.c; path = library/pkwrite.c; sourceTree = SOURCE_ROOT; };
+		DA393FF6EF53438FB7233876 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecp.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ecp.c; path = library/ecp.c; sourceTree = SOURCE_ROOT; };
+		DC82D1408836474F8A17287A /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/cipher_wrap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = cipher_wrap.c; path = library/cipher_wrap.c; sourceTree = SOURCE_ROOT; };
+		DF128870E03C44A887B56C32 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/threading.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = threading.c; path = library/threading.c; sourceTree = SOURCE_ROOT; };
+		DF1D6845ADD148189011360B /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/certs.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = certs.c; path = library/certs.c; sourceTree = SOURCE_ROOT; };
+		E0B4CA39243840CEA0366FED /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_tls.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ssl_tls.c; path = library/ssl_tls.c; sourceTree = SOURCE_ROOT; };
+		E51A84A0AA0D4EC6807D64B6 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/havege.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = havege.c; path = library/havege.c; sourceTree = SOURCE_ROOT; };
+		E85B78857F164545B5A5890C /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/cipher.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = cipher.c; path = library/cipher.c; sourceTree = SOURCE_ROOT; };
+		E9E14EB445A4443DBE4B7381 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509write_csr.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = x509write_csr.c; path = library/x509write_csr.c; sourceTree = SOURCE_ROOT; };
+		EA5215BF473840CE813FFD35 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/hmac_drbg.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = hmac_drbg.c; path = library/hmac_drbg.c; sourceTree = SOURCE_ROOT; };
+		EA9F7B57657548119B0702D5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = library/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		F828C41410A04FF5A5E2A4B4 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/entropy_poll.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = entropy_poll.c; path = library/entropy_poll.c; sourceTree = SOURCE_ROOT; };
+		F86F5C6DF4F64BDD81175A3C /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = md.c; path = library/md.c; sourceTree = SOURCE_ROOT; };
+		FB9933D2D9F24452B8CD73AF /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509_crl.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = x509_crl.c; path = library/x509_crl.c; sourceTree = SOURCE_ROOT; };
+		FBE9B55074B942EEA778A5DA /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/bignum.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = bignum.c; path = library/bignum.c; sourceTree = SOURCE_ROOT; };
+		FCC5C42FCA4746D5837F14AC /* /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/library/CMakeFiles/mbedtls.dir/Info.plist */ = {isa = PBXFileReference; explicitFileType = sourcecode.text.plist; fileEncoding = 4; name = Info.plist; path = "/Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/library/CMakeFiles/mbedtls.dir/Info.plist"; sourceTree = "<absolute>"; };
+		FFDD599DE33B4D64980A9AF7 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/asn1write.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = asn1write.c; path = library/asn1write.c; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		19FD6992687942CA8915D99B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CF935ED6EA9E4931A91B2B34 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D838924C8F11445B9EC65D6E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1967663A0F34498BA0A8965A /* ALL_BUILD */ = {
+			isa = PBXGroup;
+			children = (
+				88026CB7F5064397A8E77593 /* CMake Rules */,
+				1E021659FF994C0F88D8BCD4 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/CMakeLists.txt */,
+			);
+			name = ALL_BUILD;
+			sourceTree = "<group>";
+		};
+		285167F2EE5B462DB5B126C5 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				5DB6B28B1DED456895F6C6EF /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/aes.c */,
+				27D098D0A8F142B3809A220E /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/aesni.c */,
+				30DE930817BA4ABC92873845 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/arc4.c */,
+				4A8678F9944F45AC90AD9556 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/asn1parse.c */,
+				FFDD599DE33B4D64980A9AF7 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/asn1write.c */,
+				B4D0BB2BE9214996B58EC01E /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/base64.c */,
+				FBE9B55074B942EEA778A5DA /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/bignum.c */,
+				22DC7084BC5546DA8A0A85E5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/blowfish.c */,
+				AA2FA5C758864A6B996C727D /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/camellia.c */,
+				6D74674C5F514E7D83E43EDE /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ccm.c */,
+				E85B78857F164545B5A5890C /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/cipher.c */,
+				DC82D1408836474F8A17287A /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/cipher_wrap.c */,
+				85D654E1BE4643E2B1DF4112 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/cmac.c */,
+				0CE45A9B1EDC4EBDB39115CF /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ctr_drbg.c */,
+				05D4858D9318496CB51B56A9 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/des.c */,
+				9B390E66ADE44DB3AC8CB428 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/dhm.c */,
+				673CBAE9561644A5980E0CCF /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecdh.c */,
+				345BCD4F97C24416A0A45CEE /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecdsa.c */,
+				77BECA972BBC426EB5C05A70 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecjpake.c */,
+				DA393FF6EF53438FB7233876 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecp.c */,
+				7473EC344FDA4F30A086F5DF /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecp_curves.c */,
+				A8B080FBA754485185B6F433 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/entropy.c */,
+				F828C41410A04FF5A5E2A4B4 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/entropy_poll.c */,
+				9BB5D299DC024F5EB8D4B097 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/error.c */,
+				0C599875D9ED4BD3A0EF6738 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/gcm.c */,
+				E51A84A0AA0D4EC6807D64B6 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/havege.c */,
+				EA5215BF473840CE813FFD35 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/hmac_drbg.c */,
+				F86F5C6DF4F64BDD81175A3C /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md.c */,
+				931D952563714CD7928303D9 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md2.c */,
+				90E42CCB8BE24B4AA92F3243 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md4.c */,
+				5C55BFDCE3F74CAD9BF097FE /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md5.c */,
+				9A7C27B209A84022861CAD30 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md_wrap.c */,
+				91DC6EBE001C4798BDD91D7D /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/memory_buffer_alloc.c */,
+				166E55B0FA6A417181C5F5FF /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/oid.c */,
+				0D440723B3484BCE8DAABE92 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/padlock.c */,
+				B35E1C8B0F1943AA959E2B44 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pem.c */,
+				41335BE99F824EADB43EF9EC /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pk.c */,
+				364854BE60814AA8B402B5FA /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pk_wrap.c */,
+				A9295B171BC2400C895E9A3A /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkcs12.c */,
+				558C603F1D9D478EB524FEEA /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkcs5.c */,
+				4695D97A93B44F7984373DD4 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkparse.c */,
+				D8764D32CC984A1C9A2D6F31 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkwrite.c */,
+				3526674DE075469AA1FA6D55 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/platform.c */,
+				D59D4C668EA3473595049036 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ripemd160.c */,
+				507068BA50A64C3FB95D807D /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/rsa.c */,
+				BF426F84B9AD4647807044BE /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/sha1.c */,
+				6E56383DEA3B4F53B1471877 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/sha256.c */,
+				62BC83A260F343C59C9CD312 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/sha512.c */,
+				DF128870E03C44A887B56C32 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/threading.c */,
+				4CE7EC240D4D4DF085AC70FD /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/timing.c */,
+				2B0BAA60008E4EF2AB05FD62 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/version.c */,
+				64C67510A8214CD092B65D15 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/version_features.c */,
+				6CD03DA3F53F4BCC91D0D73E /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/xtea.c */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		3836846E7B754CC78D3A45B6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				498FC99B5D8C4972A2EB6EAB /* /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/library/CMakeFiles/mbedx509.dir/Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		3E194239D8A74A6B9AC4D661 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		582BBCAA94A243E09703D6CE = {
+			isa = PBXGroup;
+			children = (
+				A4CEE0BAB3BE4E33956F1F0F /* apidoc */,
+				1967663A0F34498BA0A8965A /* ALL_BUILD */,
+				61F8BD8CDA9241DC8D46111B /* mbedcrypto */,
+				E02CBFA194334D449ED3ABF0 /* mbedx509 */,
+				FBBF0B92DC584CC7BC79FF32 /* mbedtls */,
+				7F25F9A0EAEF4CC6B1980000 /* lib */,
+				7AAB9C9BBA8446C3817DBBA9 /* Products */,
+				3E194239D8A74A6B9AC4D661 /* Frameworks */,
+				947C8DD8A2114628ABFDFB33 /* Resources */,
+			);
+			sourceTree = "<group>";
+		};
+		61F8BD8CDA9241DC8D46111B /* mbedcrypto */ = {
+			isa = PBXGroup;
+			children = (
+				285167F2EE5B462DB5B126C5 /* Source Files */,
+				8D1DFC0918A74487851028D1 /* Resources */,
+				893996B8382E474C92412E77 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/CMakeLists.txt */,
+			);
+			name = mbedcrypto;
+			sourceTree = "<group>";
+		};
+		67523BA1F9BD40DEB5F85426 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FCC5C42FCA4746D5837F14AC /* /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/library/CMakeFiles/mbedtls.dir/Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		7AAB9C9BBA8446C3817DBBA9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9FB8F9401D5045968E15B7BB /* mbedcrypto */,
+				CBB8793AC8484523A1699F8D /* mbedtls */,
+				943C6336DD2E4A8B84F62244 /* mbedx509 */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7F25F9A0EAEF4CC6B1980000 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				91E320AAA3FE41038300D69F /* CMake Rules */,
+				60EA78180F8540029EC2B265 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/CMakeLists.txt */,
+			);
+			name = lib;
+			sourceTree = "<group>";
+		};
+		88026CB7F5064397A8E77593 /* CMake Rules */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		8D1DFC0918A74487851028D1 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				478270B29126456CB98BA0E8 /* /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/library/CMakeFiles/mbedcrypto.dir/Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		91E320AAA3FE41038300D69F /* CMake Rules */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		947C8DD8A2114628ABFDFB33 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		A4CEE0BAB3BE4E33956F1F0F /* apidoc */ = {
+			isa = PBXGroup;
+			children = (
+				EF7A3690BEB642A18D7463C0 /* CMake Rules */,
+				5E6633D3EBF145699C01C67F /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/CMakeLists.txt */,
+			);
+			name = apidoc;
+			sourceTree = "<group>";
+		};
+		C49EC35DA9C9470791F9A719 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				2D5DD09B2D014826AFA79993 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/debug.c */,
+				D0434921A8084A3AB77B89CD /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/net_sockets.c */,
+				31C11439FDAA44228C9D7BC7 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_cache.c */,
+				0C12404651D64368ADEDE240 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_ciphersuites.c */,
+				3ACFC6A128A04986826C8601 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_cli.c */,
+				396628D7085542A69A7B51CC /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_cookie.c */,
+				3C4ED7B5D1774FF48B0C31F5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_srv.c */,
+				3F02562BE94541D28B122F0D /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_ticket.c */,
+				E0B4CA39243840CEA0366FED /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_tls.c */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		E02CBFA194334D449ED3ABF0 /* mbedx509 */ = {
+			isa = PBXGroup;
+			children = (
+				FF7013086EA04A5E988F137D /* Source Files */,
+				3836846E7B754CC78D3A45B6 /* Resources */,
+				74C58F23DC6543F2B1414AE6 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/CMakeLists.txt */,
+			);
+			name = mbedx509;
+			sourceTree = "<group>";
+		};
+		EF7A3690BEB642A18D7463C0 /* CMake Rules */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		FBBF0B92DC584CC7BC79FF32 /* mbedtls */ = {
+			isa = PBXGroup;
+			children = (
+				C49EC35DA9C9470791F9A719 /* Source Files */,
+				67523BA1F9BD40DEB5F85426 /* Resources */,
+				EA9F7B57657548119B0702D5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/CMakeLists.txt */,
+			);
+			name = mbedtls;
+			sourceTree = "<group>";
+		};
+		FF7013086EA04A5E988F137D /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				DF1D6845ADD148189011360B /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/certs.c */,
+				716E32C3AC184B539D64A12C /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkcs11.c */,
+				D4ABF1C6E0934AF990C8FCB4 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509.c */,
+				785DC9CE9E1E4CE6B808D396 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509_create.c */,
+				FB9933D2D9F24452B8CD73AF /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509_crl.c */,
+				A27BCF5AA76B4B6CB46BD79A /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509_crt.c */,
+				A73D6EC794DA4A54990DC34B /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509_csr.c */,
+				7B27773140BE41F497417422 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509write_crt.c */,
+				E9E14EB445A4443DBE4B7381 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509write_csr.c */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1F84153665473841408B230A /* mbedcrypto */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A616924377AE446B889888C4 /* Build configuration list for PBXNativeTarget "mbedcrypto" */;
+			buildPhases = (
+				B0682C3675C24ABAB3981D7D /* Sources */,
+				CF935ED6EA9E4931A91B2B34 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B822A80F09744F8B847C393A /* PBXTargetDependency */,
+			);
+			name = mbedcrypto;
+			productName = mbedcrypto;
+			productReference = 9FB8F9401D5045968E15B7BB /* mbedcrypto */;
+			productType = "com.apple.product-type.library.static";
+		};
+		29EA2ADC5B66CAD17339D69A /* mbedx509 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 79C0BE0BCF9845FF916174E9 /* Build configuration list for PBXNativeTarget "mbedx509" */;
+			buildPhases = (
+				5BCCE2AE8E05453CB7F74059 /* Sources */,
+				19FD6992687942CA8915D99B /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1413847165E04E6E9D18E70A /* PBXTargetDependency */,
+				AD91EB98676A459BBF62CA57 /* PBXTargetDependency */,
+			);
+			name = mbedx509;
+			productName = mbedx509;
+			productReference = 943C6336DD2E4A8B84F62244 /* mbedx509 */;
+			productType = "com.apple.product-type.library.static";
+		};
+		91C5EDAFCB57B26C9717C8DD /* mbedtls */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C61ED8A9B47B480CB8BB52A2 /* Build configuration list for PBXNativeTarget "mbedtls" */;
+			buildPhases = (
+				595D445D47744401AE1276F4 /* Sources */,
+				D838924C8F11445B9EC65D6E /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				87A6BF6A2DDD4F2E9BCDBBB1 /* PBXTargetDependency */,
+				E2CF5A0B3A8B4DB6964EFE06 /* PBXTargetDependency */,
+				01C7CBA4F3B04695BF4B8B83 /* PBXTargetDependency */,
+			);
+			name = mbedtls;
+			productName = mbedtls;
+			productReference = CBB8793AC8484523A1699F8D /* mbedtls */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		519001C89F8348798E38BF41 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2630;
+			};
+			buildConfigurationList = 2E3474B03FFC4898A52C9691 /* Build configuration list for PBXProject "mbed TLS" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				58825A23B3E74174B099A8F6 /* Debug */,
+				013C380F87674CA5BE8C0EC3 /* Release */,
+				33E37A696E7A4A259133F8F6 /* MinSizeRel */,
+				18E128F02BD74C25A042F861 /* RelWithDebInfo */,
+			);
+			compatibilityVersion = "Xcode 3.2";
+			hasScannedForEncodings = 0;
+			mainGroup = 582BBCAA94A243E09703D6CE;
+			projectDirPath = "/Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls";
+			projectRoot = "";
+			targets = (
+				A86CA3D072C5087122B2C35D /* ALL_BUILD */,
+				7F4201D89D309979954645B1 /* ZERO_CHECK */,
+				DDA976E0AFB2F9719CD7485C /* apidoc */,
+				C12AD2E9BEF927A2395ABD5F /* install */,
+				B260333EDA3DD2EE36BC03C0 /* lib */,
+				1F84153665473841408B230A /* mbedcrypto */,
+				91C5EDAFCB57B26C9717C8DD /* mbedtls */,
+				29EA2ADC5B66CAD17339D69A /* mbedx509 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3C0110FC8322DE7E50886E21 = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here
+exit 0";
+			showEnvVarsInLog = 0;
+		};
+		3D193BB6559F7D11682B4B6B = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here
+exit 0";
+			showEnvVarsInLog = 0;
+		};
+		5120145D4CE4ADE43A812C12 = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here
+exit 0";
+			showEnvVarsInLog = 0;
+		};
+		543851F9D504548313CE16BD /* Generate CMakeFiles/ZERO_CHECK */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate CMakeFiles/ZERO_CHECK";
+			outputPaths = (
+"/Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/CMakeFiles/ZERO_CHECK"			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e
+if test \"$CONFIGURATION\" = \"Debug\"; then :
+  cd /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls
+  make -f /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/CMakeScripts/ReRunCMake.make
+fi
+if test \"$CONFIGURATION\" = \"Release\"; then :
+  cd /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls
+  make -f /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/CMakeScripts/ReRunCMake.make
+fi
+if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
+  cd /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls
+  make -f /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/CMakeScripts/ReRunCMake.make
+fi
+if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
+  cd /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls
+  make -f /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/CMakeScripts/ReRunCMake.make
+fi
+";
+			showEnvVarsInLog = 0;
+		};
+		855A34E17A4170FDA398B8BA /* Generate CMakeFiles/apidoc */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate CMakeFiles/apidoc";
+			outputPaths = (
+"/Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/CMakeFiles/apidoc"			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e
+if test \"$CONFIGURATION\" = \"Debug\"; then :
+  cd /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls
+  doxygen doxygen/mbedtls.doxyfile
+fi
+if test \"$CONFIGURATION\" = \"Release\"; then :
+  cd /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls
+  doxygen doxygen/mbedtls.doxyfile
+fi
+if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
+  cd /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls
+  doxygen doxygen/mbedtls.doxyfile
+fi
+if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
+  cd /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls
+  doxygen doxygen/mbedtls.doxyfile
+fi
+";
+			showEnvVarsInLog = 0;
+		};
+		87AF4882E018677E2624B544 = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here
+exit 0";
+			showEnvVarsInLog = 0;
+		};
+		8C55BCDA463C237637446222 /* Generate CMakeFiles/ALL_BUILD */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate CMakeFiles/ALL_BUILD";
+			outputPaths = (
+"/Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/CMakeFiles/ALL_BUILD"			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e
+if test \"$CONFIGURATION\" = \"Debug\"; then :
+  cd /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls
+  echo Build\\ all\\ projects
+fi
+if test \"$CONFIGURATION\" = \"Release\"; then :
+  cd /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls
+  echo Build\\ all\\ projects
+fi
+if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
+  cd /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls
+  echo Build\\ all\\ projects
+fi
+if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
+  cd /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls
+  echo Build\\ all\\ projects
+fi
+";
+			showEnvVarsInLog = 0;
+		};
+		93426DA6A4AC2C2AC9CE883C /* CMake PostBuild Rules */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "CMake PostBuild Rules";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e
+if test \"$CONFIGURATION\" = \"Debug\"; then :
+  cd /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls
+  /opt/homebrew/bin/cmake -DBUILD_TYPE=$CONFIGURATION -DEFFECTIVE_PLATFORM_NAME=$EFFECTIVE_PLATFORM_NAME -P cmake_install.cmake
+fi
+if test \"$CONFIGURATION\" = \"Release\"; then :
+  cd /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls
+  /opt/homebrew/bin/cmake -DBUILD_TYPE=$CONFIGURATION -DEFFECTIVE_PLATFORM_NAME=$EFFECTIVE_PLATFORM_NAME -P cmake_install.cmake
+fi
+if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
+  cd /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls
+  /opt/homebrew/bin/cmake -DBUILD_TYPE=$CONFIGURATION -DEFFECTIVE_PLATFORM_NAME=$EFFECTIVE_PLATFORM_NAME -P cmake_install.cmake
+fi
+if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
+  cd /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls
+  /opt/homebrew/bin/cmake -DBUILD_TYPE=$CONFIGURATION -DEFFECTIVE_PLATFORM_NAME=$EFFECTIVE_PLATFORM_NAME -P cmake_install.cmake
+fi
+";
+			showEnvVarsInLog = 0;
+		};
+		9B50530E35CC49C82C2FACCF = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here
+exit 0";
+			showEnvVarsInLog = 0;
+		};
+		DD0649BCEA1244EDC714A6D3 /* Generate library/CMakeFiles/lib */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+"/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/Debug/libmbedcrypto.a","/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/Debug/libmbedtls.a","/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/Debug/libmbedx509.a","/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/MinSizeRel/libmbedcrypto.a","/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/MinSizeRel/libmbedtls.a","/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/MinSizeRel/libmbedx509.a","/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/RelWithDebInfo/libmbedcrypto.a","/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/RelWithDebInfo/libmbedtls.a","/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/RelWithDebInfo/libmbedx509.a","/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/Release/libmbedcrypto.a","/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/Release/libmbedtls.a","/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/Release/libmbedx509.a"			);
+			name = "Generate library/CMakeFiles/lib";
+			outputPaths = (
+"/Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/library/CMakeFiles/lib"			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e
+if test \"$CONFIGURATION\" = \"Debug\"; then :
+  cd /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/library
+fi
+if test \"$CONFIGURATION\" = \"Release\"; then :
+  cd /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/library
+fi
+if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
+  cd /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/library
+fi
+if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
+  cd /Users/mackun/HyperPay-Jub_SDK_CXX/build/deps/secure-channel/mbedtls/library
+fi
+";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		595D445D47744401AE1276F4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A54E9F8D4C00403EB2F885E2 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/debug.c */,
+				B8219F00C5FD4AE08815F429 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/net_sockets.c */,
+				9BFAB26C16D6434EAD5198E5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_cache.c */,
+				C92D07BE00C44737B29F866F /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_ciphersuites.c */,
+				3D89E9D927844A01BCE7F2ED /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_cli.c */,
+				B468D94F5DCA46E6B457198F /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_cookie.c */,
+				F79EAAC9376A4DB3AD0C29EE /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_srv.c */,
+				46200F4A13A049998CC83E4A /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_ticket.c */,
+				0DCC3ABA6EAC49A1BAFEBC84 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ssl_tls.c */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5BCCE2AE8E05453CB7F74059 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E6C6355294764DA1B2C8DEB5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/certs.c */,
+				B1AB39014A4D40A68C5AD0B9 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkcs11.c */,
+				E6C8D3A74D324F278F014FEB /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509.c */,
+				4F9BA5BF9ED64441801453F1 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509_create.c */,
+				D37F43AFE8AC43CDBD1D966A /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509_crl.c */,
+				856C8B7535AD4FF6A441E761 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509_crt.c */,
+				C598B1F9B4F04D95B96E90F1 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509_csr.c */,
+				CAE8FE0389BE48E49907F3CE /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509write_crt.c */,
+				95417C4AD29D449D80810640 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/x509write_csr.c */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0682C3675C24ABAB3981D7D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				163BDCE945E24FB2B02A501E /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/aes.c */,
+				F3B5C2E388154412ADB1FB1D /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/aesni.c */,
+				F254CFE37B4D4DE0B776BC94 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/arc4.c */,
+				868B063070E04B70855AAAE8 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/asn1parse.c */,
+				800082BCCEE84F96A1020A9F /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/asn1write.c */,
+				A329D765F9C94A43ACB43C0B /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/base64.c */,
+				54392E9D4C314794A08BF4C2 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/bignum.c */,
+				303C7FB1A04A4DC4828DEEA7 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/blowfish.c */,
+				4B63DCE0EEDA4C508A619DA5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/camellia.c */,
+				2664911E3F3A48C7840D1533 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ccm.c */,
+				F1510FE773F048F2BD4F81C0 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/cipher.c */,
+				67D420BCA4D14079AA07E149 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/cipher_wrap.c */,
+				287C06C93A6546769E6802E3 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/cmac.c */,
+				E1A30E7A6FB64387851E6B72 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ctr_drbg.c */,
+				DB908BE632CA4F36B7A3BAF2 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/des.c */,
+				3E6D655164C24B2B8D1B6579 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/dhm.c */,
+				611F76C7EF484777B5A2161E /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecdh.c */,
+				71906ECB0B8D44B4B10CED60 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecdsa.c */,
+				70B9A51C521C4A818317FC67 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecjpake.c */,
+				0C61D42E31E34237B3FA6930 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecp.c */,
+				58E650E7431A40409F05F51C /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ecp_curves.c */,
+				8BB08AB5C548417EA1323193 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/entropy.c */,
+				DF8E0C6F9A34421490876889 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/entropy_poll.c */,
+				F804AE6B4EED4BAC93296DF5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/error.c */,
+				D1542A2388CB4C24BB8524EE /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/gcm.c */,
+				28DCFB7B24894625BC2FE373 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/havege.c */,
+				26CA907BE7B646688D075FFC /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/hmac_drbg.c */,
+				881218BFED96437A8FE51788 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md.c */,
+				FE61E94FCEE44FC09CBB2AAC /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md2.c */,
+				03F60D3CF1B7480687B3C8D3 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md4.c */,
+				79914E638A5340E9AAA6A701 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md5.c */,
+				7F98195D2CC942C8ADE061CD /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/md_wrap.c */,
+				0ADFA43322E14C60A06EECF5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/memory_buffer_alloc.c */,
+				A9F8E93922F84AE59D3F4B43 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/oid.c */,
+				B93006B25EA34B06B8885894 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/padlock.c */,
+				5C5CB41EDCC94F36907DB56D /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pem.c */,
+				03EF1E69881D4DC88657046E /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pk.c */,
+				5ACBD861246C405381519168 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pk_wrap.c */,
+				EF8331B01B0A4B61949D7E84 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkcs12.c */,
+				FAD7B6AC0FBE4809A6DAC696 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkcs5.c */,
+				E77949CE371341A88D28E8D8 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkparse.c */,
+				9C5F6F3B92454DFFA1B9AA1C /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/pkwrite.c */,
+				687F07BF7C8D413282CC6C51 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/platform.c */,
+				5F85F98C7DD540B59B18E321 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/ripemd160.c */,
+				3B8FEC1B5DE2412B8C755990 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/rsa.c */,
+				5239BB262AB74EF1ABCF9A80 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/sha1.c */,
+				879B387222414ED08B31D504 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/sha256.c */,
+				D707B41FFDB14852A1F9821B /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/sha512.c */,
+				BDCD4E3D9C2C4AF382B6106F /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/threading.c */,
+				71BC0226E9FD472590F5CCFE /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/timing.c */,
+				E159AECEE63E4F4FA533E4E5 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/version.c */,
+				2492483255534822B25A1556 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/version_features.c */,
+				6C4DB793C1BE439A80524D36 /* /Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/library/xtea.c */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		01C7CBA4F3B04695BF4B8B83 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7F4201D89D309979954645B1 /* ZERO_CHECK */;
+			targetProxy = BB26F2DD2CC34FCCA2C5E7A1 /* PBXContainerItemProxy */;
+		};
+		10E6A4B8778441749F67A950 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A86CA3D072C5087122B2C35D /* ALL_BUILD */;
+			targetProxy = 7E4CA194C45C4EC7AC15C110 /* PBXContainerItemProxy */;
+		};
+		12FC201D06DF4F3385BB7EA8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7F4201D89D309979954645B1 /* ZERO_CHECK */;
+			targetProxy = 2876343E32AD4E3E8AFABEE8 /* PBXContainerItemProxy */;
+		};
+		1413847165E04E6E9D18E70A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1F84153665473841408B230A /* mbedcrypto */;
+			targetProxy = 480D9A0F222E4DC5BCB640BD /* PBXContainerItemProxy */;
+		};
+		1CDBB3B85477446CB51AAD6B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7F4201D89D309979954645B1 /* ZERO_CHECK */;
+			targetProxy = C698D3AC2B294AD18C0DDBFB /* PBXContainerItemProxy */;
+		};
+		353E3FA87BEC4B5FBB73E1A8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 29EA2ADC5B66CAD17339D69A /* mbedx509 */;
+			targetProxy = 77341EC031A94B1F9D686576 /* PBXContainerItemProxy */;
+		};
+		632B8753840E4A24918D0AAD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 29EA2ADC5B66CAD17339D69A /* mbedx509 */;
+			targetProxy = C7A6AFCCAC1148DEB568CBEF /* PBXContainerItemProxy */;
+		};
+		779AEBBDDDE645B4B573C732 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 91C5EDAFCB57B26C9717C8DD /* mbedtls */;
+			targetProxy = 2183F382241546B49BDF6AA9 /* PBXContainerItemProxy */;
+		};
+		8781982DB6BB4B0E8702145A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 91C5EDAFCB57B26C9717C8DD /* mbedtls */;
+			targetProxy = A2133865730B4275A595B1FD /* PBXContainerItemProxy */;
+		};
+		87A6BF6A2DDD4F2E9BCDBBB1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1F84153665473841408B230A /* mbedcrypto */;
+			targetProxy = 0328D82027024F59A386AE53 /* PBXContainerItemProxy */;
+		};
+		99C680DD4FCA4282B3803225 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1F84153665473841408B230A /* mbedcrypto */;
+			targetProxy = 13470D821A8743C48381E16C /* PBXContainerItemProxy */;
+		};
+		AD91EB98676A459BBF62CA57 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7F4201D89D309979954645B1 /* ZERO_CHECK */;
+			targetProxy = 1D2FCAA54F8A49C7BAB9D9F0 /* PBXContainerItemProxy */;
+		};
+		B386E10A99474576B2FAA935 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1F84153665473841408B230A /* mbedcrypto */;
+			targetProxy = 8844BAF58725438C8E1DD36E /* PBXContainerItemProxy */;
+		};
+		B822A80F09744F8B847C393A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7F4201D89D309979954645B1 /* ZERO_CHECK */;
+			targetProxy = A19A4690F92F437794F5E582 /* PBXContainerItemProxy */;
+		};
+		E2CF5A0B3A8B4DB6964EFE06 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 29EA2ADC5B66CAD17339D69A /* mbedx509 */;
+			targetProxy = 857AF07BB982400590602D1F /* PBXContainerItemProxy */;
+		};
+		FCDFA8A2ED6F4DADAFDBA327 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7F4201D89D309979954645B1 /* ZERO_CHECK */;
+			targetProxy = 662711B21ACE4A4B9FB2254F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		07B2C38C7F1D4AFEA14AF1A7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = lib;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		08D79B5EC0414B38904F8190 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/Release";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/include","$(inherited)");
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (" -Wall -Wextra -W -Wdeclaration-after-statement -Wwrite-strings -Wpointer-arith -Wimplicit-fallthrough -Wshadow -Wmissing-declarations -Wmissing-prototypes -Wdocumentation -Wno-documentation-deprecated-sync -Wunreachable-code     ","$(inherited)");
+				OTHER_LIBTOOLFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = mbedcrypto;
+				SECTORDER_FLAGS = "";
+				TARGET_TEMP_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/build/build/mbedcrypto.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		0BA67E2FF4E54C62A332A211 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = install;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		132A53079442441CAFD14EC7 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/RelWithDebInfo";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/include","$(inherited)");
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (" -Wall -Wextra -W -Wdeclaration-after-statement -Wwrite-strings -Wpointer-arith -Wimplicit-fallthrough -Wshadow -Wmissing-declarations -Wmissing-prototypes -Wdocumentation -Wno-documentation-deprecated-sync -Wunreachable-code        -DNDEBUG ","$(inherited)");
+				OTHER_LIBTOOLFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = mbedtls;
+				SECTORDER_FLAGS = "";
+				TARGET_TEMP_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/build/build/mbedtls.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		1CCA5AFA0969434A8FBC2C44 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = apidoc;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		249BDB0E129B41658B3357EB /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		3518D190D83040E489D3C1E3 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		36AEB902018B4E0DA934D09A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		4141612831174C6D8E7EFA8C /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/RelWithDebInfo";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/include","$(inherited)");
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (" -Wall -Wextra -W -Wdeclaration-after-statement -Wwrite-strings -Wpointer-arith -Wimplicit-fallthrough -Wshadow -Wmissing-declarations -Wmissing-prototypes -Wdocumentation -Wno-documentation-deprecated-sync -Wunreachable-code        -DNDEBUG ","$(inherited)");
+				OTHER_LIBTOOLFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = mbedx509;
+				SECTORDER_FLAGS = "";
+				TARGET_TEMP_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/build/build/mbedx509.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		41D797D707D54BAD9B3C663E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = apidoc;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		44865F5B83064E3C91344D91 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = install;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		5DA121D1FA6144B986BBE067 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = lib;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		602F0330FE6D4FFCA76CD3FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = lib;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		631FDECEAECA4FCFA906435E /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				"ARCHS[sdk=iphoneos*]" = arm64;
+				BITCODE_GENERATION_MODE = bitcode;
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				ENABLE_BITCODE = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.2.sdk;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SYMROOT = "/Users/mackun/HyperPay-Jub_SDK_CXX/build/build";
+				"VALID_ARCHS[sdk=iphoneos*]" = arm64;
+			};
+			name = MinSizeRel;
+		};
+		651C92F5326748D98F155E76 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = install;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		6969CBF67EA6424495A21BEC /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				"ARCHS[sdk=iphoneos*]" = arm64;
+				BITCODE_GENERATION_MODE = bitcode;
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				ENABLE_BITCODE = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.2.sdk;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SYMROOT = "/Users/mackun/HyperPay-Jub_SDK_CXX/build/build";
+				"VALID_ARCHS[sdk=iphoneos*]" = arm64;
+			};
+			name = RelWithDebInfo;
+		};
+		6CA310396FD649AA982BE968 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/Debug";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/include","$(inherited)");
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (" -Wall -Wextra -W -Wdeclaration-after-statement -Wwrite-strings -Wpointer-arith -Wimplicit-fallthrough -Wshadow -Wmissing-declarations -Wmissing-prototypes -Wdocumentation -Wno-documentation-deprecated-sync -Wunreachable-code         ","$(inherited)");
+				OTHER_LIBTOOLFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = mbedx509;
+				SECTORDER_FLAGS = "";
+				TARGET_TEMP_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/build/build/mbedx509.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		77D24C11D57B4213A36D3CDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		7D148C7DFE4E4319AA11C862 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				"ARCHS[sdk=iphoneos*]" = arm64;
+				BITCODE_GENERATION_MODE = bitcode;
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				ENABLE_BITCODE = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.2.sdk;
+				SYMROOT = "/Users/mackun/HyperPay-Jub_SDK_CXX/build/build";
+				"VALID_ARCHS[sdk=iphoneos*]" = arm64;
+			};
+			name = Debug;
+		};
+		82D727A21BC14E4AA5B03FEC /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/MinSizeRel";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/include","$(inherited)");
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (" -Wall -Wextra -W -Wdeclaration-after-statement -Wwrite-strings -Wpointer-arith -Wimplicit-fallthrough -Wshadow -Wmissing-declarations -Wmissing-prototypes -Wdocumentation -Wno-documentation-deprecated-sync -Wunreachable-code     -DNDEBUG ","$(inherited)");
+				OTHER_LIBTOOLFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = mbedcrypto;
+				SECTORDER_FLAGS = "";
+				TARGET_TEMP_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/build/build/mbedcrypto.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		8FAA2FE6C1674F15B28282D2 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		9932DB65E57C419EB4528BE5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		9B65B61B5B564A58A72E4996 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/Release";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/include","$(inherited)");
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (" -Wall -Wextra -W -Wdeclaration-after-statement -Wwrite-strings -Wpointer-arith -Wimplicit-fallthrough -Wshadow -Wmissing-declarations -Wmissing-prototypes -Wdocumentation -Wno-documentation-deprecated-sync -Wunreachable-code     ","$(inherited)");
+				OTHER_LIBTOOLFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = mbedx509;
+				SECTORDER_FLAGS = "";
+				TARGET_TEMP_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/build/build/mbedx509.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		9B8A6ECA0BD64CC293A703D0 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/MinSizeRel";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/include","$(inherited)");
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (" -Wall -Wextra -W -Wdeclaration-after-statement -Wwrite-strings -Wpointer-arith -Wimplicit-fallthrough -Wshadow -Wmissing-declarations -Wmissing-prototypes -Wdocumentation -Wno-documentation-deprecated-sync -Wunreachable-code     -DNDEBUG ","$(inherited)");
+				OTHER_LIBTOOLFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = mbedtls;
+				SECTORDER_FLAGS = "";
+				TARGET_TEMP_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/build/build/mbedtls.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		A6A9CF18842F40B6AEEA1D70 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = install;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		B0190A04965448B686110D14 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		B95F6779C0614BF7B7257B23 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/Release";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/include","$(inherited)");
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (" -Wall -Wextra -W -Wdeclaration-after-statement -Wwrite-strings -Wpointer-arith -Wimplicit-fallthrough -Wshadow -Wmissing-declarations -Wmissing-prototypes -Wdocumentation -Wno-documentation-deprecated-sync -Wunreachable-code     ","$(inherited)");
+				OTHER_LIBTOOLFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = mbedtls;
+				SECTORDER_FLAGS = "";
+				TARGET_TEMP_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/build/build/mbedtls.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		BBEAC492DF3B41BAAEFD5436 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/RelWithDebInfo";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/include","$(inherited)");
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (" -Wall -Wextra -W -Wdeclaration-after-statement -Wwrite-strings -Wpointer-arith -Wimplicit-fallthrough -Wshadow -Wmissing-declarations -Wmissing-prototypes -Wdocumentation -Wno-documentation-deprecated-sync -Wunreachable-code        -DNDEBUG ","$(inherited)");
+				OTHER_LIBTOOLFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = mbedcrypto;
+				SECTORDER_FLAGS = "";
+				TARGET_TEMP_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/build/build/mbedcrypto.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		C0FEE047A6B347959D1FBBEB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				"ARCHS[sdk=iphoneos*]" = arm64;
+				BITCODE_GENERATION_MODE = bitcode;
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				ENABLE_BITCODE = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.2.sdk;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SYMROOT = "/Users/mackun/HyperPay-Jub_SDK_CXX/build/build";
+				"VALID_ARCHS[sdk=iphoneos*]" = arm64;
+			};
+			name = Release;
+		};
+		C4E2385430964B658768C607 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = apidoc;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		C732F5C2DBEA4E93B404D706 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/Debug";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/include","$(inherited)");
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (" -Wall -Wextra -W -Wdeclaration-after-statement -Wwrite-strings -Wpointer-arith -Wimplicit-fallthrough -Wshadow -Wmissing-declarations -Wmissing-prototypes -Wdocumentation -Wno-documentation-deprecated-sync -Wunreachable-code         ","$(inherited)");
+				OTHER_LIBTOOLFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = mbedtls;
+				SECTORDER_FLAGS = "";
+				TARGET_TEMP_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/build/build/mbedtls.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		DA0EEEBD375F4BB4819E1359 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/Debug";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/include","$(inherited)");
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (" -Wall -Wextra -W -Wdeclaration-after-statement -Wwrite-strings -Wpointer-arith -Wimplicit-fallthrough -Wshadow -Wmissing-declarations -Wmissing-prototypes -Wdocumentation -Wno-documentation-deprecated-sync -Wunreachable-code         ","$(inherited)");
+				OTHER_LIBTOOLFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = mbedcrypto;
+				SECTORDER_FLAGS = "";
+				TARGET_TEMP_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/build/build/mbedcrypto.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		E52CA39EF73C4C42924241B6 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/outputs/iOS/MinSizeRel";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/mackun/HyperPay-Jub_SDK_CXX/deps/secure-channel/mbedtls/include","$(inherited)");
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (" -Wall -Wextra -W -Wdeclaration-after-statement -Wwrite-strings -Wpointer-arith -Wimplicit-fallthrough -Wshadow -Wmissing-declarations -Wmissing-prototypes -Wdocumentation -Wno-documentation-deprecated-sync -Wunreachable-code     -DNDEBUG ","$(inherited)");
+				OTHER_LIBTOOLFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = mbedx509;
+				SECTORDER_FLAGS = "";
+				TARGET_TEMP_DIR = "/Users/mackun/HyperPay-Jub_SDK_CXX/build/build/mbedx509.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		EBB11ABABCDD4755B3161C1C /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = lib;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		F1465EEB1F9F41E383184947 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = apidoc;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		F18DDE8F02B34AEB8AB03378 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0E92B0514D3F480C851EAE78 /* Build configuration list for PBXAggregateTarget "lib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				602F0330FE6D4FFCA76CD3FD /* Debug */,
+				07B2C38C7F1D4AFEA14AF1A7 /* Release */,
+				5DA121D1FA6144B986BBE067 /* MinSizeRel */,
+				EBB11ABABCDD4755B3161C1C /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		2E3474B03FFC4898A52C9691 /* Build configuration list for PBXProject "mbed TLS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7D148C7DFE4E4319AA11C862 /* Debug */,
+				C0FEE047A6B347959D1FBBEB /* Release */,
+				631FDECEAECA4FCFA906435E /* MinSizeRel */,
+				6969CBF67EA6424495A21BEC /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		374E1BFB6F5F4C6F9B07D74B /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9932DB65E57C419EB4528BE5 /* Debug */,
+				F18DDE8F02B34AEB8AB03378 /* Release */,
+				B0190A04965448B686110D14 /* MinSizeRel */,
+				8FAA2FE6C1674F15B28282D2 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		3E6A78C59394449B9D93058A /* Build configuration list for PBXAggregateTarget "install" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44865F5B83064E3C91344D91 /* Debug */,
+				A6A9CF18842F40B6AEEA1D70 /* Release */,
+				651C92F5326748D98F155E76 /* MinSizeRel */,
+				0BA67E2FF4E54C62A332A211 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		69E89AF162D3470CBB224DE3 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				36AEB902018B4E0DA934D09A /* Debug */,
+				77D24C11D57B4213A36D3CDE /* Release */,
+				3518D190D83040E489D3C1E3 /* MinSizeRel */,
+				249BDB0E129B41658B3357EB /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		79C0BE0BCF9845FF916174E9 /* Build configuration list for PBXNativeTarget "mbedx509" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6CA310396FD649AA982BE968 /* Debug */,
+				9B65B61B5B564A58A72E4996 /* Release */,
+				E52CA39EF73C4C42924241B6 /* MinSizeRel */,
+				4141612831174C6D8E7EFA8C /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A616924377AE446B889888C4 /* Build configuration list for PBXNativeTarget "mbedcrypto" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA0EEEBD375F4BB4819E1359 /* Debug */,
+				08D79B5EC0414B38904F8190 /* Release */,
+				82D727A21BC14E4AA5B03FEC /* MinSizeRel */,
+				BBEAC492DF3B41BAAEFD5436 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C61ED8A9B47B480CB8BB52A2 /* Build configuration list for PBXNativeTarget "mbedtls" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C732F5C2DBEA4E93B404D706 /* Debug */,
+				B95F6779C0614BF7B7257B23 /* Release */,
+				9B8A6ECA0BD64CC293A703D0 /* MinSizeRel */,
+				132A53079442441CAFD14EC7 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F0DE4CD15AF14E96B17570FE /* Build configuration list for PBXAggregateTarget "apidoc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				41D797D707D54BAD9B3C663E /* Debug */,
+				1CCA5AFA0969434A8FBC2C44 /* Release */,
+				C4E2385430964B658768C607 /* MinSizeRel */,
+				F1465EEB1F9F41E383184947 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 519001C89F8348798E38BF41 /* Project object */;
+}

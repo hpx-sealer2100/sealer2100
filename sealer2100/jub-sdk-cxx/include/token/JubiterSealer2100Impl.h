@@ -11,11 +11,12 @@
 #include "token/JubiterBLDImpl.h"
 #include "common/protocpp/messages-common.pb.h"
 #include "common/protocpp/messages-management.pb.h"
-#include "common/protocpp/FirmwareUpdate.pb.h"
+#include "common/protocpp/messages-bootloader.pb.h"
+#include "common/protocpp/messages-emmc.pb.h"
 
 using namespace hw::trezor::messages::common;
 using namespace hw::trezor::messages::management;
-using namespace hw::trezor::messages::FirmwareUpdate;
+using namespace hw::trezor::messages::bootloader;
 namespace jub {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +128,7 @@ public:
     }
     virtual JUB_RV GetAppletVersionETH(stVersion& version) override;
 
-    virtual JUB_RV GetAddressETH(const std::string& path, const JUB_UINT16 tag, std::string& address) override;
+    virtual JUB_RV GetAddressETH(const std::string& path, uint64_t chainId, const JUB_UINT16 tag, std::string& address) override;
 
     virtual JUB_RV GetHDNodeETH(const JUB_BYTE format, const std::string& path, std::string& pubkey) override;
 
@@ -167,6 +168,9 @@ public:
                                      const std::string& contractAddress) override;
      virtual JUB_RV SetERC20ETHTokens(const ERC20_TOKEN_INFO tokens[],
                                       const JUB_UINT16 iCount) override;
+
+    JUB_RV StoreETHDefinition(JUB_ETH_NETWORK_INFO networkInfo,
+                              std::optional<JUB_ERC20_TOKEN_INFO> tokenInfo);
 
     virtual JUB_RV SignContractETH(const JUB_BYTE inputType,
                                     const std::vector<JUB_BYTE>& vNonce,
@@ -393,6 +397,7 @@ protected:
     std::shared_ptr<jub::JubiterBLENusDevice> _device;
     std::string _path;
     std::string session_id;//当前session_id
+    std::optional<Features> features;
 private:
     JUB_RV sendProtocolData(uint16_t sendType,const std::string& send_data, uint16_t* recvType, std::string& recvData);
     JUB_RV sendProtocolDataPlaint(uint16_t sendType, const std::string &send_data, uint16_t *recvType, std::string &recvData);

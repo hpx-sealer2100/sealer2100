@@ -56,9 +56,12 @@ typedef NS_ENUM(NSInteger, JUB_NS_SCRIPT_BTC_TYPE) {
     NS_RETURN0 = 0x01,
     NS_P2SH_MULTISIG = 0x02,
     NS_QRC20 = 0x03,
+    NS_P2WSH_MULTISIG = 0x04,
+    NS_P2SH_P2WPKH = 0x05,
+    NS_P2WPKH = 0x06,
+    NS_TAPROOT = 0x07,
     NS_SCRIPT_BTC_TYPE_NS
 };
-
 //typedef enum {
 //    BTC = 0x00,
 //    cBTC,

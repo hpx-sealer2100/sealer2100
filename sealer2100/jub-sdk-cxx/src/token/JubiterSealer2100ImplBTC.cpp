@@ -469,6 +469,15 @@ TxAck_TransactionType_TxInputType input_btcToTxInputType(const std::string mainP
         case SCRIPT_BTC_TYPE::P2WSH_MULTISIG:
             inputst = InputScriptType::SPENDP2SHWITNESS;
             break;
+        case SCRIPT_BTC_TYPE::P2SH_P2WPKH:
+            inputst = InputScriptType::SPENDP2SHWITNESS;
+            break;
+        case SCRIPT_BTC_TYPE::P2WPKH:
+            inputst = InputScriptType::SPENDWITNESS;
+            break;
+        case SCRIPT_BTC_TYPE::TAPROOT:
+            inputst = InputScriptType::SPENDTAPROOT;
+            break;
         default:
             inputst = InputScriptType::SPENDADDRESS;//其他对不上，默认SPENDADDRESS
             break;
@@ -502,6 +511,15 @@ TxAck_TransactionType_TxOutputType output_btcToTxOutputType(const std::string ma
             break;
         case SCRIPT_BTC_TYPE::RETURN0:
             outputst = OutputScriptType::PAYTOOPRETURN;
+            break;
+        case SCRIPT_BTC_TYPE::P2SH_P2WPKH:
+            outputst = OutputScriptType::PAYTOP2SHWITNESS;
+            break;
+        case SCRIPT_BTC_TYPE::P2WPKH:
+            outputst = OutputScriptType::PAYTOWITNESS;
+            break;
+        case SCRIPT_BTC_TYPE::TAPROOT:
+            outputst = OutputScriptType::PAYTOTAPROOT;
             break;
         default:
             outputst = OutputScriptType::PAYTOADDRESS;//其他对不上，默认PAYTOADDRESS

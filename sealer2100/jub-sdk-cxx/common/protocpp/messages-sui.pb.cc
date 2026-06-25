@@ -159,8 +159,12 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_messages_2dsui_2eproto::offset
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::sui::SuiSignTx, address_n_),
   PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::sui::SuiSignTx, raw_tx_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::sui::SuiSignTx, destination_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::sui::SuiSignTx, sui_amount_),
   ~0u,
   0,
+  1,
+  2,
   PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::sui::SuiSignedTx, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::sui::SuiSignedTx, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -192,10 +196,10 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_messages_2dsui_2eproto::offset
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, 7, sizeof(::hw::trezor::messages::sui::SuiGetAddress)},
   { 9, 15, sizeof(::hw::trezor::messages::sui::SuiAddress)},
-  { 16, 23, sizeof(::hw::trezor::messages::sui::SuiSignTx)},
-  { 25, 32, sizeof(::hw::trezor::messages::sui::SuiSignedTx)},
-  { 34, 41, sizeof(::hw::trezor::messages::sui::SuiSignMessage)},
-  { 43, 50, sizeof(::hw::trezor::messages::sui::SuiMessageSignature)},
+  { 16, 25, sizeof(::hw::trezor::messages::sui::SuiSignTx)},
+  { 29, 36, sizeof(::hw::trezor::messages::sui::SuiSignedTx)},
+  { 38, 45, sizeof(::hw::trezor::messages::sui::SuiSignMessage)},
+  { 47, 54, sizeof(::hw::trezor::messages::sui::SuiMessageSignature)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -211,14 +215,15 @@ const char descriptor_table_protodef_messages_2dsui_2eproto[] PROTOBUF_SECTION_V
   "\n\022messages-sui.proto\022\026hw.trezor.messages"
   ".sui\"8\n\rSuiGetAddress\022\021\n\taddress_n\030\001 \003(\r"
   "\022\024\n\014show_display\030\002 \001(\010\"\035\n\nSuiAddress\022\017\n\007"
-  "address\030\001 \001(\t\".\n\tSuiSignTx\022\021\n\taddress_n\030"
-  "\001 \003(\r\022\016\n\006raw_tx\030\002 \002(\014\"4\n\013SuiSignedTx\022\022\n\n"
-  "public_key\030\001 \002(\014\022\021\n\tsignature\030\002 \002(\014\"4\n\016S"
-  "uiSignMessage\022\021\n\taddress_n\030\001 \003(\r\022\017\n\007mess"
-  "age\030\002 \002(\014\"9\n\023SuiMessageSignature\022\021\n\tsign"
-  "ature\030\001 \002(\014\022\017\n\007address\030\002 \002(\tB7\n#com.sato"
-  "shilabs.trezor.lib.protobufB\020TrezorMessa"
-  "geSui"
+  "address\030\001 \001(\t\"W\n\tSuiSignTx\022\021\n\taddress_n\030"
+  "\001 \003(\r\022\016\n\006raw_tx\030\002 \002(\014\022\023\n\013destination\030\003 \002"
+  "(\t\022\022\n\nsui_amount\030\004 \002(\004\"4\n\013SuiSignedTx\022\022\n"
+  "\npublic_key\030\001 \002(\014\022\021\n\tsignature\030\002 \002(\014\"4\n\016"
+  "SuiSignMessage\022\021\n\taddress_n\030\001 \003(\r\022\017\n\007mes"
+  "sage\030\002 \002(\014\"9\n\023SuiMessageSignature\022\021\n\tsig"
+  "nature\030\001 \002(\014\022\017\n\007address\030\002 \002(\tB7\n#com.sat"
+  "oshilabs.trezor.lib.protobufB\020TrezorMess"
+  "ageSui"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_messages_2dsui_2eproto_deps[1] = {
 };
@@ -233,7 +238,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_mes
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_messages_2dsui_2eproto_once;
 static bool descriptor_table_messages_2dsui_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_messages_2dsui_2eproto = {
-  &descriptor_table_messages_2dsui_2eproto_initialized, descriptor_table_protodef_messages_2dsui_2eproto, "messages-sui.proto", 405,
+  &descriptor_table_messages_2dsui_2eproto_initialized, descriptor_table_protodef_messages_2dsui_2eproto, "messages-sui.proto", 446,
   &descriptor_table_messages_2dsui_2eproto_once, descriptor_table_messages_2dsui_2eproto_sccs, descriptor_table_messages_2dsui_2eproto_deps, 6, 0,
   schemas, file_default_instances, TableStruct_messages_2dsui_2eproto::offsets,
   file_level_metadata_messages_2dsui_2eproto, 6, file_level_enum_descriptors_messages_2dsui_2eproto, file_level_service_descriptors_messages_2dsui_2eproto,
@@ -854,6 +859,12 @@ class SuiSignTx::_Internal {
   static void set_has_raw_tx(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
+  static void set_has_destination(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
+  }
+  static void set_has_sui_amount(HasBits* has_bits) {
+    (*has_bits)[0] |= 4u;
+  }
 };
 
 SuiSignTx::SuiSignTx()
@@ -871,12 +882,19 @@ SuiSignTx::SuiSignTx(const SuiSignTx& from)
   if (from.has_raw_tx()) {
     raw_tx_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.raw_tx_);
   }
+  destination_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.has_destination()) {
+    destination_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.destination_);
+  }
+  sui_amount_ = from.sui_amount_;
   // @@protoc_insertion_point(copy_constructor:hw.trezor.messages.sui.SuiSignTx)
 }
 
 void SuiSignTx::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_SuiSignTx_messages_2dsui_2eproto.base);
   raw_tx_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  destination_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  sui_amount_ = PROTOBUF_ULONGLONG(0);
 }
 
 SuiSignTx::~SuiSignTx() {
@@ -886,6 +904,7 @@ SuiSignTx::~SuiSignTx() {
 
 void SuiSignTx::SharedDtor() {
   raw_tx_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  destination_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 void SuiSignTx::SetCachedSize(int size) const {
@@ -905,9 +924,15 @@ void SuiSignTx::Clear() {
 
   address_n_.Clear();
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    raw_tx_.ClearNonDefaultToEmptyNoArena();
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      raw_tx_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      destination_.ClearNonDefaultToEmptyNoArena();
+    }
   }
+  sui_amount_ = PROTOBUF_ULONGLONG(0);
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
@@ -940,6 +965,21 @@ const char* SuiSignTx::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(mutable_raw_tx(), ptr, ctx);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // required string destination = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8Verify(mutable_destination(), ptr, ctx, "hw.trezor.messages.sui.SuiSignTx.destination");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // required uint64 sui_amount = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
+          _Internal::set_has_sui_amount(&has_bits);
+          sui_amount_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -1001,6 +1041,34 @@ bool SuiSignTx::MergePartialFromCodedStream(
         break;
       }
 
+      // required string destination = 3;
+      case 3: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (26 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_destination()));
+          ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->destination().data(), static_cast<int>(this->destination().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::PARSE,
+            "hw.trezor.messages.sui.SuiSignTx.destination");
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required uint64 sui_amount = 4;
+      case 4: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (32 & 0xFF)) {
+          _Internal::set_has_sui_amount(&_has_bits_);
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::uint64, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &sui_amount_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -1041,6 +1109,21 @@ void SuiSignTx::SerializeWithCachedSizes(
       2, this->raw_tx(), output);
   }
 
+  // required string destination = 3;
+  if (cached_has_bits & 0x00000002u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->destination().data(), static_cast<int>(this->destination().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "hw.trezor.messages.sui.SuiSignTx.destination");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->destination(), output);
+  }
+
+  // required uint64 sui_amount = 4;
+  if (cached_has_bits & 0x00000004u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64(4, this->sui_amount(), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -1066,6 +1149,22 @@ void SuiSignTx::SerializeWithCachedSizes(
         2, this->raw_tx(), target);
   }
 
+  // required string destination = 3;
+  if (cached_has_bits & 0x00000002u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->destination().data(), static_cast<int>(this->destination().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "hw.trezor.messages.sui.SuiSignTx.destination");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        3, this->destination(), target);
+  }
+
+  // required uint64 sui_amount = 4;
+  if (cached_has_bits & 0x00000004u) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(4, this->sui_amount(), target);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
@@ -1074,6 +1173,33 @@ void SuiSignTx::SerializeWithCachedSizes(
   return target;
 }
 
+size_t SuiSignTx::RequiredFieldsByteSizeFallback() const {
+// @@protoc_insertion_point(required_fields_byte_size_fallback_start:hw.trezor.messages.sui.SuiSignTx)
+  size_t total_size = 0;
+
+  if (has_raw_tx()) {
+    // required bytes raw_tx = 2;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
+        this->raw_tx());
+  }
+
+  if (has_destination()) {
+    // required string destination = 3;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->destination());
+  }
+
+  if (has_sui_amount()) {
+    // required uint64 sui_amount = 4;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64Size(
+        this->sui_amount());
+  }
+
+  return total_size;
+}
 size_t SuiSignTx::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:hw.trezor.messages.sui.SuiSignTx)
   size_t total_size = 0;
@@ -1083,11 +1209,24 @@ size_t SuiSignTx::ByteSizeLong() const {
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
         _internal_metadata_.unknown_fields());
   }
-  // required bytes raw_tx = 2;
-  if (has_raw_tx()) {
+  if (((_has_bits_[0] & 0x00000007) ^ 0x00000007) == 0) {  // All required fields are present.
+    // required bytes raw_tx = 2;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
         this->raw_tx());
+
+    // required string destination = 3;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->destination());
+
+    // required uint64 sui_amount = 4;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64Size(
+        this->sui_amount());
+
+  } else {
+    total_size += RequiredFieldsByteSizeFallback();
   }
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -1130,9 +1269,20 @@ void SuiSignTx::MergeFrom(const SuiSignTx& from) {
   (void) cached_has_bits;
 
   address_n_.MergeFrom(from.address_n_);
-  if (from.has_raw_tx()) {
-    _has_bits_[0] |= 0x00000001u;
-    raw_tx_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.raw_tx_);
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 0x00000007u) {
+    if (cached_has_bits & 0x00000001u) {
+      _has_bits_[0] |= 0x00000001u;
+      raw_tx_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.raw_tx_);
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _has_bits_[0] |= 0x00000002u;
+      destination_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.destination_);
+    }
+    if (cached_has_bits & 0x00000004u) {
+      sui_amount_ = from.sui_amount_;
+    }
+    _has_bits_[0] |= cached_has_bits;
   }
 }
 
@@ -1151,7 +1301,7 @@ void SuiSignTx::CopyFrom(const SuiSignTx& from) {
 }
 
 bool SuiSignTx::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
   return true;
 }
 
@@ -1162,6 +1312,9 @@ void SuiSignTx::InternalSwap(SuiSignTx* other) {
   address_n_.InternalSwap(&other->address_n_);
   raw_tx_.Swap(&other->raw_tx_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
+  destination_.Swap(&other->destination_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(sui_amount_, other->sui_amount_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata SuiSignTx::GetMetadata() const {

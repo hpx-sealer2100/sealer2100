@@ -240,38 +240,47 @@ void (^percentageCallback)(NSUInteger percentage) = ^(NSUInteger percentage) {
     
 }
 - (IBAction)EndSessionAction:(UIButton *)sender{
-        [_sdk JUB_EndSession:__deviceID];
-        NSLog(@"[%li] JUB_EndSession(%li)", __contextID,(long)[_sdk JUB_LastError]);
-    [_sdk JUB_OpCancel:__deviceID];
-    NSLog(@"[%li] JUB_OpCancel(%li)", __contextID,(long)[_sdk JUB_LastError]);
+    //     [_sdk JUB_EndSession:__deviceID];
+    //     NSLog(@"[%li] JUB_EndSession(%li)", __contextID,(long)[_sdk JUB_LastError]);
+    // [_sdk JUB_OpCancel:__deviceID];
+    // NSLog(@"[%li] JUB_OpCancel(%li)", __contextID,(long)[_sdk JUB_LastError]);
     // 1. 获取 Documents 目录路径
-//    NSString *documentsPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-//    
-//    // 2. 拼接固件文件路径（假设叫 firmware.bin）
-//    NSString *filePath = [documentsPath stringByAppendingPathComponent:@"firmware.bin"];
-//    NSURL *fileURL = [NSURL fileURLWithPath:filePath];
-//    
-//    // 3. 读取文件内容
-//    NSError *error;
-//    NSData *firmwareData = [NSData dataWithContentsOfURL:fileURL options:0 error:&error];
-//    
-//    if (error) {
-//        NSLog(@"❌ 读取文件失败: %@", error.localizedDescription);
-//        return;
-//    }
-//    
-//    if (!firmwareData || firmwareData.length == 0) {
-//        NSLog(@"❌ 文件为空或不存在！请确保 firmware.bin 已放入 Documents 目录");
-//        return;
-//    }
-//    
-//    NSLog(@"✅ 文件大小: %lu 字节", (unsigned long)firmwareData.length);
-//    
-//    [_sdk JUB_UpdateFirmware:__deviceID firmwareFilePayload:firmwareData firmwareFileSize:firmwareData.length reboot_on_success:TRUE];
-//    
-//    NSLog(@"[%li] JUB_UpdateFirmware(%li)", __contextID,(long)[_sdk JUB_LastError]);
+// Initialize the document picker
+    [_sdk JUB_RebootToBootLoader:__deviceID];
+    NSArray *types = @[@"public.data", @"public.content"]; // Allow general file types
+    UIDocumentPickerViewController *documentPicker = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:types inMode:UIDocumentPickerModeImport];
     
+    documentPicker.delegate = self;
+    documentPicker.modalPresentationStyle = UIModalPresentationFormSheet;
     
+    [self presentViewController:documentPicker animated:YES completion:nil];
+    
+    // Note: The logic to read the file and call JUB_UpdateFirmware must be moved to the 
+    // documentPicker:didPickDocumentsAtURLs: delegate method.
+}  
+- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
+        if (urls.count == 0) return;
+        
+        NSURL *fileURL = urls.firstObject;
+        BOOL isAccessing = [fileURL startAccessingSecurityScopedResource];
+        
+        NSError *err = nil;
+        NSData *data = [NSData dataWithContentsOfURL:fileURL options:0 error:&err];
+        
+        if (isAccessing) {
+            [fileURL stopAccessingSecurityScopedResource];
+        }
+        
+        if (err) {
+            NSLog(@"❌ Read file failed: %@", err.localizedDescription);
+        } else if (!data || data.length == 0) {
+            NSLog(@"❌ File is empty");
+        } else {
+            NSLog(@"✅ File size: %lu bytes", (unsigned long)data.length);
+            [_sdk JUB_UpdateFirmware:__deviceID firmwareFilePayload:data firmwareFileSize:data.length reboot_on_success:TRUE];
+            NSLog(@"[%li] JUB_UpdateFirmware(%li)", (long)[_sdk JUB_LastError], (long)__deviceID);
+        }
+        return;
 }
 // This method is called once we click inside the textField
 -(void)textFieldDidBeginEditing:(UITextField *)textField {

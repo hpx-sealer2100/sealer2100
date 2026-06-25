@@ -31,7 +31,9 @@ JUB_RV JubiterBLDImpl::GetAppletVersionETH(stVersion& version) {
 }
 
 
-JUB_RV JubiterBLDImpl::GetAddressETH(const std::string& path, const JUB_UINT16 tag, std::string& address) {
+JUB_RV JubiterBLDImpl::GetAddressETH(const std::string& path, uint64_t chainId, const JUB_UINT16 tag, std::string& address) {
+    // not used
+    (void)chainId;
 
     uchar_vector data(path.begin(), path.end());
 

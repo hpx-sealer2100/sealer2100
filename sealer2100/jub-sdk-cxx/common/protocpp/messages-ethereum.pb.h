@@ -49,7 +49,7 @@ struct TableStruct_messages_2dethereum_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[14]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[15]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -90,6 +90,9 @@ extern EthereumSignTxEIP1559_EthereumAccessListDefaultTypeInternal _EthereumSign
 class EthereumSignTypedHash;
 class EthereumSignTypedHashDefaultTypeInternal;
 extern EthereumSignTypedHashDefaultTypeInternal _EthereumSignTypedHash_default_instance_;
+class EthereumStoreDefinition;
+class EthereumStoreDefinitionDefaultTypeInternal;
+extern EthereumStoreDefinitionDefaultTypeInternal _EthereumStoreDefinition_default_instance_;
 class EthereumTxAck;
 class EthereumTxAckDefaultTypeInternal;
 extern EthereumTxAckDefaultTypeInternal _EthereumTxAck_default_instance_;
@@ -117,6 +120,7 @@ template<> ::hw::trezor::messages::ethereum::EthereumSignTx* Arena::CreateMaybeM
 template<> ::hw::trezor::messages::ethereum::EthereumSignTxEIP1559* Arena::CreateMaybeMessage<::hw::trezor::messages::ethereum::EthereumSignTxEIP1559>(Arena*);
 template<> ::hw::trezor::messages::ethereum::EthereumSignTxEIP1559_EthereumAccessList* Arena::CreateMaybeMessage<::hw::trezor::messages::ethereum::EthereumSignTxEIP1559_EthereumAccessList>(Arena*);
 template<> ::hw::trezor::messages::ethereum::EthereumSignTypedHash* Arena::CreateMaybeMessage<::hw::trezor::messages::ethereum::EthereumSignTypedHash>(Arena*);
+template<> ::hw::trezor::messages::ethereum::EthereumStoreDefinition* Arena::CreateMaybeMessage<::hw::trezor::messages::ethereum::EthereumStoreDefinition>(Arena*);
 template<> ::hw::trezor::messages::ethereum::EthereumTxAck* Arena::CreateMaybeMessage<::hw::trezor::messages::ethereum::EthereumTxAck>(Arena*);
 template<> ::hw::trezor::messages::ethereum::EthereumTxRequest* Arena::CreateMaybeMessage<::hw::trezor::messages::ethereum::EthereumTxRequest>(Arena*);
 template<> ::hw::trezor::messages::ethereum::EthereumTypedDataSignature* Arena::CreateMaybeMessage<::hw::trezor::messages::ethereum::EthereumTypedDataSignature>(Arena*);
@@ -563,6 +567,7 @@ class EthereumGetAddress :
   enum : int {
     kAddressNFieldNumber = 1,
     kEncodedNetworkFieldNumber = 3,
+    kChainIdFieldNumber = 4,
     kShowDisplayFieldNumber = 2,
   };
   // repeated uint32 address_n = 1;
@@ -588,6 +593,12 @@ class EthereumGetAddress :
   std::string* release_encoded_network();
   void set_allocated_encoded_network(std::string* encoded_network);
 
+  // optional uint64 chain_id = 4;
+  bool has_chain_id() const;
+  void clear_chain_id();
+  ::PROTOBUF_NAMESPACE_ID::uint64 chain_id() const;
+  void set_chain_id(::PROTOBUF_NAMESPACE_ID::uint64 value);
+
   // optional bool show_display = 2;
   bool has_show_display() const;
   void clear_show_display();
@@ -603,6 +614,7 @@ class EthereumGetAddress :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint32 > address_n_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr encoded_network_;
+  ::PROTOBUF_NAMESPACE_ID::uint64 chain_id_;
   bool show_display_;
   friend struct ::TableStruct_messages_2dethereum_2eproto;
 };
@@ -2669,6 +2681,158 @@ class EthereumTypedDataSignature :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr address_;
   friend struct ::TableStruct_messages_2dethereum_2eproto;
 };
+// -------------------------------------------------------------------
+
+class EthereumStoreDefinition :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hw.trezor.messages.ethereum.EthereumStoreDefinition) */ {
+ public:
+  EthereumStoreDefinition();
+  virtual ~EthereumStoreDefinition();
+
+  EthereumStoreDefinition(const EthereumStoreDefinition& from);
+  EthereumStoreDefinition(EthereumStoreDefinition&& from) noexcept
+    : EthereumStoreDefinition() {
+    *this = ::std::move(from);
+  }
+
+  inline EthereumStoreDefinition& operator=(const EthereumStoreDefinition& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline EthereumStoreDefinition& operator=(EthereumStoreDefinition&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const EthereumStoreDefinition& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const EthereumStoreDefinition* internal_default_instance() {
+    return reinterpret_cast<const EthereumStoreDefinition*>(
+               &_EthereumStoreDefinition_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    14;
+
+  friend void swap(EthereumStoreDefinition& a, EthereumStoreDefinition& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(EthereumStoreDefinition* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline EthereumStoreDefinition* New() const final {
+    return CreateMaybeMessage<EthereumStoreDefinition>(nullptr);
+  }
+
+  EthereumStoreDefinition* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<EthereumStoreDefinition>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const EthereumStoreDefinition& from);
+  void MergeFrom(const EthereumStoreDefinition& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(EthereumStoreDefinition* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "hw.trezor.messages.ethereum.EthereumStoreDefinition";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_messages_2dethereum_2eproto);
+    return ::descriptor_table_messages_2dethereum_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kNetworkFieldNumber = 1,
+    kTokenFieldNumber = 2,
+  };
+  // required .hw.trezor.messages.ethereum_definitions.EthereumNetworkInfo network = 1;
+  bool has_network() const;
+  void clear_network();
+  const ::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo& network() const;
+  ::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo* release_network();
+  ::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo* mutable_network();
+  void set_allocated_network(::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo* network);
+
+  // optional .hw.trezor.messages.ethereum_definitions.EthereumTokenInfo token = 2;
+  bool has_token() const;
+  void clear_token();
+  const ::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo& token() const;
+  ::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo* release_token();
+  ::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo* mutable_token();
+  void set_allocated_token(::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo* token);
+
+  // @@protoc_insertion_point(class_scope:hw.trezor.messages.ethereum.EthereumStoreDefinition)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo* network_;
+  ::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo* token_;
+  friend struct ::TableStruct_messages_2dethereum_2eproto;
+};
 // ===================================================================
 
 
@@ -2871,18 +3035,18 @@ EthereumGetAddress::mutable_address_n() {
 
 // optional bool show_display = 2;
 inline bool EthereumGetAddress::has_show_display() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+  return (_has_bits_[0] & 0x00000004u) != 0;
 }
 inline void EthereumGetAddress::clear_show_display() {
   show_display_ = false;
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline bool EthereumGetAddress::show_display() const {
   // @@protoc_insertion_point(field_get:hw.trezor.messages.ethereum.EthereumGetAddress.show_display)
   return show_display_;
 }
 inline void EthereumGetAddress::set_show_display(bool value) {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000004u;
   show_display_ = value;
   // @@protoc_insertion_point(field_set:hw.trezor.messages.ethereum.EthereumGetAddress.show_display)
 }
@@ -2943,6 +3107,24 @@ inline void EthereumGetAddress::set_allocated_encoded_network(std::string* encod
   }
   encoded_network_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), encoded_network);
   // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.ethereum.EthereumGetAddress.encoded_network)
+}
+
+// optional uint64 chain_id = 4;
+inline bool EthereumGetAddress::has_chain_id() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void EthereumGetAddress::clear_chain_id() {
+  chain_id_ = PROTOBUF_ULONGLONG(0);
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint64 EthereumGetAddress::chain_id() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ethereum.EthereumGetAddress.chain_id)
+  return chain_id_;
+}
+inline void EthereumGetAddress::set_chain_id(::PROTOBUF_NAMESPACE_ID::uint64 value) {
+  _has_bits_[0] |= 0x00000002u;
+  chain_id_ = value;
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ethereum.EthereumGetAddress.chain_id)
 }
 
 // -------------------------------------------------------------------
@@ -5218,9 +5400,105 @@ inline void EthereumTypedDataSignature::set_allocated_address(std::string* addre
   // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.ethereum.EthereumTypedDataSignature.address)
 }
 
+// -------------------------------------------------------------------
+
+// EthereumStoreDefinition
+
+// required .hw.trezor.messages.ethereum_definitions.EthereumNetworkInfo network = 1;
+inline bool EthereumStoreDefinition::has_network() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline const ::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo& EthereumStoreDefinition::network() const {
+  const ::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo* p = network_;
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ethereum.EthereumStoreDefinition.network)
+  return p != nullptr ? *p : *reinterpret_cast<const ::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo*>(
+      &::hw::trezor::messages::ethereum_definitions::_EthereumNetworkInfo_default_instance_);
+}
+inline ::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo* EthereumStoreDefinition::release_network() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.ethereum.EthereumStoreDefinition.network)
+  _has_bits_[0] &= ~0x00000001u;
+  ::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo* temp = network_;
+  network_ = nullptr;
+  return temp;
+}
+inline ::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo* EthereumStoreDefinition::mutable_network() {
+  _has_bits_[0] |= 0x00000001u;
+  if (network_ == nullptr) {
+    auto* p = CreateMaybeMessage<::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo>(GetArenaNoVirtual());
+    network_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.ethereum.EthereumStoreDefinition.network)
+  return network_;
+}
+inline void EthereumStoreDefinition::set_allocated_network(::hw::trezor::messages::ethereum_definitions::EthereumNetworkInfo* network) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(network_);
+  }
+  if (network) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      network = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, network, submessage_arena);
+    }
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  network_ = network;
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.ethereum.EthereumStoreDefinition.network)
+}
+
+// optional .hw.trezor.messages.ethereum_definitions.EthereumTokenInfo token = 2;
+inline bool EthereumStoreDefinition::has_token() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline const ::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo& EthereumStoreDefinition::token() const {
+  const ::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo* p = token_;
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ethereum.EthereumStoreDefinition.token)
+  return p != nullptr ? *p : *reinterpret_cast<const ::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo*>(
+      &::hw::trezor::messages::ethereum_definitions::_EthereumTokenInfo_default_instance_);
+}
+inline ::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo* EthereumStoreDefinition::release_token() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.ethereum.EthereumStoreDefinition.token)
+  _has_bits_[0] &= ~0x00000002u;
+  ::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo* temp = token_;
+  token_ = nullptr;
+  return temp;
+}
+inline ::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo* EthereumStoreDefinition::mutable_token() {
+  _has_bits_[0] |= 0x00000002u;
+  if (token_ == nullptr) {
+    auto* p = CreateMaybeMessage<::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo>(GetArenaNoVirtual());
+    token_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.ethereum.EthereumStoreDefinition.token)
+  return token_;
+}
+inline void EthereumStoreDefinition::set_allocated_token(::hw::trezor::messages::ethereum_definitions::EthereumTokenInfo* token) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(token_);
+  }
+  if (token) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      token = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, token, submessage_arena);
+    }
+    _has_bits_[0] |= 0x00000002u;
+  } else {
+    _has_bits_[0] &= ~0x00000002u;
+  }
+  token_ = token;
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.ethereum.EthereumStoreDefinition.token)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

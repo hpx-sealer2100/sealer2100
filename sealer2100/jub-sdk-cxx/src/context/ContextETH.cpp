@@ -12,6 +12,8 @@
 #include <../HexCoding.h>
 #include <bigint/BigIntegerUtils.hh>
 
+#include "token/JubiterSealer2100Impl.h"
+
 namespace jub {
 
 
@@ -38,7 +40,7 @@ JUB_RV ContextETH::GetAddress(const BIP32_Path& path, const JUB_UINT16 tag, std:
     JUB_CHECK_NULL(token);
 
     std::string strPath = _FullBip32Path(path);
-    JUB_VERIFY_RV(token->GetAddressETH(strPath, tag, address));
+    JUB_VERIFY_RV(token->GetAddressETH(strPath, _chainID,  tag, address));
 
     return JUBR_OK;
 }
@@ -61,7 +63,7 @@ JUB_RV ContextETH::SetMyAddress(const BIP32_Path& path, std::string& address) {
     JUB_CHECK_NULL(token);
 
     std::string strPath = _FullBip32Path(path);
-    JUB_VERIFY_RV(token->GetAddressETH(strPath, 0x02, address));
+    JUB_VERIFY_RV(token->GetAddressETH(strPath, 0x02, _chainID, address));
 
     return JUBR_OK;
 }
@@ -526,5 +528,39 @@ JUB_RV ContextETH::BuildContractWithAddrAmtDataAbi(JUB_CHAR_CPTR methodID,
     abi = std::string(ETH_PRDFIX) + _abi;
 
     return JUBR_OK;
+}
+
+JUB_RV ContextETH::StoreDefinition(JUB_ETH_NETWORK_INFO networkInfo,
+                                    std::optional<JUB_ERC20_TOKEN_INFO> tokenInfo) {
+
+    auto token = dynamic_cast<ETHTokenInterface*>(jub::TokenManager::GetInstance()->GetOne(_deviceID));
+    JUB_CHECK_NULL(token);
+    auto* sealer = dynamic_cast<JubiterSealer2100Impl*>(token);
+
+    // verify params
+    JUB_CHECK_NULL(networkInfo.name);
+    JUB_CHECK_NULL(networkInfo.symbol);
+    if (_chainID != networkInfo.chainID) {
+        return JUBR_ARGUMENTS_BAD;
+    }
+    if (tokenInfo) {
+        JUB_CHECK_NULL(tokenInfo->name);
+        JUB_CHECK_NULL(tokenInfo->symbol);
+        JUB_CHECK_NULL(tokenInfo->address);
+        if (_chainID != tokenInfo->chainID) {
+            return JUBR_ARGUMENTS_BAD;
+        }
+    }
+
+    if (!sealer) {
+        if (tokenInfo) {
+            // BLD or BIO only support set token info
+            return token->SetERC20ETHToken(tokenInfo->name, tokenInfo->decimals, tokenInfo->address);
+        }
+        // BLD or BIO have on effect when set network
+        return JUBR_OK;
+    }
+
+    return sealer->StoreETHDefinition(networkInfo, tokenInfo);
 }
 } // namespace jub end

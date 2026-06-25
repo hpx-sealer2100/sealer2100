@@ -412,6 +412,17 @@ inline uint64_t decode64BE(const uint8_t* _Nonnull src) {
     // clang-format on
 }
 
+inline uint64_t decode64BE(const uint8_t* _Nonnull src,size_t len) {
+    if (len < 8) {
+        std::vector<uint8_t> tmp(8, 0);
+        std::copy(src, src + len, tmp.begin() + (8 - len));
+        return decode64BE(tmp.data());
+    } else {
+        return decode64BE(src);
+    }
+}
+
+
 // JuBiter-defined
 /// Encodes a 64-bit big-endian value into the provided buffer.
 template<typename T>

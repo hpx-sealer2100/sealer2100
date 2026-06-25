@@ -48,7 +48,7 @@ struct TableStruct_messages_2dton_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[7]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[9]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -71,12 +71,18 @@ extern TonSignMessageDefaultTypeInternal _TonSignMessage_default_instance_;
 class TonSignProof;
 class TonSignProofDefaultTypeInternal;
 extern TonSignProofDefaultTypeInternal _TonSignProof_default_instance_;
+class TonSignTx;
+class TonSignTxDefaultTypeInternal;
+extern TonSignTxDefaultTypeInternal _TonSignTx_default_instance_;
 class TonSignedMessage;
 class TonSignedMessageDefaultTypeInternal;
 extern TonSignedMessageDefaultTypeInternal _TonSignedMessage_default_instance_;
 class TonSignedProof;
 class TonSignedProofDefaultTypeInternal;
 extern TonSignedProofDefaultTypeInternal _TonSignedProof_default_instance_;
+class TonSignedTx;
+class TonSignedTxDefaultTypeInternal;
+extern TonSignedTxDefaultTypeInternal _TonSignedTx_default_instance_;
 class TonTxAck;
 class TonTxAckDefaultTypeInternal;
 extern TonTxAckDefaultTypeInternal _TonTxAck_default_instance_;
@@ -89,8 +95,10 @@ template<> ::hw::trezor::messages::ton::TonAddress* Arena::CreateMaybeMessage<::
 template<> ::hw::trezor::messages::ton::TonGetAddress* Arena::CreateMaybeMessage<::hw::trezor::messages::ton::TonGetAddress>(Arena*);
 template<> ::hw::trezor::messages::ton::TonSignMessage* Arena::CreateMaybeMessage<::hw::trezor::messages::ton::TonSignMessage>(Arena*);
 template<> ::hw::trezor::messages::ton::TonSignProof* Arena::CreateMaybeMessage<::hw::trezor::messages::ton::TonSignProof>(Arena*);
+template<> ::hw::trezor::messages::ton::TonSignTx* Arena::CreateMaybeMessage<::hw::trezor::messages::ton::TonSignTx>(Arena*);
 template<> ::hw::trezor::messages::ton::TonSignedMessage* Arena::CreateMaybeMessage<::hw::trezor::messages::ton::TonSignedMessage>(Arena*);
 template<> ::hw::trezor::messages::ton::TonSignedProof* Arena::CreateMaybeMessage<::hw::trezor::messages::ton::TonSignedProof>(Arena*);
+template<> ::hw::trezor::messages::ton::TonSignedTx* Arena::CreateMaybeMessage<::hw::trezor::messages::ton::TonSignedTx>(Arena*);
 template<> ::hw::trezor::messages::ton::TonTxAck* Arena::CreateMaybeMessage<::hw::trezor::messages::ton::TonTxAck>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace hw {
@@ -458,22 +466,9 @@ class TonAddress :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kPublicKeyFieldNumber = 1,
-    kAddressFieldNumber = 2,
+    kAddressFieldNumber = 1,
   };
-  // required bytes public_key = 1;
-  bool has_public_key() const;
-  void clear_public_key();
-  const std::string& public_key() const;
-  void set_public_key(const std::string& value);
-  void set_public_key(std::string&& value);
-  void set_public_key(const char* value);
-  void set_public_key(const void* value, size_t size);
-  std::string* mutable_public_key();
-  std::string* release_public_key();
-  void set_allocated_public_key(std::string* public_key);
-
-  // required string address = 2;
+  // required string address = 1;
   bool has_address() const;
   void clear_address();
   const std::string& address() const;
@@ -489,13 +484,9 @@ class TonAddress :
  private:
   class _Internal;
 
-  // helper for ByteSizeLong()
-  size_t RequiredFieldsByteSizeFallback() const;
-
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr public_key_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr address_;
   friend struct ::TableStruct_messages_2dton_2eproto;
 };
@@ -1070,6 +1061,575 @@ class TonSignedMessage :
 };
 // -------------------------------------------------------------------
 
+class TonSignTx :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hw.trezor.messages.ton.TonSignTx) */ {
+ public:
+  TonSignTx();
+  virtual ~TonSignTx();
+
+  TonSignTx(const TonSignTx& from);
+  TonSignTx(TonSignTx&& from) noexcept
+    : TonSignTx() {
+    *this = ::std::move(from);
+  }
+
+  inline TonSignTx& operator=(const TonSignTx& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline TonSignTx& operator=(TonSignTx&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const TonSignTx& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const TonSignTx* internal_default_instance() {
+    return reinterpret_cast<const TonSignTx*>(
+               &_TonSignTx_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    4;
+
+  friend void swap(TonSignTx& a, TonSignTx& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(TonSignTx* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline TonSignTx* New() const final {
+    return CreateMaybeMessage<TonSignTx>(nullptr);
+  }
+
+  TonSignTx* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<TonSignTx>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const TonSignTx& from);
+  void MergeFrom(const TonSignTx& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(TonSignTx* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "hw.trezor.messages.ton.TonSignTx";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_messages_2dton_2eproto);
+    return ::descriptor_table_messages_2dton_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kAddressNFieldNumber = 1,
+    kExtDestinationFieldNumber = 18,
+    kExtTonAmountFieldNumber = 19,
+    kExtPayloadFieldNumber = 20,
+    kAddressFieldNumber = 2,
+    kJettonMasterAddressFieldNumber = 3,
+    kJettonWalletAddressFieldNumber = 4,
+    kCommentFieldNumber = 8,
+    kJettonAmountBytesFieldNumber = 21,
+    kInitDataInitialChunkFieldNumber = 22,
+    kSigningMessageReprFieldNumber = 24,
+    kAmountFieldNumber = 5,
+    kJettonAmountFieldNumber = 6,
+    kFwdFeeFieldNumber = 7,
+    kValidUntilFieldNumber = 12,
+    kSeqnoFieldNumber = 11,
+    kIsRawDataFieldNumber = 9,
+    kIsBounceableFieldNumber = 16,
+    kIsTestnetOnlyFieldNumber = 17,
+    kWorkchainFieldNumber = 15,
+    kInitDataLengthFieldNumber = 23,
+    kWalletIdFieldNumber = 14,
+    kModeFieldNumber = 10,
+    kWalletVersionFieldNumber = 13,
+  };
+  // repeated uint32 address_n = 1;
+  int address_n_size() const;
+  void clear_address_n();
+  ::PROTOBUF_NAMESPACE_ID::uint32 address_n(int index) const;
+  void set_address_n(int index, ::PROTOBUF_NAMESPACE_ID::uint32 value);
+  void add_address_n(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint32 >&
+      address_n() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint32 >*
+      mutable_address_n();
+
+  // repeated string ext_destination = 18;
+  int ext_destination_size() const;
+  void clear_ext_destination();
+  const std::string& ext_destination(int index) const;
+  std::string* mutable_ext_destination(int index);
+  void set_ext_destination(int index, const std::string& value);
+  void set_ext_destination(int index, std::string&& value);
+  void set_ext_destination(int index, const char* value);
+  void set_ext_destination(int index, const char* value, size_t size);
+  std::string* add_ext_destination();
+  void add_ext_destination(const std::string& value);
+  void add_ext_destination(std::string&& value);
+  void add_ext_destination(const char* value);
+  void add_ext_destination(const char* value, size_t size);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& ext_destination() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_ext_destination();
+
+  // repeated uint64 ext_ton_amount = 19;
+  int ext_ton_amount_size() const;
+  void clear_ext_ton_amount();
+  ::PROTOBUF_NAMESPACE_ID::uint64 ext_ton_amount(int index) const;
+  void set_ext_ton_amount(int index, ::PROTOBUF_NAMESPACE_ID::uint64 value);
+  void add_ext_ton_amount(::PROTOBUF_NAMESPACE_ID::uint64 value);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint64 >&
+      ext_ton_amount() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint64 >*
+      mutable_ext_ton_amount();
+
+  // repeated string ext_payload = 20;
+  int ext_payload_size() const;
+  void clear_ext_payload();
+  const std::string& ext_payload(int index) const;
+  std::string* mutable_ext_payload(int index);
+  void set_ext_payload(int index, const std::string& value);
+  void set_ext_payload(int index, std::string&& value);
+  void set_ext_payload(int index, const char* value);
+  void set_ext_payload(int index, const char* value, size_t size);
+  std::string* add_ext_payload();
+  void add_ext_payload(const std::string& value);
+  void add_ext_payload(std::string&& value);
+  void add_ext_payload(const char* value);
+  void add_ext_payload(const char* value, size_t size);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& ext_payload() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_ext_payload();
+
+  // required string address = 2;
+  bool has_address() const;
+  void clear_address();
+  const std::string& address() const;
+  void set_address(const std::string& value);
+  void set_address(std::string&& value);
+  void set_address(const char* value);
+  void set_address(const char* value, size_t size);
+  std::string* mutable_address();
+  std::string* release_address();
+  void set_allocated_address(std::string* address);
+
+  // optional string jetton_master_address = 3;
+  bool has_jetton_master_address() const;
+  void clear_jetton_master_address();
+  const std::string& jetton_master_address() const;
+  void set_jetton_master_address(const std::string& value);
+  void set_jetton_master_address(std::string&& value);
+  void set_jetton_master_address(const char* value);
+  void set_jetton_master_address(const char* value, size_t size);
+  std::string* mutable_jetton_master_address();
+  std::string* release_jetton_master_address();
+  void set_allocated_jetton_master_address(std::string* jetton_master_address);
+
+  // optional string jetton_wallet_address = 4;
+  bool has_jetton_wallet_address() const;
+  void clear_jetton_wallet_address();
+  const std::string& jetton_wallet_address() const;
+  void set_jetton_wallet_address(const std::string& value);
+  void set_jetton_wallet_address(std::string&& value);
+  void set_jetton_wallet_address(const char* value);
+  void set_jetton_wallet_address(const char* value, size_t size);
+  std::string* mutable_jetton_wallet_address();
+  std::string* release_jetton_wallet_address();
+  void set_allocated_jetton_wallet_address(std::string* jetton_wallet_address);
+
+  // optional string comment = 8;
+  bool has_comment() const;
+  void clear_comment();
+  const std::string& comment() const;
+  void set_comment(const std::string& value);
+  void set_comment(std::string&& value);
+  void set_comment(const char* value);
+  void set_comment(const char* value, size_t size);
+  std::string* mutable_comment();
+  std::string* release_comment();
+  void set_allocated_comment(std::string* comment);
+
+  // optional bytes jetton_amount_bytes = 21;
+  bool has_jetton_amount_bytes() const;
+  void clear_jetton_amount_bytes();
+  const std::string& jetton_amount_bytes() const;
+  void set_jetton_amount_bytes(const std::string& value);
+  void set_jetton_amount_bytes(std::string&& value);
+  void set_jetton_amount_bytes(const char* value);
+  void set_jetton_amount_bytes(const void* value, size_t size);
+  std::string* mutable_jetton_amount_bytes();
+  std::string* release_jetton_amount_bytes();
+  void set_allocated_jetton_amount_bytes(std::string* jetton_amount_bytes);
+
+  // optional bytes init_data_initial_chunk = 22;
+  bool has_init_data_initial_chunk() const;
+  void clear_init_data_initial_chunk();
+  const std::string& init_data_initial_chunk() const;
+  void set_init_data_initial_chunk(const std::string& value);
+  void set_init_data_initial_chunk(std::string&& value);
+  void set_init_data_initial_chunk(const char* value);
+  void set_init_data_initial_chunk(const void* value, size_t size);
+  std::string* mutable_init_data_initial_chunk();
+  std::string* release_init_data_initial_chunk();
+  void set_allocated_init_data_initial_chunk(std::string* init_data_initial_chunk);
+
+  // optional bytes signing_message_repr = 24;
+  bool has_signing_message_repr() const;
+  void clear_signing_message_repr();
+  const std::string& signing_message_repr() const;
+  void set_signing_message_repr(const std::string& value);
+  void set_signing_message_repr(std::string&& value);
+  void set_signing_message_repr(const char* value);
+  void set_signing_message_repr(const void* value, size_t size);
+  std::string* mutable_signing_message_repr();
+  std::string* release_signing_message_repr();
+  void set_allocated_signing_message_repr(std::string* signing_message_repr);
+
+  // required uint64 amount = 5;
+  bool has_amount() const;
+  void clear_amount();
+  ::PROTOBUF_NAMESPACE_ID::uint64 amount() const;
+  void set_amount(::PROTOBUF_NAMESPACE_ID::uint64 value);
+
+  // optional uint64 jetton_amount = 6;
+  bool has_jetton_amount() const;
+  void clear_jetton_amount();
+  ::PROTOBUF_NAMESPACE_ID::uint64 jetton_amount() const;
+  void set_jetton_amount(::PROTOBUF_NAMESPACE_ID::uint64 value);
+
+  // optional uint64 fwd_fee = 7 [default = 0];
+  bool has_fwd_fee() const;
+  void clear_fwd_fee();
+  ::PROTOBUF_NAMESPACE_ID::uint64 fwd_fee() const;
+  void set_fwd_fee(::PROTOBUF_NAMESPACE_ID::uint64 value);
+
+  // required uint64 valid_until = 12;
+  bool has_valid_until() const;
+  void clear_valid_until();
+  ::PROTOBUF_NAMESPACE_ID::uint64 valid_until() const;
+  void set_valid_until(::PROTOBUF_NAMESPACE_ID::uint64 value);
+
+  // optional uint32 seqno = 11;
+  bool has_seqno() const;
+  void clear_seqno();
+  ::PROTOBUF_NAMESPACE_ID::uint32 seqno() const;
+  void set_seqno(::PROTOBUF_NAMESPACE_ID::uint32 value);
+
+  // optional bool is_raw_data = 9 [default = false];
+  bool has_is_raw_data() const;
+  void clear_is_raw_data();
+  bool is_raw_data() const;
+  void set_is_raw_data(bool value);
+
+  // optional bool is_bounceable = 16 [default = false];
+  bool has_is_bounceable() const;
+  void clear_is_bounceable();
+  bool is_bounceable() const;
+  void set_is_bounceable(bool value);
+
+  // optional bool is_testnet_only = 17 [default = false];
+  bool has_is_testnet_only() const;
+  void clear_is_testnet_only();
+  bool is_testnet_only() const;
+  void set_is_testnet_only(bool value);
+
+  // optional .hw.trezor.messages.ton.TonWorkChain workchain = 15 [default = BASECHAIN];
+  bool has_workchain() const;
+  void clear_workchain();
+  ::hw::trezor::messages::ton::TonWorkChain workchain() const;
+  void set_workchain(::hw::trezor::messages::ton::TonWorkChain value);
+
+  // optional uint32 init_data_length = 23;
+  bool has_init_data_length() const;
+  void clear_init_data_length();
+  ::PROTOBUF_NAMESPACE_ID::uint32 init_data_length() const;
+  void set_init_data_length(::PROTOBUF_NAMESPACE_ID::uint32 value);
+
+  // optional uint32 wallet_id = 14 [default = 698983191];
+  bool has_wallet_id() const;
+  void clear_wallet_id();
+  ::PROTOBUF_NAMESPACE_ID::uint32 wallet_id() const;
+  void set_wallet_id(::PROTOBUF_NAMESPACE_ID::uint32 value);
+
+  // optional uint32 mode = 10 [default = 3];
+  bool has_mode() const;
+  void clear_mode();
+  ::PROTOBUF_NAMESPACE_ID::uint32 mode() const;
+  void set_mode(::PROTOBUF_NAMESPACE_ID::uint32 value);
+
+  // optional .hw.trezor.messages.ton.TonWalletVersion wallet_version = 13 [default = V4R2];
+  bool has_wallet_version() const;
+  void clear_wallet_version();
+  ::hw::trezor::messages::ton::TonWalletVersion wallet_version() const;
+  void set_wallet_version(::hw::trezor::messages::ton::TonWalletVersion value);
+
+  // @@protoc_insertion_point(class_scope:hw.trezor.messages.ton.TonSignTx)
+ private:
+  class _Internal;
+
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint32 > address_n_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> ext_destination_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint64 > ext_ton_amount_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> ext_payload_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr address_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr jetton_master_address_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr jetton_wallet_address_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr comment_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr jetton_amount_bytes_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr init_data_initial_chunk_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr signing_message_repr_;
+  ::PROTOBUF_NAMESPACE_ID::uint64 amount_;
+  ::PROTOBUF_NAMESPACE_ID::uint64 jetton_amount_;
+  ::PROTOBUF_NAMESPACE_ID::uint64 fwd_fee_;
+  ::PROTOBUF_NAMESPACE_ID::uint64 valid_until_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 seqno_;
+  bool is_raw_data_;
+  bool is_bounceable_;
+  bool is_testnet_only_;
+  int workchain_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 init_data_length_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 wallet_id_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 mode_;
+  int wallet_version_;
+  friend struct ::TableStruct_messages_2dton_2eproto;
+};
+// -------------------------------------------------------------------
+
+class TonSignedTx :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hw.trezor.messages.ton.TonSignedTx) */ {
+ public:
+  TonSignedTx();
+  virtual ~TonSignedTx();
+
+  TonSignedTx(const TonSignedTx& from);
+  TonSignedTx(TonSignedTx&& from) noexcept
+    : TonSignedTx() {
+    *this = ::std::move(from);
+  }
+
+  inline TonSignedTx& operator=(const TonSignedTx& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline TonSignedTx& operator=(TonSignedTx&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const TonSignedTx& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const TonSignedTx* internal_default_instance() {
+    return reinterpret_cast<const TonSignedTx*>(
+               &_TonSignedTx_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  friend void swap(TonSignedTx& a, TonSignedTx& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(TonSignedTx* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline TonSignedTx* New() const final {
+    return CreateMaybeMessage<TonSignedTx>(nullptr);
+  }
+
+  TonSignedTx* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<TonSignedTx>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const TonSignedTx& from);
+  void MergeFrom(const TonSignedTx& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(TonSignedTx* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "hw.trezor.messages.ton.TonSignedTx";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_messages_2dton_2eproto);
+    return ::descriptor_table_messages_2dton_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kSignatureFieldNumber = 1,
+    kSerializedTxFieldNumber = 2,
+    kInitDataLengthFieldNumber = 3,
+  };
+  // optional bytes signature = 1;
+  bool has_signature() const;
+  void clear_signature();
+  const std::string& signature() const;
+  void set_signature(const std::string& value);
+  void set_signature(std::string&& value);
+  void set_signature(const char* value);
+  void set_signature(const void* value, size_t size);
+  std::string* mutable_signature();
+  std::string* release_signature();
+  void set_allocated_signature(std::string* signature);
+
+  // optional bytes serialized_tx = 2;
+  bool has_serialized_tx() const;
+  void clear_serialized_tx();
+  const std::string& serialized_tx() const;
+  void set_serialized_tx(const std::string& value);
+  void set_serialized_tx(std::string&& value);
+  void set_serialized_tx(const char* value);
+  void set_serialized_tx(const void* value, size_t size);
+  std::string* mutable_serialized_tx();
+  std::string* release_serialized_tx();
+  void set_allocated_serialized_tx(std::string* serialized_tx);
+
+  // optional uint32 init_data_length = 3;
+  bool has_init_data_length() const;
+  void clear_init_data_length();
+  ::PROTOBUF_NAMESPACE_ID::uint32 init_data_length() const;
+  void set_init_data_length(::PROTOBUF_NAMESPACE_ID::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:hw.trezor.messages.ton.TonSignedTx)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr signature_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr serialized_tx_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 init_data_length_;
+  friend struct ::TableStruct_messages_2dton_2eproto;
+};
+// -------------------------------------------------------------------
+
 class TonTxAck :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hw.trezor.messages.ton.TonTxAck) */ {
  public:
@@ -1119,7 +1679,7 @@ class TonTxAck :
                &_TonTxAck_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    6;
 
   friend void swap(TonTxAck& a, TonTxAck& b) {
     a.Swap(&b);
@@ -1265,7 +1825,7 @@ class TonSignProof :
                &_TonSignProof_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    7;
 
   friend void swap(TonSignProof& a, TonSignProof& b) {
     a.Swap(&b);
@@ -1489,7 +2049,7 @@ class TonSignedProof :
                &_TonSignedProof_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    8;
 
   friend void swap(TonSignedProof& a, TonSignedProof& b) {
     a.Swap(&b);
@@ -1739,101 +2299,43 @@ inline void TonGetAddress::set_wallet_id(::PROTOBUF_NAMESPACE_ID::uint32 value) 
 
 // TonAddress
 
-// required bytes public_key = 1;
-inline bool TonAddress::has_public_key() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-inline void TonAddress::clear_public_key() {
-  public_key_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline const std::string& TonAddress::public_key() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonAddress.public_key)
-  return public_key_.GetNoArena();
-}
-inline void TonAddress::set_public_key(const std::string& value) {
-  _has_bits_[0] |= 0x00000001u;
-  public_key_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonAddress.public_key)
-}
-inline void TonAddress::set_public_key(std::string&& value) {
-  _has_bits_[0] |= 0x00000001u;
-  public_key_.SetNoArena(
-    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.ton.TonAddress.public_key)
-}
-inline void TonAddress::set_public_key(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  _has_bits_[0] |= 0x00000001u;
-  public_key_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.ton.TonAddress.public_key)
-}
-inline void TonAddress::set_public_key(const void* value, size_t size) {
-  _has_bits_[0] |= 0x00000001u;
-  public_key_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.ton.TonAddress.public_key)
-}
-inline std::string* TonAddress::mutable_public_key() {
-  _has_bits_[0] |= 0x00000001u;
-  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.ton.TonAddress.public_key)
-  return public_key_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-}
-inline std::string* TonAddress::release_public_key() {
-  // @@protoc_insertion_point(field_release:hw.trezor.messages.ton.TonAddress.public_key)
-  if (!has_public_key()) {
-    return nullptr;
-  }
-  _has_bits_[0] &= ~0x00000001u;
-  return public_key_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-}
-inline void TonAddress::set_allocated_public_key(std::string* public_key) {
-  if (public_key != nullptr) {
-    _has_bits_[0] |= 0x00000001u;
-  } else {
-    _has_bits_[0] &= ~0x00000001u;
-  }
-  public_key_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), public_key);
-  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.ton.TonAddress.public_key)
-}
-
-// required string address = 2;
+// required string address = 1;
 inline bool TonAddress::has_address() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+  return (_has_bits_[0] & 0x00000001u) != 0;
 }
 inline void TonAddress::clear_address() {
   address_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000001u;
 }
 inline const std::string& TonAddress::address() const {
   // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonAddress.address)
   return address_.GetNoArena();
 }
 inline void TonAddress::set_address(const std::string& value) {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000001u;
   address_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonAddress.address)
 }
 inline void TonAddress::set_address(std::string&& value) {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000001u;
   address_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.ton.TonAddress.address)
 }
 inline void TonAddress::set_address(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000001u;
   address_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:hw.trezor.messages.ton.TonAddress.address)
 }
 inline void TonAddress::set_address(const char* value, size_t size) {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000001u;
   address_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.ton.TonAddress.address)
 }
 inline std::string* TonAddress::mutable_address() {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000001u;
   // @@protoc_insertion_point(field_mutable:hw.trezor.messages.ton.TonAddress.address)
   return address_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
@@ -1842,14 +2344,14 @@ inline std::string* TonAddress::release_address() {
   if (!has_address()) {
     return nullptr;
   }
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000001u;
   return address_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void TonAddress::set_allocated_address(std::string* address) {
   if (address != nullptr) {
-    _has_bits_[0] |= 0x00000002u;
+    _has_bits_[0] |= 0x00000001u;
   } else {
-    _has_bits_[0] &= ~0x00000002u;
+    _has_bits_[0] &= ~0x00000001u;
   }
   address_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), address);
   // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.ton.TonAddress.address)
@@ -2831,6 +3333,980 @@ inline void TonSignedMessage::set_init_data_length(::PROTOBUF_NAMESPACE_ID::uint
 
 // -------------------------------------------------------------------
 
+// TonSignTx
+
+// repeated uint32 address_n = 1;
+inline int TonSignTx::address_n_size() const {
+  return address_n_.size();
+}
+inline void TonSignTx::clear_address_n() {
+  address_n_.Clear();
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 TonSignTx::address_n(int index) const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.address_n)
+  return address_n_.Get(index);
+}
+inline void TonSignTx::set_address_n(int index, ::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  address_n_.Set(index, value);
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.address_n)
+}
+inline void TonSignTx::add_address_n(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  address_n_.Add(value);
+  // @@protoc_insertion_point(field_add:hw.trezor.messages.ton.TonSignTx.address_n)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint32 >&
+TonSignTx::address_n() const {
+  // @@protoc_insertion_point(field_list:hw.trezor.messages.ton.TonSignTx.address_n)
+  return address_n_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint32 >*
+TonSignTx::mutable_address_n() {
+  // @@protoc_insertion_point(field_mutable_list:hw.trezor.messages.ton.TonSignTx.address_n)
+  return &address_n_;
+}
+
+// required string address = 2;
+inline bool TonSignTx::has_address() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void TonSignTx::clear_address() {
+  address_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& TonSignTx::address() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.address)
+  return address_.GetNoArena();
+}
+inline void TonSignTx::set_address(const std::string& value) {
+  _has_bits_[0] |= 0x00000001u;
+  address_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.address)
+}
+inline void TonSignTx::set_address(std::string&& value) {
+  _has_bits_[0] |= 0x00000001u;
+  address_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.ton.TonSignTx.address)
+}
+inline void TonSignTx::set_address(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000001u;
+  address_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.ton.TonSignTx.address)
+}
+inline void TonSignTx::set_address(const char* value, size_t size) {
+  _has_bits_[0] |= 0x00000001u;
+  address_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.ton.TonSignTx.address)
+}
+inline std::string* TonSignTx::mutable_address() {
+  _has_bits_[0] |= 0x00000001u;
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.ton.TonSignTx.address)
+  return address_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* TonSignTx::release_address() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.ton.TonSignTx.address)
+  if (!has_address()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000001u;
+  return address_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void TonSignTx::set_allocated_address(std::string* address) {
+  if (address != nullptr) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  address_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), address);
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.ton.TonSignTx.address)
+}
+
+// optional string jetton_master_address = 3;
+inline bool TonSignTx::has_jetton_master_address() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void TonSignTx::clear_jetton_master_address() {
+  jetton_master_address_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline const std::string& TonSignTx::jetton_master_address() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.jetton_master_address)
+  return jetton_master_address_.GetNoArena();
+}
+inline void TonSignTx::set_jetton_master_address(const std::string& value) {
+  _has_bits_[0] |= 0x00000002u;
+  jetton_master_address_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.jetton_master_address)
+}
+inline void TonSignTx::set_jetton_master_address(std::string&& value) {
+  _has_bits_[0] |= 0x00000002u;
+  jetton_master_address_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.ton.TonSignTx.jetton_master_address)
+}
+inline void TonSignTx::set_jetton_master_address(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000002u;
+  jetton_master_address_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.ton.TonSignTx.jetton_master_address)
+}
+inline void TonSignTx::set_jetton_master_address(const char* value, size_t size) {
+  _has_bits_[0] |= 0x00000002u;
+  jetton_master_address_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.ton.TonSignTx.jetton_master_address)
+}
+inline std::string* TonSignTx::mutable_jetton_master_address() {
+  _has_bits_[0] |= 0x00000002u;
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.ton.TonSignTx.jetton_master_address)
+  return jetton_master_address_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* TonSignTx::release_jetton_master_address() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.ton.TonSignTx.jetton_master_address)
+  if (!has_jetton_master_address()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000002u;
+  return jetton_master_address_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void TonSignTx::set_allocated_jetton_master_address(std::string* jetton_master_address) {
+  if (jetton_master_address != nullptr) {
+    _has_bits_[0] |= 0x00000002u;
+  } else {
+    _has_bits_[0] &= ~0x00000002u;
+  }
+  jetton_master_address_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), jetton_master_address);
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.ton.TonSignTx.jetton_master_address)
+}
+
+// optional string jetton_wallet_address = 4;
+inline bool TonSignTx::has_jetton_wallet_address() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void TonSignTx::clear_jetton_wallet_address() {
+  jetton_wallet_address_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline const std::string& TonSignTx::jetton_wallet_address() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.jetton_wallet_address)
+  return jetton_wallet_address_.GetNoArena();
+}
+inline void TonSignTx::set_jetton_wallet_address(const std::string& value) {
+  _has_bits_[0] |= 0x00000004u;
+  jetton_wallet_address_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.jetton_wallet_address)
+}
+inline void TonSignTx::set_jetton_wallet_address(std::string&& value) {
+  _has_bits_[0] |= 0x00000004u;
+  jetton_wallet_address_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.ton.TonSignTx.jetton_wallet_address)
+}
+inline void TonSignTx::set_jetton_wallet_address(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000004u;
+  jetton_wallet_address_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.ton.TonSignTx.jetton_wallet_address)
+}
+inline void TonSignTx::set_jetton_wallet_address(const char* value, size_t size) {
+  _has_bits_[0] |= 0x00000004u;
+  jetton_wallet_address_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.ton.TonSignTx.jetton_wallet_address)
+}
+inline std::string* TonSignTx::mutable_jetton_wallet_address() {
+  _has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.ton.TonSignTx.jetton_wallet_address)
+  return jetton_wallet_address_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* TonSignTx::release_jetton_wallet_address() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.ton.TonSignTx.jetton_wallet_address)
+  if (!has_jetton_wallet_address()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000004u;
+  return jetton_wallet_address_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void TonSignTx::set_allocated_jetton_wallet_address(std::string* jetton_wallet_address) {
+  if (jetton_wallet_address != nullptr) {
+    _has_bits_[0] |= 0x00000004u;
+  } else {
+    _has_bits_[0] &= ~0x00000004u;
+  }
+  jetton_wallet_address_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), jetton_wallet_address);
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.ton.TonSignTx.jetton_wallet_address)
+}
+
+// required uint64 amount = 5;
+inline bool TonSignTx::has_amount() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void TonSignTx::clear_amount() {
+  amount_ = PROTOBUF_ULONGLONG(0);
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint64 TonSignTx::amount() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.amount)
+  return amount_;
+}
+inline void TonSignTx::set_amount(::PROTOBUF_NAMESPACE_ID::uint64 value) {
+  _has_bits_[0] |= 0x00000080u;
+  amount_ = value;
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.amount)
+}
+
+// optional uint64 jetton_amount = 6;
+inline bool TonSignTx::has_jetton_amount() const {
+  return (_has_bits_[0] & 0x00000100u) != 0;
+}
+inline void TonSignTx::clear_jetton_amount() {
+  jetton_amount_ = PROTOBUF_ULONGLONG(0);
+  _has_bits_[0] &= ~0x00000100u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint64 TonSignTx::jetton_amount() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.jetton_amount)
+  return jetton_amount_;
+}
+inline void TonSignTx::set_jetton_amount(::PROTOBUF_NAMESPACE_ID::uint64 value) {
+  _has_bits_[0] |= 0x00000100u;
+  jetton_amount_ = value;
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.jetton_amount)
+}
+
+// optional uint64 fwd_fee = 7 [default = 0];
+inline bool TonSignTx::has_fwd_fee() const {
+  return (_has_bits_[0] & 0x00000200u) != 0;
+}
+inline void TonSignTx::clear_fwd_fee() {
+  fwd_fee_ = PROTOBUF_ULONGLONG(0);
+  _has_bits_[0] &= ~0x00000200u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint64 TonSignTx::fwd_fee() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.fwd_fee)
+  return fwd_fee_;
+}
+inline void TonSignTx::set_fwd_fee(::PROTOBUF_NAMESPACE_ID::uint64 value) {
+  _has_bits_[0] |= 0x00000200u;
+  fwd_fee_ = value;
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.fwd_fee)
+}
+
+// optional string comment = 8;
+inline bool TonSignTx::has_comment() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void TonSignTx::clear_comment() {
+  comment_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline const std::string& TonSignTx::comment() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.comment)
+  return comment_.GetNoArena();
+}
+inline void TonSignTx::set_comment(const std::string& value) {
+  _has_bits_[0] |= 0x00000008u;
+  comment_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.comment)
+}
+inline void TonSignTx::set_comment(std::string&& value) {
+  _has_bits_[0] |= 0x00000008u;
+  comment_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.ton.TonSignTx.comment)
+}
+inline void TonSignTx::set_comment(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000008u;
+  comment_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.ton.TonSignTx.comment)
+}
+inline void TonSignTx::set_comment(const char* value, size_t size) {
+  _has_bits_[0] |= 0x00000008u;
+  comment_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.ton.TonSignTx.comment)
+}
+inline std::string* TonSignTx::mutable_comment() {
+  _has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.ton.TonSignTx.comment)
+  return comment_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* TonSignTx::release_comment() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.ton.TonSignTx.comment)
+  if (!has_comment()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000008u;
+  return comment_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void TonSignTx::set_allocated_comment(std::string* comment) {
+  if (comment != nullptr) {
+    _has_bits_[0] |= 0x00000008u;
+  } else {
+    _has_bits_[0] &= ~0x00000008u;
+  }
+  comment_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), comment);
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.ton.TonSignTx.comment)
+}
+
+// optional bool is_raw_data = 9 [default = false];
+inline bool TonSignTx::has_is_raw_data() const {
+  return (_has_bits_[0] & 0x00001000u) != 0;
+}
+inline void TonSignTx::clear_is_raw_data() {
+  is_raw_data_ = false;
+  _has_bits_[0] &= ~0x00001000u;
+}
+inline bool TonSignTx::is_raw_data() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.is_raw_data)
+  return is_raw_data_;
+}
+inline void TonSignTx::set_is_raw_data(bool value) {
+  _has_bits_[0] |= 0x00001000u;
+  is_raw_data_ = value;
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.is_raw_data)
+}
+
+// optional uint32 mode = 10 [default = 3];
+inline bool TonSignTx::has_mode() const {
+  return (_has_bits_[0] & 0x00040000u) != 0;
+}
+inline void TonSignTx::clear_mode() {
+  mode_ = 3u;
+  _has_bits_[0] &= ~0x00040000u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 TonSignTx::mode() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.mode)
+  return mode_;
+}
+inline void TonSignTx::set_mode(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _has_bits_[0] |= 0x00040000u;
+  mode_ = value;
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.mode)
+}
+
+// optional uint32 seqno = 11;
+inline bool TonSignTx::has_seqno() const {
+  return (_has_bits_[0] & 0x00000800u) != 0;
+}
+inline void TonSignTx::clear_seqno() {
+  seqno_ = 0u;
+  _has_bits_[0] &= ~0x00000800u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 TonSignTx::seqno() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.seqno)
+  return seqno_;
+}
+inline void TonSignTx::set_seqno(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _has_bits_[0] |= 0x00000800u;
+  seqno_ = value;
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.seqno)
+}
+
+// required uint64 valid_until = 12;
+inline bool TonSignTx::has_valid_until() const {
+  return (_has_bits_[0] & 0x00000400u) != 0;
+}
+inline void TonSignTx::clear_valid_until() {
+  valid_until_ = PROTOBUF_ULONGLONG(0);
+  _has_bits_[0] &= ~0x00000400u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint64 TonSignTx::valid_until() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.valid_until)
+  return valid_until_;
+}
+inline void TonSignTx::set_valid_until(::PROTOBUF_NAMESPACE_ID::uint64 value) {
+  _has_bits_[0] |= 0x00000400u;
+  valid_until_ = value;
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.valid_until)
+}
+
+// optional .hw.trezor.messages.ton.TonWalletVersion wallet_version = 13 [default = V4R2];
+inline bool TonSignTx::has_wallet_version() const {
+  return (_has_bits_[0] & 0x00080000u) != 0;
+}
+inline void TonSignTx::clear_wallet_version() {
+  wallet_version_ = 3;
+  _has_bits_[0] &= ~0x00080000u;
+}
+inline ::hw::trezor::messages::ton::TonWalletVersion TonSignTx::wallet_version() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.wallet_version)
+  return static_cast< ::hw::trezor::messages::ton::TonWalletVersion >(wallet_version_);
+}
+inline void TonSignTx::set_wallet_version(::hw::trezor::messages::ton::TonWalletVersion value) {
+  assert(::hw::trezor::messages::ton::TonWalletVersion_IsValid(value));
+  _has_bits_[0] |= 0x00080000u;
+  wallet_version_ = value;
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.wallet_version)
+}
+
+// optional uint32 wallet_id = 14 [default = 698983191];
+inline bool TonSignTx::has_wallet_id() const {
+  return (_has_bits_[0] & 0x00020000u) != 0;
+}
+inline void TonSignTx::clear_wallet_id() {
+  wallet_id_ = 698983191u;
+  _has_bits_[0] &= ~0x00020000u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 TonSignTx::wallet_id() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.wallet_id)
+  return wallet_id_;
+}
+inline void TonSignTx::set_wallet_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _has_bits_[0] |= 0x00020000u;
+  wallet_id_ = value;
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.wallet_id)
+}
+
+// optional .hw.trezor.messages.ton.TonWorkChain workchain = 15 [default = BASECHAIN];
+inline bool TonSignTx::has_workchain() const {
+  return (_has_bits_[0] & 0x00008000u) != 0;
+}
+inline void TonSignTx::clear_workchain() {
+  workchain_ = 0;
+  _has_bits_[0] &= ~0x00008000u;
+}
+inline ::hw::trezor::messages::ton::TonWorkChain TonSignTx::workchain() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.workchain)
+  return static_cast< ::hw::trezor::messages::ton::TonWorkChain >(workchain_);
+}
+inline void TonSignTx::set_workchain(::hw::trezor::messages::ton::TonWorkChain value) {
+  assert(::hw::trezor::messages::ton::TonWorkChain_IsValid(value));
+  _has_bits_[0] |= 0x00008000u;
+  workchain_ = value;
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.workchain)
+}
+
+// optional bool is_bounceable = 16 [default = false];
+inline bool TonSignTx::has_is_bounceable() const {
+  return (_has_bits_[0] & 0x00002000u) != 0;
+}
+inline void TonSignTx::clear_is_bounceable() {
+  is_bounceable_ = false;
+  _has_bits_[0] &= ~0x00002000u;
+}
+inline bool TonSignTx::is_bounceable() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.is_bounceable)
+  return is_bounceable_;
+}
+inline void TonSignTx::set_is_bounceable(bool value) {
+  _has_bits_[0] |= 0x00002000u;
+  is_bounceable_ = value;
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.is_bounceable)
+}
+
+// optional bool is_testnet_only = 17 [default = false];
+inline bool TonSignTx::has_is_testnet_only() const {
+  return (_has_bits_[0] & 0x00004000u) != 0;
+}
+inline void TonSignTx::clear_is_testnet_only() {
+  is_testnet_only_ = false;
+  _has_bits_[0] &= ~0x00004000u;
+}
+inline bool TonSignTx::is_testnet_only() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.is_testnet_only)
+  return is_testnet_only_;
+}
+inline void TonSignTx::set_is_testnet_only(bool value) {
+  _has_bits_[0] |= 0x00004000u;
+  is_testnet_only_ = value;
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.is_testnet_only)
+}
+
+// repeated string ext_destination = 18;
+inline int TonSignTx::ext_destination_size() const {
+  return ext_destination_.size();
+}
+inline void TonSignTx::clear_ext_destination() {
+  ext_destination_.Clear();
+}
+inline const std::string& TonSignTx::ext_destination(int index) const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.ext_destination)
+  return ext_destination_.Get(index);
+}
+inline std::string* TonSignTx::mutable_ext_destination(int index) {
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.ton.TonSignTx.ext_destination)
+  return ext_destination_.Mutable(index);
+}
+inline void TonSignTx::set_ext_destination(int index, const std::string& value) {
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.ext_destination)
+  ext_destination_.Mutable(index)->assign(value);
+}
+inline void TonSignTx::set_ext_destination(int index, std::string&& value) {
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.ext_destination)
+  ext_destination_.Mutable(index)->assign(std::move(value));
+}
+inline void TonSignTx::set_ext_destination(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  ext_destination_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.ton.TonSignTx.ext_destination)
+}
+inline void TonSignTx::set_ext_destination(int index, const char* value, size_t size) {
+  ext_destination_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.ton.TonSignTx.ext_destination)
+}
+inline std::string* TonSignTx::add_ext_destination() {
+  // @@protoc_insertion_point(field_add_mutable:hw.trezor.messages.ton.TonSignTx.ext_destination)
+  return ext_destination_.Add();
+}
+inline void TonSignTx::add_ext_destination(const std::string& value) {
+  ext_destination_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:hw.trezor.messages.ton.TonSignTx.ext_destination)
+}
+inline void TonSignTx::add_ext_destination(std::string&& value) {
+  ext_destination_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:hw.trezor.messages.ton.TonSignTx.ext_destination)
+}
+inline void TonSignTx::add_ext_destination(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  ext_destination_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:hw.trezor.messages.ton.TonSignTx.ext_destination)
+}
+inline void TonSignTx::add_ext_destination(const char* value, size_t size) {
+  ext_destination_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:hw.trezor.messages.ton.TonSignTx.ext_destination)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
+TonSignTx::ext_destination() const {
+  // @@protoc_insertion_point(field_list:hw.trezor.messages.ton.TonSignTx.ext_destination)
+  return ext_destination_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
+TonSignTx::mutable_ext_destination() {
+  // @@protoc_insertion_point(field_mutable_list:hw.trezor.messages.ton.TonSignTx.ext_destination)
+  return &ext_destination_;
+}
+
+// repeated uint64 ext_ton_amount = 19;
+inline int TonSignTx::ext_ton_amount_size() const {
+  return ext_ton_amount_.size();
+}
+inline void TonSignTx::clear_ext_ton_amount() {
+  ext_ton_amount_.Clear();
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint64 TonSignTx::ext_ton_amount(int index) const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.ext_ton_amount)
+  return ext_ton_amount_.Get(index);
+}
+inline void TonSignTx::set_ext_ton_amount(int index, ::PROTOBUF_NAMESPACE_ID::uint64 value) {
+  ext_ton_amount_.Set(index, value);
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.ext_ton_amount)
+}
+inline void TonSignTx::add_ext_ton_amount(::PROTOBUF_NAMESPACE_ID::uint64 value) {
+  ext_ton_amount_.Add(value);
+  // @@protoc_insertion_point(field_add:hw.trezor.messages.ton.TonSignTx.ext_ton_amount)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint64 >&
+TonSignTx::ext_ton_amount() const {
+  // @@protoc_insertion_point(field_list:hw.trezor.messages.ton.TonSignTx.ext_ton_amount)
+  return ext_ton_amount_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint64 >*
+TonSignTx::mutable_ext_ton_amount() {
+  // @@protoc_insertion_point(field_mutable_list:hw.trezor.messages.ton.TonSignTx.ext_ton_amount)
+  return &ext_ton_amount_;
+}
+
+// repeated string ext_payload = 20;
+inline int TonSignTx::ext_payload_size() const {
+  return ext_payload_.size();
+}
+inline void TonSignTx::clear_ext_payload() {
+  ext_payload_.Clear();
+}
+inline const std::string& TonSignTx::ext_payload(int index) const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.ext_payload)
+  return ext_payload_.Get(index);
+}
+inline std::string* TonSignTx::mutable_ext_payload(int index) {
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.ton.TonSignTx.ext_payload)
+  return ext_payload_.Mutable(index);
+}
+inline void TonSignTx::set_ext_payload(int index, const std::string& value) {
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.ext_payload)
+  ext_payload_.Mutable(index)->assign(value);
+}
+inline void TonSignTx::set_ext_payload(int index, std::string&& value) {
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.ext_payload)
+  ext_payload_.Mutable(index)->assign(std::move(value));
+}
+inline void TonSignTx::set_ext_payload(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  ext_payload_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.ton.TonSignTx.ext_payload)
+}
+inline void TonSignTx::set_ext_payload(int index, const char* value, size_t size) {
+  ext_payload_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.ton.TonSignTx.ext_payload)
+}
+inline std::string* TonSignTx::add_ext_payload() {
+  // @@protoc_insertion_point(field_add_mutable:hw.trezor.messages.ton.TonSignTx.ext_payload)
+  return ext_payload_.Add();
+}
+inline void TonSignTx::add_ext_payload(const std::string& value) {
+  ext_payload_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:hw.trezor.messages.ton.TonSignTx.ext_payload)
+}
+inline void TonSignTx::add_ext_payload(std::string&& value) {
+  ext_payload_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:hw.trezor.messages.ton.TonSignTx.ext_payload)
+}
+inline void TonSignTx::add_ext_payload(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  ext_payload_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:hw.trezor.messages.ton.TonSignTx.ext_payload)
+}
+inline void TonSignTx::add_ext_payload(const char* value, size_t size) {
+  ext_payload_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:hw.trezor.messages.ton.TonSignTx.ext_payload)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
+TonSignTx::ext_payload() const {
+  // @@protoc_insertion_point(field_list:hw.trezor.messages.ton.TonSignTx.ext_payload)
+  return ext_payload_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
+TonSignTx::mutable_ext_payload() {
+  // @@protoc_insertion_point(field_mutable_list:hw.trezor.messages.ton.TonSignTx.ext_payload)
+  return &ext_payload_;
+}
+
+// optional bytes jetton_amount_bytes = 21;
+inline bool TonSignTx::has_jetton_amount_bytes() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void TonSignTx::clear_jetton_amount_bytes() {
+  jetton_amount_bytes_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline const std::string& TonSignTx::jetton_amount_bytes() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.jetton_amount_bytes)
+  return jetton_amount_bytes_.GetNoArena();
+}
+inline void TonSignTx::set_jetton_amount_bytes(const std::string& value) {
+  _has_bits_[0] |= 0x00000010u;
+  jetton_amount_bytes_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.jetton_amount_bytes)
+}
+inline void TonSignTx::set_jetton_amount_bytes(std::string&& value) {
+  _has_bits_[0] |= 0x00000010u;
+  jetton_amount_bytes_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.ton.TonSignTx.jetton_amount_bytes)
+}
+inline void TonSignTx::set_jetton_amount_bytes(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000010u;
+  jetton_amount_bytes_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.ton.TonSignTx.jetton_amount_bytes)
+}
+inline void TonSignTx::set_jetton_amount_bytes(const void* value, size_t size) {
+  _has_bits_[0] |= 0x00000010u;
+  jetton_amount_bytes_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.ton.TonSignTx.jetton_amount_bytes)
+}
+inline std::string* TonSignTx::mutable_jetton_amount_bytes() {
+  _has_bits_[0] |= 0x00000010u;
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.ton.TonSignTx.jetton_amount_bytes)
+  return jetton_amount_bytes_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* TonSignTx::release_jetton_amount_bytes() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.ton.TonSignTx.jetton_amount_bytes)
+  if (!has_jetton_amount_bytes()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000010u;
+  return jetton_amount_bytes_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void TonSignTx::set_allocated_jetton_amount_bytes(std::string* jetton_amount_bytes) {
+  if (jetton_amount_bytes != nullptr) {
+    _has_bits_[0] |= 0x00000010u;
+  } else {
+    _has_bits_[0] &= ~0x00000010u;
+  }
+  jetton_amount_bytes_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), jetton_amount_bytes);
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.ton.TonSignTx.jetton_amount_bytes)
+}
+
+// optional bytes init_data_initial_chunk = 22;
+inline bool TonSignTx::has_init_data_initial_chunk() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void TonSignTx::clear_init_data_initial_chunk() {
+  init_data_initial_chunk_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline const std::string& TonSignTx::init_data_initial_chunk() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.init_data_initial_chunk)
+  return init_data_initial_chunk_.GetNoArena();
+}
+inline void TonSignTx::set_init_data_initial_chunk(const std::string& value) {
+  _has_bits_[0] |= 0x00000020u;
+  init_data_initial_chunk_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.init_data_initial_chunk)
+}
+inline void TonSignTx::set_init_data_initial_chunk(std::string&& value) {
+  _has_bits_[0] |= 0x00000020u;
+  init_data_initial_chunk_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.ton.TonSignTx.init_data_initial_chunk)
+}
+inline void TonSignTx::set_init_data_initial_chunk(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000020u;
+  init_data_initial_chunk_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.ton.TonSignTx.init_data_initial_chunk)
+}
+inline void TonSignTx::set_init_data_initial_chunk(const void* value, size_t size) {
+  _has_bits_[0] |= 0x00000020u;
+  init_data_initial_chunk_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.ton.TonSignTx.init_data_initial_chunk)
+}
+inline std::string* TonSignTx::mutable_init_data_initial_chunk() {
+  _has_bits_[0] |= 0x00000020u;
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.ton.TonSignTx.init_data_initial_chunk)
+  return init_data_initial_chunk_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* TonSignTx::release_init_data_initial_chunk() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.ton.TonSignTx.init_data_initial_chunk)
+  if (!has_init_data_initial_chunk()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000020u;
+  return init_data_initial_chunk_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void TonSignTx::set_allocated_init_data_initial_chunk(std::string* init_data_initial_chunk) {
+  if (init_data_initial_chunk != nullptr) {
+    _has_bits_[0] |= 0x00000020u;
+  } else {
+    _has_bits_[0] &= ~0x00000020u;
+  }
+  init_data_initial_chunk_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), init_data_initial_chunk);
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.ton.TonSignTx.init_data_initial_chunk)
+}
+
+// optional uint32 init_data_length = 23;
+inline bool TonSignTx::has_init_data_length() const {
+  return (_has_bits_[0] & 0x00010000u) != 0;
+}
+inline void TonSignTx::clear_init_data_length() {
+  init_data_length_ = 0u;
+  _has_bits_[0] &= ~0x00010000u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 TonSignTx::init_data_length() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.init_data_length)
+  return init_data_length_;
+}
+inline void TonSignTx::set_init_data_length(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _has_bits_[0] |= 0x00010000u;
+  init_data_length_ = value;
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.init_data_length)
+}
+
+// optional bytes signing_message_repr = 24;
+inline bool TonSignTx::has_signing_message_repr() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void TonSignTx::clear_signing_message_repr() {
+  signing_message_repr_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline const std::string& TonSignTx::signing_message_repr() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignTx.signing_message_repr)
+  return signing_message_repr_.GetNoArena();
+}
+inline void TonSignTx::set_signing_message_repr(const std::string& value) {
+  _has_bits_[0] |= 0x00000040u;
+  signing_message_repr_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignTx.signing_message_repr)
+}
+inline void TonSignTx::set_signing_message_repr(std::string&& value) {
+  _has_bits_[0] |= 0x00000040u;
+  signing_message_repr_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.ton.TonSignTx.signing_message_repr)
+}
+inline void TonSignTx::set_signing_message_repr(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000040u;
+  signing_message_repr_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.ton.TonSignTx.signing_message_repr)
+}
+inline void TonSignTx::set_signing_message_repr(const void* value, size_t size) {
+  _has_bits_[0] |= 0x00000040u;
+  signing_message_repr_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.ton.TonSignTx.signing_message_repr)
+}
+inline std::string* TonSignTx::mutable_signing_message_repr() {
+  _has_bits_[0] |= 0x00000040u;
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.ton.TonSignTx.signing_message_repr)
+  return signing_message_repr_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* TonSignTx::release_signing_message_repr() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.ton.TonSignTx.signing_message_repr)
+  if (!has_signing_message_repr()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000040u;
+  return signing_message_repr_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void TonSignTx::set_allocated_signing_message_repr(std::string* signing_message_repr) {
+  if (signing_message_repr != nullptr) {
+    _has_bits_[0] |= 0x00000040u;
+  } else {
+    _has_bits_[0] &= ~0x00000040u;
+  }
+  signing_message_repr_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), signing_message_repr);
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.ton.TonSignTx.signing_message_repr)
+}
+
+// -------------------------------------------------------------------
+
+// TonSignedTx
+
+// optional bytes signature = 1;
+inline bool TonSignedTx::has_signature() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void TonSignedTx::clear_signature() {
+  signature_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& TonSignedTx::signature() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignedTx.signature)
+  return signature_.GetNoArena();
+}
+inline void TonSignedTx::set_signature(const std::string& value) {
+  _has_bits_[0] |= 0x00000001u;
+  signature_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignedTx.signature)
+}
+inline void TonSignedTx::set_signature(std::string&& value) {
+  _has_bits_[0] |= 0x00000001u;
+  signature_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.ton.TonSignedTx.signature)
+}
+inline void TonSignedTx::set_signature(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000001u;
+  signature_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.ton.TonSignedTx.signature)
+}
+inline void TonSignedTx::set_signature(const void* value, size_t size) {
+  _has_bits_[0] |= 0x00000001u;
+  signature_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.ton.TonSignedTx.signature)
+}
+inline std::string* TonSignedTx::mutable_signature() {
+  _has_bits_[0] |= 0x00000001u;
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.ton.TonSignedTx.signature)
+  return signature_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* TonSignedTx::release_signature() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.ton.TonSignedTx.signature)
+  if (!has_signature()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000001u;
+  return signature_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void TonSignedTx::set_allocated_signature(std::string* signature) {
+  if (signature != nullptr) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  signature_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), signature);
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.ton.TonSignedTx.signature)
+}
+
+// optional bytes serialized_tx = 2;
+inline bool TonSignedTx::has_serialized_tx() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void TonSignedTx::clear_serialized_tx() {
+  serialized_tx_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline const std::string& TonSignedTx::serialized_tx() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignedTx.serialized_tx)
+  return serialized_tx_.GetNoArena();
+}
+inline void TonSignedTx::set_serialized_tx(const std::string& value) {
+  _has_bits_[0] |= 0x00000002u;
+  serialized_tx_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignedTx.serialized_tx)
+}
+inline void TonSignedTx::set_serialized_tx(std::string&& value) {
+  _has_bits_[0] |= 0x00000002u;
+  serialized_tx_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.ton.TonSignedTx.serialized_tx)
+}
+inline void TonSignedTx::set_serialized_tx(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000002u;
+  serialized_tx_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.ton.TonSignedTx.serialized_tx)
+}
+inline void TonSignedTx::set_serialized_tx(const void* value, size_t size) {
+  _has_bits_[0] |= 0x00000002u;
+  serialized_tx_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.ton.TonSignedTx.serialized_tx)
+}
+inline std::string* TonSignedTx::mutable_serialized_tx() {
+  _has_bits_[0] |= 0x00000002u;
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.ton.TonSignedTx.serialized_tx)
+  return serialized_tx_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* TonSignedTx::release_serialized_tx() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.ton.TonSignedTx.serialized_tx)
+  if (!has_serialized_tx()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000002u;
+  return serialized_tx_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void TonSignedTx::set_allocated_serialized_tx(std::string* serialized_tx) {
+  if (serialized_tx != nullptr) {
+    _has_bits_[0] |= 0x00000002u;
+  } else {
+    _has_bits_[0] &= ~0x00000002u;
+  }
+  serialized_tx_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), serialized_tx);
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.ton.TonSignedTx.serialized_tx)
+}
+
+// optional uint32 init_data_length = 3;
+inline bool TonSignedTx::has_init_data_length() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void TonSignedTx::clear_init_data_length() {
+  init_data_length_ = 0u;
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 TonSignedTx::init_data_length() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.ton.TonSignedTx.init_data_length)
+  return init_data_length_;
+}
+inline void TonSignedTx::set_init_data_length(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _has_bits_[0] |= 0x00000004u;
+  init_data_length_ = value;
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.ton.TonSignedTx.init_data_length)
+}
+
+// -------------------------------------------------------------------
+
 // TonTxAck
 
 // required bytes init_data_chunk = 1;
@@ -3216,6 +4692,10 @@ inline void TonSignedProof::set_allocated_signature(std::string* signature) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
