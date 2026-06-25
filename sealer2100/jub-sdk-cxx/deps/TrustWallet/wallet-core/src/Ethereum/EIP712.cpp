@@ -176,7 +176,11 @@ std::vector<uint8_t> EIP712::atomic_typed_data_envelope(const std::string& type_
             } break;
             case nlohmann::json::value_t::string: {
                 std::string str = json_value.get<std::string>();
-                TW::encode256BE(value, uint256_t(json_value.get<std::string>(), 10), 256);
+                int base = 10;
+                if (0 == str.rfind("0x", 0) || 0 == str.rfind("0X", 0)) {
+                    base = 16;
+                }
+                TW::encode256BE(value, uint256_t(str, base), 256);
             } break;
             default: {
                 return encode_atomic;
@@ -201,7 +205,11 @@ std::vector<uint8_t> EIP712::atomic_typed_data_envelope(const std::string& type_
                 if (bMinus) {
                     str = str.substr(1, str.size());
                 }
-                uint256_t cover = uint256_t(str, 10);
+                int base = 10;
+                if (0 == str.rfind("0x", 0) || 0 == str.rfind("0X", 0)) {
+                    base = 16;
+                }
+                uint256_t cover = uint256_t(str, base);
                 if (bMinus) {
                     cover = ~cover;
                     cover += 1;
@@ -494,75 +502,112 @@ std::optional<uint32_t> EIP712::parse_bytes_n(const std::string& type_name) {
         throw std::invalid_argument("Invalid bytes size: " + type_name);
     }
 }
-    int parseTypeN(const std::string& typeName) {
-        size_t pos = typeName.find_first_of("0123456789");
-        if (pos != std::string::npos) {
-            return std::stoi(typeName.substr(pos));
-        } else {
-            throw std::invalid_argument("Could not parse type<N> from " + typeName);
-        }
+int parseTypeN(const std::string& typeName) {
+    size_t pos = typeName.find_first_of("0123456789");
+    if (pos != std::string::npos) {
+        return std::stoi(typeName.substr(pos));
+    } else {
+        return 256;
+    }
+}
+
+int getByteSizeForIntType(const std::string& intType) {
+    return parseTypeN(intType) / 8;
+}
+
+std::vector<uint8_t> decodeHex(const std::string& value) {
+    std::string hexValue = value;
+    if (value.find("0x") == 0 || value.find("0X") == 0) {
+        hexValue = value.substr(2);
     }
 
-    int getByteSizeForIntType(const std::string& intType) {
-        return parseTypeN(intType) / 8;
+    if (hexValue.length() % 2 != 0) {
+        throw std::invalid_argument("Hex string must have an even length");
     }
-    std::vector<uint8_t> decodeHex(const std::string& value) {
-        std::string hexValue = value;
-        if (value.find("0x") == 0 || value.find("0X") == 0) {
-            hexValue = value.substr(2);
-        }
 
-        if (hexValue.length() % 2 != 0) {
-            throw std::invalid_argument("Hex string must have an even length");
-        }
-
-        std::vector<uint8_t> bytes(hexValue.length() / 2);
-        for (size_t i = 0; i < hexValue.length(); i += 2) {
-            std::string byteString = hexValue.substr(i, 2);
-            bytes[i / 2] = static_cast<uint8_t>(std::stoi(byteString, nullptr, 16));
-        }
-
-        return bytes;
+    std::vector<uint8_t> bytes(hexValue.length() / 2);
+    for (size_t i = 0; i < hexValue.length(); i += 2) {
+        std::string byteString = hexValue.substr(i, 2);
+        bytes[i / 2] = static_cast<uint8_t>(std::stoi(byteString, nullptr, 16));
     }
+
+    return bytes;
+}
+
 std::vector<uint8_t> EIP712::encode_data(const std::string& type_name, const nlohmann::json& json_value) {
 
     std::vector<uint8_t> encode_atomic;
     std::string str_val;
 
-    if (type_name.find("int") == 0 || type_name.find("uint") == 0)
-    {
-/*        if(json_value.type() == nlohmann::json::value_t::number_unsigned)
-        {
-            TW::encode64BE(uint64_t(json_value.get<uint64_t>()), encode_atomic);
-        }
-        else
-            TW::encode64BE(int64_t(json_value.get<int64_t>()), encode_atomic);
-        return encode_atomic;*/
-        long value = json_value.get<int64_t>();
+    if (0 == type_name.rfind("uint", 0)) {
         int byteLength = getByteSizeForIntType(type_name);
-        bool isSigned = type_name.find("int") == 0;
-
-        encode_atomic.resize(byteLength);
-
-        for (int i = 0; i < byteLength; ++i) {
-            encode_atomic[byteLength - i - 1] = static_cast<uint8_t>((value >> (i * 8)) & 0xFF);
+        uint256_t v = {};
+        switch (json_value.type()) {
+            case nlohmann::json::value_t::number_unsigned: {
+                v = json_value.get<std::uint64_t>();
+            } break;
+            case nlohmann::json::value_t::string: {
+                auto str = json_value.get<std::string>();
+                int base = 10;
+                if (0 == str.rfind("0x", 0) || 0 == str.rfind("0X", 0)) {
+                    base = 16;
+                }
+                v = uint256_t(str, base);
+            } break;
+            default: {
+                return encode_atomic;
+            } break;
         }
-
+        TW::encode256BE(encode_atomic, v, byteLength*8);
         return encode_atomic;
     }
-    // 处理 string 类型
-    if (type_name == "string") {
-        str_val = json_value.get<std::string>();
-        for (char c : str_val) {
-            encode_atomic.push_back(static_cast<uint8_t>(c));
+    if (0 == type_name.rfind("int", 0)) {
+        int byteLength = getByteSizeForIntType(type_name);
+        uint256_t v = {};
+
+        switch (json_value.type()) {
+            case nlohmann::json::value_t::number_integer: {
+                v = json_value.get<std::int64_t>();
+            } break;
+            case nlohmann::json::value_t::string: {
+                auto str = json_value.get<std::string>();
+                bool bMinus = false;
+                if (0 == str.rfind("-", 0)) {
+                    bMinus = true;
+                }
+                if (bMinus) {
+                    str = str.substr(1, str.size());
+                }
+                int base = 10;
+                if (0 == str.rfind("0x", 0) || 0 == str.rfind("0X", 0)) {
+                    base = 16;
+                }
+                uint256_t cover = uint256_t(str, base);
+                if (bMinus) {
+                    cover = ~cover;
+                    cover += 1;
+                }
+                v = cover;
+            } break;
+            default: {
+                return encode_atomic;
+            } break;
         }
+        TW::encode256BE(encode_atomic, v, 256);
         return encode_atomic;
     }
+   if (type_name == "string") {
+       str_val = json_value.get<std::string>();
+       for (char c : str_val) {
+           encode_atomic.push_back(static_cast<uint8_t>(c));
+       }
+       return encode_atomic;
+   }
     if(type_name == "address"){
         str_val = json_value.get<std::string>();
         return decodeHex(str_val);
     }
-    if(type_name == "bytes"){
+    if(0 == type_name.rfind("bytes", 0)){
         str_val = json_value.get<std::string>();
         return decodeHex(str_val);
     }

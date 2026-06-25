@@ -71,7 +71,7 @@ protected:
 
     static void BLE_DiscCallBack(unsigned char* uuid);
 
-    JUB_RV MatchErrorCode(int error);
+    JUB_RV MatchErrorCode(unsigned int error);
 
     //static std::shared_ptr<jub::JubiterBLEDevice> getThis();
 

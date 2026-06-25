@@ -52,6 +52,27 @@ typedef struct {
     JUB_UINT32 decimals;   // Token decimal precision
 } JUB_ERC20_TOKEN_INFO;
 
+typedef struct {
+    JUB_CHAR_CPTR network;    // The network
+    JUB_CHAR_CPTR token;      // The contract address
+    JUB_CHAR_CPTR name;       // The name of the contract
+    JUB_CHAR_CPTR owner;      // The owner of this NFT
+    JUB_CHAR_CPTR id;         // NFT id
+    JUB_CHAR_CPTR extension;  // image extension, support(png, jpg, jpeg)
+    struct {
+        JUB_BYTE_CPTR payload;
+        JUB_UINT32 size;
+    } image;                  // NFT image content, the image pix size is 432x432
+    struct {
+        JUB_BYTE_CPTR payload;
+        JUB_UINT32 size;
+    } thumbnail;              // NFT image thumbnail content, the image pix size is 108x108
+    struct {
+        JUB_BYTE_CPTR payload;
+        JUB_UINT32  size;
+    }wallpaper;               // NFT image wallpaper content, the image pix size is 480x800
+}JUB_ETH_NFT_INFO;
+
 /*****************************************************************************
  * @function name : JUB_CreateContextETH
  * @in  param : cfg
@@ -380,6 +401,16 @@ JUB_RV JUB_BuildContractWithTxIDAbiETH(IN JUB_UINT16 contextID,
 //                                      IN JUB_CHAR_PTR amount,
 //                                      OUT JUB_CHAR_PTR_PTR abi);
 
+
+/*****************************************************************************
+* @function name : JUB_UploadNFT
+* @in  param : contextID - context ID
+*            : nft - The NFT description
+* @out param : specified contract abi
+* @last change :
+*****************************************************************************/
+JUB_COINCORE_DLL_EXPORT
+JUB_RV JUB_UploadNFT(IN JUB_UINT16 contextID, JUB_ETH_NFT_INFO nft);
 
 #ifdef __cplusplus
 }

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -61,6 +61,10 @@
 		67E6A69522C321FB009FA2CE /* Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Object.h; path = ../../JubSDKDemo/Object.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		56B21D122FAC89CF00E54CF2 /* NFT */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = NFT; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		674E805022BDFB68009332EB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -78,6 +82,7 @@
 		6732D3C422C2148600FB9A5A /* JubSDKDemo */ = {
 			isa = PBXGroup;
 			children = (
+				56B21D122FAC89CF00E54CF2 /* NFT */,
 				6732D3CD22C2149E00FB9A5A /* AppDelegate.h */,
 				6732D3C522C2149D00FB9A5A /* AppDelegate.m */,
 				6732D3CF22C2149E00FB9A5A /* Assets.xcassets */,
@@ -141,6 +146,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				56B21D122FAC89CF00E54CF2 /* NFT */,
 			);
 			name = JubSDKDemo;
 			productName = JubSDKDemo;

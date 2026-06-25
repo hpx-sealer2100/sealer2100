@@ -43,8 +43,6 @@ aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/../trezor-crypto/src/sodium/pri
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/../trezor-crypto/src/chacha20poly1305 SRC_LIST)
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/../deps/uint256_t SRC_LIST)
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/../common/protocpp SRC_LIST)
-aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/../common/common/protob SRC_LIST)
-aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/../deps/nanopb SRC_LIST)
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/../deps/trezorProtocol SRC_LIST)
 list(APPEND SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/../deps/secure-channel/secure_channel.c)
 

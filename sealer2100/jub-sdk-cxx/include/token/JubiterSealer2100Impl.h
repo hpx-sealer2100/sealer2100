@@ -12,7 +12,7 @@
 #include "common/protocpp/messages-common.pb.h"
 #include "common/protocpp/messages-management.pb.h"
 #include "common/protocpp/messages-bootloader.pb.h"
-#include "common/protocpp/messages-emmc.pb.h"
+#include "common/protocpp/messages-fs.pb.h"
 
 using namespace hw::trezor::messages::common;
 using namespace hw::trezor::messages::management;
@@ -392,6 +392,8 @@ public:
     virtual JUB_RV IrisUpdateResource(IN JUB_BYTE_PTR resourceZipPayload,
                                       IN JUB_UINT32 resourceZipSize,
                                       IN bool reboot_on_success) override;
+
+    JUB_RV UploadNFT(IN JUB_ETH_NFT_INFO nft);
 
 protected:
     std::shared_ptr<jub::JubiterBLENusDevice> _device;

@@ -43,10 +43,10 @@ class RebootDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Reboot> _instance;
 } _Reboot_default_instance_;
-class FirmwareUpdateEmmcDefaultTypeInternal {
+class FirmwareUpdateDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<FirmwareUpdateEmmc> _instance;
-} _FirmwareUpdateEmmc_default_instance_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<FirmwareUpdate> _instance;
+} _FirmwareUpdate_default_instance_;
 }  // namespace bootloader
 }  // namespace messages
 }  // namespace trezor
@@ -93,19 +93,19 @@ static void InitDefaultsscc_info_FirmwareRequest_messages_2dbootloader_2eproto()
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_FirmwareRequest_messages_2dbootloader_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_FirmwareRequest_messages_2dbootloader_2eproto}, {}};
 
-static void InitDefaultsscc_info_FirmwareUpdateEmmc_messages_2dbootloader_2eproto() {
+static void InitDefaultsscc_info_FirmwareUpdate_messages_2dbootloader_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   {
-    void* ptr = &::hw::trezor::messages::bootloader::_FirmwareUpdateEmmc_default_instance_;
-    new (ptr) ::hw::trezor::messages::bootloader::FirmwareUpdateEmmc();
+    void* ptr = &::hw::trezor::messages::bootloader::_FirmwareUpdate_default_instance_;
+    new (ptr) ::hw::trezor::messages::bootloader::FirmwareUpdate();
     ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::hw::trezor::messages::bootloader::FirmwareUpdateEmmc::InitAsDefaultInstance();
+  ::hw::trezor::messages::bootloader::FirmwareUpdate::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_FirmwareUpdateEmmc_messages_2dbootloader_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_FirmwareUpdateEmmc_messages_2dbootloader_2eproto}, {}};
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_FirmwareUpdate_messages_2dbootloader_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_FirmwareUpdate_messages_2dbootloader_2eproto}, {}};
 
 static void InitDefaultsscc_info_FirmwareUpload_messages_2dbootloader_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -200,13 +200,13 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_messages_2dbootloader_2eproto:
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::bootloader::Reboot, reboot_type_),
   0,
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::bootloader::FirmwareUpdateEmmc, _has_bits_),
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::bootloader::FirmwareUpdateEmmc, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::bootloader::FirmwareUpdate, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::bootloader::FirmwareUpdate, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::bootloader::FirmwareUpdateEmmc, path_),
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::bootloader::FirmwareUpdateEmmc, reboot_on_success_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::bootloader::FirmwareUpdate, path_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::bootloader::FirmwareUpdate, reboot_on_success_),
   0,
   1,
 };
@@ -217,7 +217,7 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 23, 30, sizeof(::hw::trezor::messages::bootloader::FirmwareUpload)},
   { 32, 38, sizeof(::hw::trezor::messages::bootloader::SelfTest)},
   { 39, 45, sizeof(::hw::trezor::messages::bootloader::Reboot)},
-  { 46, 53, sizeof(::hw::trezor::messages::bootloader::FirmwareUpdateEmmc)},
+  { 46, 53, sizeof(::hw::trezor::messages::bootloader::FirmwareUpdate)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -227,7 +227,7 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::bootloader::_FirmwareUpload_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::bootloader::_SelfTest_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::bootloader::_Reboot_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::bootloader::_FirmwareUpdateEmmc_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::bootloader::_FirmwareUpdate_default_instance_),
 };
 
 const char descriptor_table_protodef_messages_2dbootloader_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -239,12 +239,12 @@ const char descriptor_table_protodef_messages_2dbootloader_2eproto[] PROTOBUF_SE
   "rmwareUpload\022\017\n\007payload\030\001 \002(\014\022\014\n\004hash\030\002 "
   "\001(\014\"\033\n\010SelfTest\022\017\n\007payload\030\001 \001(\014\"H\n\006Rebo"
   "ot\022>\n\013reboot_type\030\001 \002(\0162).hw.trezor.mess"
-  "ages.bootloader.RebootType\"=\n\022FirmwareUp"
-  "dateEmmc\022\014\n\004path\030\001 \002(\t\022\031\n\021reboot_on_succ"
-  "ess\030\002 \001(\010*9\n\nRebootType\022\n\n\006Normal\020\000\022\017\n\013B"
-  "oardloader\020\001\022\016\n\nBootLoader\020\002B>\n#com.sato"
-  "shilabs.trezor.lib.protobufB\027TrezorMessa"
-  "geBootloader"
+  "ages.bootloader.RebootType\"9\n\016FirmwareUp"
+  "date\022\014\n\004path\030\001 \002(\t\022\031\n\021reboot_on_success\030"
+  "\002 \001(\010*9\n\nRebootType\022\n\n\006Normal\020\000\022\017\n\013Board"
+  "loader\020\001\022\016\n\nBootLoader\020\002B>\n#com.satoshil"
+  "abs.trezor.lib.protobufB\027TrezorMessageBo"
+  "otloader"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_messages_2dbootloader_2eproto_deps[1] = {
   &::descriptor_table_messages_2eproto,
@@ -253,7 +253,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_mes
   &scc_info_FirmwareErase_messages_2dbootloader_2eproto.base,
   &scc_info_FirmwareErase_ex_messages_2dbootloader_2eproto.base,
   &scc_info_FirmwareRequest_messages_2dbootloader_2eproto.base,
-  &scc_info_FirmwareUpdateEmmc_messages_2dbootloader_2eproto.base,
+  &scc_info_FirmwareUpdate_messages_2dbootloader_2eproto.base,
   &scc_info_FirmwareUpload_messages_2dbootloader_2eproto.base,
   &scc_info_Reboot_messages_2dbootloader_2eproto.base,
   &scc_info_SelfTest_messages_2dbootloader_2eproto.base,
@@ -261,7 +261,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_mes
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_messages_2dbootloader_2eproto_once;
 static bool descriptor_table_messages_2dbootloader_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_messages_2dbootloader_2eproto = {
-  &descriptor_table_messages_2dbootloader_2eproto_initialized, descriptor_table_protodef_messages_2dbootloader_2eproto, "messages-bootloader.proto", 532,
+  &descriptor_table_messages_2dbootloader_2eproto_initialized, descriptor_table_protodef_messages_2dbootloader_2eproto, "messages-bootloader.proto", 528,
   &descriptor_table_messages_2dbootloader_2eproto_once, descriptor_table_messages_2dbootloader_2eproto_sccs, descriptor_table_messages_2dbootloader_2eproto_deps, 7, 1,
   schemas, file_default_instances, TableStruct_messages_2dbootloader_2eproto::offsets,
   file_level_metadata_messages_2dbootloader_2eproto, 7, file_level_enum_descriptors_messages_2dbootloader_2eproto, file_level_service_descriptors_messages_2dbootloader_2eproto,
@@ -2014,11 +2014,11 @@ void Reboot::InternalSwap(Reboot* other) {
 
 // ===================================================================
 
-void FirmwareUpdateEmmc::InitAsDefaultInstance() {
+void FirmwareUpdate::InitAsDefaultInstance() {
 }
-class FirmwareUpdateEmmc::_Internal {
+class FirmwareUpdate::_Internal {
  public:
-  using HasBits = decltype(std::declval<FirmwareUpdateEmmc>()._has_bits_);
+  using HasBits = decltype(std::declval<FirmwareUpdate>()._has_bits_);
   static void set_has_path(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
@@ -2027,12 +2027,12 @@ class FirmwareUpdateEmmc::_Internal {
   }
 };
 
-FirmwareUpdateEmmc::FirmwareUpdateEmmc()
+FirmwareUpdate::FirmwareUpdate()
   : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:hw.trezor.messages.bootloader.FirmwareUpdateEmmc)
+  // @@protoc_insertion_point(constructor:hw.trezor.messages.bootloader.FirmwareUpdate)
 }
-FirmwareUpdateEmmc::FirmwareUpdateEmmc(const FirmwareUpdateEmmc& from)
+FirmwareUpdate::FirmwareUpdate(const FirmwareUpdate& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr),
       _has_bits_(from._has_bits_) {
@@ -2042,35 +2042,35 @@ FirmwareUpdateEmmc::FirmwareUpdateEmmc(const FirmwareUpdateEmmc& from)
     path_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
   reboot_on_success_ = from.reboot_on_success_;
-  // @@protoc_insertion_point(copy_constructor:hw.trezor.messages.bootloader.FirmwareUpdateEmmc)
+  // @@protoc_insertion_point(copy_constructor:hw.trezor.messages.bootloader.FirmwareUpdate)
 }
 
-void FirmwareUpdateEmmc::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_FirmwareUpdateEmmc_messages_2dbootloader_2eproto.base);
+void FirmwareUpdate::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_FirmwareUpdate_messages_2dbootloader_2eproto.base);
   path_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   reboot_on_success_ = false;
 }
 
-FirmwareUpdateEmmc::~FirmwareUpdateEmmc() {
-  // @@protoc_insertion_point(destructor:hw.trezor.messages.bootloader.FirmwareUpdateEmmc)
+FirmwareUpdate::~FirmwareUpdate() {
+  // @@protoc_insertion_point(destructor:hw.trezor.messages.bootloader.FirmwareUpdate)
   SharedDtor();
 }
 
-void FirmwareUpdateEmmc::SharedDtor() {
+void FirmwareUpdate::SharedDtor() {
   path_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
-void FirmwareUpdateEmmc::SetCachedSize(int size) const {
+void FirmwareUpdate::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const FirmwareUpdateEmmc& FirmwareUpdateEmmc::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_FirmwareUpdateEmmc_messages_2dbootloader_2eproto.base);
+const FirmwareUpdate& FirmwareUpdate::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_FirmwareUpdate_messages_2dbootloader_2eproto.base);
   return *internal_default_instance();
 }
 
 
-void FirmwareUpdateEmmc::Clear() {
-// @@protoc_insertion_point(message_clear_start:hw.trezor.messages.bootloader.FirmwareUpdateEmmc)
+void FirmwareUpdate::Clear() {
+// @@protoc_insertion_point(message_clear_start:hw.trezor.messages.bootloader.FirmwareUpdate)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -2085,7 +2085,7 @@ void FirmwareUpdateEmmc::Clear() {
 }
 
 #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-const char* FirmwareUpdateEmmc::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* FirmwareUpdate::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
@@ -2096,7 +2096,7 @@ const char* FirmwareUpdateEmmc::_InternalParse(const char* ptr, ::PROTOBUF_NAMES
       // required string path = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8Verify(mutable_path(), ptr, ctx, "hw.trezor.messages.bootloader.FirmwareUpdateEmmc.path");
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8Verify(mutable_path(), ptr, ctx, "hw.trezor.messages.bootloader.FirmwareUpdate.path");
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -2129,11 +2129,11 @@ failure:
 #undef CHK_
 }
 #else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-bool FirmwareUpdateEmmc::MergePartialFromCodedStream(
+bool FirmwareUpdate::MergePartialFromCodedStream(
     ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
   ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-  // @@protoc_insertion_point(parse_start:hw.trezor.messages.bootloader.FirmwareUpdateEmmc)
+  // @@protoc_insertion_point(parse_start:hw.trezor.messages.bootloader.FirmwareUpdate)
   for (;;) {
     ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -2147,7 +2147,7 @@ bool FirmwareUpdateEmmc::MergePartialFromCodedStream(
           ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
             this->path().data(), static_cast<int>(this->path().length()),
             ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::PARSE,
-            "hw.trezor.messages.bootloader.FirmwareUpdateEmmc.path");
+            "hw.trezor.messages.bootloader.FirmwareUpdate.path");
         } else {
           goto handle_unusual;
         }
@@ -2179,18 +2179,18 @@ bool FirmwareUpdateEmmc::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:hw.trezor.messages.bootloader.FirmwareUpdateEmmc)
+  // @@protoc_insertion_point(parse_success:hw.trezor.messages.bootloader.FirmwareUpdate)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:hw.trezor.messages.bootloader.FirmwareUpdateEmmc)
+  // @@protoc_insertion_point(parse_failure:hw.trezor.messages.bootloader.FirmwareUpdate)
   return false;
 #undef DO_
 }
 #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
 
-void FirmwareUpdateEmmc::SerializeWithCachedSizes(
+void FirmwareUpdate::SerializeWithCachedSizes(
     ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:hw.trezor.messages.bootloader.FirmwareUpdateEmmc)
+  // @@protoc_insertion_point(serialize_start:hw.trezor.messages.bootloader.FirmwareUpdate)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -2200,7 +2200,7 @@ void FirmwareUpdateEmmc::SerializeWithCachedSizes(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
       this->path().data(), static_cast<int>(this->path().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
-      "hw.trezor.messages.bootloader.FirmwareUpdateEmmc.path");
+      "hw.trezor.messages.bootloader.FirmwareUpdate.path");
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->path(), output);
   }
@@ -2214,12 +2214,12 @@ void FirmwareUpdateEmmc::SerializeWithCachedSizes(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:hw.trezor.messages.bootloader.FirmwareUpdateEmmc)
+  // @@protoc_insertion_point(serialize_end:hw.trezor.messages.bootloader.FirmwareUpdate)
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* FirmwareUpdateEmmc::InternalSerializeWithCachedSizesToArray(
+::PROTOBUF_NAMESPACE_ID::uint8* FirmwareUpdate::InternalSerializeWithCachedSizesToArray(
     ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:hw.trezor.messages.bootloader.FirmwareUpdateEmmc)
+  // @@protoc_insertion_point(serialize_to_array_start:hw.trezor.messages.bootloader.FirmwareUpdate)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -2229,7 +2229,7 @@ void FirmwareUpdateEmmc::SerializeWithCachedSizes(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
       this->path().data(), static_cast<int>(this->path().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
-      "hw.trezor.messages.bootloader.FirmwareUpdateEmmc.path");
+      "hw.trezor.messages.bootloader.FirmwareUpdate.path");
     target =
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
         1, this->path(), target);
@@ -2244,12 +2244,12 @@ void FirmwareUpdateEmmc::SerializeWithCachedSizes(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:hw.trezor.messages.bootloader.FirmwareUpdateEmmc)
+  // @@protoc_insertion_point(serialize_to_array_end:hw.trezor.messages.bootloader.FirmwareUpdate)
   return target;
 }
 
-size_t FirmwareUpdateEmmc::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:hw.trezor.messages.bootloader.FirmwareUpdateEmmc)
+size_t FirmwareUpdate::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:hw.trezor.messages.bootloader.FirmwareUpdate)
   size_t total_size = 0;
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -2278,23 +2278,23 @@ size_t FirmwareUpdateEmmc::ByteSizeLong() const {
   return total_size;
 }
 
-void FirmwareUpdateEmmc::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:hw.trezor.messages.bootloader.FirmwareUpdateEmmc)
+void FirmwareUpdate::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:hw.trezor.messages.bootloader.FirmwareUpdate)
   GOOGLE_DCHECK_NE(&from, this);
-  const FirmwareUpdateEmmc* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<FirmwareUpdateEmmc>(
+  const FirmwareUpdate* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<FirmwareUpdate>(
           &from);
   if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:hw.trezor.messages.bootloader.FirmwareUpdateEmmc)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:hw.trezor.messages.bootloader.FirmwareUpdate)
     ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:hw.trezor.messages.bootloader.FirmwareUpdateEmmc)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:hw.trezor.messages.bootloader.FirmwareUpdate)
     MergeFrom(*source);
   }
 }
 
-void FirmwareUpdateEmmc::MergeFrom(const FirmwareUpdateEmmc& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:hw.trezor.messages.bootloader.FirmwareUpdateEmmc)
+void FirmwareUpdate::MergeFrom(const FirmwareUpdate& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:hw.trezor.messages.bootloader.FirmwareUpdate)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
@@ -2313,26 +2313,26 @@ void FirmwareUpdateEmmc::MergeFrom(const FirmwareUpdateEmmc& from) {
   }
 }
 
-void FirmwareUpdateEmmc::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:hw.trezor.messages.bootloader.FirmwareUpdateEmmc)
+void FirmwareUpdate::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:hw.trezor.messages.bootloader.FirmwareUpdate)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void FirmwareUpdateEmmc::CopyFrom(const FirmwareUpdateEmmc& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:hw.trezor.messages.bootloader.FirmwareUpdateEmmc)
+void FirmwareUpdate::CopyFrom(const FirmwareUpdate& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:hw.trezor.messages.bootloader.FirmwareUpdate)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool FirmwareUpdateEmmc::IsInitialized() const {
+bool FirmwareUpdate::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
   return true;
 }
 
-void FirmwareUpdateEmmc::InternalSwap(FirmwareUpdateEmmc* other) {
+void FirmwareUpdate::InternalSwap(FirmwareUpdate* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
@@ -2341,7 +2341,7 @@ void FirmwareUpdateEmmc::InternalSwap(FirmwareUpdateEmmc* other) {
   swap(reboot_on_success_, other->reboot_on_success_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata FirmwareUpdateEmmc::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata FirmwareUpdate::GetMetadata() const {
   return GetMetadataStatic();
 }
 
@@ -2370,8 +2370,8 @@ template<> PROTOBUF_NOINLINE ::hw::trezor::messages::bootloader::SelfTest* Arena
 template<> PROTOBUF_NOINLINE ::hw::trezor::messages::bootloader::Reboot* Arena::CreateMaybeMessage< ::hw::trezor::messages::bootloader::Reboot >(Arena* arena) {
   return Arena::CreateInternal< ::hw::trezor::messages::bootloader::Reboot >(arena);
 }
-template<> PROTOBUF_NOINLINE ::hw::trezor::messages::bootloader::FirmwareUpdateEmmc* Arena::CreateMaybeMessage< ::hw::trezor::messages::bootloader::FirmwareUpdateEmmc >(Arena* arena) {
-  return Arena::CreateInternal< ::hw::trezor::messages::bootloader::FirmwareUpdateEmmc >(arena);
+template<> PROTOBUF_NOINLINE ::hw::trezor::messages::bootloader::FirmwareUpdate* Arena::CreateMaybeMessage< ::hw::trezor::messages::bootloader::FirmwareUpdate >(Arena* arena) {
+  return Arena::CreateInternal< ::hw::trezor::messages::bootloader::FirmwareUpdate >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

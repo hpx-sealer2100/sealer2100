@@ -289,10 +289,14 @@ JUB_RV JubiterBLDImpl::_SignTXUpgradeETH(const int erc,
     if (0x9000 != ret) {
         return JUBR_TRANSMIT_DEVICE_ERROR;
     }
-
+    if (ulRetDataLen == 0) {
+        return JUBR_CUSTOM_DEFINED + 100;
+    }
     uchar_vector vSignature;
     vSignature.insert(vSignature.end(), retData, retData + ulRetDataLen);
-
+    if (vSignature.empty()) {
+        return JUBR_CUSTOM_DEFINED + 101;
+    }
     vRaw.clear();
     JUB_VERIFY_RV(jub::eth::serializeTx(vNonce,
                                         vGasPrice,
@@ -302,6 +306,9 @@ JUB_RV JubiterBLDImpl::_SignTXUpgradeETH(const int erc,
                                         vInput,
                                         vSignature,
                                         vRaw));
+    if (vRaw.empty()) {
+        return JUBR_CUSTOM_DEFINED + 102;
+    }
 
     return JUBR_OK;
 }

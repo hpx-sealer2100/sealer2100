@@ -25,7 +25,7 @@ JubiterBLEDevice::~JubiterBLEDevice() {
     Disconnect();
 }
 
-JUB_RV JubiterBLEDevice::MatchErrorCode(int error) {
+JUB_RV JubiterBLEDevice::MatchErrorCode(unsigned int error) {
 
 #ifdef __ANDROID__
 switch (error) {

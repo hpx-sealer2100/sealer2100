@@ -52,6 +52,10 @@ extern JUB_ENUM_PUB_FORMAT (^inlinePubFormat)(JUB_NS_ENUM_PUB_FORMAT);
 @synthesize decimals;
 @end
 
+@implementation ETHNFTInfo
+
+@end
+
 // ERC20TokenInfo* -> ERC20_TOKEN_INFO
 ERC20_TOKEN_INFO (^inlineERC20TokenInfo)(ERC20TokenInfo*) = ^(ERC20TokenInfo* tokenInfo) {
     ERC20_TOKEN_INFO token;
@@ -320,7 +324,10 @@ ERC20TokenInfo* (^inlineNSERC20TokenInfo)(ERC20_TOKEN_INFO) = ^(ERC20_TOKEN_INFO
     NSString* strRaw = [NSString stringWithCString:raw
                                           encoding:NSUTF8StringEncoding];
     JUB_FreeMemory(raw);
-    
+    if ([strRaw length] <= 2) {
+        self.lastError = JUBR_CUSTOM_DEFINED + 300;
+        return @"";
+    }
     return strRaw;
 }
 
@@ -405,17 +412,17 @@ ERC20TokenInfo* (^inlineNSERC20TokenInfo)(ERC20_TOKEN_INFO) = ^(ERC20_TOKEN_INFO
                token:(ERC20TokenInfoV2*)token;
 {
     JUB_ETH_NETWORK_INFO _network = {
-        .name = [network.name UTF8String],
-        .symbol = [network.symbol UTF8String],
         .chainID = static_cast<uint64_t>(network.chain_id),
         .slip44ID = static_cast<uint64_t>(network.slip44_id),
+        .name = [network.name UTF8String],
+        .symbol = [network.symbol UTF8String],
     };
     
     JUB_ERC20_TOKEN_INFO _token = {
+        .chainID = static_cast<uint64_t>(network.chain_id),
         .name = [token.name UTF8String],
         .symbol = [token.symbol UTF8String],
         .address = [token.address UTF8String],
-        .chainID = static_cast<uint64_t>(network.chain_id),
         .decimals = static_cast<JUB_UINT32>(token.decimals),
     };
     auto rv = JUB_SetERC20TokenETHV2(contextID, _network, _token);
@@ -805,6 +812,34 @@ ERC20TokenInfo* (^inlineNSERC20TokenInfo)(ERC20_TOKEN_INFO) = ^(ERC20_TOKEN_INFO
     JUB_FreeMemory(abi);
     
     return strAbi;
+}
+
+- (void) JUB_Upload:(NSUInteger)contextId nft:(ETHNFTInfo *)nft {
+    JUB_ETH_NFT_INFO _nft = {
+        .network = [nft.network UTF8String],
+        .token = [nft.token UTF8String],
+        .name = [nft.name UTF8String],
+        .owner = [nft.owner UTF8String],
+        .id = [nft.id UTF8String],
+        .extension = [nft.extension UTF8String],
+        .image = {
+            .payload = (JUB_BYTE_CPTR)[nft.image bytes],
+            .size = static_cast<JUB_UINT32>(nft.image.length),
+        },
+        .thumbnail = {
+            .payload = (JUB_BYTE_CPTR)[nft.thumbnail bytes],
+            .size = static_cast<JUB_UINT32>(nft.thumbnail.length),
+        },
+        .wallpaper = {
+            .payload = (JUB_BYTE_CPTR)[nft.wallpaper bytes],
+            .size = static_cast<JUB_UINT32>(nft.wallpaper.length),
+        }
+    };
+    
+    auto rv = JUB_UploadNFT(contextId, _nft);
+    if (JUBR_OK != rv) {
+        self.lastError = rv;
+    }
 }
 
 @end

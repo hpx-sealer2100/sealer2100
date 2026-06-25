@@ -69,9 +69,9 @@ extern FirmwareErase_exDefaultTypeInternal _FirmwareErase_ex_default_instance_;
 class FirmwareRequest;
 class FirmwareRequestDefaultTypeInternal;
 extern FirmwareRequestDefaultTypeInternal _FirmwareRequest_default_instance_;
-class FirmwareUpdateEmmc;
-class FirmwareUpdateEmmcDefaultTypeInternal;
-extern FirmwareUpdateEmmcDefaultTypeInternal _FirmwareUpdateEmmc_default_instance_;
+class FirmwareUpdate;
+class FirmwareUpdateDefaultTypeInternal;
+extern FirmwareUpdateDefaultTypeInternal _FirmwareUpdate_default_instance_;
 class FirmwareUpload;
 class FirmwareUploadDefaultTypeInternal;
 extern FirmwareUploadDefaultTypeInternal _FirmwareUpload_default_instance_;
@@ -89,7 +89,7 @@ PROTOBUF_NAMESPACE_OPEN
 template<> ::hw::trezor::messages::bootloader::FirmwareErase* Arena::CreateMaybeMessage<::hw::trezor::messages::bootloader::FirmwareErase>(Arena*);
 template<> ::hw::trezor::messages::bootloader::FirmwareErase_ex* Arena::CreateMaybeMessage<::hw::trezor::messages::bootloader::FirmwareErase_ex>(Arena*);
 template<> ::hw::trezor::messages::bootloader::FirmwareRequest* Arena::CreateMaybeMessage<::hw::trezor::messages::bootloader::FirmwareRequest>(Arena*);
-template<> ::hw::trezor::messages::bootloader::FirmwareUpdateEmmc* Arena::CreateMaybeMessage<::hw::trezor::messages::bootloader::FirmwareUpdateEmmc>(Arena*);
+template<> ::hw::trezor::messages::bootloader::FirmwareUpdate* Arena::CreateMaybeMessage<::hw::trezor::messages::bootloader::FirmwareUpdate>(Arena*);
 template<> ::hw::trezor::messages::bootloader::FirmwareUpload* Arena::CreateMaybeMessage<::hw::trezor::messages::bootloader::FirmwareUpload>(Arena*);
 template<> ::hw::trezor::messages::bootloader::Reboot* Arena::CreateMaybeMessage<::hw::trezor::messages::bootloader::Reboot>(Arena*);
 template<> ::hw::trezor::messages::bootloader::SelfTest* Arena::CreateMaybeMessage<::hw::trezor::messages::bootloader::SelfTest>(Arena*);
@@ -999,23 +999,23 @@ class Reboot :
 };
 // -------------------------------------------------------------------
 
-class FirmwareUpdateEmmc :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hw.trezor.messages.bootloader.FirmwareUpdateEmmc) */ {
+class FirmwareUpdate :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hw.trezor.messages.bootloader.FirmwareUpdate) */ {
  public:
-  FirmwareUpdateEmmc();
-  virtual ~FirmwareUpdateEmmc();
+  FirmwareUpdate();
+  virtual ~FirmwareUpdate();
 
-  FirmwareUpdateEmmc(const FirmwareUpdateEmmc& from);
-  FirmwareUpdateEmmc(FirmwareUpdateEmmc&& from) noexcept
-    : FirmwareUpdateEmmc() {
+  FirmwareUpdate(const FirmwareUpdate& from);
+  FirmwareUpdate(FirmwareUpdate&& from) noexcept
+    : FirmwareUpdate() {
     *this = ::std::move(from);
   }
 
-  inline FirmwareUpdateEmmc& operator=(const FirmwareUpdateEmmc& from) {
+  inline FirmwareUpdate& operator=(const FirmwareUpdate& from) {
     CopyFrom(from);
     return *this;
   }
-  inline FirmwareUpdateEmmc& operator=(FirmwareUpdateEmmc&& from) noexcept {
+  inline FirmwareUpdate& operator=(FirmwareUpdate&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -1040,37 +1040,37 @@ class FirmwareUpdateEmmc :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return GetMetadataStatic().reflection;
   }
-  static const FirmwareUpdateEmmc& default_instance();
+  static const FirmwareUpdate& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const FirmwareUpdateEmmc* internal_default_instance() {
-    return reinterpret_cast<const FirmwareUpdateEmmc*>(
-               &_FirmwareUpdateEmmc_default_instance_);
+  static inline const FirmwareUpdate* internal_default_instance() {
+    return reinterpret_cast<const FirmwareUpdate*>(
+               &_FirmwareUpdate_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     6;
 
-  friend void swap(FirmwareUpdateEmmc& a, FirmwareUpdateEmmc& b) {
+  friend void swap(FirmwareUpdate& a, FirmwareUpdate& b) {
     a.Swap(&b);
   }
-  inline void Swap(FirmwareUpdateEmmc* other) {
+  inline void Swap(FirmwareUpdate* other) {
     if (other == this) return;
     InternalSwap(other);
   }
 
   // implements Message ----------------------------------------------
 
-  inline FirmwareUpdateEmmc* New() const final {
-    return CreateMaybeMessage<FirmwareUpdateEmmc>(nullptr);
+  inline FirmwareUpdate* New() const final {
+    return CreateMaybeMessage<FirmwareUpdate>(nullptr);
   }
 
-  FirmwareUpdateEmmc* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<FirmwareUpdateEmmc>(arena);
+  FirmwareUpdate* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<FirmwareUpdate>(arena);
   }
   void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
   void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const FirmwareUpdateEmmc& from);
-  void MergeFrom(const FirmwareUpdateEmmc& from);
+  void CopyFrom(const FirmwareUpdate& from);
+  void MergeFrom(const FirmwareUpdate& from);
   PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
   bool IsInitialized() const final;
 
@@ -1091,10 +1091,10 @@ class FirmwareUpdateEmmc :
   inline void SharedCtor();
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(FirmwareUpdateEmmc* other);
+  void InternalSwap(FirmwareUpdate* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "hw.trezor.messages.bootloader.FirmwareUpdateEmmc";
+    return "hw.trezor.messages.bootloader.FirmwareUpdate";
   }
   private:
   inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
@@ -1140,7 +1140,7 @@ class FirmwareUpdateEmmc :
   bool reboot_on_success() const;
   void set_reboot_on_success(bool value);
 
-  // @@protoc_insertion_point(class_scope:hw.trezor.messages.bootloader.FirmwareUpdateEmmc)
+  // @@protoc_insertion_point(class_scope:hw.trezor.messages.bootloader.FirmwareUpdate)
  private:
   class _Internal;
 
@@ -1449,82 +1449,82 @@ inline void Reboot::set_reboot_type(::hw::trezor::messages::bootloader::RebootTy
 
 // -------------------------------------------------------------------
 
-// FirmwareUpdateEmmc
+// FirmwareUpdate
 
 // required string path = 1;
-inline bool FirmwareUpdateEmmc::has_path() const {
+inline bool FirmwareUpdate::has_path() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void FirmwareUpdateEmmc::clear_path() {
+inline void FirmwareUpdate::clear_path() {
   path_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   _has_bits_[0] &= ~0x00000001u;
 }
-inline const std::string& FirmwareUpdateEmmc::path() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.bootloader.FirmwareUpdateEmmc.path)
+inline const std::string& FirmwareUpdate::path() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.bootloader.FirmwareUpdate.path)
   return path_.GetNoArena();
 }
-inline void FirmwareUpdateEmmc::set_path(const std::string& value) {
+inline void FirmwareUpdate::set_path(const std::string& value) {
   _has_bits_[0] |= 0x00000001u;
   path_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.bootloader.FirmwareUpdateEmmc.path)
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.bootloader.FirmwareUpdate.path)
 }
-inline void FirmwareUpdateEmmc::set_path(std::string&& value) {
+inline void FirmwareUpdate::set_path(std::string&& value) {
   _has_bits_[0] |= 0x00000001u;
   path_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.bootloader.FirmwareUpdateEmmc.path)
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.bootloader.FirmwareUpdate.path)
 }
-inline void FirmwareUpdateEmmc::set_path(const char* value) {
+inline void FirmwareUpdate::set_path(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   _has_bits_[0] |= 0x00000001u;
   path_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.bootloader.FirmwareUpdateEmmc.path)
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.bootloader.FirmwareUpdate.path)
 }
-inline void FirmwareUpdateEmmc::set_path(const char* value, size_t size) {
+inline void FirmwareUpdate::set_path(const char* value, size_t size) {
   _has_bits_[0] |= 0x00000001u;
   path_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.bootloader.FirmwareUpdateEmmc.path)
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.bootloader.FirmwareUpdate.path)
 }
-inline std::string* FirmwareUpdateEmmc::mutable_path() {
+inline std::string* FirmwareUpdate::mutable_path() {
   _has_bits_[0] |= 0x00000001u;
-  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.bootloader.FirmwareUpdateEmmc.path)
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.bootloader.FirmwareUpdate.path)
   return path_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline std::string* FirmwareUpdateEmmc::release_path() {
-  // @@protoc_insertion_point(field_release:hw.trezor.messages.bootloader.FirmwareUpdateEmmc.path)
+inline std::string* FirmwareUpdate::release_path() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.bootloader.FirmwareUpdate.path)
   if (!has_path()) {
     return nullptr;
   }
   _has_bits_[0] &= ~0x00000001u;
   return path_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline void FirmwareUpdateEmmc::set_allocated_path(std::string* path) {
+inline void FirmwareUpdate::set_allocated_path(std::string* path) {
   if (path != nullptr) {
     _has_bits_[0] |= 0x00000001u;
   } else {
     _has_bits_[0] &= ~0x00000001u;
   }
   path_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), path);
-  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.bootloader.FirmwareUpdateEmmc.path)
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.bootloader.FirmwareUpdate.path)
 }
 
 // optional bool reboot_on_success = 2;
-inline bool FirmwareUpdateEmmc::has_reboot_on_success() const {
+inline bool FirmwareUpdate::has_reboot_on_success() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void FirmwareUpdateEmmc::clear_reboot_on_success() {
+inline void FirmwareUpdate::clear_reboot_on_success() {
   reboot_on_success_ = false;
   _has_bits_[0] &= ~0x00000002u;
 }
-inline bool FirmwareUpdateEmmc::reboot_on_success() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.bootloader.FirmwareUpdateEmmc.reboot_on_success)
+inline bool FirmwareUpdate::reboot_on_success() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.bootloader.FirmwareUpdate.reboot_on_success)
   return reboot_on_success_;
 }
-inline void FirmwareUpdateEmmc::set_reboot_on_success(bool value) {
+inline void FirmwareUpdate::set_reboot_on_success(bool value) {
   _has_bits_[0] |= 0x00000002u;
   reboot_on_success_ = value;
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.bootloader.FirmwareUpdateEmmc.reboot_on_success)
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.bootloader.FirmwareUpdate.reboot_on_success)
 }
 
 #ifdef __GNUC__

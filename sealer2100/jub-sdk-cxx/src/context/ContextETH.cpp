@@ -11,6 +11,8 @@
 #include <uint256_t/uint256_t.h>
 #include <../HexCoding.h>
 #include <bigint/BigIntegerUtils.hh>
+#include <PublicKey.h>
+#include <Ethereum/Transaction.h>
 
 #include "token/JubiterSealer2100Impl.h"
 
@@ -146,8 +148,13 @@ JUB_RV ContextETH::SignTransaction(const BIP32_Path& path,
                                    vPath,
                                    vChainID,
                                    raw));
+    if (raw.empty()) {
+        return JUBR_CUSTOM_DEFINED + 201;
+    }
     strRaw = std::string(ETH_PRDFIX) + raw.getHex();
-
+    if (strRaw.size() <= 2) {
+        return JUBR_CUSTOM_DEFINED + 202;
+    }
     return JUBR_OK;
 }
 
@@ -360,13 +367,13 @@ JUB_RV ContextETH::SignBytestring(const BIP32_Path& path,
                                                     // chainId for hardware
                                         vSignature));
 #if defined(DEBUG)
+    // use soft verify message signature
     std::string pubkey;
     JUB_VERIFY_RV(token->GetHDNodeETH(JUB_ENUM_PUB_FORMAT::HEX, strPath, pubkey));
-
-    //verify
-    JUB_VERIFY_RV(token->VerifyBytestring(vData,
-                                          vSignature,
-                                          TW::parse_hex(pubkey)));
+    auto vpk = TW::parse_hex(pubkey);
+    auto pk = TW::PublicKey(vpk, TWPublicKeyType::TWPublicKeyTypeSECP256k1);
+    auto digest = TW::Ethereum::TransactionPersonal(vData).preHash();
+    JUB_VERIFY_RV(pk.verify(vSignature, digest) ? JUBR_OK : JUBR_ERROR);
 #endif
 
     signature = std::string(ETH_PRDFIX) + vSignature.getHex();
@@ -555,12 +562,31 @@ JUB_RV ContextETH::StoreDefinition(JUB_ETH_NETWORK_INFO networkInfo,
     if (!sealer) {
         if (tokenInfo) {
             // BLD or BIO only support set token info
-            return token->SetERC20ETHToken(tokenInfo->name, tokenInfo->decimals, tokenInfo->address);
+            return token->SetERC20ETHToken(tokenInfo->symbol, tokenInfo->decimals, tokenInfo->address);
         }
         // BLD or BIO have on effect when set network
         return JUBR_OK;
     }
 
     return sealer->StoreETHDefinition(networkInfo, tokenInfo);
+}
+
+JUB_RV  ContextETH::UploadNFT(JUB_ETH_NFT_INFO nft) {
+    JUB_CHECK_NULL(nft.id);
+    JUB_CHECK_NULL(nft.name);
+    JUB_CHECK_NULL(nft.token);
+    JUB_CHECK_NULL(nft.network);
+    JUB_CHECK_NULL(nft.owner);
+    JUB_CHECK_NULL(nft.image.payload);
+    JUB_CHECK_NULL(nft.thumbnail.payload);
+
+    auto token = dynamic_cast<ETHTokenInterface*>(jub::TokenManager::GetInstance()->GetOne(_deviceID));
+    JUB_CHECK_NULL(token);
+    auto* sealer = dynamic_cast<JubiterSealer2100Impl*>(token);
+    // only Sealer2100 support
+    if (!sealer) {
+        return JUBR_IMPL_NOT_SUPPORT;
+    }
+    return sealer->UploadNFT(nft);
 }
 } // namespace jub end

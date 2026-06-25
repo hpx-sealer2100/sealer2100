@@ -190,7 +190,9 @@ JUB_RV JUB_SignTransactionETH(IN JUB_UINT16 contextID,
                                            input,
                                            str_raw));
     JUB_VERIFY_RV(_allocMem(raw, str_raw));
-
+    if (std::strlen(*raw) <= 2) {
+        return JUBR_CUSTOM_DEFINED + 200;
+    }
     return JUBR_OK;
 }
 /*****************************************************************************
@@ -630,3 +632,21 @@ JUB_RV JUB_BuildContractWithAddrAmtDataAbiETH(IN JUB_UINT16 contextID,
 
     return JUBR_OK;
 }
+
+/*****************************************************************************
+* @function name : JUB_UploadNFT
+* @in  param : contextID - context ID
+*            : nft - The NFT description
+* @out param : specified contract abi
+* @last change :
+*****************************************************************************/
+JUB_COINCORE_DLL_EXPORT
+JUB_RV JUB_UploadNFT(IN JUB_UINT16 contextID, JUB_ETH_NFT_INFO nft) {
+    JUB_CHECK_CONTEXT_ETH(contextID);
+
+    auto context = (jub::ContextETH*)jub::ContextManager::GetInstance()->GetOne(contextID);
+    JUB_CHECK_NULL(context);
+    JUB_VERIFY_RV(context->UploadNFT(nft));
+    return JUBR_OK;
+}
+

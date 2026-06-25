@@ -624,65 +624,49 @@ message SEWipeUserStorage{
 }
 
 /**
- * Request: Ask for uoload resource to device (wallpaper/nft pics, mp4)
- * @next ResourceRequest
- * @next ZoomRequest
+ * Request: Ask for uoload NFT to device
+ * @next NftRequest
  * @next Failure
  */
- message ResourceUpload {
-    required string extension = 1;  // the extension of the resource
-    required uint32 data_length = 2;  // total length of the data to be upload
-    required ResourceType res_type = 3;
-    optional bytes nft_meta_data = 4;
-    required uint32 zoom_data_length = 5;
-    optional string file_name_no_ext = 6; // name template: nft/wp - mac(unique verify) - timestamp(sort)
+ message NftMetadata {
+    required string id = 1;         // the id of the NFT
+    required string name = 3;       // the name of the NFT
+    required string token = 2;      // the token address of the NFT
+    required string network = 4;    // the network of the NFT
+    required string owner = 5;      // the owner of the NFT
+}
+message NftUpload {
+    required NftMetadata metadata = 1;  // the metadata of the NFT
+    required string extension = 2;      // the extension of the resource, (png/jpg)
+    required uint32 image_size = 3;     // the size of the image in bytes
+    required uint32 thumbnail_size = 4; // the size of the thumbnail in bytes
+    required uint32 wallpaper_size = 5; // the size of the wallpaper in bytes
+}
 
-    enum ResourceType {
-        WallPaper = 0;
-        Nft = 1;
+/**
+ * Response: Device asks for more data
+ * @next NftAck
+ */
+ message NftRequest {
+    required uint32 offset = 1;       // offset of requested data chunk
+    required uint32 data_length = 2;  // length of requested data chunk
+    required NftRequestType type = 3; // the type of the request, IMAGE or THUMBNAIL
+    enum NftRequestType {
+        IMAGE = 0;
+        THUMBNAIL = 1;
+        WALLPAPER = 2;
     }
 }
 
 /**
- * Response: Device asks for more data
- * @next ResourceAck
- */
- message ZoomRequest {
-    optional uint32 offset = 1;       // offset of requested data chunk
-    required uint32 data_length = 2;  // length of requested data chunk
-}
-
-/**
- * Response: Device asks for more data
- * @next ResourceAck
- */
-message ResourceRequest {
-    optional uint32 offset = 1;       // offset of requested data chunk
-    required uint32 data_length = 2;  // length of requested data chunk
-}
-
-/**
- * Request: Send resource in binary form to the device
- * @next ResourceRequest
+ * Request: Send NFT data in binary form to the device
+ * @next NftRequest
  * @next Success
  * @next Failure
  */
-message ResourceAck {
-    required bytes data_chunk = 1;
-    optional bytes hash = 2;   //  the hash of the data_chunk
-}
-
-/**
- * Request: Ask for update the internal static resource on device
- * @next ResourceRequest
- * @next Success
- * @next Failure
- */
-message ResourceUpdate {
-    required string file_name = 1;
-    required uint32 data_length = 2;
-    required bytes initial_data_chunk = 3; // <= 16K
-    optional bytes hash = 4;
+message NftAck {
+    required bytes chunk = 1;  // the data chunk of the NFT
+    optional bytes hash = 2;   // the hash of the chunk, sha256(chunk)
 }
 
 /**

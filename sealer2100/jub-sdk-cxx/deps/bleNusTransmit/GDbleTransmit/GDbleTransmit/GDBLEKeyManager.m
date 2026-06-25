@@ -85,12 +85,12 @@ const unsigned long handle, //device handle
         //等待连接成功
         while ([dev connectedStatus] != BLES_CONNECTED_CAN_SEND) {
             if (ADDPRE(getMilSeconds()) - startTime > timeout) {
-                ret = CKR_TIMEOUT;
+                ret = CKR_BLE_BOND_FAIL;
                 break;
             }
             if([dev connectedStatus] == BLES_UNCONNECT)
             {
-                ret = CKR_USER_CANCEL;
+                ret = CKR_BLE_BOND_FAIL;
                 break;
             }
             [NSThread sleepForTimeInterval:0.010];

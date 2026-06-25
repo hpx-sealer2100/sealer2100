@@ -527,4 +527,63 @@ void (^percentageCallback)(NSUInteger percentage) = ^(NSUInteger percentage) {
 //                                                to:@"xxxxxxx"
 //                                        valueInWei:@""
 //                                             input:@""];
+
+- (IBAction) UploadNFT:(id)sender {
+    ContextConfigETH *cfg = [[ContextConfigETH alloc] init];
+    cfg.mainPath = @"m/44'/60'/0'";
+    cfg.chainID = 1;
+    __contextID = [_sdk JUB_CreateContextETH:__deviceID
+                                         cfg:cfg];
+    NSLog(@"[%li] JUB_CreateContextETH(%li)", __deviceID, (long)[_sdk JUB_LastError]);
+    
+    NSBundle* bundle = [NSBundle mainBundle];
+    NSString* path = [bundle pathForResource:@"21" ofType:@"json"];
+    if (!path) {
+        NSLog(@"Failed find meta file");
+        return;
+    }
+    NSData* data = [NSData dataWithContentsOfFile: path];
+    if (!data) {
+        NSLog(@"Faild read meta file");
+        return;
+    }
+    
+    NSError* error = nil;
+    
+    id obj = [NSJSONSerialization JSONObjectWithData: data options:0 error:&error];
+    if (error) {
+        NSLog(@"JSON parse error: %@", error);
+        return;
+    }
+    if (![obj isKindOfClass: [NSDictionary class]]) {
+        NSLog(@"Invalid content");
+        return;
+    }
+    
+    NSDictionary* dict = (NSDictionary*) obj;
+    
+    ETHNFTInfo* nft = [[ETHNFTInfo alloc] init];
+    nft.id = dict[@"id"];
+    nft.name = dict[@"name"];
+    nft.token = dict[@"token"];
+    nft.network = dict[@"network"];
+    nft.owner = dict[@"owner"];
+    nft.extension = @"png";
+    
+    path = [bundle pathForResource:@"21-image.png" ofType:@"bin"];
+    nft.image = [NSData dataWithContentsOfFile:path];
+    
+    path =[bundle pathForResource:@"21-thumbnail.png" ofType:@"bin"];
+    nft.thumbnail = [NSData dataWithContentsOfFile:path];
+    
+    path =[bundle pathForResource:@"21-wallpaper.png" ofType:@"bin"];
+    nft.wallpaper = [NSData dataWithContentsOfFile: path];
+    
+    [_sdk JUB_Upload: __contextID nft: nft];
+    
+    if (_sdk.lastError != 0) {
+        NSLog(@"upload NFT failed: %lu", _sdk.lastError);
+    }
+    
+}
 @end

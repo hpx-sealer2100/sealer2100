@@ -20,7 +20,7 @@
 		3BB3C28B2DFEB6A300DED473 /* messages-monero.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C24C2DFEB69F00DED473 /* messages-monero.pb.cc */; };
 		3BB3C28C2DFEB6A300DED473 /* messages-tezos.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C24D2DFEB69F00DED473 /* messages-tezos.pb.cc */; };
 		3BB3C28E2DFEB6A300DED473 /* messages.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C2512DFEB69F00DED473 /* messages.pb.cc */; };
-		3BB3C28F2DFEB6A300DED473 /* messages-emmc.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C2542DFEB69F00DED473 /* messages-emmc.pb.cc */; };
+		3BB3C28F2DFEB6A300DED473 /* messages-fs.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C2542DFEB69F00DED473 /* messages-fs.pb.cc */; };
 		3BB3C2902DFEB6A300DED473 /* messages-cosmos.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C2562DFEB6A000DED473 /* messages-cosmos.pb.cc */; };
 		3BB3C2912DFEB6A300DED473 /* messages-algorand.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C2592DFEB6A000DED473 /* messages-algorand.pb.cc */; };
 		3BB3C2922DFEB6A300DED473 /* messages-stellar.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3C25A2DFEB6A000DED473 /* messages-stellar.pb.cc */; };
@@ -273,7 +273,7 @@
 		3BB3C2452DFEB69F00DED473 /* messages-bootloader.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-bootloader.pb.cc"; path = "../../common/protocpp/messages-bootloader.pb.cc"; sourceTree = "<group>"; };
 		3BB3C2462DFEB69F00DED473 /* messages-polkadot.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-polkadot.pb.h"; path = "../../common/protocpp/messages-polkadot.pb.h"; sourceTree = "<group>"; };
 		3BB3C2472DFEB69F00DED473 /* messages-ripple.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-ripple.pb.h"; path = "../../common/protocpp/messages-ripple.pb.h"; sourceTree = "<group>"; };
-		3BB3C2482DFEB69F00DED473 /* messages-emmc.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-emmc.pb.h"; path = "../../common/protocpp/messages-emmc.pb.h"; sourceTree = "<group>"; };
+		3BB3C2482DFEB69F00DED473 /* messages-fs.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-fs.pb.h"; path = "../../common/protocpp/messages-fs.pb.h"; sourceTree = "<group>"; };
 		3BB3C2492DFEB69F00DED473 /* messages-ton.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-ton.pb.h"; path = "../../common/protocpp/messages-ton.pb.h"; sourceTree = "<group>"; };
 		3BB3C24A2DFEB69F00DED473 /* messages-starcoin.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-starcoin.pb.cc"; path = "../../common/protocpp/messages-starcoin.pb.cc"; sourceTree = "<group>"; };
 		3BB3C24B2DFEB69F00DED473 /* messages-ton.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-ton.pb.cc"; path = "../../common/protocpp/messages-ton.pb.cc"; sourceTree = "<group>"; };
@@ -284,7 +284,7 @@
 		3BB3C2512DFEB69F00DED473 /* messages.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = messages.pb.cc; path = ../../common/protocpp/messages.pb.cc; sourceTree = "<group>"; };
 		3BB3C2522DFEB69F00DED473 /* messages-solana.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-solana.pb.h"; path = "../../common/protocpp/messages-solana.pb.h"; sourceTree = "<group>"; };
 		3BB3C2532DFEB69F00DED473 /* messages-filecoin.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-filecoin.pb.h"; path = "../../common/protocpp/messages-filecoin.pb.h"; sourceTree = "<group>"; };
-		3BB3C2542DFEB69F00DED473 /* messages-emmc.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-emmc.pb.cc"; path = "../../common/protocpp/messages-emmc.pb.cc"; sourceTree = "<group>"; };
+		3BB3C2542DFEB69F00DED473 /* messages-fs.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-fs.pb.cc"; path = "../../common/protocpp/messages-fs.pb.cc"; sourceTree = "<group>"; };
 		3BB3C2552DFEB6A000DED473 /* messages-stellar.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-stellar.pb.h"; path = "../../common/protocpp/messages-stellar.pb.h"; sourceTree = "<group>"; };
 		3BB3C2562DFEB6A000DED473 /* messages-cosmos.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "messages-cosmos.pb.cc"; path = "../../common/protocpp/messages-cosmos.pb.cc"; sourceTree = "<group>"; };
 		3BB3C2572DFEB6A000DED473 /* messages-monero.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "messages-monero.pb.h"; path = "../../common/protocpp/messages-monero.pb.h"; sourceTree = "<group>"; };
@@ -1883,8 +1883,8 @@
 				3BB3C2622DFEB6A000DED473 /* messages-crypto.pb.h */,
 				3BB3C2772DFEB6A200DED473 /* messages-debug.pb.cc */,
 				3BB3C2582DFEB6A000DED473 /* messages-debug.pb.h */,
-				3BB3C2542DFEB69F00DED473 /* messages-emmc.pb.cc */,
-				3BB3C2482DFEB69F00DED473 /* messages-emmc.pb.h */,
+				3BB3C2542DFEB69F00DED473 /* messages-fs.pb.cc */,
+				3BB3C2482DFEB69F00DED473 /* messages-fs.pb.h */,
 				3BB3C23E2DFEB69E00DED473 /* messages-eos.pb.cc */,
 				3BB3C23F2DFEB69E00DED473 /* messages-eos.pb.h */,
 				3BB3C2412DFEB69E00DED473 /* messages-ethereum-definitions.pb.cc */,
@@ -2152,7 +2152,7 @@
 				67C29D842363102F00E36619 /* JUB_SDK_DEV.cpp in Sources */,
 				9E0A255F2DBD0DAE001621F4 /* JubiterBLENusDevice.cpp in Sources */,
 				772BC0A726DF7FE000723878 /* ContextTRX.cpp in Sources */,
-				3BB3C28F2DFEB6A300DED473 /* messages-emmc.pb.cc in Sources */,
+				3BB3C28F2DFEB6A300DED473 /* messages-fs.pb.cc in Sources */,
 				9EEB8D962DC8B6C900CFA49C /* Address.cpp in Sources */,
 				67C29C7C23630AF000E36619 /* ed25519-donna-32bit-tables.c in Sources */,
 				3BB3C2922DFEB6A300DED473 /* messages-stellar.pb.cc in Sources */,

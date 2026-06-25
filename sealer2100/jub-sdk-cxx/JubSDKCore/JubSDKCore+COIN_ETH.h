@@ -62,6 +62,34 @@
 @property (atomic, assign) NSInteger decimals;
 @end
 
+//typedef struct {
+//    JUB_CHAR_CPTR network;    // The network
+//    JUB_CHAR_CPTR token;      // The contract address
+//    JUB_CHAR_CPTR name;       // The name of the contract
+//    JUB_CHAR_CPTR owner;      // The owner of this NFT
+//    JUB_CHAR_CPTR id;         // NFT id
+//    JUB_CHAR_CPTR extension;  // image extension, support(png, jpg, jpeg)
+//    struct {
+//        JUB_BYTE_CPTR payload;
+//        JUB_UINT32 size;
+//    } image;                  // NFT image content, the image pix size is 432x432
+//    struct {
+//        JUB_BYTE_CPTR payload;
+//        JUB_UINT32 size;
+//    } thumbnail;              // NFT image thumbnail content, the image pix size is 108x108
+//}JUB_ETH_NFT_INFO;
+@interface ETHNFTInfo : NSObject
+@property (atomic, copy) NSString* _Nonnull id;
+@property (atomic, copy) NSString* _Nonnull name;
+@property (atomic, copy) NSString* _Nonnull token;
+@property (atomic, copy) NSString* _Nonnull network;
+@property (atomic, copy) NSString* _Nonnull owner;
+@property (atomic, copy) NSString* _Nonnull extension;
+@property (atomic, assign) NSData* _Nonnull image;
+@property (atomic, assign) NSData* _Nonnull thumbnail;
+@property (atomic, assign) NSData* _Nonnull wallpaper;
+@end
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface JubSDKCore (COIN_ETH)
@@ -233,6 +261,9 @@ NS_ASSUME_NONNULL_BEGIN
                                             address:(NSString*)address
                                              amount:(NSString*)amount
                                                data:(NSString*)data;
+
+- (void)JUB_Upload: (NSUInteger)contextId
+               nft: (ETHNFTInfo*) nft;
 
 @end
 

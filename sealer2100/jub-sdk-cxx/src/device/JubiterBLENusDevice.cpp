@@ -35,7 +35,17 @@ namespace jub {
 //  }
 //
 
+//template <uint8_t N>
+//struct sized_payload_t{
+//    static constexpr  uint8_t size = N;
+//    uint8_t payload[N];
+//};
 
+template <uint8_t N, class T>
+struct sized_payload_t{
+    uint8_t size;
+    T payload[N];
+}__attribute__((packed));
 
 JubiterBLENusDevice::JubiterBLENusDevice():
     _param1{nullptr, GDBLE_ReadCallBack, GDBLE_ScanCallBack, GDBLE_DiscCallBack},
@@ -57,6 +67,9 @@ typedef enum secure_channel_cammand
     SC_CLOSE = 4,
     SC_TRANS = 5,
 } secure_channel_cammand;
+
+#define SECURE_CHANNEL_MAGIC_0 '#'
+#define SECURE_CHANNEL_MAGIC_1 '?'
 
 #define info_prefix "Sealer2100-AESKey-v1"
 #define pre_set_info "aFHDfju2h!@#Sxv~"
@@ -241,32 +254,52 @@ JUB_RV JubiterBLENusDevice::openSecureChannel(void){
     if (pulRetDataLen < 2) {
         return JUBR_ERROR;
     }
+
     JUB_ULONG newLen = pulRetDataLen - 2;
     memmove(retData, retData + 2, newLen);
     memset(retData + newLen, 0, 2);
     pulRetDataLen = newLen;
 
-    if (retData[0] == '#' && retData[1] == '?' && retData[2] == '?' && retData[3] == SC_OPEN)
-    {
-        uint8_t pubkey_len = retData[4];
-        uint8_t pubkey[pubkey_len];
-        memcpy(pubkey, &retData[5], pubkey_len);
-        uint8_t nonce_len = retData[5 + pubkey_len];
-        uint8_t nonce[nonce_len];
-        memcpy(nonce, &retData[6 + pubkey_len], nonce_len);
-        uint8_t b_deviceid_len = retData[6 + pubkey_len + nonce_len];
-        char b_deviceid[b_deviceid_len];
-        memcpy(b_deviceid, &retData[7 + pubkey_len + nonce_len], b_deviceid_len);
-        strcpy(m_sc_context.b_deviceid, std::string(b_deviceid, b_deviceid_len).c_str());
-
-        code = secure_channel_open(&m_sc_context, pubkey, nonce, (const char *)info_prefix, (uint8_t *)pre_set_info, strlen(pre_set_info));
-        if (code != SUCCESS)
-        {
-            return JUBR_HOST_MEMORY;
-        }
-        return JUBR_OK;
+    struct ble_sec_open_resp_t{
+        uint8_t magic[3];
+        uint8_t cmd;
+        sized_payload_t<PUBLIC_KEY_SIZE, uint8_t> ecdh_pk;
+        sized_payload_t<NONCE_SIZE, uint8_t> nonce;
+        sized_payload_t<DEVICE_ID_SIZE, char> device_id;
+    }__attribute__((packed));
+    if (pulRetDataLen != sizeof(ble_sec_open_resp_t)) {
+        JUBR_ERROR;
     }
-    return JUBR_ERROR;
+    auto* resp = static_cast<ble_sec_open_resp_t*>((void*)retData);
+
+    // check magic and cmd
+    if (resp->magic[0] != SECURE_CHANNEL_MAGIC_0 ||
+        resp->magic[1] != SECURE_CHANNEL_MAGIC_1 ||
+        resp->magic[2] != SECURE_CHANNEL_MAGIC_1 ||
+        resp->cmd != SC_OPEN) {
+        return JUBR_ERROR;
+    }
+    // check `pk` `nonce` `device_id` size
+    if (resp->ecdh_pk.size != PUBLIC_KEY_SIZE ||
+        resp->nonce.size != NONCE_SIZE ||
+        resp->device_id.size != DEVICE_ID_SIZE) {
+        return JUBR_ERROR;
+    }
+
+    // cache peer deviceid
+    strncpy(m_sc_context.b_deviceid, resp->device_id.payload, DEVICE_ID_SIZE);
+    code = secure_channel_open(
+            &m_sc_context,
+            resp->ecdh_pk.payload,
+            resp->nonce.payload,
+            (const char*) info_prefix,
+            (uint8_t*)pre_set_info,
+            strlen(pre_set_info)
+            );
+    if (code != SUCCESS) {
+        return JUBR_HOST_MEMORY;
+    }
+    return JUBR_OK;
 }
 
 unsigned int JubiterBLENusDevice::Disconnect(unsigned long handle) {

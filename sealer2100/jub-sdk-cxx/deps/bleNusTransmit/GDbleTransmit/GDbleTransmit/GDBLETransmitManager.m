@@ -1287,9 +1287,17 @@ static GDBLETransmitManager *_instance = nil;
     GDBLEDevice* dev = [self getBLEDeviceFromConnectList:peripheral];
     if (dev == nil) {
         //设备已移除
+        [dev setConnectedStatus:BLES_UNCONNECT];
         return;
     }
-    [dev setConnectedStatus:BLES_CONNECTED_CAN_SEND];
+    
+    // Check if pairing was cancelled
+    if (error != nil) {
+        NSLog(@"Notification state update failed: %@", error);
+        [dev setConnectedStatus:BLES_UNCONNECT];
+        return;
+    }
+
     //添加收发数据的队列
     dispatch_queue_t send_queue ;
     NSInteger ret = [[GDQueuePool SharedInstance] GetFreeQueue:&send_queue];
@@ -1309,6 +1317,7 @@ static GDBLETransmitManager *_instance = nil;
         rcv_queue = dispatch_get_global_queue(0, 0);
     }
     [dev setRecvSerialQueue:rcv_queue];
+    [dev setConnectedStatus:BLES_CONNECTED_CAN_SEND];
     if (ADDPRE(isPrintLog())) {
         NSLog(@"BLES_CONNECTED_CAN_SEND");
     }

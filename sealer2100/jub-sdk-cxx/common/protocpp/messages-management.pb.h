@@ -49,7 +49,7 @@ struct TableStruct_messages_2dmanagement_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[61]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[60]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -150,6 +150,18 @@ extern LockDeviceDefaultTypeInternal _LockDevice_default_instance_;
 class NextU2FCounter;
 class NextU2FCounterDefaultTypeInternal;
 extern NextU2FCounterDefaultTypeInternal _NextU2FCounter_default_instance_;
+class NftAck;
+class NftAckDefaultTypeInternal;
+extern NftAckDefaultTypeInternal _NftAck_default_instance_;
+class NftMetadata;
+class NftMetadataDefaultTypeInternal;
+extern NftMetadataDefaultTypeInternal _NftMetadata_default_instance_;
+class NftRequest;
+class NftRequestDefaultTypeInternal;
+extern NftRequestDefaultTypeInternal _NftRequest_default_instance_;
+class NftUpload;
+class NftUploadDefaultTypeInternal;
+extern NftUploadDefaultTypeInternal _NftUpload_default_instance_;
 class Nonce;
 class NonceDefaultTypeInternal;
 extern NonceDefaultTypeInternal _Nonce_default_instance_;
@@ -177,18 +189,6 @@ extern RecoveryDeviceDefaultTypeInternal _RecoveryDevice_default_instance_;
 class ResetDevice;
 class ResetDeviceDefaultTypeInternal;
 extern ResetDeviceDefaultTypeInternal _ResetDevice_default_instance_;
-class ResourceAck;
-class ResourceAckDefaultTypeInternal;
-extern ResourceAckDefaultTypeInternal _ResourceAck_default_instance_;
-class ResourceRequest;
-class ResourceRequestDefaultTypeInternal;
-extern ResourceRequestDefaultTypeInternal _ResourceRequest_default_instance_;
-class ResourceUpdate;
-class ResourceUpdateDefaultTypeInternal;
-extern ResourceUpdateDefaultTypeInternal _ResourceUpdate_default_instance_;
-class ResourceUpload;
-class ResourceUploadDefaultTypeInternal;
-extern ResourceUploadDefaultTypeInternal _ResourceUpload_default_instance_;
 class SEBackToRomBoot;
 class SEBackToRomBootDefaultTypeInternal;
 extern SEBackToRomBootDefaultTypeInternal _SEBackToRomBoot_default_instance_;
@@ -240,9 +240,6 @@ extern WordRequestDefaultTypeInternal _WordRequest_default_instance_;
 class WriteSEPublicCert;
 class WriteSEPublicCertDefaultTypeInternal;
 extern WriteSEPublicCertDefaultTypeInternal _WriteSEPublicCert_default_instance_;
-class ZoomRequest;
-class ZoomRequestDefaultTypeInternal;
-extern ZoomRequestDefaultTypeInternal _ZoomRequest_default_instance_;
 }  // namespace management
 }  // namespace messages
 }  // namespace trezor
@@ -278,6 +275,10 @@ template<> ::hw::trezor::messages::management::ListResDir* Arena::CreateMaybeMes
 template<> ::hw::trezor::messages::management::LoadDevice* Arena::CreateMaybeMessage<::hw::trezor::messages::management::LoadDevice>(Arena*);
 template<> ::hw::trezor::messages::management::LockDevice* Arena::CreateMaybeMessage<::hw::trezor::messages::management::LockDevice>(Arena*);
 template<> ::hw::trezor::messages::management::NextU2FCounter* Arena::CreateMaybeMessage<::hw::trezor::messages::management::NextU2FCounter>(Arena*);
+template<> ::hw::trezor::messages::management::NftAck* Arena::CreateMaybeMessage<::hw::trezor::messages::management::NftAck>(Arena*);
+template<> ::hw::trezor::messages::management::NftMetadata* Arena::CreateMaybeMessage<::hw::trezor::messages::management::NftMetadata>(Arena*);
+template<> ::hw::trezor::messages::management::NftRequest* Arena::CreateMaybeMessage<::hw::trezor::messages::management::NftRequest>(Arena*);
+template<> ::hw::trezor::messages::management::NftUpload* Arena::CreateMaybeMessage<::hw::trezor::messages::management::NftUpload>(Arena*);
 template<> ::hw::trezor::messages::management::Nonce* Arena::CreateMaybeMessage<::hw::trezor::messages::management::Nonce>(Arena*);
 template<> ::hw::trezor::messages::management::Ping* Arena::CreateMaybeMessage<::hw::trezor::messages::management::Ping>(Arena*);
 template<> ::hw::trezor::messages::management::PreauthorizedRequest* Arena::CreateMaybeMessage<::hw::trezor::messages::management::PreauthorizedRequest>(Arena*);
@@ -287,10 +288,6 @@ template<> ::hw::trezor::messages::management::RebootToBoardloader* Arena::Creat
 template<> ::hw::trezor::messages::management::RebootToBootloader* Arena::CreateMaybeMessage<::hw::trezor::messages::management::RebootToBootloader>(Arena*);
 template<> ::hw::trezor::messages::management::RecoveryDevice* Arena::CreateMaybeMessage<::hw::trezor::messages::management::RecoveryDevice>(Arena*);
 template<> ::hw::trezor::messages::management::ResetDevice* Arena::CreateMaybeMessage<::hw::trezor::messages::management::ResetDevice>(Arena*);
-template<> ::hw::trezor::messages::management::ResourceAck* Arena::CreateMaybeMessage<::hw::trezor::messages::management::ResourceAck>(Arena*);
-template<> ::hw::trezor::messages::management::ResourceRequest* Arena::CreateMaybeMessage<::hw::trezor::messages::management::ResourceRequest>(Arena*);
-template<> ::hw::trezor::messages::management::ResourceUpdate* Arena::CreateMaybeMessage<::hw::trezor::messages::management::ResourceUpdate>(Arena*);
-template<> ::hw::trezor::messages::management::ResourceUpload* Arena::CreateMaybeMessage<::hw::trezor::messages::management::ResourceUpload>(Arena*);
 template<> ::hw::trezor::messages::management::SEBackToRomBoot* Arena::CreateMaybeMessage<::hw::trezor::messages::management::SEBackToRomBoot>(Arena*);
 template<> ::hw::trezor::messages::management::SEInitialize* Arena::CreateMaybeMessage<::hw::trezor::messages::management::SEInitialize>(Arena*);
 template<> ::hw::trezor::messages::management::SEInitializeDone* Arena::CreateMaybeMessage<::hw::trezor::messages::management::SEInitializeDone>(Arena*);
@@ -308,7 +305,6 @@ template<> ::hw::trezor::messages::management::WipeDevice* Arena::CreateMaybeMes
 template<> ::hw::trezor::messages::management::WordAck* Arena::CreateMaybeMessage<::hw::trezor::messages::management::WordAck>(Arena*);
 template<> ::hw::trezor::messages::management::WordRequest* Arena::CreateMaybeMessage<::hw::trezor::messages::management::WordRequest>(Arena*);
 template<> ::hw::trezor::messages::management::WriteSEPublicCert* Arena::CreateMaybeMessage<::hw::trezor::messages::management::WriteSEPublicCert>(Arena*);
-template<> ::hw::trezor::messages::management::ZoomRequest* Arena::CreateMaybeMessage<::hw::trezor::messages::management::ZoomRequest>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace hw {
 namespace trezor {
@@ -424,28 +420,29 @@ inline bool WordRequest_WordRequestType_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<WordRequest_WordRequestType>(
     WordRequest_WordRequestType_descriptor(), name, value);
 }
-enum ResourceUpload_ResourceType : int {
-  ResourceUpload_ResourceType_WallPaper = 0,
-  ResourceUpload_ResourceType_Nft = 1
+enum NftRequest_NftRequestType : int {
+  NftRequest_NftRequestType_IMAGE = 0,
+  NftRequest_NftRequestType_THUMBNAIL = 1,
+  NftRequest_NftRequestType_WALLPAPER = 2
 };
-bool ResourceUpload_ResourceType_IsValid(int value);
-constexpr ResourceUpload_ResourceType ResourceUpload_ResourceType_ResourceType_MIN = ResourceUpload_ResourceType_WallPaper;
-constexpr ResourceUpload_ResourceType ResourceUpload_ResourceType_ResourceType_MAX = ResourceUpload_ResourceType_Nft;
-constexpr int ResourceUpload_ResourceType_ResourceType_ARRAYSIZE = ResourceUpload_ResourceType_ResourceType_MAX + 1;
+bool NftRequest_NftRequestType_IsValid(int value);
+constexpr NftRequest_NftRequestType NftRequest_NftRequestType_NftRequestType_MIN = NftRequest_NftRequestType_IMAGE;
+constexpr NftRequest_NftRequestType NftRequest_NftRequestType_NftRequestType_MAX = NftRequest_NftRequestType_WALLPAPER;
+constexpr int NftRequest_NftRequestType_NftRequestType_ARRAYSIZE = NftRequest_NftRequestType_NftRequestType_MAX + 1;
 
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ResourceUpload_ResourceType_descriptor();
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* NftRequest_NftRequestType_descriptor();
 template<typename T>
-inline const std::string& ResourceUpload_ResourceType_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, ResourceUpload_ResourceType>::value ||
+inline const std::string& NftRequest_NftRequestType_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, NftRequest_NftRequestType>::value ||
     ::std::is_integral<T>::value,
-    "Incorrect type passed to function ResourceUpload_ResourceType_Name.");
+    "Incorrect type passed to function NftRequest_NftRequestType_Name.");
   return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    ResourceUpload_ResourceType_descriptor(), enum_t_value);
+    NftRequest_NftRequestType_descriptor(), enum_t_value);
 }
-inline bool ResourceUpload_ResourceType_Parse(
-    const std::string& name, ResourceUpload_ResourceType* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ResourceUpload_ResourceType>(
-    ResourceUpload_ResourceType_descriptor(), name, value);
+inline bool NftRequest_NftRequestType_Parse(
+    const std::string& name, NftRequest_NftRequestType* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<NftRequest_NftRequestType>(
+    NftRequest_NftRequestType_descriptor(), name, value);
 }
 enum BackupType : int {
   Bip39 = 0,
@@ -8748,23 +8745,23 @@ class SEWipeUserStorage :
 };
 // -------------------------------------------------------------------
 
-class ResourceUpload :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hw.trezor.messages.management.ResourceUpload) */ {
+class NftMetadata :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hw.trezor.messages.management.NftMetadata) */ {
  public:
-  ResourceUpload();
-  virtual ~ResourceUpload();
+  NftMetadata();
+  virtual ~NftMetadata();
 
-  ResourceUpload(const ResourceUpload& from);
-  ResourceUpload(ResourceUpload&& from) noexcept
-    : ResourceUpload() {
+  NftMetadata(const NftMetadata& from);
+  NftMetadata(NftMetadata&& from) noexcept
+    : NftMetadata() {
     *this = ::std::move(from);
   }
 
-  inline ResourceUpload& operator=(const ResourceUpload& from) {
+  inline NftMetadata& operator=(const NftMetadata& from) {
     CopyFrom(from);
     return *this;
   }
-  inline ResourceUpload& operator=(ResourceUpload&& from) noexcept {
+  inline NftMetadata& operator=(NftMetadata&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -8789,37 +8786,37 @@ class ResourceUpload :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return GetMetadataStatic().reflection;
   }
-  static const ResourceUpload& default_instance();
+  static const NftMetadata& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const ResourceUpload* internal_default_instance() {
-    return reinterpret_cast<const ResourceUpload*>(
-               &_ResourceUpload_default_instance_);
+  static inline const NftMetadata* internal_default_instance() {
+    return reinterpret_cast<const NftMetadata*>(
+               &_NftMetadata_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     51;
 
-  friend void swap(ResourceUpload& a, ResourceUpload& b) {
+  friend void swap(NftMetadata& a, NftMetadata& b) {
     a.Swap(&b);
   }
-  inline void Swap(ResourceUpload* other) {
+  inline void Swap(NftMetadata* other) {
     if (other == this) return;
     InternalSwap(other);
   }
 
   // implements Message ----------------------------------------------
 
-  inline ResourceUpload* New() const final {
-    return CreateMaybeMessage<ResourceUpload>(nullptr);
+  inline NftMetadata* New() const final {
+    return CreateMaybeMessage<NftMetadata>(nullptr);
   }
 
-  ResourceUpload* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<ResourceUpload>(arena);
+  NftMetadata* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<NftMetadata>(arena);
   }
   void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
   void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const ResourceUpload& from);
-  void MergeFrom(const ResourceUpload& from);
+  void CopyFrom(const NftMetadata& from);
+  void MergeFrom(const NftMetadata& from);
   PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
   bool IsInitialized() const final;
 
@@ -8840,10 +8837,10 @@ class ResourceUpload :
   inline void SharedCtor();
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(ResourceUpload* other);
+  void InternalSwap(NftMetadata* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "hw.trezor.messages.management.ResourceUpload";
+    return "hw.trezor.messages.management.NftMetadata";
   }
   private:
   inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
@@ -8865,47 +8862,221 @@ class ResourceUpload :
 
   // nested types ----------------------------------------------------
 
-  typedef ResourceUpload_ResourceType ResourceType;
-  static constexpr ResourceType WallPaper =
-    ResourceUpload_ResourceType_WallPaper;
-  static constexpr ResourceType Nft =
-    ResourceUpload_ResourceType_Nft;
-  static inline bool ResourceType_IsValid(int value) {
-    return ResourceUpload_ResourceType_IsValid(value);
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kIdFieldNumber = 1,
+    kTokenFieldNumber = 2,
+    kNameFieldNumber = 3,
+    kNetworkFieldNumber = 4,
+    kOwnerFieldNumber = 5,
+  };
+  // required string id = 1;
+  bool has_id() const;
+  void clear_id();
+  const std::string& id() const;
+  void set_id(const std::string& value);
+  void set_id(std::string&& value);
+  void set_id(const char* value);
+  void set_id(const char* value, size_t size);
+  std::string* mutable_id();
+  std::string* release_id();
+  void set_allocated_id(std::string* id);
+
+  // required string token = 2;
+  bool has_token() const;
+  void clear_token();
+  const std::string& token() const;
+  void set_token(const std::string& value);
+  void set_token(std::string&& value);
+  void set_token(const char* value);
+  void set_token(const char* value, size_t size);
+  std::string* mutable_token();
+  std::string* release_token();
+  void set_allocated_token(std::string* token);
+
+  // required string name = 3;
+  bool has_name() const;
+  void clear_name();
+  const std::string& name() const;
+  void set_name(const std::string& value);
+  void set_name(std::string&& value);
+  void set_name(const char* value);
+  void set_name(const char* value, size_t size);
+  std::string* mutable_name();
+  std::string* release_name();
+  void set_allocated_name(std::string* name);
+
+  // required string network = 4;
+  bool has_network() const;
+  void clear_network();
+  const std::string& network() const;
+  void set_network(const std::string& value);
+  void set_network(std::string&& value);
+  void set_network(const char* value);
+  void set_network(const char* value, size_t size);
+  std::string* mutable_network();
+  std::string* release_network();
+  void set_allocated_network(std::string* network);
+
+  // required string owner = 5;
+  bool has_owner() const;
+  void clear_owner();
+  const std::string& owner() const;
+  void set_owner(const std::string& value);
+  void set_owner(std::string&& value);
+  void set_owner(const char* value);
+  void set_owner(const char* value, size_t size);
+  std::string* mutable_owner();
+  std::string* release_owner();
+  void set_allocated_owner(std::string* owner);
+
+  // @@protoc_insertion_point(class_scope:hw.trezor.messages.management.NftMetadata)
+ private:
+  class _Internal;
+
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr id_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr token_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr network_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr owner_;
+  friend struct ::TableStruct_messages_2dmanagement_2eproto;
+};
+// -------------------------------------------------------------------
+
+class NftUpload :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hw.trezor.messages.management.NftUpload) */ {
+ public:
+  NftUpload();
+  virtual ~NftUpload();
+
+  NftUpload(const NftUpload& from);
+  NftUpload(NftUpload&& from) noexcept
+    : NftUpload() {
+    *this = ::std::move(from);
   }
-  static constexpr ResourceType ResourceType_MIN =
-    ResourceUpload_ResourceType_ResourceType_MIN;
-  static constexpr ResourceType ResourceType_MAX =
-    ResourceUpload_ResourceType_ResourceType_MAX;
-  static constexpr int ResourceType_ARRAYSIZE =
-    ResourceUpload_ResourceType_ResourceType_ARRAYSIZE;
-  static inline const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor*
-  ResourceType_descriptor() {
-    return ResourceUpload_ResourceType_descriptor();
+
+  inline NftUpload& operator=(const NftUpload& from) {
+    CopyFrom(from);
+    return *this;
   }
-  template<typename T>
-  static inline const std::string& ResourceType_Name(T enum_t_value) {
-    static_assert(::std::is_same<T, ResourceType>::value ||
-      ::std::is_integral<T>::value,
-      "Incorrect type passed to function ResourceType_Name.");
-    return ResourceUpload_ResourceType_Name(enum_t_value);
+  inline NftUpload& operator=(NftUpload&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
   }
-  static inline bool ResourceType_Parse(const std::string& name,
-      ResourceType* value) {
-    return ResourceUpload_ResourceType_Parse(name, value);
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
   }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const NftUpload& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const NftUpload* internal_default_instance() {
+    return reinterpret_cast<const NftUpload*>(
+               &_NftUpload_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    52;
+
+  friend void swap(NftUpload& a, NftUpload& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(NftUpload* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline NftUpload* New() const final {
+    return CreateMaybeMessage<NftUpload>(nullptr);
+  }
+
+  NftUpload* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<NftUpload>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const NftUpload& from);
+  void MergeFrom(const NftUpload& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(NftUpload* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "hw.trezor.messages.management.NftUpload";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_messages_2dmanagement_2eproto);
+    return ::descriptor_table_messages_2dmanagement_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
 
   // accessors -------------------------------------------------------
 
   enum : int {
-    kExtensionFieldNumber = 1,
-    kNftMetaDataFieldNumber = 4,
-    kFileNameNoExtFieldNumber = 6,
-    kDataLengthFieldNumber = 2,
-    kResTypeFieldNumber = 3,
-    kZoomDataLengthFieldNumber = 5,
+    kExtensionFieldNumber = 2,
+    kMetadataFieldNumber = 1,
+    kImageSizeFieldNumber = 3,
+    kThumbnailSizeFieldNumber = 4,
+    kWallpaperSizeFieldNumber = 5,
   };
-  // required string extension = 1;
+  // required string extension = 2;
   bool has_extension() const;
   void clear_extension();
   const std::string& extension() const;
@@ -8917,49 +9088,33 @@ class ResourceUpload :
   std::string* release_extension();
   void set_allocated_extension(std::string* extension);
 
-  // optional bytes nft_meta_data = 4;
-  bool has_nft_meta_data() const;
-  void clear_nft_meta_data();
-  const std::string& nft_meta_data() const;
-  void set_nft_meta_data(const std::string& value);
-  void set_nft_meta_data(std::string&& value);
-  void set_nft_meta_data(const char* value);
-  void set_nft_meta_data(const void* value, size_t size);
-  std::string* mutable_nft_meta_data();
-  std::string* release_nft_meta_data();
-  void set_allocated_nft_meta_data(std::string* nft_meta_data);
+  // required .hw.trezor.messages.management.NftMetadata metadata = 1;
+  bool has_metadata() const;
+  void clear_metadata();
+  const ::hw::trezor::messages::management::NftMetadata& metadata() const;
+  ::hw::trezor::messages::management::NftMetadata* release_metadata();
+  ::hw::trezor::messages::management::NftMetadata* mutable_metadata();
+  void set_allocated_metadata(::hw::trezor::messages::management::NftMetadata* metadata);
 
-  // optional string file_name_no_ext = 6;
-  bool has_file_name_no_ext() const;
-  void clear_file_name_no_ext();
-  const std::string& file_name_no_ext() const;
-  void set_file_name_no_ext(const std::string& value);
-  void set_file_name_no_ext(std::string&& value);
-  void set_file_name_no_ext(const char* value);
-  void set_file_name_no_ext(const char* value, size_t size);
-  std::string* mutable_file_name_no_ext();
-  std::string* release_file_name_no_ext();
-  void set_allocated_file_name_no_ext(std::string* file_name_no_ext);
+  // required uint32 image_size = 3;
+  bool has_image_size() const;
+  void clear_image_size();
+  ::PROTOBUF_NAMESPACE_ID::uint32 image_size() const;
+  void set_image_size(::PROTOBUF_NAMESPACE_ID::uint32 value);
 
-  // required uint32 data_length = 2;
-  bool has_data_length() const;
-  void clear_data_length();
-  ::PROTOBUF_NAMESPACE_ID::uint32 data_length() const;
-  void set_data_length(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  // required uint32 thumbnail_size = 4;
+  bool has_thumbnail_size() const;
+  void clear_thumbnail_size();
+  ::PROTOBUF_NAMESPACE_ID::uint32 thumbnail_size() const;
+  void set_thumbnail_size(::PROTOBUF_NAMESPACE_ID::uint32 value);
 
-  // required .hw.trezor.messages.management.ResourceUpload.ResourceType res_type = 3;
-  bool has_res_type() const;
-  void clear_res_type();
-  ::hw::trezor::messages::management::ResourceUpload_ResourceType res_type() const;
-  void set_res_type(::hw::trezor::messages::management::ResourceUpload_ResourceType value);
+  // required uint32 wallpaper_size = 5;
+  bool has_wallpaper_size() const;
+  void clear_wallpaper_size();
+  ::PROTOBUF_NAMESPACE_ID::uint32 wallpaper_size() const;
+  void set_wallpaper_size(::PROTOBUF_NAMESPACE_ID::uint32 value);
 
-  // required uint32 zoom_data_length = 5;
-  bool has_zoom_data_length() const;
-  void clear_zoom_data_length();
-  ::PROTOBUF_NAMESPACE_ID::uint32 zoom_data_length() const;
-  void set_zoom_data_length(::PROTOBUF_NAMESPACE_ID::uint32 value);
-
-  // @@protoc_insertion_point(class_scope:hw.trezor.messages.management.ResourceUpload)
+  // @@protoc_insertion_point(class_scope:hw.trezor.messages.management.NftUpload)
  private:
   class _Internal;
 
@@ -8970,32 +9125,31 @@ class ResourceUpload :
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr extension_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr nft_meta_data_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr file_name_no_ext_;
-  ::PROTOBUF_NAMESPACE_ID::uint32 data_length_;
-  int res_type_;
-  ::PROTOBUF_NAMESPACE_ID::uint32 zoom_data_length_;
+  ::hw::trezor::messages::management::NftMetadata* metadata_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 image_size_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 thumbnail_size_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 wallpaper_size_;
   friend struct ::TableStruct_messages_2dmanagement_2eproto;
 };
 // -------------------------------------------------------------------
 
-class ZoomRequest :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hw.trezor.messages.management.ZoomRequest) */ {
+class NftRequest :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hw.trezor.messages.management.NftRequest) */ {
  public:
-  ZoomRequest();
-  virtual ~ZoomRequest();
+  NftRequest();
+  virtual ~NftRequest();
 
-  ZoomRequest(const ZoomRequest& from);
-  ZoomRequest(ZoomRequest&& from) noexcept
-    : ZoomRequest() {
+  NftRequest(const NftRequest& from);
+  NftRequest(NftRequest&& from) noexcept
+    : NftRequest() {
     *this = ::std::move(from);
   }
 
-  inline ZoomRequest& operator=(const ZoomRequest& from) {
+  inline NftRequest& operator=(const NftRequest& from) {
     CopyFrom(from);
     return *this;
   }
-  inline ZoomRequest& operator=(ZoomRequest&& from) noexcept {
+  inline NftRequest& operator=(NftRequest&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -9020,185 +9174,37 @@ class ZoomRequest :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return GetMetadataStatic().reflection;
   }
-  static const ZoomRequest& default_instance();
+  static const NftRequest& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const ZoomRequest* internal_default_instance() {
-    return reinterpret_cast<const ZoomRequest*>(
-               &_ZoomRequest_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    52;
-
-  friend void swap(ZoomRequest& a, ZoomRequest& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(ZoomRequest* other) {
-    if (other == this) return;
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline ZoomRequest* New() const final {
-    return CreateMaybeMessage<ZoomRequest>(nullptr);
-  }
-
-  ZoomRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<ZoomRequest>(arena);
-  }
-  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const ZoomRequest& from);
-  void MergeFrom(const ZoomRequest& from);
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  #else
-  bool MergePartialFromCodedStream(
-      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
-  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-  void SerializeWithCachedSizes(
-      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
-  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
-      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  inline void SharedCtor();
-  inline void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(ZoomRequest* other);
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "hw.trezor.messages.management.ZoomRequest";
-  }
-  private:
-  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
-    return nullptr;
-  }
-  inline void* MaybeArenaPtr() const {
-    return nullptr;
-  }
-  public:
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-  private:
-  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
-    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_messages_2dmanagement_2eproto);
-    return ::descriptor_table_messages_2dmanagement_2eproto.file_level_metadata[kIndexInFileMessages];
-  }
-
-  public:
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kOffsetFieldNumber = 1,
-    kDataLengthFieldNumber = 2,
-  };
-  // optional uint32 offset = 1;
-  bool has_offset() const;
-  void clear_offset();
-  ::PROTOBUF_NAMESPACE_ID::uint32 offset() const;
-  void set_offset(::PROTOBUF_NAMESPACE_ID::uint32 value);
-
-  // required uint32 data_length = 2;
-  bool has_data_length() const;
-  void clear_data_length();
-  ::PROTOBUF_NAMESPACE_ID::uint32 data_length() const;
-  void set_data_length(::PROTOBUF_NAMESPACE_ID::uint32 value);
-
-  // @@protoc_insertion_point(class_scope:hw.trezor.messages.management.ZoomRequest)
- private:
-  class _Internal;
-
-  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
-  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  ::PROTOBUF_NAMESPACE_ID::uint32 offset_;
-  ::PROTOBUF_NAMESPACE_ID::uint32 data_length_;
-  friend struct ::TableStruct_messages_2dmanagement_2eproto;
-};
-// -------------------------------------------------------------------
-
-class ResourceRequest :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hw.trezor.messages.management.ResourceRequest) */ {
- public:
-  ResourceRequest();
-  virtual ~ResourceRequest();
-
-  ResourceRequest(const ResourceRequest& from);
-  ResourceRequest(ResourceRequest&& from) noexcept
-    : ResourceRequest() {
-    *this = ::std::move(from);
-  }
-
-  inline ResourceRequest& operator=(const ResourceRequest& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline ResourceRequest& operator=(ResourceRequest&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
-    return _internal_metadata_.unknown_fields();
-  }
-  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
-    return _internal_metadata_.mutable_unknown_fields();
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return GetMetadataStatic().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return GetMetadataStatic().reflection;
-  }
-  static const ResourceRequest& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const ResourceRequest* internal_default_instance() {
-    return reinterpret_cast<const ResourceRequest*>(
-               &_ResourceRequest_default_instance_);
+  static inline const NftRequest* internal_default_instance() {
+    return reinterpret_cast<const NftRequest*>(
+               &_NftRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     53;
 
-  friend void swap(ResourceRequest& a, ResourceRequest& b) {
+  friend void swap(NftRequest& a, NftRequest& b) {
     a.Swap(&b);
   }
-  inline void Swap(ResourceRequest* other) {
+  inline void Swap(NftRequest* other) {
     if (other == this) return;
     InternalSwap(other);
   }
 
   // implements Message ----------------------------------------------
 
-  inline ResourceRequest* New() const final {
-    return CreateMaybeMessage<ResourceRequest>(nullptr);
+  inline NftRequest* New() const final {
+    return CreateMaybeMessage<NftRequest>(nullptr);
   }
 
-  ResourceRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<ResourceRequest>(arena);
+  NftRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<NftRequest>(arena);
   }
   void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
   void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const ResourceRequest& from);
-  void MergeFrom(const ResourceRequest& from);
+  void CopyFrom(const NftRequest& from);
+  void MergeFrom(const NftRequest& from);
   PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
   bool IsInitialized() const final;
 
@@ -9219,10 +9225,10 @@ class ResourceRequest :
   inline void SharedCtor();
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(ResourceRequest* other);
+  void InternalSwap(NftRequest* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "hw.trezor.messages.management.ResourceRequest";
+    return "hw.trezor.messages.management.NftRequest";
   }
   private:
   inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
@@ -9244,13 +9250,46 @@ class ResourceRequest :
 
   // nested types ----------------------------------------------------
 
+  typedef NftRequest_NftRequestType NftRequestType;
+  static constexpr NftRequestType IMAGE =
+    NftRequest_NftRequestType_IMAGE;
+  static constexpr NftRequestType THUMBNAIL =
+    NftRequest_NftRequestType_THUMBNAIL;
+  static constexpr NftRequestType WALLPAPER =
+    NftRequest_NftRequestType_WALLPAPER;
+  static inline bool NftRequestType_IsValid(int value) {
+    return NftRequest_NftRequestType_IsValid(value);
+  }
+  static constexpr NftRequestType NftRequestType_MIN =
+    NftRequest_NftRequestType_NftRequestType_MIN;
+  static constexpr NftRequestType NftRequestType_MAX =
+    NftRequest_NftRequestType_NftRequestType_MAX;
+  static constexpr int NftRequestType_ARRAYSIZE =
+    NftRequest_NftRequestType_NftRequestType_ARRAYSIZE;
+  static inline const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor*
+  NftRequestType_descriptor() {
+    return NftRequest_NftRequestType_descriptor();
+  }
+  template<typename T>
+  static inline const std::string& NftRequestType_Name(T enum_t_value) {
+    static_assert(::std::is_same<T, NftRequestType>::value ||
+      ::std::is_integral<T>::value,
+      "Incorrect type passed to function NftRequestType_Name.");
+    return NftRequest_NftRequestType_Name(enum_t_value);
+  }
+  static inline bool NftRequestType_Parse(const std::string& name,
+      NftRequestType* value) {
+    return NftRequest_NftRequestType_Parse(name, value);
+  }
+
   // accessors -------------------------------------------------------
 
   enum : int {
     kOffsetFieldNumber = 1,
     kDataLengthFieldNumber = 2,
+    kTypeFieldNumber = 3,
   };
-  // optional uint32 offset = 1;
+  // required uint32 offset = 1;
   bool has_offset() const;
   void clear_offset();
   ::PROTOBUF_NAMESPACE_ID::uint32 offset() const;
@@ -9262,36 +9301,46 @@ class ResourceRequest :
   ::PROTOBUF_NAMESPACE_ID::uint32 data_length() const;
   void set_data_length(::PROTOBUF_NAMESPACE_ID::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:hw.trezor.messages.management.ResourceRequest)
+  // required .hw.trezor.messages.management.NftRequest.NftRequestType type = 3;
+  bool has_type() const;
+  void clear_type();
+  ::hw::trezor::messages::management::NftRequest_NftRequestType type() const;
+  void set_type(::hw::trezor::messages::management::NftRequest_NftRequestType value);
+
+  // @@protoc_insertion_point(class_scope:hw.trezor.messages.management.NftRequest)
  private:
   class _Internal;
+
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::uint32 offset_;
   ::PROTOBUF_NAMESPACE_ID::uint32 data_length_;
+  int type_;
   friend struct ::TableStruct_messages_2dmanagement_2eproto;
 };
 // -------------------------------------------------------------------
 
-class ResourceAck :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hw.trezor.messages.management.ResourceAck) */ {
+class NftAck :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hw.trezor.messages.management.NftAck) */ {
  public:
-  ResourceAck();
-  virtual ~ResourceAck();
+  NftAck();
+  virtual ~NftAck();
 
-  ResourceAck(const ResourceAck& from);
-  ResourceAck(ResourceAck&& from) noexcept
-    : ResourceAck() {
+  NftAck(const NftAck& from);
+  NftAck(NftAck&& from) noexcept
+    : NftAck() {
     *this = ::std::move(from);
   }
 
-  inline ResourceAck& operator=(const ResourceAck& from) {
+  inline NftAck& operator=(const NftAck& from) {
     CopyFrom(from);
     return *this;
   }
-  inline ResourceAck& operator=(ResourceAck&& from) noexcept {
+  inline NftAck& operator=(NftAck&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -9316,37 +9365,37 @@ class ResourceAck :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return GetMetadataStatic().reflection;
   }
-  static const ResourceAck& default_instance();
+  static const NftAck& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const ResourceAck* internal_default_instance() {
-    return reinterpret_cast<const ResourceAck*>(
-               &_ResourceAck_default_instance_);
+  static inline const NftAck* internal_default_instance() {
+    return reinterpret_cast<const NftAck*>(
+               &_NftAck_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     54;
 
-  friend void swap(ResourceAck& a, ResourceAck& b) {
+  friend void swap(NftAck& a, NftAck& b) {
     a.Swap(&b);
   }
-  inline void Swap(ResourceAck* other) {
+  inline void Swap(NftAck* other) {
     if (other == this) return;
     InternalSwap(other);
   }
 
   // implements Message ----------------------------------------------
 
-  inline ResourceAck* New() const final {
-    return CreateMaybeMessage<ResourceAck>(nullptr);
+  inline NftAck* New() const final {
+    return CreateMaybeMessage<NftAck>(nullptr);
   }
 
-  ResourceAck* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<ResourceAck>(arena);
+  NftAck* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<NftAck>(arena);
   }
   void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
   void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const ResourceAck& from);
-  void MergeFrom(const ResourceAck& from);
+  void CopyFrom(const NftAck& from);
+  void MergeFrom(const NftAck& from);
   PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
   bool IsInitialized() const final;
 
@@ -9367,10 +9416,10 @@ class ResourceAck :
   inline void SharedCtor();
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(ResourceAck* other);
+  void InternalSwap(NftAck* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "hw.trezor.messages.management.ResourceAck";
+    return "hw.trezor.messages.management.NftAck";
   }
   private:
   inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
@@ -9395,20 +9444,20 @@ class ResourceAck :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kDataChunkFieldNumber = 1,
+    kChunkFieldNumber = 1,
     kHashFieldNumber = 2,
   };
-  // required bytes data_chunk = 1;
-  bool has_data_chunk() const;
-  void clear_data_chunk();
-  const std::string& data_chunk() const;
-  void set_data_chunk(const std::string& value);
-  void set_data_chunk(std::string&& value);
-  void set_data_chunk(const char* value);
-  void set_data_chunk(const void* value, size_t size);
-  std::string* mutable_data_chunk();
-  std::string* release_data_chunk();
-  void set_allocated_data_chunk(std::string* data_chunk);
+  // required bytes chunk = 1;
+  bool has_chunk() const;
+  void clear_chunk();
+  const std::string& chunk() const;
+  void set_chunk(const std::string& value);
+  void set_chunk(std::string&& value);
+  void set_chunk(const char* value);
+  void set_chunk(const void* value, size_t size);
+  std::string* mutable_chunk();
+  std::string* release_chunk();
+  void set_allocated_chunk(std::string* chunk);
 
   // optional bytes hash = 2;
   bool has_hash() const;
@@ -9422,200 +9471,15 @@ class ResourceAck :
   std::string* release_hash();
   void set_allocated_hash(std::string* hash);
 
-  // @@protoc_insertion_point(class_scope:hw.trezor.messages.management.ResourceAck)
+  // @@protoc_insertion_point(class_scope:hw.trezor.messages.management.NftAck)
  private:
   class _Internal;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr data_chunk_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr chunk_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr hash_;
-  friend struct ::TableStruct_messages_2dmanagement_2eproto;
-};
-// -------------------------------------------------------------------
-
-class ResourceUpdate :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:hw.trezor.messages.management.ResourceUpdate) */ {
- public:
-  ResourceUpdate();
-  virtual ~ResourceUpdate();
-
-  ResourceUpdate(const ResourceUpdate& from);
-  ResourceUpdate(ResourceUpdate&& from) noexcept
-    : ResourceUpdate() {
-    *this = ::std::move(from);
-  }
-
-  inline ResourceUpdate& operator=(const ResourceUpdate& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline ResourceUpdate& operator=(ResourceUpdate&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
-    return _internal_metadata_.unknown_fields();
-  }
-  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
-    return _internal_metadata_.mutable_unknown_fields();
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return GetMetadataStatic().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return GetMetadataStatic().reflection;
-  }
-  static const ResourceUpdate& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const ResourceUpdate* internal_default_instance() {
-    return reinterpret_cast<const ResourceUpdate*>(
-               &_ResourceUpdate_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    55;
-
-  friend void swap(ResourceUpdate& a, ResourceUpdate& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(ResourceUpdate* other) {
-    if (other == this) return;
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline ResourceUpdate* New() const final {
-    return CreateMaybeMessage<ResourceUpdate>(nullptr);
-  }
-
-  ResourceUpdate* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<ResourceUpdate>(arena);
-  }
-  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const ResourceUpdate& from);
-  void MergeFrom(const ResourceUpdate& from);
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  #else
-  bool MergePartialFromCodedStream(
-      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
-  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-  void SerializeWithCachedSizes(
-      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
-  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
-      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  inline void SharedCtor();
-  inline void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(ResourceUpdate* other);
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "hw.trezor.messages.management.ResourceUpdate";
-  }
-  private:
-  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
-    return nullptr;
-  }
-  inline void* MaybeArenaPtr() const {
-    return nullptr;
-  }
-  public:
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-  private:
-  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
-    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_messages_2dmanagement_2eproto);
-    return ::descriptor_table_messages_2dmanagement_2eproto.file_level_metadata[kIndexInFileMessages];
-  }
-
-  public:
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kFileNameFieldNumber = 1,
-    kInitialDataChunkFieldNumber = 3,
-    kHashFieldNumber = 4,
-    kDataLengthFieldNumber = 2,
-  };
-  // required string file_name = 1;
-  bool has_file_name() const;
-  void clear_file_name();
-  const std::string& file_name() const;
-  void set_file_name(const std::string& value);
-  void set_file_name(std::string&& value);
-  void set_file_name(const char* value);
-  void set_file_name(const char* value, size_t size);
-  std::string* mutable_file_name();
-  std::string* release_file_name();
-  void set_allocated_file_name(std::string* file_name);
-
-  // required bytes initial_data_chunk = 3;
-  bool has_initial_data_chunk() const;
-  void clear_initial_data_chunk();
-  const std::string& initial_data_chunk() const;
-  void set_initial_data_chunk(const std::string& value);
-  void set_initial_data_chunk(std::string&& value);
-  void set_initial_data_chunk(const char* value);
-  void set_initial_data_chunk(const void* value, size_t size);
-  std::string* mutable_initial_data_chunk();
-  std::string* release_initial_data_chunk();
-  void set_allocated_initial_data_chunk(std::string* initial_data_chunk);
-
-  // optional bytes hash = 4;
-  bool has_hash() const;
-  void clear_hash();
-  const std::string& hash() const;
-  void set_hash(const std::string& value);
-  void set_hash(std::string&& value);
-  void set_hash(const char* value);
-  void set_hash(const void* value, size_t size);
-  std::string* mutable_hash();
-  std::string* release_hash();
-  void set_allocated_hash(std::string* hash);
-
-  // required uint32 data_length = 2;
-  bool has_data_length() const;
-  void clear_data_length();
-  ::PROTOBUF_NAMESPACE_ID::uint32 data_length() const;
-  void set_data_length(::PROTOBUF_NAMESPACE_ID::uint32 value);
-
-  // @@protoc_insertion_point(class_scope:hw.trezor.messages.management.ResourceUpdate)
- private:
-  class _Internal;
-
-  // helper for ByteSizeLong()
-  size_t RequiredFieldsByteSizeFallback() const;
-
-  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
-  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr file_name_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr initial_data_chunk_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr hash_;
-  ::PROTOBUF_NAMESPACE_ID::uint32 data_length_;
   friend struct ::TableStruct_messages_2dmanagement_2eproto;
 };
 // -------------------------------------------------------------------
@@ -9669,7 +9533,7 @@ class ListResDir :
                &_ListResDir_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    56;
+    55;
 
   friend void swap(ListResDir& a, ListResDir& b) {
     a.Swap(&b);
@@ -9815,7 +9679,7 @@ class FileInfoList_FileInfo :
                &_FileInfoList_FileInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    57;
+    56;
 
   friend void swap(FileInfoList_FileInfo& a, FileInfoList_FileInfo& b) {
     a.Swap(&b);
@@ -9972,7 +9836,7 @@ class FileInfoList :
                &_FileInfoList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    58;
+    57;
 
   friend void swap(FileInfoList& a, FileInfoList& b) {
     a.Swap(&b);
@@ -10119,7 +9983,7 @@ class UnlockPath :
                &_UnlockPath_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    59;
+    58;
 
   friend void swap(UnlockPath& a, UnlockPath& b) {
     a.Swap(&b);
@@ -10278,7 +10142,7 @@ class UnlockedPathRequest :
                &_UnlockedPathRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    60;
+    59;
 
   friend void swap(UnlockedPathRequest& a, UnlockedPathRequest& b) {
     a.Swap(&b);
@@ -15230,631 +15094,640 @@ inline void SEMessageSignature::set_allocated_signature(std::string* signature) 
 
 // -------------------------------------------------------------------
 
-// ResourceUpload
+// NftMetadata
 
-// required string extension = 1;
-inline bool ResourceUpload::has_extension() const {
+// required string id = 1;
+inline bool NftMetadata::has_id() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void ResourceUpload::clear_extension() {
+inline void NftMetadata::clear_id() {
+  id_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& NftMetadata::id() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.NftMetadata.id)
+  return id_.GetNoArena();
+}
+inline void NftMetadata::set_id(const std::string& value) {
+  _has_bits_[0] |= 0x00000001u;
+  id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.NftMetadata.id)
+}
+inline void NftMetadata::set_id(std::string&& value) {
+  _has_bits_[0] |= 0x00000001u;
+  id_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.management.NftMetadata.id)
+}
+inline void NftMetadata::set_id(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000001u;
+  id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.management.NftMetadata.id)
+}
+inline void NftMetadata::set_id(const char* value, size_t size) {
+  _has_bits_[0] |= 0x00000001u;
+  id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.management.NftMetadata.id)
+}
+inline std::string* NftMetadata::mutable_id() {
+  _has_bits_[0] |= 0x00000001u;
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.NftMetadata.id)
+  return id_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* NftMetadata::release_id() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.NftMetadata.id)
+  if (!has_id()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000001u;
+  return id_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void NftMetadata::set_allocated_id(std::string* id) {
+  if (id != nullptr) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  id_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), id);
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.NftMetadata.id)
+}
+
+// required string name = 3;
+inline bool NftMetadata::has_name() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void NftMetadata::clear_name() {
+  name_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline const std::string& NftMetadata::name() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.NftMetadata.name)
+  return name_.GetNoArena();
+}
+inline void NftMetadata::set_name(const std::string& value) {
+  _has_bits_[0] |= 0x00000004u;
+  name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.NftMetadata.name)
+}
+inline void NftMetadata::set_name(std::string&& value) {
+  _has_bits_[0] |= 0x00000004u;
+  name_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.management.NftMetadata.name)
+}
+inline void NftMetadata::set_name(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000004u;
+  name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.management.NftMetadata.name)
+}
+inline void NftMetadata::set_name(const char* value, size_t size) {
+  _has_bits_[0] |= 0x00000004u;
+  name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.management.NftMetadata.name)
+}
+inline std::string* NftMetadata::mutable_name() {
+  _has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.NftMetadata.name)
+  return name_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* NftMetadata::release_name() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.NftMetadata.name)
+  if (!has_name()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000004u;
+  return name_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void NftMetadata::set_allocated_name(std::string* name) {
+  if (name != nullptr) {
+    _has_bits_[0] |= 0x00000004u;
+  } else {
+    _has_bits_[0] &= ~0x00000004u;
+  }
+  name_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.NftMetadata.name)
+}
+
+// required string token = 2;
+inline bool NftMetadata::has_token() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void NftMetadata::clear_token() {
+  token_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline const std::string& NftMetadata::token() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.NftMetadata.token)
+  return token_.GetNoArena();
+}
+inline void NftMetadata::set_token(const std::string& value) {
+  _has_bits_[0] |= 0x00000002u;
+  token_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.NftMetadata.token)
+}
+inline void NftMetadata::set_token(std::string&& value) {
+  _has_bits_[0] |= 0x00000002u;
+  token_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.management.NftMetadata.token)
+}
+inline void NftMetadata::set_token(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000002u;
+  token_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.management.NftMetadata.token)
+}
+inline void NftMetadata::set_token(const char* value, size_t size) {
+  _has_bits_[0] |= 0x00000002u;
+  token_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.management.NftMetadata.token)
+}
+inline std::string* NftMetadata::mutable_token() {
+  _has_bits_[0] |= 0x00000002u;
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.NftMetadata.token)
+  return token_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* NftMetadata::release_token() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.NftMetadata.token)
+  if (!has_token()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000002u;
+  return token_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void NftMetadata::set_allocated_token(std::string* token) {
+  if (token != nullptr) {
+    _has_bits_[0] |= 0x00000002u;
+  } else {
+    _has_bits_[0] &= ~0x00000002u;
+  }
+  token_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), token);
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.NftMetadata.token)
+}
+
+// required string network = 4;
+inline bool NftMetadata::has_network() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void NftMetadata::clear_network() {
+  network_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline const std::string& NftMetadata::network() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.NftMetadata.network)
+  return network_.GetNoArena();
+}
+inline void NftMetadata::set_network(const std::string& value) {
+  _has_bits_[0] |= 0x00000008u;
+  network_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.NftMetadata.network)
+}
+inline void NftMetadata::set_network(std::string&& value) {
+  _has_bits_[0] |= 0x00000008u;
+  network_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.management.NftMetadata.network)
+}
+inline void NftMetadata::set_network(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000008u;
+  network_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.management.NftMetadata.network)
+}
+inline void NftMetadata::set_network(const char* value, size_t size) {
+  _has_bits_[0] |= 0x00000008u;
+  network_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.management.NftMetadata.network)
+}
+inline std::string* NftMetadata::mutable_network() {
+  _has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.NftMetadata.network)
+  return network_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* NftMetadata::release_network() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.NftMetadata.network)
+  if (!has_network()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000008u;
+  return network_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void NftMetadata::set_allocated_network(std::string* network) {
+  if (network != nullptr) {
+    _has_bits_[0] |= 0x00000008u;
+  } else {
+    _has_bits_[0] &= ~0x00000008u;
+  }
+  network_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), network);
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.NftMetadata.network)
+}
+
+// required string owner = 5;
+inline bool NftMetadata::has_owner() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void NftMetadata::clear_owner() {
+  owner_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline const std::string& NftMetadata::owner() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.NftMetadata.owner)
+  return owner_.GetNoArena();
+}
+inline void NftMetadata::set_owner(const std::string& value) {
+  _has_bits_[0] |= 0x00000010u;
+  owner_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.NftMetadata.owner)
+}
+inline void NftMetadata::set_owner(std::string&& value) {
+  _has_bits_[0] |= 0x00000010u;
+  owner_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.management.NftMetadata.owner)
+}
+inline void NftMetadata::set_owner(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000010u;
+  owner_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.management.NftMetadata.owner)
+}
+inline void NftMetadata::set_owner(const char* value, size_t size) {
+  _has_bits_[0] |= 0x00000010u;
+  owner_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.management.NftMetadata.owner)
+}
+inline std::string* NftMetadata::mutable_owner() {
+  _has_bits_[0] |= 0x00000010u;
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.NftMetadata.owner)
+  return owner_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* NftMetadata::release_owner() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.NftMetadata.owner)
+  if (!has_owner()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000010u;
+  return owner_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void NftMetadata::set_allocated_owner(std::string* owner) {
+  if (owner != nullptr) {
+    _has_bits_[0] |= 0x00000010u;
+  } else {
+    _has_bits_[0] &= ~0x00000010u;
+  }
+  owner_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), owner);
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.NftMetadata.owner)
+}
+
+// -------------------------------------------------------------------
+
+// NftUpload
+
+// required .hw.trezor.messages.management.NftMetadata metadata = 1;
+inline bool NftUpload::has_metadata() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void NftUpload::clear_metadata() {
+  if (metadata_ != nullptr) metadata_->Clear();
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline const ::hw::trezor::messages::management::NftMetadata& NftUpload::metadata() const {
+  const ::hw::trezor::messages::management::NftMetadata* p = metadata_;
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.NftUpload.metadata)
+  return p != nullptr ? *p : *reinterpret_cast<const ::hw::trezor::messages::management::NftMetadata*>(
+      &::hw::trezor::messages::management::_NftMetadata_default_instance_);
+}
+inline ::hw::trezor::messages::management::NftMetadata* NftUpload::release_metadata() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.NftUpload.metadata)
+  _has_bits_[0] &= ~0x00000002u;
+  ::hw::trezor::messages::management::NftMetadata* temp = metadata_;
+  metadata_ = nullptr;
+  return temp;
+}
+inline ::hw::trezor::messages::management::NftMetadata* NftUpload::mutable_metadata() {
+  _has_bits_[0] |= 0x00000002u;
+  if (metadata_ == nullptr) {
+    auto* p = CreateMaybeMessage<::hw::trezor::messages::management::NftMetadata>(GetArenaNoVirtual());
+    metadata_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.NftUpload.metadata)
+  return metadata_;
+}
+inline void NftUpload::set_allocated_metadata(::hw::trezor::messages::management::NftMetadata* metadata) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete metadata_;
+  }
+  if (metadata) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      metadata = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, metadata, submessage_arena);
+    }
+    _has_bits_[0] |= 0x00000002u;
+  } else {
+    _has_bits_[0] &= ~0x00000002u;
+  }
+  metadata_ = metadata;
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.NftUpload.metadata)
+}
+
+// required string extension = 2;
+inline bool NftUpload::has_extension() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void NftUpload::clear_extension() {
   extension_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   _has_bits_[0] &= ~0x00000001u;
 }
-inline const std::string& ResourceUpload::extension() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.ResourceUpload.extension)
+inline const std::string& NftUpload::extension() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.NftUpload.extension)
   return extension_.GetNoArena();
 }
-inline void ResourceUpload::set_extension(const std::string& value) {
+inline void NftUpload::set_extension(const std::string& value) {
   _has_bits_[0] |= 0x00000001u;
   extension_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.ResourceUpload.extension)
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.NftUpload.extension)
 }
-inline void ResourceUpload::set_extension(std::string&& value) {
+inline void NftUpload::set_extension(std::string&& value) {
   _has_bits_[0] |= 0x00000001u;
   extension_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.management.ResourceUpload.extension)
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.management.NftUpload.extension)
 }
-inline void ResourceUpload::set_extension(const char* value) {
+inline void NftUpload::set_extension(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   _has_bits_[0] |= 0x00000001u;
   extension_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.management.ResourceUpload.extension)
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.management.NftUpload.extension)
 }
-inline void ResourceUpload::set_extension(const char* value, size_t size) {
+inline void NftUpload::set_extension(const char* value, size_t size) {
   _has_bits_[0] |= 0x00000001u;
   extension_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.management.ResourceUpload.extension)
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.management.NftUpload.extension)
 }
-inline std::string* ResourceUpload::mutable_extension() {
+inline std::string* NftUpload::mutable_extension() {
   _has_bits_[0] |= 0x00000001u;
-  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.ResourceUpload.extension)
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.NftUpload.extension)
   return extension_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline std::string* ResourceUpload::release_extension() {
-  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.ResourceUpload.extension)
+inline std::string* NftUpload::release_extension() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.NftUpload.extension)
   if (!has_extension()) {
     return nullptr;
   }
   _has_bits_[0] &= ~0x00000001u;
   return extension_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline void ResourceUpload::set_allocated_extension(std::string* extension) {
+inline void NftUpload::set_allocated_extension(std::string* extension) {
   if (extension != nullptr) {
     _has_bits_[0] |= 0x00000001u;
   } else {
     _has_bits_[0] &= ~0x00000001u;
   }
   extension_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), extension);
-  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.ResourceUpload.extension)
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.NftUpload.extension)
 }
 
-// required uint32 data_length = 2;
-inline bool ResourceUpload::has_data_length() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
-}
-inline void ResourceUpload::clear_data_length() {
-  data_length_ = 0u;
-  _has_bits_[0] &= ~0x00000008u;
-}
-inline ::PROTOBUF_NAMESPACE_ID::uint32 ResourceUpload::data_length() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.ResourceUpload.data_length)
-  return data_length_;
-}
-inline void ResourceUpload::set_data_length(::PROTOBUF_NAMESPACE_ID::uint32 value) {
-  _has_bits_[0] |= 0x00000008u;
-  data_length_ = value;
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.ResourceUpload.data_length)
-}
-
-// required .hw.trezor.messages.management.ResourceUpload.ResourceType res_type = 3;
-inline bool ResourceUpload::has_res_type() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
-}
-inline void ResourceUpload::clear_res_type() {
-  res_type_ = 0;
-  _has_bits_[0] &= ~0x00000010u;
-}
-inline ::hw::trezor::messages::management::ResourceUpload_ResourceType ResourceUpload::res_type() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.ResourceUpload.res_type)
-  return static_cast< ::hw::trezor::messages::management::ResourceUpload_ResourceType >(res_type_);
-}
-inline void ResourceUpload::set_res_type(::hw::trezor::messages::management::ResourceUpload_ResourceType value) {
-  assert(::hw::trezor::messages::management::ResourceUpload_ResourceType_IsValid(value));
-  _has_bits_[0] |= 0x00000010u;
-  res_type_ = value;
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.ResourceUpload.res_type)
-}
-
-// optional bytes nft_meta_data = 4;
-inline bool ResourceUpload::has_nft_meta_data() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
-}
-inline void ResourceUpload::clear_nft_meta_data() {
-  nft_meta_data_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline const std::string& ResourceUpload::nft_meta_data() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.ResourceUpload.nft_meta_data)
-  return nft_meta_data_.GetNoArena();
-}
-inline void ResourceUpload::set_nft_meta_data(const std::string& value) {
-  _has_bits_[0] |= 0x00000002u;
-  nft_meta_data_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.ResourceUpload.nft_meta_data)
-}
-inline void ResourceUpload::set_nft_meta_data(std::string&& value) {
-  _has_bits_[0] |= 0x00000002u;
-  nft_meta_data_.SetNoArena(
-    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.management.ResourceUpload.nft_meta_data)
-}
-inline void ResourceUpload::set_nft_meta_data(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  _has_bits_[0] |= 0x00000002u;
-  nft_meta_data_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.management.ResourceUpload.nft_meta_data)
-}
-inline void ResourceUpload::set_nft_meta_data(const void* value, size_t size) {
-  _has_bits_[0] |= 0x00000002u;
-  nft_meta_data_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.management.ResourceUpload.nft_meta_data)
-}
-inline std::string* ResourceUpload::mutable_nft_meta_data() {
-  _has_bits_[0] |= 0x00000002u;
-  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.ResourceUpload.nft_meta_data)
-  return nft_meta_data_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-}
-inline std::string* ResourceUpload::release_nft_meta_data() {
-  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.ResourceUpload.nft_meta_data)
-  if (!has_nft_meta_data()) {
-    return nullptr;
-  }
-  _has_bits_[0] &= ~0x00000002u;
-  return nft_meta_data_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-}
-inline void ResourceUpload::set_allocated_nft_meta_data(std::string* nft_meta_data) {
-  if (nft_meta_data != nullptr) {
-    _has_bits_[0] |= 0x00000002u;
-  } else {
-    _has_bits_[0] &= ~0x00000002u;
-  }
-  nft_meta_data_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), nft_meta_data);
-  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.ResourceUpload.nft_meta_data)
-}
-
-// required uint32 zoom_data_length = 5;
-inline bool ResourceUpload::has_zoom_data_length() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
-}
-inline void ResourceUpload::clear_zoom_data_length() {
-  zoom_data_length_ = 0u;
-  _has_bits_[0] &= ~0x00000020u;
-}
-inline ::PROTOBUF_NAMESPACE_ID::uint32 ResourceUpload::zoom_data_length() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.ResourceUpload.zoom_data_length)
-  return zoom_data_length_;
-}
-inline void ResourceUpload::set_zoom_data_length(::PROTOBUF_NAMESPACE_ID::uint32 value) {
-  _has_bits_[0] |= 0x00000020u;
-  zoom_data_length_ = value;
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.ResourceUpload.zoom_data_length)
-}
-
-// optional string file_name_no_ext = 6;
-inline bool ResourceUpload::has_file_name_no_ext() const {
+// required uint32 image_size = 3;
+inline bool NftUpload::has_image_size() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void ResourceUpload::clear_file_name_no_ext() {
-  file_name_no_ext_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+inline void NftUpload::clear_image_size() {
+  image_size_ = 0u;
   _has_bits_[0] &= ~0x00000004u;
 }
-inline const std::string& ResourceUpload::file_name_no_ext() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.ResourceUpload.file_name_no_ext)
-  return file_name_no_ext_.GetNoArena();
+inline ::PROTOBUF_NAMESPACE_ID::uint32 NftUpload::image_size() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.NftUpload.image_size)
+  return image_size_;
 }
-inline void ResourceUpload::set_file_name_no_ext(const std::string& value) {
+inline void NftUpload::set_image_size(::PROTOBUF_NAMESPACE_ID::uint32 value) {
   _has_bits_[0] |= 0x00000004u;
-  file_name_no_ext_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.ResourceUpload.file_name_no_ext)
+  image_size_ = value;
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.NftUpload.image_size)
 }
-inline void ResourceUpload::set_file_name_no_ext(std::string&& value) {
-  _has_bits_[0] |= 0x00000004u;
-  file_name_no_ext_.SetNoArena(
-    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.management.ResourceUpload.file_name_no_ext)
+
+// required uint32 thumbnail_size = 4;
+inline bool NftUpload::has_thumbnail_size() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void ResourceUpload::set_file_name_no_ext(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  _has_bits_[0] |= 0x00000004u;
-  file_name_no_ext_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.management.ResourceUpload.file_name_no_ext)
+inline void NftUpload::clear_thumbnail_size() {
+  thumbnail_size_ = 0u;
+  _has_bits_[0] &= ~0x00000008u;
 }
-inline void ResourceUpload::set_file_name_no_ext(const char* value, size_t size) {
-  _has_bits_[0] |= 0x00000004u;
-  file_name_no_ext_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.management.ResourceUpload.file_name_no_ext)
+inline ::PROTOBUF_NAMESPACE_ID::uint32 NftUpload::thumbnail_size() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.NftUpload.thumbnail_size)
+  return thumbnail_size_;
 }
-inline std::string* ResourceUpload::mutable_file_name_no_ext() {
-  _has_bits_[0] |= 0x00000004u;
-  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.ResourceUpload.file_name_no_ext)
-  return file_name_no_ext_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+inline void NftUpload::set_thumbnail_size(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _has_bits_[0] |= 0x00000008u;
+  thumbnail_size_ = value;
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.NftUpload.thumbnail_size)
 }
-inline std::string* ResourceUpload::release_file_name_no_ext() {
-  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.ResourceUpload.file_name_no_ext)
-  if (!has_file_name_no_ext()) {
-    return nullptr;
-  }
-  _has_bits_[0] &= ~0x00000004u;
-  return file_name_no_ext_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+
+// required uint32 wallpaper_size = 5;
+inline bool NftUpload::has_wallpaper_size() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
-inline void ResourceUpload::set_allocated_file_name_no_ext(std::string* file_name_no_ext) {
-  if (file_name_no_ext != nullptr) {
-    _has_bits_[0] |= 0x00000004u;
-  } else {
-    _has_bits_[0] &= ~0x00000004u;
-  }
-  file_name_no_ext_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), file_name_no_ext);
-  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.ResourceUpload.file_name_no_ext)
+inline void NftUpload::clear_wallpaper_size() {
+  wallpaper_size_ = 0u;
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 NftUpload::wallpaper_size() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.NftUpload.wallpaper_size)
+  return wallpaper_size_;
+}
+inline void NftUpload::set_wallpaper_size(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _has_bits_[0] |= 0x00000010u;
+  wallpaper_size_ = value;
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.NftUpload.wallpaper_size)
 }
 
 // -------------------------------------------------------------------
 
-// ZoomRequest
+// NftRequest
 
-// optional uint32 offset = 1;
-inline bool ZoomRequest::has_offset() const {
+// required uint32 offset = 1;
+inline bool NftRequest::has_offset() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void ZoomRequest::clear_offset() {
+inline void NftRequest::clear_offset() {
   offset_ = 0u;
   _has_bits_[0] &= ~0x00000001u;
 }
-inline ::PROTOBUF_NAMESPACE_ID::uint32 ZoomRequest::offset() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.ZoomRequest.offset)
+inline ::PROTOBUF_NAMESPACE_ID::uint32 NftRequest::offset() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.NftRequest.offset)
   return offset_;
 }
-inline void ZoomRequest::set_offset(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+inline void NftRequest::set_offset(::PROTOBUF_NAMESPACE_ID::uint32 value) {
   _has_bits_[0] |= 0x00000001u;
   offset_ = value;
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.ZoomRequest.offset)
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.NftRequest.offset)
 }
 
 // required uint32 data_length = 2;
-inline bool ZoomRequest::has_data_length() const {
+inline bool NftRequest::has_data_length() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void ZoomRequest::clear_data_length() {
+inline void NftRequest::clear_data_length() {
   data_length_ = 0u;
   _has_bits_[0] &= ~0x00000002u;
 }
-inline ::PROTOBUF_NAMESPACE_ID::uint32 ZoomRequest::data_length() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.ZoomRequest.data_length)
+inline ::PROTOBUF_NAMESPACE_ID::uint32 NftRequest::data_length() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.NftRequest.data_length)
   return data_length_;
 }
-inline void ZoomRequest::set_data_length(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+inline void NftRequest::set_data_length(::PROTOBUF_NAMESPACE_ID::uint32 value) {
   _has_bits_[0] |= 0x00000002u;
   data_length_ = value;
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.ZoomRequest.data_length)
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.NftRequest.data_length)
+}
+
+// required .hw.trezor.messages.management.NftRequest.NftRequestType type = 3;
+inline bool NftRequest::has_type() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void NftRequest::clear_type() {
+  type_ = 0;
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline ::hw::trezor::messages::management::NftRequest_NftRequestType NftRequest::type() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.NftRequest.type)
+  return static_cast< ::hw::trezor::messages::management::NftRequest_NftRequestType >(type_);
+}
+inline void NftRequest::set_type(::hw::trezor::messages::management::NftRequest_NftRequestType value) {
+  assert(::hw::trezor::messages::management::NftRequest_NftRequestType_IsValid(value));
+  _has_bits_[0] |= 0x00000004u;
+  type_ = value;
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.NftRequest.type)
 }
 
 // -------------------------------------------------------------------
 
-// ResourceRequest
+// NftAck
 
-// optional uint32 offset = 1;
-inline bool ResourceRequest::has_offset() const {
+// required bytes chunk = 1;
+inline bool NftAck::has_chunk() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void ResourceRequest::clear_offset() {
-  offset_ = 0u;
+inline void NftAck::clear_chunk() {
+  chunk_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   _has_bits_[0] &= ~0x00000001u;
 }
-inline ::PROTOBUF_NAMESPACE_ID::uint32 ResourceRequest::offset() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.ResourceRequest.offset)
-  return offset_;
+inline const std::string& NftAck::chunk() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.NftAck.chunk)
+  return chunk_.GetNoArena();
 }
-inline void ResourceRequest::set_offset(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+inline void NftAck::set_chunk(const std::string& value) {
   _has_bits_[0] |= 0x00000001u;
-  offset_ = value;
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.ResourceRequest.offset)
+  chunk_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.NftAck.chunk)
 }
-
-// required uint32 data_length = 2;
-inline bool ResourceRequest::has_data_length() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
-}
-inline void ResourceRequest::clear_data_length() {
-  data_length_ = 0u;
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline ::PROTOBUF_NAMESPACE_ID::uint32 ResourceRequest::data_length() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.ResourceRequest.data_length)
-  return data_length_;
-}
-inline void ResourceRequest::set_data_length(::PROTOBUF_NAMESPACE_ID::uint32 value) {
-  _has_bits_[0] |= 0x00000002u;
-  data_length_ = value;
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.ResourceRequest.data_length)
-}
-
-// -------------------------------------------------------------------
-
-// ResourceAck
-
-// required bytes data_chunk = 1;
-inline bool ResourceAck::has_data_chunk() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-inline void ResourceAck::clear_data_chunk() {
-  data_chunk_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline const std::string& ResourceAck::data_chunk() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.ResourceAck.data_chunk)
-  return data_chunk_.GetNoArena();
-}
-inline void ResourceAck::set_data_chunk(const std::string& value) {
+inline void NftAck::set_chunk(std::string&& value) {
   _has_bits_[0] |= 0x00000001u;
-  data_chunk_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.ResourceAck.data_chunk)
-}
-inline void ResourceAck::set_data_chunk(std::string&& value) {
-  _has_bits_[0] |= 0x00000001u;
-  data_chunk_.SetNoArena(
+  chunk_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.management.ResourceAck.data_chunk)
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.management.NftAck.chunk)
 }
-inline void ResourceAck::set_data_chunk(const char* value) {
+inline void NftAck::set_chunk(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   _has_bits_[0] |= 0x00000001u;
-  data_chunk_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.management.ResourceAck.data_chunk)
+  chunk_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.management.NftAck.chunk)
 }
-inline void ResourceAck::set_data_chunk(const void* value, size_t size) {
+inline void NftAck::set_chunk(const void* value, size_t size) {
   _has_bits_[0] |= 0x00000001u;
-  data_chunk_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+  chunk_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.management.ResourceAck.data_chunk)
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.management.NftAck.chunk)
 }
-inline std::string* ResourceAck::mutable_data_chunk() {
+inline std::string* NftAck::mutable_chunk() {
   _has_bits_[0] |= 0x00000001u;
-  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.ResourceAck.data_chunk)
-  return data_chunk_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.NftAck.chunk)
+  return chunk_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline std::string* ResourceAck::release_data_chunk() {
-  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.ResourceAck.data_chunk)
-  if (!has_data_chunk()) {
+inline std::string* NftAck::release_chunk() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.NftAck.chunk)
+  if (!has_chunk()) {
     return nullptr;
   }
   _has_bits_[0] &= ~0x00000001u;
-  return data_chunk_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  return chunk_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline void ResourceAck::set_allocated_data_chunk(std::string* data_chunk) {
-  if (data_chunk != nullptr) {
+inline void NftAck::set_allocated_chunk(std::string* chunk) {
+  if (chunk != nullptr) {
     _has_bits_[0] |= 0x00000001u;
   } else {
     _has_bits_[0] &= ~0x00000001u;
   }
-  data_chunk_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), data_chunk);
-  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.ResourceAck.data_chunk)
+  chunk_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), chunk);
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.NftAck.chunk)
 }
 
 // optional bytes hash = 2;
-inline bool ResourceAck::has_hash() const {
+inline bool NftAck::has_hash() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void ResourceAck::clear_hash() {
+inline void NftAck::clear_hash() {
   hash_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   _has_bits_[0] &= ~0x00000002u;
 }
-inline const std::string& ResourceAck::hash() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.ResourceAck.hash)
+inline const std::string& NftAck::hash() const {
+  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.NftAck.hash)
   return hash_.GetNoArena();
 }
-inline void ResourceAck::set_hash(const std::string& value) {
+inline void NftAck::set_hash(const std::string& value) {
   _has_bits_[0] |= 0x00000002u;
   hash_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.ResourceAck.hash)
+  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.NftAck.hash)
 }
-inline void ResourceAck::set_hash(std::string&& value) {
+inline void NftAck::set_hash(std::string&& value) {
   _has_bits_[0] |= 0x00000002u;
   hash_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.management.ResourceAck.hash)
+  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.management.NftAck.hash)
 }
-inline void ResourceAck::set_hash(const char* value) {
+inline void NftAck::set_hash(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   _has_bits_[0] |= 0x00000002u;
   hash_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.management.ResourceAck.hash)
+  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.management.NftAck.hash)
 }
-inline void ResourceAck::set_hash(const void* value, size_t size) {
+inline void NftAck::set_hash(const void* value, size_t size) {
   _has_bits_[0] |= 0x00000002u;
   hash_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.management.ResourceAck.hash)
+  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.management.NftAck.hash)
 }
-inline std::string* ResourceAck::mutable_hash() {
+inline std::string* NftAck::mutable_hash() {
   _has_bits_[0] |= 0x00000002u;
-  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.ResourceAck.hash)
+  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.NftAck.hash)
   return hash_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline std::string* ResourceAck::release_hash() {
-  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.ResourceAck.hash)
+inline std::string* NftAck::release_hash() {
+  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.NftAck.hash)
   if (!has_hash()) {
     return nullptr;
   }
   _has_bits_[0] &= ~0x00000002u;
   return hash_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline void ResourceAck::set_allocated_hash(std::string* hash) {
+inline void NftAck::set_allocated_hash(std::string* hash) {
   if (hash != nullptr) {
     _has_bits_[0] |= 0x00000002u;
   } else {
     _has_bits_[0] &= ~0x00000002u;
   }
   hash_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), hash);
-  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.ResourceAck.hash)
-}
-
-// -------------------------------------------------------------------
-
-// ResourceUpdate
-
-// required string file_name = 1;
-inline bool ResourceUpdate::has_file_name() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-inline void ResourceUpdate::clear_file_name() {
-  file_name_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline const std::string& ResourceUpdate::file_name() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.ResourceUpdate.file_name)
-  return file_name_.GetNoArena();
-}
-inline void ResourceUpdate::set_file_name(const std::string& value) {
-  _has_bits_[0] |= 0x00000001u;
-  file_name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.ResourceUpdate.file_name)
-}
-inline void ResourceUpdate::set_file_name(std::string&& value) {
-  _has_bits_[0] |= 0x00000001u;
-  file_name_.SetNoArena(
-    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.management.ResourceUpdate.file_name)
-}
-inline void ResourceUpdate::set_file_name(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  _has_bits_[0] |= 0x00000001u;
-  file_name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.management.ResourceUpdate.file_name)
-}
-inline void ResourceUpdate::set_file_name(const char* value, size_t size) {
-  _has_bits_[0] |= 0x00000001u;
-  file_name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.management.ResourceUpdate.file_name)
-}
-inline std::string* ResourceUpdate::mutable_file_name() {
-  _has_bits_[0] |= 0x00000001u;
-  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.ResourceUpdate.file_name)
-  return file_name_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-}
-inline std::string* ResourceUpdate::release_file_name() {
-  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.ResourceUpdate.file_name)
-  if (!has_file_name()) {
-    return nullptr;
-  }
-  _has_bits_[0] &= ~0x00000001u;
-  return file_name_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-}
-inline void ResourceUpdate::set_allocated_file_name(std::string* file_name) {
-  if (file_name != nullptr) {
-    _has_bits_[0] |= 0x00000001u;
-  } else {
-    _has_bits_[0] &= ~0x00000001u;
-  }
-  file_name_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), file_name);
-  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.ResourceUpdate.file_name)
-}
-
-// required uint32 data_length = 2;
-inline bool ResourceUpdate::has_data_length() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
-}
-inline void ResourceUpdate::clear_data_length() {
-  data_length_ = 0u;
-  _has_bits_[0] &= ~0x00000008u;
-}
-inline ::PROTOBUF_NAMESPACE_ID::uint32 ResourceUpdate::data_length() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.ResourceUpdate.data_length)
-  return data_length_;
-}
-inline void ResourceUpdate::set_data_length(::PROTOBUF_NAMESPACE_ID::uint32 value) {
-  _has_bits_[0] |= 0x00000008u;
-  data_length_ = value;
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.ResourceUpdate.data_length)
-}
-
-// required bytes initial_data_chunk = 3;
-inline bool ResourceUpdate::has_initial_data_chunk() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
-}
-inline void ResourceUpdate::clear_initial_data_chunk() {
-  initial_data_chunk_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline const std::string& ResourceUpdate::initial_data_chunk() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.ResourceUpdate.initial_data_chunk)
-  return initial_data_chunk_.GetNoArena();
-}
-inline void ResourceUpdate::set_initial_data_chunk(const std::string& value) {
-  _has_bits_[0] |= 0x00000002u;
-  initial_data_chunk_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.ResourceUpdate.initial_data_chunk)
-}
-inline void ResourceUpdate::set_initial_data_chunk(std::string&& value) {
-  _has_bits_[0] |= 0x00000002u;
-  initial_data_chunk_.SetNoArena(
-    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.management.ResourceUpdate.initial_data_chunk)
-}
-inline void ResourceUpdate::set_initial_data_chunk(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  _has_bits_[0] |= 0x00000002u;
-  initial_data_chunk_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.management.ResourceUpdate.initial_data_chunk)
-}
-inline void ResourceUpdate::set_initial_data_chunk(const void* value, size_t size) {
-  _has_bits_[0] |= 0x00000002u;
-  initial_data_chunk_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.management.ResourceUpdate.initial_data_chunk)
-}
-inline std::string* ResourceUpdate::mutable_initial_data_chunk() {
-  _has_bits_[0] |= 0x00000002u;
-  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.ResourceUpdate.initial_data_chunk)
-  return initial_data_chunk_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-}
-inline std::string* ResourceUpdate::release_initial_data_chunk() {
-  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.ResourceUpdate.initial_data_chunk)
-  if (!has_initial_data_chunk()) {
-    return nullptr;
-  }
-  _has_bits_[0] &= ~0x00000002u;
-  return initial_data_chunk_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-}
-inline void ResourceUpdate::set_allocated_initial_data_chunk(std::string* initial_data_chunk) {
-  if (initial_data_chunk != nullptr) {
-    _has_bits_[0] |= 0x00000002u;
-  } else {
-    _has_bits_[0] &= ~0x00000002u;
-  }
-  initial_data_chunk_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), initial_data_chunk);
-  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.ResourceUpdate.initial_data_chunk)
-}
-
-// optional bytes hash = 4;
-inline bool ResourceUpdate::has_hash() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
-inline void ResourceUpdate::clear_hash() {
-  hash_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline const std::string& ResourceUpdate::hash() const {
-  // @@protoc_insertion_point(field_get:hw.trezor.messages.management.ResourceUpdate.hash)
-  return hash_.GetNoArena();
-}
-inline void ResourceUpdate::set_hash(const std::string& value) {
-  _has_bits_[0] |= 0x00000004u;
-  hash_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:hw.trezor.messages.management.ResourceUpdate.hash)
-}
-inline void ResourceUpdate::set_hash(std::string&& value) {
-  _has_bits_[0] |= 0x00000004u;
-  hash_.SetNoArena(
-    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:hw.trezor.messages.management.ResourceUpdate.hash)
-}
-inline void ResourceUpdate::set_hash(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  _has_bits_[0] |= 0x00000004u;
-  hash_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:hw.trezor.messages.management.ResourceUpdate.hash)
-}
-inline void ResourceUpdate::set_hash(const void* value, size_t size) {
-  _has_bits_[0] |= 0x00000004u;
-  hash_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:hw.trezor.messages.management.ResourceUpdate.hash)
-}
-inline std::string* ResourceUpdate::mutable_hash() {
-  _has_bits_[0] |= 0x00000004u;
-  // @@protoc_insertion_point(field_mutable:hw.trezor.messages.management.ResourceUpdate.hash)
-  return hash_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-}
-inline std::string* ResourceUpdate::release_hash() {
-  // @@protoc_insertion_point(field_release:hw.trezor.messages.management.ResourceUpdate.hash)
-  if (!has_hash()) {
-    return nullptr;
-  }
-  _has_bits_[0] &= ~0x00000004u;
-  return hash_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-}
-inline void ResourceUpdate::set_allocated_hash(std::string* hash) {
-  if (hash != nullptr) {
-    _has_bits_[0] |= 0x00000004u;
-  } else {
-    _has_bits_[0] &= ~0x00000004u;
-  }
-  hash_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), hash);
-  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.ResourceUpdate.hash)
+  // @@protoc_insertion_point(field_set_allocated:hw.trezor.messages.management.NftAck.hash)
 }
 
 // -------------------------------------------------------------------
@@ -16308,8 +16181,6 @@ inline void UnlockedPathRequest::set_allocated_mac(std::string* mac) {
 
 // -------------------------------------------------------------------
 
-// -------------------------------------------------------------------
-
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -16340,10 +16211,10 @@ template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::hw::trezor::messages::management::WordRequest_WordRequestType>() {
   return ::hw::trezor::messages::management::WordRequest_WordRequestType_descriptor();
 }
-template <> struct is_proto_enum< ::hw::trezor::messages::management::ResourceUpload_ResourceType> : ::std::true_type {};
+template <> struct is_proto_enum< ::hw::trezor::messages::management::NftRequest_NftRequestType> : ::std::true_type {};
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::hw::trezor::messages::management::ResourceUpload_ResourceType>() {
-  return ::hw::trezor::messages::management::ResourceUpload_ResourceType_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::hw::trezor::messages::management::NftRequest_NftRequestType>() {
+  return ::hw::trezor::messages::management::NftRequest_NftRequestType_descriptor();
 }
 template <> struct is_proto_enum< ::hw::trezor::messages::management::BackupType> : ::std::true_type {};
 template <>

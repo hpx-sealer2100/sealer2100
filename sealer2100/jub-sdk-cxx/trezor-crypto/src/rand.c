@@ -23,29 +23,96 @@
 
 #include <TrezorCrypto/rand.h>
 
+#include <stddef.h>
+
+#if defined(__APPLE__)
+// iOS / macOS
+    #include <TargetConditionals.h>
+    #include <Security/Security.h>
+
+#elif defined(__ANDROID__) || defined(__linux__)
+// Android / Linux
 #include <fcntl.h>
-#include <sys/types.h>
-#include <sys/uio.h>
 #include <unistd.h>
+#include <errno.h>
+#include <sys/types.h>
 
-uint32_t random32() {
-    int randomData = open("/dev/urandom", O_RDONLY);
-    if (randomData < 0) {
+#if defined(__ANDROID__)
+#include <android/api-level.h>
+#if __ANDROID_API__ >= 28
+    #define USE_GETRANDOM 1
+    #include <sys/random.h>
+#endif
+#elif defined(__linux__)
+#include <linux/version.h>
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,17,0)
+    #define USE_GETRANDOM 1
+    #include <sys/random.h>
+#endif
+#endif
+
+#else
+    #error "Unsupported platform for random32"
+#endif
+
+static int get_random_bytes(void *buf, size_t len) {
+#if defined(__APPLE__)
+    // iOS / macOS：使用 SecRandomCopyBytes
+    if (SecRandomCopyBytes(kSecRandomDefault, len, buf) == errSecSuccess) {
         return 0;
     }
+    return -1;
 
-    uint32_t result;
-    if (read(randomData, &result, sizeof(result)) < 0) {
-        return 0;
+#elif defined(__ANDROID__) || defined(__linux__)
+    size_t done = 0;
+
+#ifdef USE_GETRANDOM
+    while (done < len) {
+        ssize_t n = getrandom((unsigned char*)buf + done, len - done, 0);
+        if (n < 0) {
+            if (errno == EINTR) {
+                continue;
+            }
+            done = 0;
+            break;
+        }
+        done += (size_t)n;
+    }
+#endif
+    if (done < len) {
+        int fd = open("/dev/urandom", O_RDONLY);
+        if (fd < 0) return -1;
+
+        while (done < len) {
+            ssize_t n = read(fd, (unsigned char*)buf + done, len - done);
+            if (n < 0) {
+                if (errno == EINTR) continue;
+                close(fd);
+                return -1;
+            }
+            if (n == 0) {
+                close(fd);
+                return -1;
+            }
+            done += (size_t)n;
+        }
+        close(fd);
     }
 
-    close(randomData);
+    return 0;
+#endif
+}
 
-    return result;
+uint32_t random32(void) {
+    uint32_t v = 0;
+    if (get_random_bytes(&v, sizeof(v)) != 0) {
+        abort();
+    }
+    return v;
 }
 
 void random_buffer(uint8_t *buf, size_t len) {
-    int randomData = open("/dev/urandom", O_RDONLY);
-    read(randomData, buf, len);
-    close(randomData);
+    if (get_random_bytes(buf, len) != 0) {
+        abort();
+    }
 }

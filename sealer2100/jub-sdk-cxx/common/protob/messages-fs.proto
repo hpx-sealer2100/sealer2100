@@ -1,0 +1,167 @@
+syntax = "proto2";
+package hw.trezor.messages.fs;
+
+// Sugar for easier handling in Java
+option java_package = "com.satoshilabs.trezor.lib.protobuf";
+option java_outer_classname = "TrezorMessageFs";
+
+option (include_in_bitcoin_only) = true;
+
+import "messages.proto";
+
+/**
+ * @embed
+ * Type of file or directory
+ */
+enum FsType {
+    FILE = 1;
+    DIRECTORY = 2;
+}
+
+/**
+ * Response: The result return by FsStat
+ * Information of file or directory
+ */
+message FsInfo {
+    required FsType type = 1;
+    required uint32 size = 2;
+    required string name = 3;
+}
+
+/**
+ * Content of file
+ */
+message FsChunk {
+    required bytes data = 1;
+    optional bytes data_hash = 2; // sha256 of the data
+}
+
+/**
+ * Request: Read file content
+ * @start
+ * @next FsChunk
+ * @next Failure
+ */
+message FsRead {
+    required string path = 1;
+    required uint32 offset = 2;
+    required uint32 size = 3;
+}
+
+/**
+ * Request: Write file content
+ * @start
+ * @next Success
+ * @next Failure
+ */
+message FsWrite {
+    required string path = 1;
+    required uint32 total = 2;
+    optional uint32 offset = 3;
+    required FsChunk chunk = 4;
+}
+
+/**
+ * Request: Remove file or directory
+ * @start
+ * @next Success
+ * @next Failure
+ */
+message FsRemove {
+    required string path = 1;
+}
+
+/**
+ * Request: Create directory
+ * @start
+ * @next Success
+ * @next Failure
+ */
+message FsMkdir {
+    required string path = 1;
+}
+
+/**
+ * Request: Get file or directory information
+ * @start
+ * @next Success
+ * @next Failure
+ */
+message FsStat {
+    required string path = 1;
+}
+
+/**
+ * Request: Get file system information
+ * @start
+ * @next Success
+ * @next Failure
+ */
+message FsFsStat {
+}
+
+/**
+ * Response: The result return by FsFsStat
+ * Information of file system
+ */
+message FsFsInfo {
+    required uint32 block_count = 1;
+    required uint32 block_size = 2;
+    required uint32 block_used = 3;
+}
+
+/**
+ * Part of the request accepted by EmmcFileRead and EmmcFileWrite
+ * The result returned by EmmcFileRead and EmmcFileWrite
+ * @embed
+ * @end
+ */
+message FsFile {
+    option deprecated = true;
+    required string path = 1;
+    required uint32 offset = 2;
+    required uint32 len = 3;
+    optional bytes data = 4;
+    optional uint32 data_hash = 5;
+    optional uint32 processed_byte = 6;
+}
+
+/**
+ * Request: Read file chunk from Emmc
+ * @deprecated use FsRead instead
+ * @start
+ * @next FsFile
+ * @next Failure
+ */
+message FsFileRead {
+    option deprecated = true;
+    // available in boot only
+    required FsFile file = 1;
+    // this is only used for progress display
+    // if not provided, progress bar won't display
+    optional uint32 ui_percentage = 2;
+}
+
+/**
+ * Request: Write file chunk
+ * @deprecated use FsWrite instead
+ * @start
+ * @next EmmcFile
+ * @next Failure
+ */
+message FsFileWrite {
+    option deprecated = true;
+    required FsFile file = 1;
+    required bool overwrite = 2; // only support overwrite
+    required bool append = 3;
+    optional uint32 ui_percentage = 4;
+}
+
+/**
+ * Request: Generate resource files checksums
+ * @start
+ * @next FsInfo, the generated checksums file, than user can read it
+ * @next Failure
+ */
+message FsChecksums {
+}

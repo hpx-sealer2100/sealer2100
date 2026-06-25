@@ -97,6 +97,7 @@ public:
 //    virtual JUB_RV BuildContractWithAmtAbi(JUB_CHAR_CPTR methodID, JUB_CHAR_CPTR amount, std::string& abi);
     virtual JUB_RV BuildContractWithAddrAmtDataAbi(JUB_CHAR_CPTR methodID, JUB_CHAR_CPTR address, JUB_CHAR_CPTR amount, JUB_CHAR_CPTR data, std::string& abi);
     virtual JUB_RV StoreDefinition(JUB_ETH_NETWORK_INFO networkInfo, std::optional<JUB_ERC20_TOKEN_INFO> tokenInfo);
+    virtual JUB_RV UploadNFT(JUB_ETH_NFT_INFO nft);
 
 private:
     void _addContrFunc(const std::string& methodID, const jub::eth::ENUM_CONTRACT_ABI& type) {

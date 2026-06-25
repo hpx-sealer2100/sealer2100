@@ -14,6 +14,7 @@
 #include "libETH/libETH.hpp"
 #include "BinaryCoding.h"
 #include <TrezorCrypto/base58.h>
+#include <PublicKey.h>
 #include <Ethereum/EIP712.h>
 
 #include <variant>
@@ -45,7 +46,9 @@ namespace jub
         JUB_ENUM_PROTOCOL_ETH_TYPEDDATA_ValueAck = 468,
         JUB_ENUM_PROTOCOL_ETH_TYPEDDATA_Signature = 469,
         JUB_ENUM_PROTOCOL_ETH_StoreDefinition = 471,
-
+        JUB_ENUM_PROTOCOL_UPLOAD_NFT = 10018,
+        JUB_ENUM_PROTOCOL_NFT_Request = 10019,
+        JUB_ENUM_PROTOCOL_NFT_Ack = 10021,
     };
 
 
@@ -454,11 +457,6 @@ namespace jub
             {
                 msgToBeEncode.set_message(std::string(reinterpret_cast<const char *>(vData.data()), vData.size()));
             }
-            if (!vChainID.empty())
-            {
-                msgToBeEncode.set_encoded_network(std::string(reinterpret_cast<const char *>(vData.data()), vData.size()));
-            }
-
             // Encode the message using standard protobuf
             if (!msgToBeEncode.SerializeToString(&msgInPb))
             {
@@ -567,80 +565,75 @@ namespace jub
 
     EthereumTypedDataStructAck_EthereumFieldType get_field_type(const std::string& type_name,const nlohmann::json& types)
     {
-        EthereumTypedDataStructAck_EthereumDataType data_type;
-        std::optional<uint32_t> size;
-        //EthereumTypedDataStructAck_EthereumFieldType entry_type;
-        //entry_type.Clear();
-        auto* raw_ptr = (EthereumTypedDataStructAck_EthereumFieldType*)nullptr;
-        //std::shared_ptr<EthereumTypedDataStructAck_EthereumFieldType> entry_type = nullptr;
-        std::string struct_name;
+        EthereumTypedDataStructAck_EthereumFieldType ret;
         if (jub::eth::EIP712::is_array(type_name)) {
-            data_type = EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_ARRAY;
-            size = jub::eth::EIP712::parse_array_n(type_name);
+            ret.set_data_type(EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_ARRAY);
+            std::optional<uint32_t> size = jub::eth::EIP712::parse_array_n(type_name);
+            if(size.has_value()) {
+                ret.set_size(size.value());
+            }
             std::string member_typename = jub::eth::EIP712::typeof_array(type_name);
-
-            // 递归处理数组元素类型
-            //entry_type = get_field_type(member_typename, types);
             EthereumTypedDataStructAck_EthereumFieldType member_type = get_field_type(member_typename, types);
             if (member_type.data_type() == EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_ARRAY) {
-                //if (entry_type.data_type() == EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_ARRAY) {
                 throw std::runtime_error("Nested arrays are not supported");
             }
-            raw_ptr = new EthereumTypedDataStructAck_EthereumFieldType(
-                    std::move(member_type)
-            );
-            //entry_type = std::make_shared<EthereumTypedDataStructAck_EthereumFieldType>(std::move(member_type));//创建智能指针对象
 
-            // 检查嵌套数组
-/*            if (member_type->data_type() == EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_ARRAY) {
-                //if (entry_type.data_type() == EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_ARRAY) {
-                throw std::runtime_error("Nested arrays are not supported");
-            }*/
-
-           // throw std::runtime_error("arrays are not supported");//暂不支持数组
+            ret.set_allocated_struct_name(new std::string(member_typename));
+            ret.set_allocated_entry_type(new EthereumTypedDataStructAck_EthereumFieldType(std::move(member_type)));
         }
         else if (type_name.find("uint") == 0) {
-            data_type = EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_UINT;
-            size = jub::eth::EIP712::get_byte_size_for_int_type(type_name);
+            ret.set_data_type(EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_UINT);
+            std::optional<uint32_t> size = jub::eth::EIP712::get_byte_size_for_int_type(type_name);
+            if(size.has_value()) {
+                ret.set_size(size.value());
+            }
         }
         else if (type_name.find("int") == 0) {
-            data_type = EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_INT;
-            size = jub::eth::EIP712::get_byte_size_for_int_type(type_name);
+            ret.set_data_type(EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_INT);
+            std::optional<uint32_t> size = jub::eth::EIP712::get_byte_size_for_int_type(type_name);
+            if(size.has_value()) {
+                ret.set_size(size.value());
+            }
         }
         else if (type_name.find("bytes") == 0) {
-            data_type = EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_BYTES;
-            size = jub::eth::EIP712::parse_bytes_n(type_name);
+            ret.set_data_type(EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_BYTES);
+            std::optional<uint32_t> size = jub::eth::EIP712::parse_bytes_n(type_name);
+            if(size.has_value()) {
+                ret.set_size(size.value());
+            }
         }
         else if (type_name == "string") {
-            data_type = EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_STRING;
+            ret.set_data_type(EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_STRING);
         }
         else if (type_name == "bool") {
-            data_type = EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_BOOL;
+            ret.set_data_type(EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_BOOL);
         }
         else if (type_name == "address") {
-            data_type = EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_ADDRESS;
+            ret.set_data_type(EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_ADDRESS);
+
+        }
+        else if (type_name.find("bytes") == 0) {
+            ret.set_data_type(EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_BYTES);
+            std::optional<uint32_t> size = jub::eth::EIP712::parse_bytes_n(type_name);
+            if(size.has_value()) {
+                ret.set_size(size.value());
+            }
+        }
+        else if (type_name == "bool") {
+            ret.set_data_type(EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_BOOL);
+        }
+        else if (type_name == "address") {
+            ret.set_data_type(EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_ADDRESS);
         }
         else {
             // 检查是否是自定义结构体
             if (types.contains(type_name)) {
-                data_type = EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_STRUCT;
-                size = types[type_name].size(); // 结构体成员数量
-                struct_name = type_name;
+                ret.set_data_type(EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_STRUCT);
+                ret.set_allocated_struct_name(new std::string(type_name));
+                ret.set_size(types[type_name].size());
             } else {
                 throw std::invalid_argument("Unsupported type name: " + type_name);
             }
-        }
-        EthereumTypedDataStructAck_EthereumFieldType ret;
-        ret.Clear();
-        if(EthereumTypedDataStructAck_EthereumDataType::EthereumTypedDataStructAck_EthereumDataType_STRUCT == data_type)
-            ret.set_struct_name(type_name);
-        if(size.has_value())
-            ret.set_size(size.value());
-        ret.set_data_type(data_type);
-        if(nullptr != raw_ptr && raw_ptr->has_data_type())//具有required字段。
-        {
-            ret.set_allocated_entry_type(raw_ptr);//放弃智能指针所有权,交给protobuf管理。
-            //entry_type.release_entry_type();
         }
         return ret;
     }
@@ -683,6 +676,8 @@ namespace jub
                 jub::eth::EIP712::clearJSON();
                 return JUBR_DATA_INVALID;
             }
+
+            msgToBeEncode.set_metamask_v4_compat(bMetamaskV4Compat);
             if (!msgToBeEncode.SerializeToString(&msgInPb))
             {
                 jub::eth::EIP712::clearJSON();
@@ -711,16 +706,9 @@ namespace jub
                 std::vector<EthereumTypedDataStructAck_EthereumStructMember> members;
                 for (auto& item : types[struct_name]) {
                     EthereumTypedDataStructAck_EthereumFieldType FieldType = get_field_type(item["type"],types);
-                    auto* raw_ptr = new EthereumTypedDataStructAck_EthereumFieldType(
-                            std::move(FieldType)
-                    );
-                    // 创建智能指针
-                    //auto auto_ptr = std::make_shared<EthereumTypedDataStructAck_EthereumFieldType>(
-                    //        std::move(FieldType)
-                    //);
                     EthereumTypedDataStructAck_EthereumStructMember member;
                     member.set_name(item["name"]);
-                    member.set_allocated_type(raw_ptr);
+                    member.set_allocated_type(new EthereumTypedDataStructAck_EthereumFieldType(std::move(FieldType)));
                     //member.set_allocated_type(&FieldType);
                     //member.set_allocated_type(auto_ptr.get());
                     //auto_ptr.reset();
@@ -894,5 +882,89 @@ namespace jub
     {
         return JUBR_OK;
     }
+
+    JUB_RV JubiterSealer2100Impl::UploadNFT(JUB_ETH_NFT_INFO nft) {
+
+        // step 0. send `NftUpload`
+        auto upload = NftUpload{};
+        auto* meta = new NftMetadata();
+        meta->set_id(nft.id);
+        meta->set_name(nft.name);
+        meta->set_token(nft.token);
+        meta->set_network(nft.network);
+        meta->set_owner(nft.owner);
+        upload.set_allocated_metadata(meta);
+        upload.set_extension(nft.extension);
+        upload.set_image_size(nft.image.size);
+        upload.set_thumbnail_size(nft.thumbnail.size);
+        upload.set_wallpaper_size(nft.wallpaper.size);
+
+        auto pb = upload.SerializeAsString();
+        JUB_UINT16 recvType;
+        std::string vMsgOutPb;
+        JUB_RV rv = sendProtocolData(JUB_ENUM_PROTOCOL_UPLOAD_NFT, pb, &recvType, vMsgOutPb);
+        if( JUBR_OK != rv) {
+            return rv;
+        }
+
+        // notify ui
+        _device->notifyPercentage(1);
+        auto total = nft.image.size + nft.thumbnail.size + nft.wallpaper.size;
+        auto processed = 0ul;
+
+        // step 1. process `NftRequest`
+        while (recvType == JUB_ENUM_PROTOCOL_NFT_Request) {
+            NftRequest resp;
+            if (!resp.ParseFromString(vMsgOutPb)) {
+                return JUBR_ARGUMENTS_BAD;
+            }
+            JUB_BYTE_CPTR payload = nullptr;
+            JUB_UINT32 size = 0;
+            if (resp.type() == NftRequest_NftRequestType_IMAGE) {
+                payload = nft.image.payload;
+                size = nft.image.size;
+            } else if (resp.type() == NftRequest_NftRequestType_THUMBNAIL) {
+                payload = nft.thumbnail.payload;
+                size = nft.thumbnail.size;
+            } else if (resp.type() == NftRequest_NftRequestType_WALLPAPER) {
+                payload = nft.wallpaper.payload;
+                size = nft.wallpaper.size;
+            }
+            else {
+                return JUBR_ARGUMENTS_BAD;
+            }
+
+            if (resp.offset() > size) {
+                return JUBR_ARGUMENTS_BAD;
+            }
+
+            // move over `offset`, resize `size`
+            auto chunk = payload + resp.offset();
+            size -= resp.offset();
+            size = std::min(size, resp.data_length());
+
+            auto ack = NftAck();
+            ack.set_chunk(chunk, size);
+            pb = ack.SerializeAsString();
+
+            // send Ack
+            rv = sendProtocolData(JUB_ENUM_PROTOCOL_NFT_Ack, pb, &recvType, vMsgOutPb);
+            if( JUBR_OK != rv) {
+                return rv;
+            }
+            processed += size;
+
+            // notify ui
+            auto pct = processed * 100 / total;
+            _device->notifyPercentage(pct);
+        }
+
+        if (recvType != JUB_ENUM_PROTOCOL_MessageType_Success) {
+            return JUBR_ERROR;
+        }
+
+        return JUBR_OK;
+    }
+
 
 } // namespace jub end

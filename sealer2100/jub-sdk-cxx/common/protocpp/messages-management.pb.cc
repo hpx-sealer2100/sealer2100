@@ -16,6 +16,7 @@
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 extern PROTOBUF_INTERNAL_EXPORT_messages_2dmanagement_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_FileInfoList_FileInfo_messages_2dmanagement_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_messages_2dmanagement_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_NftMetadata_messages_2dmanagement_2eproto;
 namespace hw {
 namespace trezor {
 namespace messages {
@@ -224,26 +225,22 @@ class SEWipeUserStorageDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<SEWipeUserStorage> _instance;
 } _SEWipeUserStorage_default_instance_;
-class ResourceUploadDefaultTypeInternal {
+class NftMetadataDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ResourceUpload> _instance;
-} _ResourceUpload_default_instance_;
-class ZoomRequestDefaultTypeInternal {
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<NftMetadata> _instance;
+} _NftMetadata_default_instance_;
+class NftUploadDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ZoomRequest> _instance;
-} _ZoomRequest_default_instance_;
-class ResourceRequestDefaultTypeInternal {
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<NftUpload> _instance;
+} _NftUpload_default_instance_;
+class NftRequestDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ResourceRequest> _instance;
-} _ResourceRequest_default_instance_;
-class ResourceAckDefaultTypeInternal {
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<NftRequest> _instance;
+} _NftRequest_default_instance_;
+class NftAckDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ResourceAck> _instance;
-} _ResourceAck_default_instance_;
-class ResourceUpdateDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ResourceUpdate> _instance;
-} _ResourceUpdate_default_instance_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<NftAck> _instance;
+} _NftAck_default_instance_;
 class ListResDirDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ListResDir> _instance;
@@ -693,6 +690,63 @@ static void InitDefaultsscc_info_NextU2FCounter_messages_2dmanagement_2eproto() 
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_NextU2FCounter_messages_2dmanagement_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_NextU2FCounter_messages_2dmanagement_2eproto}, {}};
 
+static void InitDefaultsscc_info_NftAck_messages_2dmanagement_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::hw::trezor::messages::management::_NftAck_default_instance_;
+    new (ptr) ::hw::trezor::messages::management::NftAck();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::hw::trezor::messages::management::NftAck::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_NftAck_messages_2dmanagement_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_NftAck_messages_2dmanagement_2eproto}, {}};
+
+static void InitDefaultsscc_info_NftMetadata_messages_2dmanagement_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::hw::trezor::messages::management::_NftMetadata_default_instance_;
+    new (ptr) ::hw::trezor::messages::management::NftMetadata();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::hw::trezor::messages::management::NftMetadata::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_NftMetadata_messages_2dmanagement_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_NftMetadata_messages_2dmanagement_2eproto}, {}};
+
+static void InitDefaultsscc_info_NftRequest_messages_2dmanagement_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::hw::trezor::messages::management::_NftRequest_default_instance_;
+    new (ptr) ::hw::trezor::messages::management::NftRequest();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::hw::trezor::messages::management::NftRequest::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_NftRequest_messages_2dmanagement_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_NftRequest_messages_2dmanagement_2eproto}, {}};
+
+static void InitDefaultsscc_info_NftUpload_messages_2dmanagement_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::hw::trezor::messages::management::_NftUpload_default_instance_;
+    new (ptr) ::hw::trezor::messages::management::NftUpload();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::hw::trezor::messages::management::NftUpload::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_NftUpload_messages_2dmanagement_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsscc_info_NftUpload_messages_2dmanagement_2eproto}, {
+      &scc_info_NftMetadata_messages_2dmanagement_2eproto.base,}};
+
 static void InitDefaultsscc_info_Nonce_messages_2dmanagement_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -822,62 +876,6 @@ static void InitDefaultsscc_info_ResetDevice_messages_2dmanagement_2eproto() {
 
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_ResetDevice_messages_2dmanagement_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_ResetDevice_messages_2dmanagement_2eproto}, {}};
-
-static void InitDefaultsscc_info_ResourceAck_messages_2dmanagement_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::hw::trezor::messages::management::_ResourceAck_default_instance_;
-    new (ptr) ::hw::trezor::messages::management::ResourceAck();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::hw::trezor::messages::management::ResourceAck::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_ResourceAck_messages_2dmanagement_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_ResourceAck_messages_2dmanagement_2eproto}, {}};
-
-static void InitDefaultsscc_info_ResourceRequest_messages_2dmanagement_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::hw::trezor::messages::management::_ResourceRequest_default_instance_;
-    new (ptr) ::hw::trezor::messages::management::ResourceRequest();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::hw::trezor::messages::management::ResourceRequest::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_ResourceRequest_messages_2dmanagement_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_ResourceRequest_messages_2dmanagement_2eproto}, {}};
-
-static void InitDefaultsscc_info_ResourceUpdate_messages_2dmanagement_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::hw::trezor::messages::management::_ResourceUpdate_default_instance_;
-    new (ptr) ::hw::trezor::messages::management::ResourceUpdate();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::hw::trezor::messages::management::ResourceUpdate::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_ResourceUpdate_messages_2dmanagement_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_ResourceUpdate_messages_2dmanagement_2eproto}, {}};
-
-static void InitDefaultsscc_info_ResourceUpload_messages_2dmanagement_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::hw::trezor::messages::management::_ResourceUpload_default_instance_;
-    new (ptr) ::hw::trezor::messages::management::ResourceUpload();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::hw::trezor::messages::management::ResourceUpload::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_ResourceUpload_messages_2dmanagement_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_ResourceUpload_messages_2dmanagement_2eproto}, {}};
 
 static void InitDefaultsscc_info_SEBackToRomBoot_messages_2dmanagement_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -1117,21 +1115,7 @@ static void InitDefaultsscc_info_WriteSEPublicCert_messages_2dmanagement_2eproto
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_WriteSEPublicCert_messages_2dmanagement_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_WriteSEPublicCert_messages_2dmanagement_2eproto}, {}};
 
-static void InitDefaultsscc_info_ZoomRequest_messages_2dmanagement_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::hw::trezor::messages::management::_ZoomRequest_default_instance_;
-    new (ptr) ::hw::trezor::messages::management::ZoomRequest();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::hw::trezor::messages::management::ZoomRequest::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_ZoomRequest_messages_2dmanagement_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_ZoomRequest_messages_2dmanagement_2eproto}, {}};
-
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_messages_2dmanagement_2eproto[61];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_messages_2dmanagement_2eproto[60];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_messages_2dmanagement_2eproto[7];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_messages_2dmanagement_2eproto = nullptr;
 
@@ -1655,63 +1639,56 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_messages_2dmanagement_2eproto:
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceUpload, _has_bits_),
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceUpload, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftMetadata, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftMetadata, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceUpload, extension_),
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceUpload, data_length_),
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceUpload, res_type_),
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceUpload, nft_meta_data_),
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceUpload, zoom_data_length_),
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceUpload, file_name_no_ext_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftMetadata, id_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftMetadata, name_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftMetadata, token_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftMetadata, network_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftMetadata, owner_),
   0,
+  2,
+  1,
   3,
   4,
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftUpload, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftUpload, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftUpload, metadata_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftUpload, extension_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftUpload, image_size_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftUpload, thumbnail_size_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftUpload, wallpaper_size_),
   1,
-  5,
+  0,
   2,
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ZoomRequest, _has_bits_),
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ZoomRequest, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ZoomRequest, offset_),
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ZoomRequest, data_length_),
-  0,
-  1,
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceRequest, _has_bits_),
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceRequest, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceRequest, offset_),
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceRequest, data_length_),
-  0,
-  1,
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceAck, _has_bits_),
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceAck, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceAck, data_chunk_),
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceAck, hash_),
-  0,
-  1,
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceUpdate, _has_bits_),
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceUpdate, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceUpdate, file_name_),
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceUpdate, data_length_),
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceUpdate, initial_data_chunk_),
-  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ResourceUpdate, hash_),
-  0,
   3,
+  4,
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftRequest, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftRequest, offset_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftRequest, data_length_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftRequest, type_),
+  0,
   1,
   2,
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftAck, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftAck, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftAck, chunk_),
+  PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::NftAck, hash_),
+  0,
+  1,
   PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ListResDir, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::hw::trezor::messages::management::ListResDir, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1804,16 +1781,15 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 504, 509, sizeof(::hw::trezor::messages::management::SEInitializeDone)},
   { 509, 514, sizeof(::hw::trezor::messages::management::SEBackToRomBoot)},
   { 514, 519, sizeof(::hw::trezor::messages::management::SEWipeUserStorage)},
-  { 519, 530, sizeof(::hw::trezor::messages::management::ResourceUpload)},
-  { 536, 543, sizeof(::hw::trezor::messages::management::ZoomRequest)},
-  { 545, 552, sizeof(::hw::trezor::messages::management::ResourceRequest)},
-  { 554, 561, sizeof(::hw::trezor::messages::management::ResourceAck)},
-  { 563, 572, sizeof(::hw::trezor::messages::management::ResourceUpdate)},
-  { 576, 582, sizeof(::hw::trezor::messages::management::ListResDir)},
-  { 583, 590, sizeof(::hw::trezor::messages::management::FileInfoList_FileInfo)},
-  { 592, 598, sizeof(::hw::trezor::messages::management::FileInfoList)},
-  { 599, 606, sizeof(::hw::trezor::messages::management::UnlockPath)},
-  { 608, 614, sizeof(::hw::trezor::messages::management::UnlockedPathRequest)},
+  { 519, 529, sizeof(::hw::trezor::messages::management::NftMetadata)},
+  { 534, 544, sizeof(::hw::trezor::messages::management::NftUpload)},
+  { 549, 557, sizeof(::hw::trezor::messages::management::NftRequest)},
+  { 560, 567, sizeof(::hw::trezor::messages::management::NftAck)},
+  { 569, 575, sizeof(::hw::trezor::messages::management::ListResDir)},
+  { 576, 583, sizeof(::hw::trezor::messages::management::FileInfoList_FileInfo)},
+  { 585, 591, sizeof(::hw::trezor::messages::management::FileInfoList)},
+  { 592, 599, sizeof(::hw::trezor::messages::management::UnlockPath)},
+  { 601, 607, sizeof(::hw::trezor::messages::management::UnlockedPathRequest)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -1868,11 +1844,10 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::management::_SEInitializeDone_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::management::_SEBackToRomBoot_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::management::_SEWipeUserStorage_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::management::_ResourceUpload_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::management::_ZoomRequest_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::management::_ResourceRequest_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::management::_ResourceAck_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::management::_ResourceUpdate_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::management::_NftMetadata_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::management::_NftUpload_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::management::_NftRequest_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::management::_NftAck_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::management::_ListResDir_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::management::_FileInfoList_FileInfo_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::hw::trezor::messages::management::_FileInfoList_default_instance_),
@@ -2003,36 +1978,35 @@ const char descriptor_table_protodef_messages_2dmanagement_2eproto[] PROTOBUF_SE
   "\rSESignMessage\022\017\n\007message\030\001 \002(\014\"\'\n\022SEMes"
   "sageSignature\022\021\n\tsignature\030\001 \002(\014\"\016\n\014SEIn"
   "itialize\"\022\n\020SEInitializeDone\"\021\n\017SEBackTo"
-  "RomBoot\"\023\n\021SEWipeUserStorage\"\371\001\n\016Resourc"
-  "eUpload\022\021\n\textension\030\001 \002(\t\022\023\n\013data_lengt"
-  "h\030\002 \002(\r\022L\n\010res_type\030\003 \002(\0162:.hw.trezor.me"
-  "ssages.management.ResourceUpload.Resourc"
-  "eType\022\025\n\rnft_meta_data\030\004 \001(\014\022\030\n\020zoom_dat"
-  "a_length\030\005 \002(\r\022\030\n\020file_name_no_ext\030\006 \001(\t"
-  "\"&\n\014ResourceType\022\r\n\tWallPaper\020\000\022\007\n\003Nft\020\001"
-  "\"2\n\013ZoomRequest\022\016\n\006offset\030\001 \001(\r\022\023\n\013data_"
-  "length\030\002 \002(\r\"6\n\017ResourceRequest\022\016\n\006offse"
-  "t\030\001 \001(\r\022\023\n\013data_length\030\002 \002(\r\"/\n\013Resource"
-  "Ack\022\022\n\ndata_chunk\030\001 \002(\014\022\014\n\004hash\030\002 \001(\014\"b\n"
-  "\016ResourceUpdate\022\021\n\tfile_name\030\001 \002(\t\022\023\n\013da"
-  "ta_length\030\002 \002(\r\022\032\n\022initial_data_chunk\030\003 "
-  "\002(\014\022\014\n\004hash\030\004 \001(\014\"\032\n\nListResDir\022\014\n\004path\030"
-  "\001 \002(\t\"{\n\014FileInfoList\022C\n\005files\030\001 \003(\01324.h"
-  "w.trezor.messages.management.FileInfoLis"
-  "t.FileInfo\032&\n\010FileInfo\022\014\n\004name\030\001 \002(\t\022\014\n\004"
-  "size\030\002 \002(\004\",\n\nUnlockPath\022\021\n\taddress_n\030\001 "
-  "\003(\r\022\013\n\003mac\030\002 \001(\014\"\"\n\023UnlockedPathRequest\022"
-  "\013\n\003mac\030\001 \001(\014*>\n\nBackupType\022\t\n\005Bip39\020\000\022\020\n"
-  "\014Slip39_Basic\020\001\022\023\n\017Slip39_Advanced\020\002*G\n\020"
-  "SafetyCheckLevel\022\n\n\006Strict\020\000\022\020\n\014PromptAl"
-  "ways\020\001\022\025\n\021PromptTemporarily\020\002BB\n#com.sat"
-  "oshilabs.trezor.lib.protobufB\027TrezorMess"
-  "ageManagement\200\246\035\001"
+  "RomBoot\"\023\n\021SEWipeUserStorage\"V\n\013NftMetad"
+  "ata\022\n\n\002id\030\001 \002(\t\022\014\n\004name\030\003 \002(\t\022\r\n\005token\030\002"
+  " \002(\t\022\017\n\007network\030\004 \002(\t\022\r\n\005owner\030\005 \002(\t\"\240\001\n"
+  "\tNftUpload\022<\n\010metadata\030\001 \002(\0132*.hw.trezor"
+  ".messages.management.NftMetadata\022\021\n\texte"
+  "nsion\030\002 \002(\t\022\022\n\nimage_size\030\003 \002(\r\022\026\n\016thumb"
+  "nail_size\030\004 \002(\r\022\026\n\016wallpaper_size\030\005 \002(\r\""
+  "\264\001\n\nNftRequest\022\016\n\006offset\030\001 \002(\r\022\023\n\013data_l"
+  "ength\030\002 \002(\r\022F\n\004type\030\003 \002(\01628.hw.trezor.me"
+  "ssages.management.NftRequest.NftRequestT"
+  "ype\"9\n\016NftRequestType\022\t\n\005IMAGE\020\000\022\r\n\tTHUM"
+  "BNAIL\020\001\022\r\n\tWALLPAPER\020\002\"%\n\006NftAck\022\r\n\005chun"
+  "k\030\001 \002(\014\022\014\n\004hash\030\002 \001(\014\"\032\n\nListResDir\022\014\n\004p"
+  "ath\030\001 \002(\t\"{\n\014FileInfoList\022C\n\005files\030\001 \003(\013"
+  "24.hw.trezor.messages.management.FileInf"
+  "oList.FileInfo\032&\n\010FileInfo\022\014\n\004name\030\001 \002(\t"
+  "\022\014\n\004size\030\002 \002(\004\",\n\nUnlockPath\022\021\n\taddress_"
+  "n\030\001 \003(\r\022\013\n\003mac\030\002 \001(\014\"\"\n\023UnlockedPathRequ"
+  "est\022\013\n\003mac\030\001 \001(\014*>\n\nBackupType\022\t\n\005Bip39\020"
+  "\000\022\020\n\014Slip39_Basic\020\001\022\023\n\017Slip39_Advanced\020\002"
+  "*G\n\020SafetyCheckLevel\022\n\n\006Strict\020\000\022\020\n\014Prom"
+  "ptAlways\020\001\022\025\n\021PromptTemporarily\020\002BB\n#com"
+  ".satoshilabs.trezor.lib.protobufB\027Trezor"
+  "MessageManagement\200\246\035\001"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_messages_2dmanagement_2eproto_deps[1] = {
   &::descriptor_table_messages_2eproto,
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_messages_2dmanagement_2eproto_sccs[61] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_messages_2dmanagement_2eproto_sccs[60] = {
   &scc_info_ApplyFlags_messages_2dmanagement_2eproto.base,
   &scc_info_ApplySettings_messages_2dmanagement_2eproto.base,
   &scc_info_BackupDevice_messages_2dmanagement_2eproto.base,
@@ -2063,6 +2037,10 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_mes
   &scc_info_LoadDevice_messages_2dmanagement_2eproto.base,
   &scc_info_LockDevice_messages_2dmanagement_2eproto.base,
   &scc_info_NextU2FCounter_messages_2dmanagement_2eproto.base,
+  &scc_info_NftAck_messages_2dmanagement_2eproto.base,
+  &scc_info_NftMetadata_messages_2dmanagement_2eproto.base,
+  &scc_info_NftRequest_messages_2dmanagement_2eproto.base,
+  &scc_info_NftUpload_messages_2dmanagement_2eproto.base,
   &scc_info_Nonce_messages_2dmanagement_2eproto.base,
   &scc_info_Ping_messages_2dmanagement_2eproto.base,
   &scc_info_PreauthorizedRequest_messages_2dmanagement_2eproto.base,
@@ -2072,10 +2050,6 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_mes
   &scc_info_RebootToBootloader_messages_2dmanagement_2eproto.base,
   &scc_info_RecoveryDevice_messages_2dmanagement_2eproto.base,
   &scc_info_ResetDevice_messages_2dmanagement_2eproto.base,
-  &scc_info_ResourceAck_messages_2dmanagement_2eproto.base,
-  &scc_info_ResourceRequest_messages_2dmanagement_2eproto.base,
-  &scc_info_ResourceUpdate_messages_2dmanagement_2eproto.base,
-  &scc_info_ResourceUpload_messages_2dmanagement_2eproto.base,
   &scc_info_SEBackToRomBoot_messages_2dmanagement_2eproto.base,
   &scc_info_SEInitialize_messages_2dmanagement_2eproto.base,
   &scc_info_SEInitializeDone_messages_2dmanagement_2eproto.base,
@@ -2093,15 +2067,14 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_mes
   &scc_info_WordAck_messages_2dmanagement_2eproto.base,
   &scc_info_WordRequest_messages_2dmanagement_2eproto.base,
   &scc_info_WriteSEPublicCert_messages_2dmanagement_2eproto.base,
-  &scc_info_ZoomRequest_messages_2dmanagement_2eproto.base,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_messages_2dmanagement_2eproto_once;
 static bool descriptor_table_messages_2dmanagement_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_messages_2dmanagement_2eproto = {
-  &descriptor_table_messages_2dmanagement_2eproto_initialized, descriptor_table_protodef_messages_2dmanagement_2eproto, "messages-management.proto", 5857,
-  &descriptor_table_messages_2dmanagement_2eproto_once, descriptor_table_messages_2dmanagement_2eproto_sccs, descriptor_table_messages_2dmanagement_2eproto_deps, 61, 1,
+  &descriptor_table_messages_2dmanagement_2eproto_initialized, descriptor_table_protodef_messages_2dmanagement_2eproto, "messages-management.proto", 5821,
+  &descriptor_table_messages_2dmanagement_2eproto_once, descriptor_table_messages_2dmanagement_2eproto_sccs, descriptor_table_messages_2dmanagement_2eproto_deps, 60, 1,
   schemas, file_default_instances, TableStruct_messages_2dmanagement_2eproto::offsets,
-  file_level_metadata_messages_2dmanagement_2eproto, 61, file_level_enum_descriptors_messages_2dmanagement_2eproto, file_level_service_descriptors_messages_2dmanagement_2eproto,
+  file_level_metadata_messages_2dmanagement_2eproto, 60, file_level_enum_descriptors_messages_2dmanagement_2eproto, file_level_service_descriptors_messages_2dmanagement_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -2228,14 +2201,15 @@ constexpr WordRequest_WordRequestType WordRequest::WordRequestType_MIN;
 constexpr WordRequest_WordRequestType WordRequest::WordRequestType_MAX;
 constexpr int WordRequest::WordRequestType_ARRAYSIZE;
 #endif  // (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ResourceUpload_ResourceType_descriptor() {
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* NftRequest_NftRequestType_descriptor() {
   ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_messages_2dmanagement_2eproto);
   return file_level_enum_descriptors_messages_2dmanagement_2eproto[4];
 }
-bool ResourceUpload_ResourceType_IsValid(int value) {
+bool NftRequest_NftRequestType_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
+    case 2:
       return true;
     default:
       return false;
@@ -2243,11 +2217,12 @@ bool ResourceUpload_ResourceType_IsValid(int value) {
 }
 
 #if (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
-constexpr ResourceUpload_ResourceType ResourceUpload::WallPaper;
-constexpr ResourceUpload_ResourceType ResourceUpload::Nft;
-constexpr ResourceUpload_ResourceType ResourceUpload::ResourceType_MIN;
-constexpr ResourceUpload_ResourceType ResourceUpload::ResourceType_MAX;
-constexpr int ResourceUpload::ResourceType_ARRAYSIZE;
+constexpr NftRequest_NftRequestType NftRequest::IMAGE;
+constexpr NftRequest_NftRequestType NftRequest::THUMBNAIL;
+constexpr NftRequest_NftRequestType NftRequest::WALLPAPER;
+constexpr NftRequest_NftRequestType NftRequest::NftRequestType_MIN;
+constexpr NftRequest_NftRequestType NftRequest::NftRequestType_MAX;
+constexpr int NftRequest::NftRequestType_ARRAYSIZE;
 #endif  // (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* BackupType_descriptor() {
   ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_messages_2dmanagement_2eproto);
@@ -20303,118 +20278,122 @@ void SEWipeUserStorage::InternalSwap(SEWipeUserStorage* other) {
 
 // ===================================================================
 
-void ResourceUpload::InitAsDefaultInstance() {
+void NftMetadata::InitAsDefaultInstance() {
 }
-class ResourceUpload::_Internal {
+class NftMetadata::_Internal {
  public:
-  using HasBits = decltype(std::declval<ResourceUpload>()._has_bits_);
-  static void set_has_extension(HasBits* has_bits) {
+  using HasBits = decltype(std::declval<NftMetadata>()._has_bits_);
+  static void set_has_id(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
-  static void set_has_data_length(HasBits* has_bits) {
-    (*has_bits)[0] |= 8u;
+  static void set_has_name(HasBits* has_bits) {
+    (*has_bits)[0] |= 4u;
   }
-  static void set_has_res_type(HasBits* has_bits) {
-    (*has_bits)[0] |= 16u;
-  }
-  static void set_has_nft_meta_data(HasBits* has_bits) {
+  static void set_has_token(HasBits* has_bits) {
     (*has_bits)[0] |= 2u;
   }
-  static void set_has_zoom_data_length(HasBits* has_bits) {
-    (*has_bits)[0] |= 32u;
+  static void set_has_network(HasBits* has_bits) {
+    (*has_bits)[0] |= 8u;
   }
-  static void set_has_file_name_no_ext(HasBits* has_bits) {
-    (*has_bits)[0] |= 4u;
+  static void set_has_owner(HasBits* has_bits) {
+    (*has_bits)[0] |= 16u;
   }
 };
 
-ResourceUpload::ResourceUpload()
+NftMetadata::NftMetadata()
   : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:hw.trezor.messages.management.ResourceUpload)
+  // @@protoc_insertion_point(constructor:hw.trezor.messages.management.NftMetadata)
 }
-ResourceUpload::ResourceUpload(const ResourceUpload& from)
+NftMetadata::NftMetadata(const NftMetadata& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr),
       _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  extension_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  if (from.has_extension()) {
-    extension_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.extension_);
+  id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.has_id()) {
+    id_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.id_);
   }
-  nft_meta_data_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  if (from.has_nft_meta_data()) {
-    nft_meta_data_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.nft_meta_data_);
+  token_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.has_token()) {
+    token_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.token_);
   }
-  file_name_no_ext_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  if (from.has_file_name_no_ext()) {
-    file_name_no_ext_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.file_name_no_ext_);
+  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.has_name()) {
+    name_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.name_);
   }
-  ::memcpy(&data_length_, &from.data_length_,
-    static_cast<size_t>(reinterpret_cast<char*>(&zoom_data_length_) -
-    reinterpret_cast<char*>(&data_length_)) + sizeof(zoom_data_length_));
-  // @@protoc_insertion_point(copy_constructor:hw.trezor.messages.management.ResourceUpload)
+  network_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.has_network()) {
+    network_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.network_);
+  }
+  owner_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.has_owner()) {
+    owner_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.owner_);
+  }
+  // @@protoc_insertion_point(copy_constructor:hw.trezor.messages.management.NftMetadata)
 }
 
-void ResourceUpload::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_ResourceUpload_messages_2dmanagement_2eproto.base);
-  extension_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  nft_meta_data_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  file_name_no_ext_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  ::memset(&data_length_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&zoom_data_length_) -
-      reinterpret_cast<char*>(&data_length_)) + sizeof(zoom_data_length_));
+void NftMetadata::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_NftMetadata_messages_2dmanagement_2eproto.base);
+  id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  token_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  network_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  owner_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
-ResourceUpload::~ResourceUpload() {
-  // @@protoc_insertion_point(destructor:hw.trezor.messages.management.ResourceUpload)
+NftMetadata::~NftMetadata() {
+  // @@protoc_insertion_point(destructor:hw.trezor.messages.management.NftMetadata)
   SharedDtor();
 }
 
-void ResourceUpload::SharedDtor() {
-  extension_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  nft_meta_data_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  file_name_no_ext_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+void NftMetadata::SharedDtor() {
+  id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  token_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  network_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  owner_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
-void ResourceUpload::SetCachedSize(int size) const {
+void NftMetadata::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const ResourceUpload& ResourceUpload::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_ResourceUpload_messages_2dmanagement_2eproto.base);
+const NftMetadata& NftMetadata::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_NftMetadata_messages_2dmanagement_2eproto.base);
   return *internal_default_instance();
 }
 
 
-void ResourceUpload::Clear() {
-// @@protoc_insertion_point(message_clear_start:hw.trezor.messages.management.ResourceUpload)
+void NftMetadata::Clear() {
+// @@protoc_insertion_point(message_clear_start:hw.trezor.messages.management.NftMetadata)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
+  if (cached_has_bits & 0x0000001fu) {
     if (cached_has_bits & 0x00000001u) {
-      extension_.ClearNonDefaultToEmptyNoArena();
+      id_.ClearNonDefaultToEmptyNoArena();
     }
     if (cached_has_bits & 0x00000002u) {
-      nft_meta_data_.ClearNonDefaultToEmptyNoArena();
+      token_.ClearNonDefaultToEmptyNoArena();
     }
     if (cached_has_bits & 0x00000004u) {
-      file_name_no_ext_.ClearNonDefaultToEmptyNoArena();
+      name_.ClearNonDefaultToEmptyNoArena();
     }
-  }
-  if (cached_has_bits & 0x00000038u) {
-    ::memset(&data_length_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&zoom_data_length_) -
-        reinterpret_cast<char*>(&data_length_)) + sizeof(zoom_data_length_));
+    if (cached_has_bits & 0x00000008u) {
+      network_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000010u) {
+      owner_.ClearNonDefaultToEmptyNoArena();
+    }
   }
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
 
 #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-const char* ResourceUpload::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* NftMetadata::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
@@ -20422,52 +20401,38 @@ const char* ResourceUpload::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // required string extension = 1;
+      // required string id = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8Verify(mutable_extension(), ptr, ctx, "hw.trezor.messages.management.ResourceUpload.extension");
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8Verify(mutable_id(), ptr, ctx, "hw.trezor.messages.management.NftMetadata.id");
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // required uint32 data_length = 2;
+      // required string token = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
-          _Internal::set_has_data_length(&has_bits);
-          data_length_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8Verify(mutable_token(), ptr, ctx, "hw.trezor.messages.management.NftMetadata.token");
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // required .hw.trezor.messages.management.ResourceUpload.ResourceType res_type = 3;
+      // required string name = 3;
       case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
-          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8Verify(mutable_name(), ptr, ctx, "hw.trezor.messages.management.NftMetadata.name");
           CHK_(ptr);
-          if (PROTOBUF_PREDICT_TRUE(::hw::trezor::messages::management::ResourceUpload_ResourceType_IsValid(val))) {
-            set_res_type(static_cast<::hw::trezor::messages::management::ResourceUpload_ResourceType>(val));
-          } else {
-            ::PROTOBUF_NAMESPACE_ID::internal::WriteVarint(3, val, mutable_unknown_fields());
-          }
         } else goto handle_unusual;
         continue;
-      // optional bytes nft_meta_data = 4;
+      // required string network = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(mutable_nft_meta_data(), ptr, ctx);
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8Verify(mutable_network(), ptr, ctx, "hw.trezor.messages.management.NftMetadata.network");
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // required uint32 zoom_data_length = 5;
+      // required string owner = 5;
       case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 40)) {
-          _Internal::set_has_zoom_data_length(&has_bits);
-          zoom_data_length_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // optional string file_name_no_ext = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 50)) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8Verify(mutable_file_name_no_ext(), ptr, ctx, "hw.trezor.messages.management.ResourceUpload.file_name_no_ext");
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8Verify(mutable_owner(), ptr, ctx, "hw.trezor.messages.management.NftMetadata.owner");
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -20492,25 +20457,1105 @@ failure:
 #undef CHK_
 }
 #else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-bool ResourceUpload::MergePartialFromCodedStream(
+bool NftMetadata::MergePartialFromCodedStream(
     ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
   ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-  // @@protoc_insertion_point(parse_start:hw.trezor.messages.management.ResourceUpload)
+  // @@protoc_insertion_point(parse_start:hw.trezor.messages.management.NftMetadata)
   for (;;) {
     ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required string extension = 1;
+      // required string id = 1;
       case 1: {
         if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (10 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_id()));
+          ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->id().data(), static_cast<int>(this->id().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::PARSE,
+            "hw.trezor.messages.management.NftMetadata.id");
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required string token = 2;
+      case 2: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (18 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_token()));
+          ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->token().data(), static_cast<int>(this->token().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::PARSE,
+            "hw.trezor.messages.management.NftMetadata.token");
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required string name = 3;
+      case 3: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (26 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_name()));
+          ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->name().data(), static_cast<int>(this->name().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::PARSE,
+            "hw.trezor.messages.management.NftMetadata.name");
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required string network = 4;
+      case 4: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (34 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_network()));
+          ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->network().data(), static_cast<int>(this->network().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::PARSE,
+            "hw.trezor.messages.management.NftMetadata.network");
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required string owner = 5;
+      case 5: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (42 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_owner()));
+          ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->owner().data(), static_cast<int>(this->owner().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::PARSE,
+            "hw.trezor.messages.management.NftMetadata.owner");
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:hw.trezor.messages.management.NftMetadata)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:hw.trezor.messages.management.NftMetadata)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void NftMetadata::SerializeWithCachedSizes(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:hw.trezor.messages.management.NftMetadata)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // required string id = 1;
+  if (cached_has_bits & 0x00000001u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->id().data(), static_cast<int>(this->id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "hw.trezor.messages.management.NftMetadata.id");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->id(), output);
+  }
+
+  // required string token = 2;
+  if (cached_has_bits & 0x00000002u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->token().data(), static_cast<int>(this->token().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "hw.trezor.messages.management.NftMetadata.token");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->token(), output);
+  }
+
+  // required string name = 3;
+  if (cached_has_bits & 0x00000004u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->name().data(), static_cast<int>(this->name().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "hw.trezor.messages.management.NftMetadata.name");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->name(), output);
+  }
+
+  // required string network = 4;
+  if (cached_has_bits & 0x00000008u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->network().data(), static_cast<int>(this->network().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "hw.trezor.messages.management.NftMetadata.network");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      4, this->network(), output);
+  }
+
+  // required string owner = 5;
+  if (cached_has_bits & 0x00000010u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->owner().data(), static_cast<int>(this->owner().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "hw.trezor.messages.management.NftMetadata.owner");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      5, this->owner(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:hw.trezor.messages.management.NftMetadata)
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* NftMetadata::InternalSerializeWithCachedSizesToArray(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:hw.trezor.messages.management.NftMetadata)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // required string id = 1;
+  if (cached_has_bits & 0x00000001u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->id().data(), static_cast<int>(this->id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "hw.trezor.messages.management.NftMetadata.id");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        1, this->id(), target);
+  }
+
+  // required string token = 2;
+  if (cached_has_bits & 0x00000002u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->token().data(), static_cast<int>(this->token().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "hw.trezor.messages.management.NftMetadata.token");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        2, this->token(), target);
+  }
+
+  // required string name = 3;
+  if (cached_has_bits & 0x00000004u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->name().data(), static_cast<int>(this->name().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "hw.trezor.messages.management.NftMetadata.name");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        3, this->name(), target);
+  }
+
+  // required string network = 4;
+  if (cached_has_bits & 0x00000008u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->network().data(), static_cast<int>(this->network().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "hw.trezor.messages.management.NftMetadata.network");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        4, this->network(), target);
+  }
+
+  // required string owner = 5;
+  if (cached_has_bits & 0x00000010u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->owner().data(), static_cast<int>(this->owner().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "hw.trezor.messages.management.NftMetadata.owner");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        5, this->owner(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:hw.trezor.messages.management.NftMetadata)
+  return target;
+}
+
+size_t NftMetadata::RequiredFieldsByteSizeFallback() const {
+// @@protoc_insertion_point(required_fields_byte_size_fallback_start:hw.trezor.messages.management.NftMetadata)
+  size_t total_size = 0;
+
+  if (has_id()) {
+    // required string id = 1;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->id());
+  }
+
+  if (has_token()) {
+    // required string token = 2;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->token());
+  }
+
+  if (has_name()) {
+    // required string name = 3;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->name());
+  }
+
+  if (has_network()) {
+    // required string network = 4;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->network());
+  }
+
+  if (has_owner()) {
+    // required string owner = 5;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->owner());
+  }
+
+  return total_size;
+}
+size_t NftMetadata::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:hw.trezor.messages.management.NftMetadata)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  if (((_has_bits_[0] & 0x0000001f) ^ 0x0000001f) == 0) {  // All required fields are present.
+    // required string id = 1;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->id());
+
+    // required string token = 2;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->token());
+
+    // required string name = 3;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->name());
+
+    // required string network = 4;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->network());
+
+    // required string owner = 5;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->owner());
+
+  } else {
+    total_size += RequiredFieldsByteSizeFallback();
+  }
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void NftMetadata::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:hw.trezor.messages.management.NftMetadata)
+  GOOGLE_DCHECK_NE(&from, this);
+  const NftMetadata* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<NftMetadata>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:hw.trezor.messages.management.NftMetadata)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:hw.trezor.messages.management.NftMetadata)
+    MergeFrom(*source);
+  }
+}
+
+void NftMetadata::MergeFrom(const NftMetadata& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:hw.trezor.messages.management.NftMetadata)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 0x0000001fu) {
+    if (cached_has_bits & 0x00000001u) {
+      _has_bits_[0] |= 0x00000001u;
+      id_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.id_);
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _has_bits_[0] |= 0x00000002u;
+      token_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.token_);
+    }
+    if (cached_has_bits & 0x00000004u) {
+      _has_bits_[0] |= 0x00000004u;
+      name_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.name_);
+    }
+    if (cached_has_bits & 0x00000008u) {
+      _has_bits_[0] |= 0x00000008u;
+      network_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.network_);
+    }
+    if (cached_has_bits & 0x00000010u) {
+      _has_bits_[0] |= 0x00000010u;
+      owner_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.owner_);
+    }
+  }
+}
+
+void NftMetadata::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:hw.trezor.messages.management.NftMetadata)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void NftMetadata::CopyFrom(const NftMetadata& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:hw.trezor.messages.management.NftMetadata)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool NftMetadata::IsInitialized() const {
+  if ((_has_bits_[0] & 0x0000001f) != 0x0000001f) return false;
+  return true;
+}
+
+void NftMetadata::InternalSwap(NftMetadata* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  id_.Swap(&other->id_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  token_.Swap(&other->token_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  name_.Swap(&other->name_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  network_.Swap(&other->network_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  owner_.Swap(&other->owner_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata NftMetadata::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void NftUpload::InitAsDefaultInstance() {
+  ::hw::trezor::messages::management::_NftUpload_default_instance_._instance.get_mutable()->metadata_ = const_cast< ::hw::trezor::messages::management::NftMetadata*>(
+      ::hw::trezor::messages::management::NftMetadata::internal_default_instance());
+}
+class NftUpload::_Internal {
+ public:
+  using HasBits = decltype(std::declval<NftUpload>()._has_bits_);
+  static const ::hw::trezor::messages::management::NftMetadata& metadata(const NftUpload* msg);
+  static void set_has_metadata(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
+  }
+  static void set_has_extension(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+  static void set_has_image_size(HasBits* has_bits) {
+    (*has_bits)[0] |= 4u;
+  }
+  static void set_has_thumbnail_size(HasBits* has_bits) {
+    (*has_bits)[0] |= 8u;
+  }
+  static void set_has_wallpaper_size(HasBits* has_bits) {
+    (*has_bits)[0] |= 16u;
+  }
+};
+
+const ::hw::trezor::messages::management::NftMetadata&
+NftUpload::_Internal::metadata(const NftUpload* msg) {
+  return *msg->metadata_;
+}
+NftUpload::NftUpload()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:hw.trezor.messages.management.NftUpload)
+}
+NftUpload::NftUpload(const NftUpload& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr),
+      _has_bits_(from._has_bits_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  extension_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.has_extension()) {
+    extension_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.extension_);
+  }
+  if (from.has_metadata()) {
+    metadata_ = new ::hw::trezor::messages::management::NftMetadata(*from.metadata_);
+  } else {
+    metadata_ = nullptr;
+  }
+  ::memcpy(&image_size_, &from.image_size_,
+    static_cast<size_t>(reinterpret_cast<char*>(&wallpaper_size_) -
+    reinterpret_cast<char*>(&image_size_)) + sizeof(wallpaper_size_));
+  // @@protoc_insertion_point(copy_constructor:hw.trezor.messages.management.NftUpload)
+}
+
+void NftUpload::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_NftUpload_messages_2dmanagement_2eproto.base);
+  extension_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  ::memset(&metadata_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&wallpaper_size_) -
+      reinterpret_cast<char*>(&metadata_)) + sizeof(wallpaper_size_));
+}
+
+NftUpload::~NftUpload() {
+  // @@protoc_insertion_point(destructor:hw.trezor.messages.management.NftUpload)
+  SharedDtor();
+}
+
+void NftUpload::SharedDtor() {
+  extension_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (this != internal_default_instance()) delete metadata_;
+}
+
+void NftUpload::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const NftUpload& NftUpload::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_NftUpload_messages_2dmanagement_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void NftUpload::Clear() {
+// @@protoc_insertion_point(message_clear_start:hw.trezor.messages.management.NftUpload)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      extension_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      GOOGLE_DCHECK(metadata_ != nullptr);
+      metadata_->Clear();
+    }
+  }
+  if (cached_has_bits & 0x0000001cu) {
+    ::memset(&image_size_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&wallpaper_size_) -
+        reinterpret_cast<char*>(&image_size_)) + sizeof(wallpaper_size_));
+  }
+  _has_bits_.Clear();
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* NftUpload::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // required .hw.trezor.messages.management.NftMetadata metadata = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr = ctx->ParseMessage(mutable_metadata(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // required string extension = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8Verify(mutable_extension(), ptr, ctx, "hw.trezor.messages.management.NftUpload.extension");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // required uint32 image_size = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
+          _Internal::set_has_image_size(&has_bits);
+          image_size_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // required uint32 thumbnail_size = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
+          _Internal::set_has_thumbnail_size(&has_bits);
+          thumbnail_size_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // required uint32 wallpaper_size = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 40)) {
+          _Internal::set_has_wallpaper_size(&has_bits);
+          wallpaper_size_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  _has_bits_.Or(has_bits);
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool NftUpload::MergePartialFromCodedStream(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+  // @@protoc_insertion_point(parse_start:hw.trezor.messages.management.NftUpload)
+  for (;;) {
+    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required .hw.trezor.messages.management.NftMetadata metadata = 1;
+      case 1: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (10 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadMessage(
+               input, mutable_metadata()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required string extension = 2;
+      case 2: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (18 & 0xFF)) {
           DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
                 input, this->mutable_extension()));
           ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
             this->extension().data(), static_cast<int>(this->extension().length()),
             ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::PARSE,
-            "hw.trezor.messages.management.ResourceUpload.extension");
+            "hw.trezor.messages.management.NftUpload.extension");
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required uint32 image_size = 3;
+      case 3: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (24 & 0xFF)) {
+          _Internal::set_has_image_size(&_has_bits_);
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::uint32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &image_size_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required uint32 thumbnail_size = 4;
+      case 4: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (32 & 0xFF)) {
+          _Internal::set_has_thumbnail_size(&_has_bits_);
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::uint32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &thumbnail_size_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required uint32 wallpaper_size = 5;
+      case 5: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (40 & 0xFF)) {
+          _Internal::set_has_wallpaper_size(&_has_bits_);
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::uint32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &wallpaper_size_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:hw.trezor.messages.management.NftUpload)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:hw.trezor.messages.management.NftUpload)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void NftUpload::SerializeWithCachedSizes(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:hw.trezor.messages.management.NftUpload)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // required .hw.trezor.messages.management.NftMetadata metadata = 1;
+  if (cached_has_bits & 0x00000002u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, _Internal::metadata(this), output);
+  }
+
+  // required string extension = 2;
+  if (cached_has_bits & 0x00000001u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->extension().data(), static_cast<int>(this->extension().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "hw.trezor.messages.management.NftUpload.extension");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->extension(), output);
+  }
+
+  // required uint32 image_size = 3;
+  if (cached_has_bits & 0x00000004u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32(3, this->image_size(), output);
+  }
+
+  // required uint32 thumbnail_size = 4;
+  if (cached_has_bits & 0x00000008u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32(4, this->thumbnail_size(), output);
+  }
+
+  // required uint32 wallpaper_size = 5;
+  if (cached_has_bits & 0x00000010u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32(5, this->wallpaper_size(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:hw.trezor.messages.management.NftUpload)
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* NftUpload::InternalSerializeWithCachedSizesToArray(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:hw.trezor.messages.management.NftUpload)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // required .hw.trezor.messages.management.NftMetadata metadata = 1;
+  if (cached_has_bits & 0x00000002u) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        1, _Internal::metadata(this), target);
+  }
+
+  // required string extension = 2;
+  if (cached_has_bits & 0x00000001u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->extension().data(), static_cast<int>(this->extension().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "hw.trezor.messages.management.NftUpload.extension");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        2, this->extension(), target);
+  }
+
+  // required uint32 image_size = 3;
+  if (cached_has_bits & 0x00000004u) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(3, this->image_size(), target);
+  }
+
+  // required uint32 thumbnail_size = 4;
+  if (cached_has_bits & 0x00000008u) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(4, this->thumbnail_size(), target);
+  }
+
+  // required uint32 wallpaper_size = 5;
+  if (cached_has_bits & 0x00000010u) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(5, this->wallpaper_size(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:hw.trezor.messages.management.NftUpload)
+  return target;
+}
+
+size_t NftUpload::RequiredFieldsByteSizeFallback() const {
+// @@protoc_insertion_point(required_fields_byte_size_fallback_start:hw.trezor.messages.management.NftUpload)
+  size_t total_size = 0;
+
+  if (has_extension()) {
+    // required string extension = 2;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->extension());
+  }
+
+  if (has_metadata()) {
+    // required .hw.trezor.messages.management.NftMetadata metadata = 1;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *metadata_);
+  }
+
+  if (has_image_size()) {
+    // required uint32 image_size = 3;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
+        this->image_size());
+  }
+
+  if (has_thumbnail_size()) {
+    // required uint32 thumbnail_size = 4;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
+        this->thumbnail_size());
+  }
+
+  if (has_wallpaper_size()) {
+    // required uint32 wallpaper_size = 5;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
+        this->wallpaper_size());
+  }
+
+  return total_size;
+}
+size_t NftUpload::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:hw.trezor.messages.management.NftUpload)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  if (((_has_bits_[0] & 0x0000001f) ^ 0x0000001f) == 0) {  // All required fields are present.
+    // required string extension = 2;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->extension());
+
+    // required .hw.trezor.messages.management.NftMetadata metadata = 1;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *metadata_);
+
+    // required uint32 image_size = 3;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
+        this->image_size());
+
+    // required uint32 thumbnail_size = 4;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
+        this->thumbnail_size());
+
+    // required uint32 wallpaper_size = 5;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
+        this->wallpaper_size());
+
+  } else {
+    total_size += RequiredFieldsByteSizeFallback();
+  }
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void NftUpload::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:hw.trezor.messages.management.NftUpload)
+  GOOGLE_DCHECK_NE(&from, this);
+  const NftUpload* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<NftUpload>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:hw.trezor.messages.management.NftUpload)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:hw.trezor.messages.management.NftUpload)
+    MergeFrom(*source);
+  }
+}
+
+void NftUpload::MergeFrom(const NftUpload& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:hw.trezor.messages.management.NftUpload)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 0x0000001fu) {
+    if (cached_has_bits & 0x00000001u) {
+      _has_bits_[0] |= 0x00000001u;
+      extension_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.extension_);
+    }
+    if (cached_has_bits & 0x00000002u) {
+      mutable_metadata()->::hw::trezor::messages::management::NftMetadata::MergeFrom(from.metadata());
+    }
+    if (cached_has_bits & 0x00000004u) {
+      image_size_ = from.image_size_;
+    }
+    if (cached_has_bits & 0x00000008u) {
+      thumbnail_size_ = from.thumbnail_size_;
+    }
+    if (cached_has_bits & 0x00000010u) {
+      wallpaper_size_ = from.wallpaper_size_;
+    }
+    _has_bits_[0] |= cached_has_bits;
+  }
+}
+
+void NftUpload::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:hw.trezor.messages.management.NftUpload)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void NftUpload::CopyFrom(const NftUpload& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:hw.trezor.messages.management.NftUpload)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool NftUpload::IsInitialized() const {
+  if ((_has_bits_[0] & 0x0000001f) != 0x0000001f) return false;
+  if (has_metadata()) {
+    if (!this->metadata_->IsInitialized()) return false;
+  }
+  return true;
+}
+
+void NftUpload::InternalSwap(NftUpload* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  extension_.Swap(&other->extension_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(metadata_, other->metadata_);
+  swap(image_size_, other->image_size_);
+  swap(thumbnail_size_, other->thumbnail_size_);
+  swap(wallpaper_size_, other->wallpaper_size_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata NftUpload::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void NftRequest::InitAsDefaultInstance() {
+}
+class NftRequest::_Internal {
+ public:
+  using HasBits = decltype(std::declval<NftRequest>()._has_bits_);
+  static void set_has_offset(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+  static void set_has_data_length(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
+  }
+  static void set_has_type(HasBits* has_bits) {
+    (*has_bits)[0] |= 4u;
+  }
+};
+
+NftRequest::NftRequest()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:hw.trezor.messages.management.NftRequest)
+}
+NftRequest::NftRequest(const NftRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr),
+      _has_bits_(from._has_bits_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&offset_, &from.offset_,
+    static_cast<size_t>(reinterpret_cast<char*>(&type_) -
+    reinterpret_cast<char*>(&offset_)) + sizeof(type_));
+  // @@protoc_insertion_point(copy_constructor:hw.trezor.messages.management.NftRequest)
+}
+
+void NftRequest::SharedCtor() {
+  ::memset(&offset_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&type_) -
+      reinterpret_cast<char*>(&offset_)) + sizeof(type_));
+}
+
+NftRequest::~NftRequest() {
+  // @@protoc_insertion_point(destructor:hw.trezor.messages.management.NftRequest)
+  SharedDtor();
+}
+
+void NftRequest::SharedDtor() {
+}
+
+void NftRequest::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const NftRequest& NftRequest::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_NftRequest_messages_2dmanagement_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void NftRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:hw.trezor.messages.management.NftRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000007u) {
+    ::memset(&offset_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&type_) -
+        reinterpret_cast<char*>(&offset_)) + sizeof(type_));
+  }
+  _has_bits_.Clear();
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* NftRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // required uint32 offset = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          _Internal::set_has_offset(&has_bits);
+          offset_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // required uint32 data_length = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          _Internal::set_has_data_length(&has_bits);
+          data_length_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // required .hw.trezor.messages.management.NftRequest.NftRequestType type = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
+          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+          if (PROTOBUF_PREDICT_TRUE(::hw::trezor::messages::management::NftRequest_NftRequestType_IsValid(val))) {
+            set_type(static_cast<::hw::trezor::messages::management::NftRequest_NftRequestType>(val));
+          } else {
+            ::PROTOBUF_NAMESPACE_ID::internal::WriteVarint(3, val, mutable_unknown_fields());
+          }
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  _has_bits_.Or(has_bits);
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool NftRequest::MergePartialFromCodedStream(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+  // @@protoc_insertion_point(parse_start:hw.trezor.messages.management.NftRequest)
+  for (;;) {
+    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 offset = 1;
+      case 1: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (8 & 0xFF)) {
+          _Internal::set_has_offset(&_has_bits_);
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::uint32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &offset_)));
         } else {
           goto handle_unusual;
         }
@@ -20530,15 +21575,15 @@ bool ResourceUpload::MergePartialFromCodedStream(
         break;
       }
 
-      // required .hw.trezor.messages.management.ResourceUpload.ResourceType res_type = 3;
+      // required .hw.trezor.messages.management.NftRequest.NftRequestType type = 3;
       case 3: {
         if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (24 & 0xFF)) {
           int value = 0;
           DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
                    int, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::hw::trezor::messages::management::ResourceUpload_ResourceType_IsValid(value)) {
-            set_res_type(static_cast< ::hw::trezor::messages::management::ResourceUpload_ResourceType >(value));
+          if (::hw::trezor::messages::management::NftRequest_NftRequestType_IsValid(value)) {
+            set_type(static_cast< ::hw::trezor::messages::management::NftRequest_NftRequestType >(value));
           } else {
             mutable_unknown_fields()->AddVarint(
                 3, static_cast<::PROTOBUF_NAMESPACE_ID::uint64>(value));
@@ -20549,45 +21594,6 @@ bool ResourceUpload::MergePartialFromCodedStream(
         break;
       }
 
-      // optional bytes nft_meta_data = 4;
-      case 4: {
-        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (34 & 0xFF)) {
-          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadBytes(
-                input, this->mutable_nft_meta_data()));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // required uint32 zoom_data_length = 5;
-      case 5: {
-        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (40 & 0xFF)) {
-          _Internal::set_has_zoom_data_length(&_has_bits_);
-          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
-                   ::PROTOBUF_NAMESPACE_ID::uint32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &zoom_data_length_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // optional string file_name_no_ext = 6;
-      case 6: {
-        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (50 & 0xFF)) {
-          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
-                input, this->mutable_file_name_no_ext()));
-          ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
-            this->file_name_no_ext().data(), static_cast<int>(this->file_name_no_ext().length()),
-            ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::PARSE,
-            "hw.trezor.messages.management.ResourceUpload.file_name_no_ext");
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -20600,140 +21606,85 @@ bool ResourceUpload::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:hw.trezor.messages.management.ResourceUpload)
+  // @@protoc_insertion_point(parse_success:hw.trezor.messages.management.NftRequest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:hw.trezor.messages.management.ResourceUpload)
+  // @@protoc_insertion_point(parse_failure:hw.trezor.messages.management.NftRequest)
   return false;
 #undef DO_
 }
 #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
 
-void ResourceUpload::SerializeWithCachedSizes(
+void NftRequest::SerializeWithCachedSizes(
     ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:hw.trezor.messages.management.ResourceUpload)
+  // @@protoc_insertion_point(serialize_start:hw.trezor.messages.management.NftRequest)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  // required string extension = 1;
+  // required uint32 offset = 1;
   if (cached_has_bits & 0x00000001u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->extension().data(), static_cast<int>(this->extension().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
-      "hw.trezor.messages.management.ResourceUpload.extension");
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
-      1, this->extension(), output);
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32(1, this->offset(), output);
   }
 
   // required uint32 data_length = 2;
-  if (cached_has_bits & 0x00000008u) {
+  if (cached_has_bits & 0x00000002u) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32(2, this->data_length(), output);
   }
 
-  // required .hw.trezor.messages.management.ResourceUpload.ResourceType res_type = 3;
-  if (cached_has_bits & 0x00000010u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnum(
-      3, this->res_type(), output);
-  }
-
-  // optional bytes nft_meta_data = 4;
-  if (cached_has_bits & 0x00000002u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBytesMaybeAliased(
-      4, this->nft_meta_data(), output);
-  }
-
-  // required uint32 zoom_data_length = 5;
-  if (cached_has_bits & 0x00000020u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32(5, this->zoom_data_length(), output);
-  }
-
-  // optional string file_name_no_ext = 6;
+  // required .hw.trezor.messages.management.NftRequest.NftRequestType type = 3;
   if (cached_has_bits & 0x00000004u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->file_name_no_ext().data(), static_cast<int>(this->file_name_no_ext().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
-      "hw.trezor.messages.management.ResourceUpload.file_name_no_ext");
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
-      6, this->file_name_no_ext(), output);
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnum(
+      3, this->type(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:hw.trezor.messages.management.ResourceUpload)
+  // @@protoc_insertion_point(serialize_end:hw.trezor.messages.management.NftRequest)
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* ResourceUpload::InternalSerializeWithCachedSizesToArray(
+::PROTOBUF_NAMESPACE_ID::uint8* NftRequest::InternalSerializeWithCachedSizesToArray(
     ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:hw.trezor.messages.management.ResourceUpload)
+  // @@protoc_insertion_point(serialize_to_array_start:hw.trezor.messages.management.NftRequest)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  // required string extension = 1;
+  // required uint32 offset = 1;
   if (cached_has_bits & 0x00000001u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->extension().data(), static_cast<int>(this->extension().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
-      "hw.trezor.messages.management.ResourceUpload.extension");
-    target =
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
-        1, this->extension(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(1, this->offset(), target);
   }
 
   // required uint32 data_length = 2;
-  if (cached_has_bits & 0x00000008u) {
+  if (cached_has_bits & 0x00000002u) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(2, this->data_length(), target);
   }
 
-  // required .hw.trezor.messages.management.ResourceUpload.ResourceType res_type = 3;
-  if (cached_has_bits & 0x00000010u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
-      3, this->res_type(), target);
-  }
-
-  // optional bytes nft_meta_data = 4;
-  if (cached_has_bits & 0x00000002u) {
-    target =
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBytesToArray(
-        4, this->nft_meta_data(), target);
-  }
-
-  // required uint32 zoom_data_length = 5;
-  if (cached_has_bits & 0x00000020u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(5, this->zoom_data_length(), target);
-  }
-
-  // optional string file_name_no_ext = 6;
+  // required .hw.trezor.messages.management.NftRequest.NftRequestType type = 3;
   if (cached_has_bits & 0x00000004u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->file_name_no_ext().data(), static_cast<int>(this->file_name_no_ext().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
-      "hw.trezor.messages.management.ResourceUpload.file_name_no_ext");
-    target =
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
-        6, this->file_name_no_ext(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
+      3, this->type(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:hw.trezor.messages.management.ResourceUpload)
+  // @@protoc_insertion_point(serialize_to_array_end:hw.trezor.messages.management.NftRequest)
   return target;
 }
 
-size_t ResourceUpload::RequiredFieldsByteSizeFallback() const {
-// @@protoc_insertion_point(required_fields_byte_size_fallback_start:hw.trezor.messages.management.ResourceUpload)
+size_t NftRequest::RequiredFieldsByteSizeFallback() const {
+// @@protoc_insertion_point(required_fields_byte_size_fallback_start:hw.trezor.messages.management.NftRequest)
   size_t total_size = 0;
 
-  if (has_extension()) {
-    // required string extension = 1;
+  if (has_offset()) {
+    // required uint32 offset = 1;
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->extension());
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
+        this->offset());
   }
 
   if (has_data_length()) {
@@ -20743,23 +21694,16 @@ size_t ResourceUpload::RequiredFieldsByteSizeFallback() const {
         this->data_length());
   }
 
-  if (has_res_type()) {
-    // required .hw.trezor.messages.management.ResourceUpload.ResourceType res_type = 3;
+  if (has_type()) {
+    // required .hw.trezor.messages.management.NftRequest.NftRequestType type = 3;
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->res_type());
-  }
-
-  if (has_zoom_data_length()) {
-    // required uint32 zoom_data_length = 5;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
-        this->zoom_data_length());
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->type());
   }
 
   return total_size;
 }
-size_t ResourceUpload::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:hw.trezor.messages.management.ResourceUpload)
+size_t NftRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:hw.trezor.messages.management.NftRequest)
   size_t total_size = 0;
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -20767,25 +21711,20 @@ size_t ResourceUpload::ByteSizeLong() const {
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
         _internal_metadata_.unknown_fields());
   }
-  if (((_has_bits_[0] & 0x00000039) ^ 0x00000039) == 0) {  // All required fields are present.
-    // required string extension = 1;
+  if (((_has_bits_[0] & 0x00000007) ^ 0x00000007) == 0) {  // All required fields are present.
+    // required uint32 offset = 1;
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->extension());
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
+        this->offset());
 
     // required uint32 data_length = 2;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
         this->data_length());
 
-    // required .hw.trezor.messages.management.ResourceUpload.ResourceType res_type = 3;
+    // required .hw.trezor.messages.management.NftRequest.NftRequestType type = 3;
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->res_type());
-
-    // required uint32 zoom_data_length = 5;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
-        this->zoom_data_length());
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->type());
 
   } else {
     total_size += RequiredFieldsByteSizeFallback();
@@ -20794,764 +21733,89 @@ size_t ResourceUpload::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000006u) {
-    // optional bytes nft_meta_data = 4;
-    if (cached_has_bits & 0x00000002u) {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
-          this->nft_meta_data());
-    }
-
-    // optional string file_name_no_ext = 6;
-    if (cached_has_bits & 0x00000004u) {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-          this->file_name_no_ext());
-    }
-
-  }
   int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
 }
 
-void ResourceUpload::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:hw.trezor.messages.management.ResourceUpload)
+void NftRequest::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:hw.trezor.messages.management.NftRequest)
   GOOGLE_DCHECK_NE(&from, this);
-  const ResourceUpload* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<ResourceUpload>(
+  const NftRequest* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<NftRequest>(
           &from);
   if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:hw.trezor.messages.management.ResourceUpload)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:hw.trezor.messages.management.NftRequest)
     ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:hw.trezor.messages.management.ResourceUpload)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:hw.trezor.messages.management.NftRequest)
     MergeFrom(*source);
   }
 }
 
-void ResourceUpload::MergeFrom(const ResourceUpload& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:hw.trezor.messages.management.ResourceUpload)
+void NftRequest::MergeFrom(const NftRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:hw.trezor.messages.management.NftRequest)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x0000003fu) {
-    if (cached_has_bits & 0x00000001u) {
-      _has_bits_[0] |= 0x00000001u;
-      extension_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.extension_);
-    }
-    if (cached_has_bits & 0x00000002u) {
-      _has_bits_[0] |= 0x00000002u;
-      nft_meta_data_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.nft_meta_data_);
-    }
-    if (cached_has_bits & 0x00000004u) {
-      _has_bits_[0] |= 0x00000004u;
-      file_name_no_ext_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.file_name_no_ext_);
-    }
-    if (cached_has_bits & 0x00000008u) {
-      data_length_ = from.data_length_;
-    }
-    if (cached_has_bits & 0x00000010u) {
-      res_type_ = from.res_type_;
-    }
-    if (cached_has_bits & 0x00000020u) {
-      zoom_data_length_ = from.zoom_data_length_;
-    }
-    _has_bits_[0] |= cached_has_bits;
-  }
-}
-
-void ResourceUpload::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:hw.trezor.messages.management.ResourceUpload)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-void ResourceUpload::CopyFrom(const ResourceUpload& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:hw.trezor.messages.management.ResourceUpload)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool ResourceUpload::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000039) != 0x00000039) return false;
-  return true;
-}
-
-void ResourceUpload::InternalSwap(ResourceUpload* other) {
-  using std::swap;
-  _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_has_bits_[0], other->_has_bits_[0]);
-  extension_.Swap(&other->extension_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-    GetArenaNoVirtual());
-  nft_meta_data_.Swap(&other->nft_meta_data_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-    GetArenaNoVirtual());
-  file_name_no_ext_.Swap(&other->file_name_no_ext_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-    GetArenaNoVirtual());
-  swap(data_length_, other->data_length_);
-  swap(res_type_, other->res_type_);
-  swap(zoom_data_length_, other->zoom_data_length_);
-}
-
-::PROTOBUF_NAMESPACE_ID::Metadata ResourceUpload::GetMetadata() const {
-  return GetMetadataStatic();
-}
-
-
-// ===================================================================
-
-void ZoomRequest::InitAsDefaultInstance() {
-}
-class ZoomRequest::_Internal {
- public:
-  using HasBits = decltype(std::declval<ZoomRequest>()._has_bits_);
-  static void set_has_offset(HasBits* has_bits) {
-    (*has_bits)[0] |= 1u;
-  }
-  static void set_has_data_length(HasBits* has_bits) {
-    (*has_bits)[0] |= 2u;
-  }
-};
-
-ZoomRequest::ZoomRequest()
-  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:hw.trezor.messages.management.ZoomRequest)
-}
-ZoomRequest::ZoomRequest(const ZoomRequest& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message(),
-      _internal_metadata_(nullptr),
-      _has_bits_(from._has_bits_) {
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::memcpy(&offset_, &from.offset_,
-    static_cast<size_t>(reinterpret_cast<char*>(&data_length_) -
-    reinterpret_cast<char*>(&offset_)) + sizeof(data_length_));
-  // @@protoc_insertion_point(copy_constructor:hw.trezor.messages.management.ZoomRequest)
-}
-
-void ZoomRequest::SharedCtor() {
-  ::memset(&offset_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&data_length_) -
-      reinterpret_cast<char*>(&offset_)) + sizeof(data_length_));
-}
-
-ZoomRequest::~ZoomRequest() {
-  // @@protoc_insertion_point(destructor:hw.trezor.messages.management.ZoomRequest)
-  SharedDtor();
-}
-
-void ZoomRequest::SharedDtor() {
-}
-
-void ZoomRequest::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
-}
-const ZoomRequest& ZoomRequest::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_ZoomRequest_messages_2dmanagement_2eproto.base);
-  return *internal_default_instance();
-}
-
-
-void ZoomRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:hw.trezor.messages.management.ZoomRequest)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
-    ::memset(&offset_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&data_length_) -
-        reinterpret_cast<char*>(&offset_)) + sizeof(data_length_));
-  }
-  _has_bits_.Clear();
-  _internal_metadata_.Clear();
-}
-
-#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-const char* ZoomRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
-    switch (tag >> 3) {
-      // optional uint32 offset = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          _Internal::set_has_offset(&has_bits);
-          offset_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // required uint32 data_length = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
-          _Internal::set_has_data_length(&has_bits);
-          data_length_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      default: {
-      handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
-          ctx->SetLastTag(tag);
-          goto success;
-        }
-        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
-        CHK_(ptr != nullptr);
-        continue;
-      }
-    }  // switch
-  }  // while
-success:
-  _has_bits_.Or(has_bits);
-  return ptr;
-failure:
-  ptr = nullptr;
-  goto success;
-#undef CHK_
-}
-#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-bool ZoomRequest::MergePartialFromCodedStream(
-    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-  // @@protoc_insertion_point(parse_start:hw.trezor.messages.management.ZoomRequest)
-  for (;;) {
-    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional uint32 offset = 1;
-      case 1: {
-        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (8 & 0xFF)) {
-          _Internal::set_has_offset(&_has_bits_);
-          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
-                   ::PROTOBUF_NAMESPACE_ID::uint32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &offset_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // required uint32 data_length = 2;
-      case 2: {
-        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (16 & 0xFF)) {
-          _Internal::set_has_data_length(&_has_bits_);
-          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
-                   ::PROTOBUF_NAMESPACE_ID::uint32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &data_length_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0) {
-          goto success;
-        }
-        DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
-              input, tag, _internal_metadata_.mutable_unknown_fields()));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:hw.trezor.messages.management.ZoomRequest)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:hw.trezor.messages.management.ZoomRequest)
-  return false;
-#undef DO_
-}
-#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-
-void ZoomRequest::SerializeWithCachedSizes(
-    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:hw.trezor.messages.management.ZoomRequest)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  cached_has_bits = _has_bits_[0];
-  // optional uint32 offset = 1;
-  if (cached_has_bits & 0x00000001u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32(1, this->offset(), output);
-  }
-
-  // required uint32 data_length = 2;
-  if (cached_has_bits & 0x00000002u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32(2, this->data_length(), output);
-  }
-
-  if (_internal_metadata_.have_unknown_fields()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
-        _internal_metadata_.unknown_fields(), output);
-  }
-  // @@protoc_insertion_point(serialize_end:hw.trezor.messages.management.ZoomRequest)
-}
-
-::PROTOBUF_NAMESPACE_ID::uint8* ZoomRequest::InternalSerializeWithCachedSizesToArray(
-    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:hw.trezor.messages.management.ZoomRequest)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  cached_has_bits = _has_bits_[0];
-  // optional uint32 offset = 1;
-  if (cached_has_bits & 0x00000001u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(1, this->offset(), target);
-  }
-
-  // required uint32 data_length = 2;
-  if (cached_has_bits & 0x00000002u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(2, this->data_length(), target);
-  }
-
-  if (_internal_metadata_.have_unknown_fields()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields(), target);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:hw.trezor.messages.management.ZoomRequest)
-  return target;
-}
-
-size_t ZoomRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:hw.trezor.messages.management.ZoomRequest)
-  size_t total_size = 0;
-
-  if (_internal_metadata_.have_unknown_fields()) {
-    total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
-        _internal_metadata_.unknown_fields());
-  }
-  // required uint32 data_length = 2;
-  if (has_data_length()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
-        this->data_length());
-  }
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  // optional uint32 offset = 1;
-  cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
-        this->offset());
-  }
-
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
-}
-
-void ZoomRequest::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:hw.trezor.messages.management.ZoomRequest)
-  GOOGLE_DCHECK_NE(&from, this);
-  const ZoomRequest* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<ZoomRequest>(
-          &from);
-  if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:hw.trezor.messages.management.ZoomRequest)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:hw.trezor.messages.management.ZoomRequest)
-    MergeFrom(*source);
-  }
-}
-
-void ZoomRequest::MergeFrom(const ZoomRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:hw.trezor.messages.management.ZoomRequest)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
+  if (cached_has_bits & 0x00000007u) {
     if (cached_has_bits & 0x00000001u) {
       offset_ = from.offset_;
     }
     if (cached_has_bits & 0x00000002u) {
       data_length_ = from.data_length_;
     }
+    if (cached_has_bits & 0x00000004u) {
+      type_ = from.type_;
+    }
     _has_bits_[0] |= cached_has_bits;
   }
 }
 
-void ZoomRequest::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:hw.trezor.messages.management.ZoomRequest)
+void NftRequest::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:hw.trezor.messages.management.NftRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void ZoomRequest::CopyFrom(const ZoomRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:hw.trezor.messages.management.ZoomRequest)
+void NftRequest::CopyFrom(const NftRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:hw.trezor.messages.management.NftRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool ZoomRequest::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000002) != 0x00000002) return false;
+bool NftRequest::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
   return true;
 }
 
-void ZoomRequest::InternalSwap(ZoomRequest* other) {
+void NftRequest::InternalSwap(NftRequest* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   swap(offset_, other->offset_);
   swap(data_length_, other->data_length_);
+  swap(type_, other->type_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ZoomRequest::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata NftRequest::GetMetadata() const {
   return GetMetadataStatic();
 }
 
 
 // ===================================================================
 
-void ResourceRequest::InitAsDefaultInstance() {
+void NftAck::InitAsDefaultInstance() {
 }
-class ResourceRequest::_Internal {
+class NftAck::_Internal {
  public:
-  using HasBits = decltype(std::declval<ResourceRequest>()._has_bits_);
-  static void set_has_offset(HasBits* has_bits) {
-    (*has_bits)[0] |= 1u;
-  }
-  static void set_has_data_length(HasBits* has_bits) {
-    (*has_bits)[0] |= 2u;
-  }
-};
-
-ResourceRequest::ResourceRequest()
-  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:hw.trezor.messages.management.ResourceRequest)
-}
-ResourceRequest::ResourceRequest(const ResourceRequest& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message(),
-      _internal_metadata_(nullptr),
-      _has_bits_(from._has_bits_) {
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::memcpy(&offset_, &from.offset_,
-    static_cast<size_t>(reinterpret_cast<char*>(&data_length_) -
-    reinterpret_cast<char*>(&offset_)) + sizeof(data_length_));
-  // @@protoc_insertion_point(copy_constructor:hw.trezor.messages.management.ResourceRequest)
-}
-
-void ResourceRequest::SharedCtor() {
-  ::memset(&offset_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&data_length_) -
-      reinterpret_cast<char*>(&offset_)) + sizeof(data_length_));
-}
-
-ResourceRequest::~ResourceRequest() {
-  // @@protoc_insertion_point(destructor:hw.trezor.messages.management.ResourceRequest)
-  SharedDtor();
-}
-
-void ResourceRequest::SharedDtor() {
-}
-
-void ResourceRequest::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
-}
-const ResourceRequest& ResourceRequest::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_ResourceRequest_messages_2dmanagement_2eproto.base);
-  return *internal_default_instance();
-}
-
-
-void ResourceRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:hw.trezor.messages.management.ResourceRequest)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
-    ::memset(&offset_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&data_length_) -
-        reinterpret_cast<char*>(&offset_)) + sizeof(data_length_));
-  }
-  _has_bits_.Clear();
-  _internal_metadata_.Clear();
-}
-
-#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-const char* ResourceRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
-    switch (tag >> 3) {
-      // optional uint32 offset = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          _Internal::set_has_offset(&has_bits);
-          offset_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // required uint32 data_length = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
-          _Internal::set_has_data_length(&has_bits);
-          data_length_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      default: {
-      handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
-          ctx->SetLastTag(tag);
-          goto success;
-        }
-        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
-        CHK_(ptr != nullptr);
-        continue;
-      }
-    }  // switch
-  }  // while
-success:
-  _has_bits_.Or(has_bits);
-  return ptr;
-failure:
-  ptr = nullptr;
-  goto success;
-#undef CHK_
-}
-#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-bool ResourceRequest::MergePartialFromCodedStream(
-    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-  // @@protoc_insertion_point(parse_start:hw.trezor.messages.management.ResourceRequest)
-  for (;;) {
-    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional uint32 offset = 1;
-      case 1: {
-        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (8 & 0xFF)) {
-          _Internal::set_has_offset(&_has_bits_);
-          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
-                   ::PROTOBUF_NAMESPACE_ID::uint32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &offset_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // required uint32 data_length = 2;
-      case 2: {
-        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (16 & 0xFF)) {
-          _Internal::set_has_data_length(&_has_bits_);
-          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
-                   ::PROTOBUF_NAMESPACE_ID::uint32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &data_length_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0) {
-          goto success;
-        }
-        DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
-              input, tag, _internal_metadata_.mutable_unknown_fields()));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:hw.trezor.messages.management.ResourceRequest)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:hw.trezor.messages.management.ResourceRequest)
-  return false;
-#undef DO_
-}
-#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-
-void ResourceRequest::SerializeWithCachedSizes(
-    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:hw.trezor.messages.management.ResourceRequest)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  cached_has_bits = _has_bits_[0];
-  // optional uint32 offset = 1;
-  if (cached_has_bits & 0x00000001u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32(1, this->offset(), output);
-  }
-
-  // required uint32 data_length = 2;
-  if (cached_has_bits & 0x00000002u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32(2, this->data_length(), output);
-  }
-
-  if (_internal_metadata_.have_unknown_fields()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
-        _internal_metadata_.unknown_fields(), output);
-  }
-  // @@protoc_insertion_point(serialize_end:hw.trezor.messages.management.ResourceRequest)
-}
-
-::PROTOBUF_NAMESPACE_ID::uint8* ResourceRequest::InternalSerializeWithCachedSizesToArray(
-    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:hw.trezor.messages.management.ResourceRequest)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  cached_has_bits = _has_bits_[0];
-  // optional uint32 offset = 1;
-  if (cached_has_bits & 0x00000001u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(1, this->offset(), target);
-  }
-
-  // required uint32 data_length = 2;
-  if (cached_has_bits & 0x00000002u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(2, this->data_length(), target);
-  }
-
-  if (_internal_metadata_.have_unknown_fields()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields(), target);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:hw.trezor.messages.management.ResourceRequest)
-  return target;
-}
-
-size_t ResourceRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:hw.trezor.messages.management.ResourceRequest)
-  size_t total_size = 0;
-
-  if (_internal_metadata_.have_unknown_fields()) {
-    total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
-        _internal_metadata_.unknown_fields());
-  }
-  // required uint32 data_length = 2;
-  if (has_data_length()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
-        this->data_length());
-  }
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  // optional uint32 offset = 1;
-  cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
-        this->offset());
-  }
-
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
-}
-
-void ResourceRequest::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:hw.trezor.messages.management.ResourceRequest)
-  GOOGLE_DCHECK_NE(&from, this);
-  const ResourceRequest* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<ResourceRequest>(
-          &from);
-  if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:hw.trezor.messages.management.ResourceRequest)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:hw.trezor.messages.management.ResourceRequest)
-    MergeFrom(*source);
-  }
-}
-
-void ResourceRequest::MergeFrom(const ResourceRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:hw.trezor.messages.management.ResourceRequest)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
-    if (cached_has_bits & 0x00000001u) {
-      offset_ = from.offset_;
-    }
-    if (cached_has_bits & 0x00000002u) {
-      data_length_ = from.data_length_;
-    }
-    _has_bits_[0] |= cached_has_bits;
-  }
-}
-
-void ResourceRequest::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:hw.trezor.messages.management.ResourceRequest)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-void ResourceRequest::CopyFrom(const ResourceRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:hw.trezor.messages.management.ResourceRequest)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool ResourceRequest::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000002) != 0x00000002) return false;
-  return true;
-}
-
-void ResourceRequest::InternalSwap(ResourceRequest* other) {
-  using std::swap;
-  _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_has_bits_[0], other->_has_bits_[0]);
-  swap(offset_, other->offset_);
-  swap(data_length_, other->data_length_);
-}
-
-::PROTOBUF_NAMESPACE_ID::Metadata ResourceRequest::GetMetadata() const {
-  return GetMetadataStatic();
-}
-
-
-// ===================================================================
-
-void ResourceAck::InitAsDefaultInstance() {
-}
-class ResourceAck::_Internal {
- public:
-  using HasBits = decltype(std::declval<ResourceAck>()._has_bits_);
-  static void set_has_data_chunk(HasBits* has_bits) {
+  using HasBits = decltype(std::declval<NftAck>()._has_bits_);
+  static void set_has_chunk(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
   static void set_has_hash(HasBits* has_bits) {
@@ -21559,54 +21823,54 @@ class ResourceAck::_Internal {
   }
 };
 
-ResourceAck::ResourceAck()
+NftAck::NftAck()
   : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:hw.trezor.messages.management.ResourceAck)
+  // @@protoc_insertion_point(constructor:hw.trezor.messages.management.NftAck)
 }
-ResourceAck::ResourceAck(const ResourceAck& from)
+NftAck::NftAck(const NftAck& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr),
       _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  data_chunk_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  if (from.has_data_chunk()) {
-    data_chunk_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.data_chunk_);
+  chunk_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.has_chunk()) {
+    chunk_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.chunk_);
   }
   hash_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (from.has_hash()) {
     hash_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.hash_);
   }
-  // @@protoc_insertion_point(copy_constructor:hw.trezor.messages.management.ResourceAck)
+  // @@protoc_insertion_point(copy_constructor:hw.trezor.messages.management.NftAck)
 }
 
-void ResourceAck::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_ResourceAck_messages_2dmanagement_2eproto.base);
-  data_chunk_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+void NftAck::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_NftAck_messages_2dmanagement_2eproto.base);
+  chunk_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   hash_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
-ResourceAck::~ResourceAck() {
-  // @@protoc_insertion_point(destructor:hw.trezor.messages.management.ResourceAck)
+NftAck::~NftAck() {
+  // @@protoc_insertion_point(destructor:hw.trezor.messages.management.NftAck)
   SharedDtor();
 }
 
-void ResourceAck::SharedDtor() {
-  data_chunk_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+void NftAck::SharedDtor() {
+  chunk_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   hash_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
-void ResourceAck::SetCachedSize(int size) const {
+void NftAck::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const ResourceAck& ResourceAck::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_ResourceAck_messages_2dmanagement_2eproto.base);
+const NftAck& NftAck::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_NftAck_messages_2dmanagement_2eproto.base);
   return *internal_default_instance();
 }
 
 
-void ResourceAck::Clear() {
-// @@protoc_insertion_point(message_clear_start:hw.trezor.messages.management.ResourceAck)
+void NftAck::Clear() {
+// @@protoc_insertion_point(message_clear_start:hw.trezor.messages.management.NftAck)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -21614,7 +21878,7 @@ void ResourceAck::Clear() {
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x00000003u) {
     if (cached_has_bits & 0x00000001u) {
-      data_chunk_.ClearNonDefaultToEmptyNoArena();
+      chunk_.ClearNonDefaultToEmptyNoArena();
     }
     if (cached_has_bits & 0x00000002u) {
       hash_.ClearNonDefaultToEmptyNoArena();
@@ -21625,7 +21889,7 @@ void ResourceAck::Clear() {
 }
 
 #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-const char* ResourceAck::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* NftAck::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
@@ -21633,10 +21897,10 @@ const char* ResourceAck::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // required bytes data_chunk = 1;
+      // required bytes chunk = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(mutable_data_chunk(), ptr, ctx);
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(mutable_chunk(), ptr, ctx);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -21668,21 +21932,21 @@ failure:
 #undef CHK_
 }
 #else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-bool ResourceAck::MergePartialFromCodedStream(
+bool NftAck::MergePartialFromCodedStream(
     ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
   ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-  // @@protoc_insertion_point(parse_start:hw.trezor.messages.management.ResourceAck)
+  // @@protoc_insertion_point(parse_start:hw.trezor.messages.management.NftAck)
   for (;;) {
     ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required bytes data_chunk = 1;
+      // required bytes chunk = 1;
       case 1: {
         if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (10 & 0xFF)) {
           DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadBytes(
-                input, this->mutable_data_chunk()));
+                input, this->mutable_chunk()));
         } else {
           goto handle_unusual;
         }
@@ -21712,26 +21976,26 @@ bool ResourceAck::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:hw.trezor.messages.management.ResourceAck)
+  // @@protoc_insertion_point(parse_success:hw.trezor.messages.management.NftAck)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:hw.trezor.messages.management.ResourceAck)
+  // @@protoc_insertion_point(parse_failure:hw.trezor.messages.management.NftAck)
   return false;
 #undef DO_
 }
 #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
 
-void ResourceAck::SerializeWithCachedSizes(
+void NftAck::SerializeWithCachedSizes(
     ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:hw.trezor.messages.management.ResourceAck)
+  // @@protoc_insertion_point(serialize_start:hw.trezor.messages.management.NftAck)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  // required bytes data_chunk = 1;
+  // required bytes chunk = 1;
   if (cached_has_bits & 0x00000001u) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBytesMaybeAliased(
-      1, this->data_chunk(), output);
+      1, this->chunk(), output);
   }
 
   // optional bytes hash = 2;
@@ -21744,21 +22008,21 @@ void ResourceAck::SerializeWithCachedSizes(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:hw.trezor.messages.management.ResourceAck)
+  // @@protoc_insertion_point(serialize_end:hw.trezor.messages.management.NftAck)
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* ResourceAck::InternalSerializeWithCachedSizesToArray(
+::PROTOBUF_NAMESPACE_ID::uint8* NftAck::InternalSerializeWithCachedSizesToArray(
     ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:hw.trezor.messages.management.ResourceAck)
+  // @@protoc_insertion_point(serialize_to_array_start:hw.trezor.messages.management.NftAck)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  // required bytes data_chunk = 1;
+  // required bytes chunk = 1;
   if (cached_has_bits & 0x00000001u) {
     target =
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBytesToArray(
-        1, this->data_chunk(), target);
+        1, this->chunk(), target);
   }
 
   // optional bytes hash = 2;
@@ -21772,12 +22036,12 @@ void ResourceAck::SerializeWithCachedSizes(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:hw.trezor.messages.management.ResourceAck)
+  // @@protoc_insertion_point(serialize_to_array_end:hw.trezor.messages.management.NftAck)
   return target;
 }
 
-size_t ResourceAck::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:hw.trezor.messages.management.ResourceAck)
+size_t NftAck::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:hw.trezor.messages.management.NftAck)
   size_t total_size = 0;
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -21785,11 +22049,11 @@ size_t ResourceAck::ByteSizeLong() const {
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
         _internal_metadata_.unknown_fields());
   }
-  // required bytes data_chunk = 1;
-  if (has_data_chunk()) {
+  // required bytes chunk = 1;
+  if (has_chunk()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
-        this->data_chunk());
+        this->chunk());
   }
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -21808,23 +22072,23 @@ size_t ResourceAck::ByteSizeLong() const {
   return total_size;
 }
 
-void ResourceAck::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:hw.trezor.messages.management.ResourceAck)
+void NftAck::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:hw.trezor.messages.management.NftAck)
   GOOGLE_DCHECK_NE(&from, this);
-  const ResourceAck* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<ResourceAck>(
+  const NftAck* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<NftAck>(
           &from);
   if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:hw.trezor.messages.management.ResourceAck)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:hw.trezor.messages.management.NftAck)
     ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:hw.trezor.messages.management.ResourceAck)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:hw.trezor.messages.management.NftAck)
     MergeFrom(*source);
   }
 }
 
-void ResourceAck::MergeFrom(const ResourceAck& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:hw.trezor.messages.management.ResourceAck)
+void NftAck::MergeFrom(const NftAck& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:hw.trezor.messages.management.NftAck)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
@@ -21834,7 +22098,7 @@ void ResourceAck::MergeFrom(const ResourceAck& from) {
   if (cached_has_bits & 0x00000003u) {
     if (cached_has_bits & 0x00000001u) {
       _has_bits_[0] |= 0x00000001u;
-      data_chunk_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.data_chunk_);
+      chunk_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.chunk_);
     }
     if (cached_has_bits & 0x00000002u) {
       _has_bits_[0] |= 0x00000002u;
@@ -21843,512 +22107,36 @@ void ResourceAck::MergeFrom(const ResourceAck& from) {
   }
 }
 
-void ResourceAck::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:hw.trezor.messages.management.ResourceAck)
+void NftAck::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:hw.trezor.messages.management.NftAck)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void ResourceAck::CopyFrom(const ResourceAck& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:hw.trezor.messages.management.ResourceAck)
+void NftAck::CopyFrom(const NftAck& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:hw.trezor.messages.management.NftAck)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool ResourceAck::IsInitialized() const {
+bool NftAck::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
   return true;
 }
 
-void ResourceAck::InternalSwap(ResourceAck* other) {
+void NftAck::InternalSwap(NftAck* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
-  data_chunk_.Swap(&other->data_chunk_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+  chunk_.Swap(&other->chunk_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
   hash_.Swap(&other->hash_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ResourceAck::GetMetadata() const {
-  return GetMetadataStatic();
-}
-
-
-// ===================================================================
-
-void ResourceUpdate::InitAsDefaultInstance() {
-}
-class ResourceUpdate::_Internal {
- public:
-  using HasBits = decltype(std::declval<ResourceUpdate>()._has_bits_);
-  static void set_has_file_name(HasBits* has_bits) {
-    (*has_bits)[0] |= 1u;
-  }
-  static void set_has_data_length(HasBits* has_bits) {
-    (*has_bits)[0] |= 8u;
-  }
-  static void set_has_initial_data_chunk(HasBits* has_bits) {
-    (*has_bits)[0] |= 2u;
-  }
-  static void set_has_hash(HasBits* has_bits) {
-    (*has_bits)[0] |= 4u;
-  }
-};
-
-ResourceUpdate::ResourceUpdate()
-  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:hw.trezor.messages.management.ResourceUpdate)
-}
-ResourceUpdate::ResourceUpdate(const ResourceUpdate& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message(),
-      _internal_metadata_(nullptr),
-      _has_bits_(from._has_bits_) {
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  file_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  if (from.has_file_name()) {
-    file_name_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.file_name_);
-  }
-  initial_data_chunk_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  if (from.has_initial_data_chunk()) {
-    initial_data_chunk_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.initial_data_chunk_);
-  }
-  hash_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  if (from.has_hash()) {
-    hash_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.hash_);
-  }
-  data_length_ = from.data_length_;
-  // @@protoc_insertion_point(copy_constructor:hw.trezor.messages.management.ResourceUpdate)
-}
-
-void ResourceUpdate::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_ResourceUpdate_messages_2dmanagement_2eproto.base);
-  file_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  initial_data_chunk_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  hash_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  data_length_ = 0u;
-}
-
-ResourceUpdate::~ResourceUpdate() {
-  // @@protoc_insertion_point(destructor:hw.trezor.messages.management.ResourceUpdate)
-  SharedDtor();
-}
-
-void ResourceUpdate::SharedDtor() {
-  file_name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  initial_data_chunk_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  hash_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-}
-
-void ResourceUpdate::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
-}
-const ResourceUpdate& ResourceUpdate::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_ResourceUpdate_messages_2dmanagement_2eproto.base);
-  return *internal_default_instance();
-}
-
-
-void ResourceUpdate::Clear() {
-// @@protoc_insertion_point(message_clear_start:hw.trezor.messages.management.ResourceUpdate)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
-    if (cached_has_bits & 0x00000001u) {
-      file_name_.ClearNonDefaultToEmptyNoArena();
-    }
-    if (cached_has_bits & 0x00000002u) {
-      initial_data_chunk_.ClearNonDefaultToEmptyNoArena();
-    }
-    if (cached_has_bits & 0x00000004u) {
-      hash_.ClearNonDefaultToEmptyNoArena();
-    }
-  }
-  data_length_ = 0u;
-  _has_bits_.Clear();
-  _internal_metadata_.Clear();
-}
-
-#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-const char* ResourceUpdate::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
-    switch (tag >> 3) {
-      // required string file_name = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8Verify(mutable_file_name(), ptr, ctx, "hw.trezor.messages.management.ResourceUpdate.file_name");
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // required uint32 data_length = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
-          _Internal::set_has_data_length(&has_bits);
-          data_length_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // required bytes initial_data_chunk = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(mutable_initial_data_chunk(), ptr, ctx);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // optional bytes hash = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(mutable_hash(), ptr, ctx);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      default: {
-      handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
-          ctx->SetLastTag(tag);
-          goto success;
-        }
-        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
-        CHK_(ptr != nullptr);
-        continue;
-      }
-    }  // switch
-  }  // while
-success:
-  _has_bits_.Or(has_bits);
-  return ptr;
-failure:
-  ptr = nullptr;
-  goto success;
-#undef CHK_
-}
-#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-bool ResourceUpdate::MergePartialFromCodedStream(
-    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-  // @@protoc_insertion_point(parse_start:hw.trezor.messages.management.ResourceUpdate)
-  for (;;) {
-    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required string file_name = 1;
-      case 1: {
-        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (10 & 0xFF)) {
-          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
-                input, this->mutable_file_name()));
-          ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
-            this->file_name().data(), static_cast<int>(this->file_name().length()),
-            ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::PARSE,
-            "hw.trezor.messages.management.ResourceUpdate.file_name");
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // required uint32 data_length = 2;
-      case 2: {
-        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (16 & 0xFF)) {
-          _Internal::set_has_data_length(&_has_bits_);
-          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
-                   ::PROTOBUF_NAMESPACE_ID::uint32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &data_length_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // required bytes initial_data_chunk = 3;
-      case 3: {
-        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (26 & 0xFF)) {
-          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadBytes(
-                input, this->mutable_initial_data_chunk()));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // optional bytes hash = 4;
-      case 4: {
-        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (34 & 0xFF)) {
-          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadBytes(
-                input, this->mutable_hash()));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0) {
-          goto success;
-        }
-        DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
-              input, tag, _internal_metadata_.mutable_unknown_fields()));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:hw.trezor.messages.management.ResourceUpdate)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:hw.trezor.messages.management.ResourceUpdate)
-  return false;
-#undef DO_
-}
-#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-
-void ResourceUpdate::SerializeWithCachedSizes(
-    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:hw.trezor.messages.management.ResourceUpdate)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  cached_has_bits = _has_bits_[0];
-  // required string file_name = 1;
-  if (cached_has_bits & 0x00000001u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->file_name().data(), static_cast<int>(this->file_name().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
-      "hw.trezor.messages.management.ResourceUpdate.file_name");
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
-      1, this->file_name(), output);
-  }
-
-  // required uint32 data_length = 2;
-  if (cached_has_bits & 0x00000008u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32(2, this->data_length(), output);
-  }
-
-  // required bytes initial_data_chunk = 3;
-  if (cached_has_bits & 0x00000002u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBytesMaybeAliased(
-      3, this->initial_data_chunk(), output);
-  }
-
-  // optional bytes hash = 4;
-  if (cached_has_bits & 0x00000004u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBytesMaybeAliased(
-      4, this->hash(), output);
-  }
-
-  if (_internal_metadata_.have_unknown_fields()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
-        _internal_metadata_.unknown_fields(), output);
-  }
-  // @@protoc_insertion_point(serialize_end:hw.trezor.messages.management.ResourceUpdate)
-}
-
-::PROTOBUF_NAMESPACE_ID::uint8* ResourceUpdate::InternalSerializeWithCachedSizesToArray(
-    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:hw.trezor.messages.management.ResourceUpdate)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  cached_has_bits = _has_bits_[0];
-  // required string file_name = 1;
-  if (cached_has_bits & 0x00000001u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->file_name().data(), static_cast<int>(this->file_name().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
-      "hw.trezor.messages.management.ResourceUpdate.file_name");
-    target =
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
-        1, this->file_name(), target);
-  }
-
-  // required uint32 data_length = 2;
-  if (cached_has_bits & 0x00000008u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(2, this->data_length(), target);
-  }
-
-  // required bytes initial_data_chunk = 3;
-  if (cached_has_bits & 0x00000002u) {
-    target =
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBytesToArray(
-        3, this->initial_data_chunk(), target);
-  }
-
-  // optional bytes hash = 4;
-  if (cached_has_bits & 0x00000004u) {
-    target =
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBytesToArray(
-        4, this->hash(), target);
-  }
-
-  if (_internal_metadata_.have_unknown_fields()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields(), target);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:hw.trezor.messages.management.ResourceUpdate)
-  return target;
-}
-
-size_t ResourceUpdate::RequiredFieldsByteSizeFallback() const {
-// @@protoc_insertion_point(required_fields_byte_size_fallback_start:hw.trezor.messages.management.ResourceUpdate)
-  size_t total_size = 0;
-
-  if (has_file_name()) {
-    // required string file_name = 1;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->file_name());
-  }
-
-  if (has_initial_data_chunk()) {
-    // required bytes initial_data_chunk = 3;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
-        this->initial_data_chunk());
-  }
-
-  if (has_data_length()) {
-    // required uint32 data_length = 2;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
-        this->data_length());
-  }
-
-  return total_size;
-}
-size_t ResourceUpdate::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:hw.trezor.messages.management.ResourceUpdate)
-  size_t total_size = 0;
-
-  if (_internal_metadata_.have_unknown_fields()) {
-    total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
-        _internal_metadata_.unknown_fields());
-  }
-  if (((_has_bits_[0] & 0x0000000b) ^ 0x0000000b) == 0) {  // All required fields are present.
-    // required string file_name = 1;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->file_name());
-
-    // required bytes initial_data_chunk = 3;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
-        this->initial_data_chunk());
-
-    // required uint32 data_length = 2;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
-        this->data_length());
-
-  } else {
-    total_size += RequiredFieldsByteSizeFallback();
-  }
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  // optional bytes hash = 4;
-  cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000004u) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
-        this->hash());
-  }
-
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
-}
-
-void ResourceUpdate::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:hw.trezor.messages.management.ResourceUpdate)
-  GOOGLE_DCHECK_NE(&from, this);
-  const ResourceUpdate* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<ResourceUpdate>(
-          &from);
-  if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:hw.trezor.messages.management.ResourceUpdate)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:hw.trezor.messages.management.ResourceUpdate)
-    MergeFrom(*source);
-  }
-}
-
-void ResourceUpdate::MergeFrom(const ResourceUpdate& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:hw.trezor.messages.management.ResourceUpdate)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
-    if (cached_has_bits & 0x00000001u) {
-      _has_bits_[0] |= 0x00000001u;
-      file_name_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.file_name_);
-    }
-    if (cached_has_bits & 0x00000002u) {
-      _has_bits_[0] |= 0x00000002u;
-      initial_data_chunk_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.initial_data_chunk_);
-    }
-    if (cached_has_bits & 0x00000004u) {
-      _has_bits_[0] |= 0x00000004u;
-      hash_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.hash_);
-    }
-    if (cached_has_bits & 0x00000008u) {
-      data_length_ = from.data_length_;
-    }
-    _has_bits_[0] |= cached_has_bits;
-  }
-}
-
-void ResourceUpdate::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:hw.trezor.messages.management.ResourceUpdate)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-void ResourceUpdate::CopyFrom(const ResourceUpdate& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:hw.trezor.messages.management.ResourceUpdate)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool ResourceUpdate::IsInitialized() const {
-  if ((_has_bits_[0] & 0x0000000b) != 0x0000000b) return false;
-  return true;
-}
-
-void ResourceUpdate::InternalSwap(ResourceUpdate* other) {
-  using std::swap;
-  _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_has_bits_[0], other->_has_bits_[0]);
-  file_name_.Swap(&other->file_name_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-    GetArenaNoVirtual());
-  initial_data_chunk_.Swap(&other->initial_data_chunk_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-    GetArenaNoVirtual());
-  hash_.Swap(&other->hash_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-    GetArenaNoVirtual());
-  swap(data_length_, other->data_length_);
-}
-
-::PROTOBUF_NAMESPACE_ID::Metadata ResourceUpdate::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata NftAck::GetMetadata() const {
   return GetMetadataStatic();
 }
 
@@ -24015,20 +23803,17 @@ template<> PROTOBUF_NOINLINE ::hw::trezor::messages::management::SEBackToRomBoot
 template<> PROTOBUF_NOINLINE ::hw::trezor::messages::management::SEWipeUserStorage* Arena::CreateMaybeMessage< ::hw::trezor::messages::management::SEWipeUserStorage >(Arena* arena) {
   return Arena::CreateInternal< ::hw::trezor::messages::management::SEWipeUserStorage >(arena);
 }
-template<> PROTOBUF_NOINLINE ::hw::trezor::messages::management::ResourceUpload* Arena::CreateMaybeMessage< ::hw::trezor::messages::management::ResourceUpload >(Arena* arena) {
-  return Arena::CreateInternal< ::hw::trezor::messages::management::ResourceUpload >(arena);
+template<> PROTOBUF_NOINLINE ::hw::trezor::messages::management::NftMetadata* Arena::CreateMaybeMessage< ::hw::trezor::messages::management::NftMetadata >(Arena* arena) {
+  return Arena::CreateInternal< ::hw::trezor::messages::management::NftMetadata >(arena);
 }
-template<> PROTOBUF_NOINLINE ::hw::trezor::messages::management::ZoomRequest* Arena::CreateMaybeMessage< ::hw::trezor::messages::management::ZoomRequest >(Arena* arena) {
-  return Arena::CreateInternal< ::hw::trezor::messages::management::ZoomRequest >(arena);
+template<> PROTOBUF_NOINLINE ::hw::trezor::messages::management::NftUpload* Arena::CreateMaybeMessage< ::hw::trezor::messages::management::NftUpload >(Arena* arena) {
+  return Arena::CreateInternal< ::hw::trezor::messages::management::NftUpload >(arena);
 }
-template<> PROTOBUF_NOINLINE ::hw::trezor::messages::management::ResourceRequest* Arena::CreateMaybeMessage< ::hw::trezor::messages::management::ResourceRequest >(Arena* arena) {
-  return Arena::CreateInternal< ::hw::trezor::messages::management::ResourceRequest >(arena);
+template<> PROTOBUF_NOINLINE ::hw::trezor::messages::management::NftRequest* Arena::CreateMaybeMessage< ::hw::trezor::messages::management::NftRequest >(Arena* arena) {
+  return Arena::CreateInternal< ::hw::trezor::messages::management::NftRequest >(arena);
 }
-template<> PROTOBUF_NOINLINE ::hw::trezor::messages::management::ResourceAck* Arena::CreateMaybeMessage< ::hw::trezor::messages::management::ResourceAck >(Arena* arena) {
-  return Arena::CreateInternal< ::hw::trezor::messages::management::ResourceAck >(arena);
-}
-template<> PROTOBUF_NOINLINE ::hw::trezor::messages::management::ResourceUpdate* Arena::CreateMaybeMessage< ::hw::trezor::messages::management::ResourceUpdate >(Arena* arena) {
-  return Arena::CreateInternal< ::hw::trezor::messages::management::ResourceUpdate >(arena);
+template<> PROTOBUF_NOINLINE ::hw::trezor::messages::management::NftAck* Arena::CreateMaybeMessage< ::hw::trezor::messages::management::NftAck >(Arena* arena) {
+  return Arena::CreateInternal< ::hw::trezor::messages::management::NftAck >(arena);
 }
 template<> PROTOBUF_NOINLINE ::hw::trezor::messages::management::ListResDir* Arena::CreateMaybeMessage< ::hw::trezor::messages::management::ListResDir >(Arena* arena) {
   return Arena::CreateInternal< ::hw::trezor::messages::management::ListResDir >(arena);
