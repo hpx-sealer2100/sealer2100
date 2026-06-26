@@ -268,7 +268,7 @@ JUB_RV JubiterBLENusDevice::openSecureChannel(void){
         sized_payload_t<DEVICE_ID_SIZE, char> device_id;
     }__attribute__((packed));
     if (pulRetDataLen != sizeof(ble_sec_open_resp_t)) {
-        JUBR_ERROR;
+        return JUBR_ERROR;
     }
     auto* resp = static_cast<ble_sec_open_resp_t*>((void*)retData);
 
