@@ -5,6 +5,7 @@
 #include "rand.h"
 #include "hmac.h"
 #include "storage.h"
+#include "memzero.h"
 
 #define PIN_STRETCH_ITERATIONS 2
 #define SE_USER_PIN_SIZE 32
@@ -50,9 +51,9 @@ static int se_user_pin_stretch(HMAC_SHA256_CTX* ctx, const uint8_t input[SE_USER
     hmac_sha256_Update(ctx, secret, sizeof(secret));
 
 err:
-    memset(cmac, 0, sizeof(cmac));
-    memset(point, 0, sizeof(point));
-    memset(secret, 0, sizeof(secret));
+    memzero(cmac, sizeof(cmac));
+    memzero(point, sizeof(point));
+    memzero(secret, sizeof(secret));
     return ret;
 }
 
@@ -76,7 +77,7 @@ static int se_user_pin_stretch_cmac_ecdh(uint8_t pin[SE_USER_PIN_SIZE]) {
     hmac_sha256_Final(&ctx, pin);
   }
 err:
-  memset(digest, 0, sizeof(digest));
+  memzero(digest, sizeof(digest));
   return ret;
 }
 
@@ -90,7 +91,7 @@ static int se_user_pin_stretch_hmac(uint8_t pin[SE_USER_PIN_SIZE]) {
 
   hmac_sha256(pin, SE_USER_PIN_SIZE, digest, sizeof(digest), pin);
 err:
-  memset(digest, 0, sizeof(digest));
+  memzero(digest, sizeof(digest));
   return ret;
 }
 
@@ -148,9 +149,9 @@ int se_set_user_pin(uint8_t pin[32]) {
 
   hmac_sha256(pin, SE_USER_PIN_SIZE, secret, sizeof(secret), pin);
 err:
-  memset(digest, 0, sizeof(digest));
-  memset(rnd, 0, sizeof(rnd));
-  memset(secret, 0, sizeof(secret));
+  memzero(digest, sizeof(digest));
+  memzero(rnd, sizeof(rnd));
+  memzero(secret, sizeof(secret));
   return ret;
 }
 
@@ -182,8 +183,8 @@ int se_verify_user_pin(uint8_t pin[32]) {
 
   hmac_sha256(pin, SE_USER_PIN_SIZE, secret, len, pin);
 err:
-  memset(digest, 0, sizeof(digest));
-  memset(secret, 0, sizeof(secret));
+  memzero(digest, sizeof(digest));
+  memzero(secret, sizeof(secret));
   return ret;
 }
 

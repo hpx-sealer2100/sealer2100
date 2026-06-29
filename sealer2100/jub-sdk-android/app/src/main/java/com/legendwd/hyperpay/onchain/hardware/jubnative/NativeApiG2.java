@@ -193,8 +193,8 @@ public class NativeApiG2 {
     public static String nativeETHTransaction(long contextID, String json) {
         return NativeApiLL.nativeETHTransaction(contextID, json);
     }
-    public static String nativeETHTypedData(long contextID, String json,String json_TypedData) {
-        return NativeApiLL.nativeETHTypeDataMAX(contextID, json,json_TypedData);
+    public static String nativeETHTypedData(long contextID, String json) {
+        return NativeApiLL.nativeETHTypeDataMAX(contextID, json);
     }
 
     public static int nativeETHSetERC20Tokens(long contextID, String json) {
@@ -204,7 +204,12 @@ public class NativeApiG2 {
     public static int nativeETHSetERC20Token(long contextID, String json) {
         return NativeApiLL.nativeETHSetERC20Token(contextID, json);
     }
-
+    public static int nativeETHSetERC20TokenV2(long contextID, String json) {
+        return NativeApiLL.nativeETHSetERC20TokenV2(contextID, json);
+    }
+    public static int nativeETHSetNetworkV2(long contextID, String json) {
+        return NativeApiLL.nativeETHSetNetworkV2(contextID, json);
+    }
     public static String nativeETHBuildERC20TransferAbi(long contextID, String json) {
         return NativeApiLL.nativeETHBuildERC20TransferAbi(contextID, json);
     }
@@ -227,6 +232,10 @@ public class NativeApiG2 {
 
     public static String nativeETHBuildContractWithTxIDAbi(long contextID, String json) {
         return NativeApiLL.nativeETHBuildContractWithTxIDAbi(contextID, json);
+    }
+
+    public static int nativeETHUploadNFT(long contextId, String meta, byte[] image, byte[] thumbnail, byte[] wallpaper) {
+        return NativeApiLL.nativeETHUploadNFT(contextId, meta, image, thumbnail, wallpaper);
     }
 
     public static int nativeHCCreateContext(int[] contextIDs, boolean isMultiSig, String json, long deviceHandle) {

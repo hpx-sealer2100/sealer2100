@@ -566,6 +566,7 @@ if TYPE_CHECKING:
     class NftRequestType(IntEnum):
         IMAGE = 0
         THUMBNAIL = 1
+        WALLPAPER = 2
 
     class DebugSwipeDirection(IntEnum):
         UP = 0

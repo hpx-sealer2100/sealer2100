@@ -19,6 +19,8 @@
 #include "secure_heap.h"
 #include "updater.h"
 #include "version.h"
+#include "memzero.h"
+
 
 #include "lfs.h"
 
@@ -323,7 +325,7 @@ static void iris_info_refresh_timer_cb(lv_timer_t* timer) {
                 hal_delay(10);
                 ret = iris_sec_channel_open(key, 32);
             } while (ret == IRIS_HANDSHAKE_PENDING);
-            memset(key, 0, sizeof(key));
+            memzero(key, sizeof(key));
 
             if (ret != IRIS_ERROR_OK) {
                 LOG_ERROR(MODULE, "iris sec channel open failed, ret: %d", ret);

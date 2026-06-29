@@ -94,6 +94,7 @@ class IrisScreen(Modal):
     def __init__(self):
         super().__init__()
         self.iris_power_down_chan = loop.chan()
+        self.sync_chan = loop.chan()
         self.clean()
         self._content = lv.obj(self)
         self._content.add_style(Styles.container, lv.PART.MAIN)
@@ -201,6 +202,9 @@ class IrisScreen(Modal):
                 await iris.wait_response_with_timeout()
             await iris.close()
             self.iris_power_down_chan.publish(True)
+            self.sync_chan.publish(True)
+            self.channel.publish(value)
+            self.dismiss()
 
         for task in self.tasks:
             try:
@@ -209,7 +213,6 @@ class IrisScreen(Modal):
                 pass
 
         loop.spawn(close_iris(bool(value)))
-        super().close(value)
 
     async def wait_iris_power_down_and_result(self):
         await self.iris_power_down_chan.take()

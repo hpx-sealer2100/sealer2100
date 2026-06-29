@@ -381,7 +381,7 @@ JUB_RV JubiterBLENusDevice::SendDataPlaint(IN JUB_BYTE_CPTR sendData, IN JUB_ULO
 
     unsigned int ret = 0;
 
-    unsigned int recvlen = 0;
+    unsigned int recvlen = (unsigned int) *pulRetDataLen;
 
     ret = GD_BLE_SendAPDU_Sync(_handle, const_cast<unsigned char *>(sendData), ulSendLen, retData, &recvlen, ulMiliSecondTimeout);
 

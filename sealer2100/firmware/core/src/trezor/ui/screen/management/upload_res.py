@@ -4,6 +4,8 @@ from trezor.ui import Style, colors, font
 from trezor.ui.component import VStack
 from trezor.ui.screen import Modal
 
+from trezor.ui.theme import Styles
+
 class LoadingResource(Modal):
     def __init__(self, res: str, total: int):
         super().__init__()
@@ -22,6 +24,7 @@ class LoadingResource(Modal):
 
         self.label = container.add(lv.label)
         self.label.set_text(res)
+        self.label.set_style_text_align(lv.TEXT_ALIGN.CENTER, lv.PART.MAIN)
         self.label.set_style_text_color(colors.USER.WHITE, lv.PART.MAIN)
         self.label.set_style_text_font(font.Medium.PF32, lv.PART.MAIN)
         self.label.set_width(lv.pct(100))

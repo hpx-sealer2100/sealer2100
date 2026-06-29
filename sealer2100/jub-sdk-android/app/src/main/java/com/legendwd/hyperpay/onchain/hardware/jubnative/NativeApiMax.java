@@ -3,6 +3,7 @@ package com.legendwd.hyperpay.onchain.hardware.jubnative;
 import android.util.Log;
 
 import com.legendwd.hyperpay.onchain.hardware.jubnative.utils.InputPassphrase;
+import com.legendwd.hyperpay.onchain.hardware.jubnative.utils.LogUtil;
 import com.legendwd.hyperpay.onchain.hardware.jubnative.utils.StrUtil;
 
 public class NativeApiMax {
@@ -37,7 +38,8 @@ public class NativeApiMax {
      * @param data
      */
     public static void onNativeDataReceived(byte[] data) {
-        Log.i(TAG, "[Java] recvNativeData: " + StrUtil.byteArr2HexStr(data));
+        // log for debug
+        // LogUtil.i(TAG, () -> "[Java] recvNativeData" + "[" + data.length + "]:" + StrUtil.byteArr2HexStr(data));
         HyperMateAdapter.getInstance().writeWithoutResponse(data, mNotifyCallback);
     }
 
@@ -50,7 +52,8 @@ public class NativeApiMax {
      * @param messageType
      */
     public static void onNotifyMessage(int messageType) {
-        Log.d(TAG, "[Java] onNotifyMessage: " + messageType);
+        // log for debug
+        // LogUtil.d(TAG, () -> "[Java] onNotifyMessage: " + messageType);
         if (mMessageCallback != null) {
             mMessageCallback.onNotifyMessage(messageType);
         }
@@ -64,15 +67,13 @@ public class NativeApiMax {
      * @param onDevice
      */
     public static void onSetPassphrase(String passphrase, boolean onDevice) {
-        Log.d(TAG, "[Java] onSetPassphrase: " + passphrase + " onDevice: " + onDevice);
         if (mPassphraseCallback != null) {
             InputPassphrase inputPassphrase = new InputPassphrase(passphrase, onDevice);
             mPassphraseCallback.onPassphrase(inputPassphrase);
-            // 传回 C++ 层
-            Log.w(TAG, "待回传 Passphrase ：" + inputPassphrase);
             nativeSendPassphraseToNative(inputPassphrase.getPassphrase(), inputPassphrase.getOnDevice());
         } else {
-            Log.w(TAG, "Passphrase callback is not set.");
+            // log for debug
+            // Log.w(TAG, "Passphrase callback is not set.");
         }
     }
 
@@ -83,7 +84,8 @@ public class NativeApiMax {
      * @param percentage
      */
     public static void onUpdatePercentage(int percentage) {
-        Log.d(TAG, "[Java] onUpdatePercentage: " + percentage);
+        // log for debug
+        // LogUtil.d(TAG, () -> "[Java] onUpdatePercentage: " + percentage);
         if (mUpdatePercentageCallback != null) {
             mUpdatePercentageCallback.onUpdatePercentage(percentage);
         }

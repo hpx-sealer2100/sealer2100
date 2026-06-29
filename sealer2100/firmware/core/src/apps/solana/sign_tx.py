@@ -105,7 +105,9 @@ async def sign_tx(
                 from .spl.memo.memo_program import parse
 
                 await parse(ctx, accounts, i.data)
-
+            elif program_id == COMPUTE_BUDGET_PROGRAM_ID:
+                # not used
+                continue
             else:
                 if device.get_defi_lock():
                     await show_defi_lock(ctx)

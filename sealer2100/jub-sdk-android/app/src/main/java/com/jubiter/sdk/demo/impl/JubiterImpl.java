@@ -246,7 +246,8 @@ public class JubiterImpl {
 
     public void sendApdu(final String apdu,
                          final JubCallback<String, Void> callback) {
-        Log.d("sendAPDU", apdu);
+        // test code
+        // Log.d("sendAPDU", apdu);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -610,7 +611,7 @@ public class JubiterImpl {
 
                 int[] contextIDs = new int[1];
                 NativeApi.nativeBTCCreateContext(contextIDs, false,
-                        JSONParseUtils.getJsonStr(mContext, "testDASH44.json"),
+                        JSONParseUtils.getJsonStr(mContext, "testBTC_tr.json"),
                         mDeviceHandle);
 //                NativeApi.nativeBTCCreateContext(contextIDs, true,
 //                        JSONParseUtils.getJsonStr(mContext, "testBTC45_7-7-1.json"),
@@ -624,7 +625,7 @@ public class JubiterImpl {
                             mUIHandler.post(() -> Toast.makeText(mContext, "MessageType: " + messageType, Toast.LENGTH_SHORT).show());
                         }
                     });
-                    signRaw = NativeApi.nativeBTCTransaction(contextID, JSONParseUtils.getJsonStr(mContext, "testDASH44.json"));
+                    signRaw = NativeApi.nativeBTCTransaction(contextID, JSONParseUtils.getJsonStr(mContext, "testBTC_tr.json"));
                     Log.d("JuBiter", "HyperMateMax 签名: " + signRaw);
                     mUIHandler.post(new Runnable() {
                         @Override
@@ -1147,6 +1148,114 @@ public class JubiterImpl {
                 Log.d("ethTrans contextID:", " " + contextID);
 
                 if (BluetoothKeyApi.sDeviceType == BluetoothKeyApi.DeviceType.HyperMateMax) {
+                    NativeApi.setNotifyMessageCallback(new InnerMessageCallback() {
+                        @Override
+                        public void onNotifyMessage(int messageType) {
+                            mUIHandler.post(() -> Toast.makeText(mContext, "MessageType: " + messageType, Toast.LENGTH_SHORT).show());
+                        }
+                    });
+                    final String rawString = NativeApi.nativeETHTransaction(contextID, JSONParseUtils.getJsonStr(mContext, "testETH.json"));
+                    mUIHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onSuccess(rawString, null);
+                        }
+                    });
+                    return;
+                }
+
+                int ret = NativeApi.nativeShowVirtualPwd(contextID);
+                if (ret != 0) {
+                    final int finalRet = ret;
+                    mUIHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onFailed(finalRet);
+                        }
+                    });
+                    return;
+                }
+
+                mUIHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        final VerifyPinDialog dialog = new VerifyPinDialog(mContext, new VerifyPinDialog.callback() {
+                            @Override
+                            public void onClickListener(String pin) {
+                                int ret = 0;
+                                if (TextUtils.isEmpty(pin) || pin.length() != 4) {
+                                    final int finalRet = ret;
+                                    mUIHandler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            callback.onFailed(finalRet);
+                                        }
+                                    });
+                                    return;
+                                }
+
+                                ret = NativeApi.nativeVerifyPIN(contextID, pin.getBytes());
+
+                                if (ret != 0) {
+                                    final int finalRet = ret;
+                                    mUIHandler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            callback.onFailed(finalRet);
+                                        }
+                                    });
+                                    return;
+                                }
+                                final String rawString = NativeApi.nativeETHTransaction(contextID, JSONParseUtils.getJsonStr(mContext, "testETH.json"));
+                                if (TextUtils.isEmpty(rawString)) {
+                                    mUIHandler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            callback.onFailed(NativeApi.nativeGetErrorCode());
+                                        }
+                                    });
+                                    return;
+                                }
+                                mUIHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        callback.onSuccess(rawString, null);
+                                    }
+                                });
+                            }
+                        });
+                        dialog.show();
+                    }
+                });
+
+            }
+        }).start();
+    }
+
+    public void ethTransCustom(final JubCallback<String, Void> callback) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                int[] contextIDs = new int[1];
+                NativeApi.nativeETHCreateContext(contextIDs,
+                        JSONParseUtils.getJsonStr(mContext, "contextETHCustom.json"),
+                        mDeviceHandle);
+                final long contextID = contextIDs[0];
+
+                Log.d("ethTrans contextID:", " " + contextID);
+
+                if (BluetoothKeyApi.sDeviceType == BluetoothKeyApi.DeviceType.HyperMateMax) {
+                    int rv = NativeApi.nativeETHSetNetworkV2(contextID, JSONParseUtils.getJsonStr(mContext, "testETH_network_cucc.json"));
+                    if (rv != 0) {
+                        mUIHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.onFailed(rv);
+                            }
+                        });
+                        return;
+                    }
                     NativeApi.setNotifyMessageCallback(new InnerMessageCallback() {
                         @Override
                         public void onNotifyMessage(int messageType) {
@@ -2171,6 +2280,8 @@ public class JubiterImpl {
                         mDeviceHandle);
                 final long contextID = contextIDs[0];
                 int ret = NativeApi.nativeETHSetERC20Token(contextID, JSONParseUtils.getJsonStr(mContext, "testETH_erc20.json"));
+                // use V2 api
+                // int ret = NativeApi.nativeETHSetERC20TokenV2(contextID, JSONParseUtils.getJsonStr(mContext, "testETH_erc20.json"));
                 if (ret != 0) {
                     final int finalRet = ret;
                     mUIHandler.post(new Runnable() {
@@ -2269,6 +2380,163 @@ public class JubiterImpl {
             }
         }).start();
     }
+
+    public void ethErc20Custom(final JubCallback<String, String> callback) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                int[] contextIDs = new int[1];
+                NativeApi.nativeETHCreateContext(contextIDs,
+                        JSONParseUtils.getJsonStr(mContext, "contextERC20Custom.json"),
+                        mDeviceHandle);
+                final long contextID = contextIDs[0];
+                int ret = NativeApi.nativeETHSetERC20TokenV2(contextID, JSONParseUtils.getJsonStr(mContext, "testETH_token_cmcc.json"));
+                if (ret != 0) {
+                    final int finalRet = ret;
+                    mUIHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onFailed(finalRet);
+                        }
+                    });
+                    return;
+                }
+                String data = NativeApi.nativeETHBuildERC20TransferAbi(contextID, JSONParseUtils.getJsonStr(mContext, "testETH_token_cmcc.json"));
+                Log.d("erc20 abi", " " + data);
+
+                if (BluetoothKeyApi.sDeviceType == BluetoothKeyApi.DeviceType.HyperMateMax) {
+                    NativeApi.setNotifyMessageCallback(new InnerMessageCallback() {
+                        @Override
+                        public void onNotifyMessage(int messageType) {
+                            mUIHandler.post(() -> Toast.makeText(mContext, "MessageType: " + messageType, Toast.LENGTH_SHORT).show());
+                        }
+                    });
+                    final String rawString = NativeApi.nativeETHTransaction(contextID, JSONParseUtils.getJsonStr(mContext, "testETH_token_cmcc.json"));
+                    mUIHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onSuccess(rawString, null);
+                        }
+                    });
+                    return;
+                }
+
+                ret = NativeApi.nativeShowVirtualPwd(contextID);
+                if (ret != 0) {
+                    final int finalRet = ret;
+                    mUIHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onFailed(finalRet);
+                        }
+                    });
+                    return;
+                }
+
+                mUIHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        final VerifyPinDialog dialog = new VerifyPinDialog(mContext, new VerifyPinDialog.callback() {
+                            @Override
+                            public void onClickListener(String pin) {
+                                int ret = 0;
+                                if (TextUtils.isEmpty(pin) || pin.length() != 4) {
+                                    final int finalRet = ret;
+                                    mUIHandler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            callback.onFailed(finalRet);
+                                        }
+                                    });
+                                    return;
+                                }
+
+                                ret = NativeApi.nativeVerifyPIN(contextID, pin.getBytes());
+
+                                if (ret != 0) {
+                                    final int finalRet = ret;
+                                    mUIHandler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            callback.onFailed(finalRet);
+                                        }
+                                    });
+                                    return;
+                                }
+                                final String rawString = NativeApi.nativeETHTransaction(contextID, JSONParseUtils.getJsonStr(mContext, "testETH_erc20.json"));
+                                if (TextUtils.isEmpty(rawString)) {
+                                    mUIHandler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            callback.onFailed(NativeApi.nativeGetErrorCode());
+                                        }
+                                    });
+                                    return;
+                                }
+                                Log.d("erc20 raw", " " + rawString);
+                                mUIHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        callback.onSuccess(rawString, null);
+                                    }
+                                });
+                            }
+                        });
+                        dialog.show();
+                    }
+                });
+
+            }
+        }).start();
+    }
+    public void ethUploadNFT(final JubCallback<String, String> callback) {
+        ThreadUtils.execute(new Runnable() {
+            @Override
+            public void run() {
+                NativeApi.setUpdatePercentageCallback(new UpdatePercentageCallback() {
+                    @Override
+                    public void onUpdatePercentage(int percentage) {
+                        mUIHandler.post(() -> {
+                            Toast.makeText(mContext, "上传进度: " + percentage + "%", Toast.LENGTH_SHORT).show();
+                        });
+                    }
+                });
+
+                int[] contextIDs = new int[1];
+                NativeApi.nativeETHCreateContext(contextIDs,
+                        JSONParseUtils.getJsonStr(mContext, "testETH_erc20.json"),
+                        mDeviceHandle);
+                final long contextID = contextIDs[0];
+
+                Log.d("solTokenTrans contextID:", " " + contextID);
+
+                String meta = JSONParseUtils.getJsonStr(mContext, "NFT/desc/21.json");
+                byte[] image = FileUtils.readFileFromAsset(mContext, "NFT/image/21.png");
+                byte[] thumbnail = FileUtils.readFileFromAsset(mContext, "NFT/thumbnail/21.png");
+                byte[] wallpaper = FileUtils.readFileFromAsset(mContext, "NFT/wallpaper/21.png");
+
+                int ret= NativeApi.nativeETHUploadNFT(contextID, meta, image, thumbnail, wallpaper);
+                if (ret != 0) {
+                    final int finalRet = ret;
+                    mUIHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onFailed(finalRet);
+                        }
+                    });
+                    return;
+                }
+
+                mUIHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onSuccess("NFT 上传成功", null);
+                    }
+                });
+            }
+        });
+    }
     public void ethTypedData(final JubCallback<String, String> callback) {
         new Thread(new Runnable() {
             @Override
@@ -2292,8 +2560,8 @@ public class JubiterImpl {
                     return;
                 }
 
-                final String rawString = NativeApi.nativeETHTypedData(contextID, JSONParseUtils.getJsonStr(mContext, "testETH_erc20.json"),
-                        JSONParseUtils.getJsonStr(mContext, "EIP712.json"));
+                final String rawString = NativeApi.nativeETHTypedData(contextID,
+                        JSONParseUtils.getJsonStr(mContext, "testETH_eip712.json"));
                 if (TextUtils.isEmpty(rawString)) {
                     mUIHandler.post(new Runnable() {
                         @Override
@@ -2808,19 +3076,23 @@ public class JubiterImpl {
                 NativeApi.setUpdatePercentageCallback(new UpdatePercentageCallback() {
                     @Override
                     public void onUpdatePercentage(int percentage) {
-                        Log.d("FS", "update percentage: " + percentage);
+                        if (percentage == 100) {
+                            Log.d("FS", "update percentage: " + percentage);
+                        }
                         mUIHandler.post(() -> {
                             Toast.makeText(mContext, "升级进度: " + percentage + "%", Toast.LENGTH_SHORT).show();
                         });
                     }
                 });
 
-
-                // 切 bootloader 模式
-                int bootRv = NativeApi.nativeRebootToBootloader(mDeviceHandle);
-                if (bootRv != 0) {
-                    Log.e("FS", "nativeRebootToBootloader rv: " + bootRv);
-                    return;
+                String features = NativeApi.nativeGetDeviceFeatures(mDeviceHandle);
+                if (!features.contains("bootloader_mode")) {
+                    // 切 bootloader 模式
+                    int bootRv = NativeApi.nativeRebootToBootloader(mDeviceHandle);
+                    if (bootRv != 0) {
+                        Log.e("FS", "nativeRebootToBootloader rv: " + bootRv);
+                        return;
+                    }
                 }
                 Log.d("FS", ">>> 开始升级固件");
 
@@ -2832,6 +3104,11 @@ public class JubiterImpl {
 
                 int firmwareRv = NativeApi.nativeUpdateFirmware(mDeviceHandle, data, true);
                 Log.d("FS", "updateFirmware rv: " + firmwareRv);
+
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    int rv = NativeApi.nativeDisconnect(mDeviceHandle);
+                    Log.d("FS", "nativeDisconnect rv: " + rv);
+                }, 1000);
             });
         } catch (IOException e) {
             Log.e("FS", "updateFirmware: " + e.getMessage());
@@ -2848,7 +3125,7 @@ public class JubiterImpl {
                 NativeApi.setUpdatePercentageCallback(new UpdatePercentageCallback() {
                     @Override
                     public void onUpdatePercentage(int percentage) {
-                        Log.d("FS", "update percentage: " + percentage);
+//                        Log.d("FS", "update percentage: " + percentage);
                         mUIHandler.post(() -> {
                             Toast.makeText(mContext, "升级进度: " + percentage + "%", Toast.LENGTH_SHORT).show();
                         });
@@ -2888,6 +3165,7 @@ public class JubiterImpl {
                 @Override
                 public void onPassphrase(InputPassphrase inputPassphrase) {
                     // not on device
+                    // sample test code, just hardcode input in callback
                     inputPassphrase.setPassphrase("5");
                     inputPassphrase.setOnDevice(false);
 

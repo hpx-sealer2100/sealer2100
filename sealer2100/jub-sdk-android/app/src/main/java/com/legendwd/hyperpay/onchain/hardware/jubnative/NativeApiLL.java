@@ -195,17 +195,21 @@ public class NativeApiLL {
 
     public static native String nativeETHTransaction(long contextID, String json);
 
-    public static native String nativeETHTypeDataMAX(long contextID, String json_Path,String json_TypedData);
+    public static native String nativeETHTypeDataMAX(long contextID, String json_Path);
 
     public static native int nativeETHSetERC20Tokens(long contextID, String json);
 
     public static native int nativeETHSetERC20Token(long contextID, String json);
+    public static native int nativeETHSetERC20TokenV2(long contextID, String json);
+    public static native int nativeETHSetNetworkV2(long contextID, String json);
 
     public static native String nativeETHBuildERC20TransferAbi(long contextID, String json);
 
     public static native String nativeETHSignBytestring(long contextID, String json);
 
     public static native String nativeETHSignTypedData(long contextID, String json);
+
+    public static native int nativeETHUploadNFT(long contextId, String meta, byte[] image, byte[] thumbnail, byte[] wallpaper);
 
     //********************************* ETH multi sign ************************************
 

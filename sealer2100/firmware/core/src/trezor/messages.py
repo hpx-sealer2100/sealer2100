@@ -3280,6 +3280,7 @@ if TYPE_CHECKING:
         extension: "str"
         image_size: "int"
         thumbnail_size: "int"
+        wallpaper_size: "int"
 
         def __init__(
             self,
@@ -3288,6 +3289,7 @@ if TYPE_CHECKING:
             extension: "str",
             image_size: "int",
             thumbnail_size: "int",
+            wallpaper_size: "int",
         ) -> None:
             pass
 

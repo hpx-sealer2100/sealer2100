@@ -62,6 +62,7 @@ async def upload_nft(ctx: wire.Context, msg: NftUpload) -> Success:
         io.fs.mkdir(f'{NFT_DIR}/{metadata.token}/desc')
         io.fs.mkdir(f'{NFT_DIR}/{metadata.token}/image')
         io.fs.mkdir(f'{NFT_DIR}/{metadata.token}/thumbnail')
+        io.fs.mkdir(f'{NFT_DIR}/{metadata.token}/wallpaper')
 
         # save description
         content = {
@@ -80,7 +81,7 @@ async def upload_nft(ctx: wire.Context, msg: NftUpload) -> Success:
         # setup a loading screen
         desc = NftDesc(desc_path)
         source = NftSource(desc)
-        total = msg.image_size + msg.thumbnail_size
+        total = msg.image_size + msg.thumbnail_size + msg.wallpaper_size
         loading = LoadingResource(f"{metadata.name}#{metadata.id}", total)
         await loading.show()
 
@@ -121,6 +122,26 @@ async def upload_nft(ctx: wire.Context, msg: NftUpload) -> Success:
                 size -= length
                 loading.update(length)
                 f.sync()
+
+        # save wallpaper
+        size = msg.wallpaper_size
+        with io.fs.open(source.wallpaper('FS'), "w") as f:
+            f.truncate()
+            offset = 0
+            while size > 0:
+                length = min(REQUEST_CHUNK_SIZE, size)
+                req = NftRequest(offset=offset, data_length=length, type=NftRequestType.WALLPAPER)
+                ack = await request_nft_with_timeout(ctx, req, timeout=REQUEST_TIMEOUT)
+                if ack.hash:
+                    digest = sha256(ack.chunk).digest()
+                    if digest != ack.hash:
+                        raise wire.DataError("Date digest is inconsistent")
+                f.write(ack.chunk)
+                offset += length
+                size -= length
+                loading.update(length)
+                f.sync()
+
     except BaseException as e:
         log.exception(__name__, f'{e}')
         raise wire.FirmwareError(f"Failed to write file with error code {e}")

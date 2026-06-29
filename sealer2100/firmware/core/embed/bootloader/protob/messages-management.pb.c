@@ -159,19 +159,16 @@ PB_BIND(SEBackToRomBoot, SEBackToRomBoot, AUTO)
 PB_BIND(SEWipeUserStorage, SEWipeUserStorage, AUTO)
 
 
-PB_BIND(ResourceUpload, ResourceUpload, AUTO)
+PB_BIND(NftMetadata, NftMetadata, AUTO)
 
 
-PB_BIND(ZoomRequest, ZoomRequest, AUTO)
+PB_BIND(NftUpload, NftUpload, AUTO)
 
 
-PB_BIND(ResourceRequest, ResourceRequest, AUTO)
+PB_BIND(NftRequest, NftRequest, AUTO)
 
 
-PB_BIND(ResourceAck, ResourceAck, AUTO)
-
-
-PB_BIND(ResourceUpdate, ResourceUpdate, AUTO)
+PB_BIND(NftAck, NftAck, AUTO)
 
 
 PB_BIND(ListResDir, ListResDir, AUTO)

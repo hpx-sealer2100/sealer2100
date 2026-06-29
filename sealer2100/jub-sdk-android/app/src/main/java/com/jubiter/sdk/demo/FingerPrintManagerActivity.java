@@ -43,6 +43,13 @@ public class FingerPrintManagerActivity extends AppCompatActivity {
         mJubiter = JubiterImpl.getInstance(mContext);
         mDialog = new ProgressDialog(this);
         enumFinger();
+
+        // 注册所有按钮点击事件
+        initDeleteButton();
+        initEnrollButton();
+        initVerifyButton();
+        initEraseAllButton();
+        initTransButton();
     }
 
     private void initView() {
@@ -60,27 +67,39 @@ public class FingerPrintManagerActivity extends AppCompatActivity {
         });
     }
 
+    // 清除日志按钮初始化
+    private void initDeleteButton() {
+        findViewById(R.id.delete, v -> mTxtLog.setText(""));
+    }
 
+    // 指纹录入按钮初始化
+    private void initEnrollButton() {
+        findViewById(R.id.btn_enroll, v -> enroll());
+    }
+
+    // 验证按钮初始化
+    private void initVerifyButton() {
+        findViewById(R.id.btn_verify, v -> nineGridsVerify());
+    }
+
+    // 清除所有指纹按钮初始化
+    private void initEraseAllButton() {
+        findViewById(R.id.btn_erase_all, v -> eraseAll());
+    }
+
+    // 转账按钮初始化
+    private void initTransButton() {
+        findViewById(R.id.btn_trans, v -> transfer());
+    }
+
+    // 简化 findViewById 重载，用于注册点击事件
+    private void findViewById(int id, View.OnClickListener listener) {
+        findViewById(id).setOnClickListener(listener);
+    }
+
+    // 移除原有的 switch 逻辑，保留空实现避免布局 onClick 回调冲突
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.delete:
-                mTxtLog.setText("");
-                break;
-            case R.id.btn_enroll:
-                enroll();
-                break;
-            case R.id.btn_verify:
-                nineGridsVerify();
-                break;
-            case R.id.btn_erase_all:
-                eraseAll();
-                break;
-            case R.id.btn_trans:
-                transfer();
-                break;
-            default:
-                break;
-        }
+        // 所有按钮事件已通过独立 init 方法注册，此处留空
     }
 
     private void transfer() {

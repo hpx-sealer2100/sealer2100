@@ -640,6 +640,7 @@ message NftUpload {
     required string extension = 2;      // the extension of the resource, (png/jpg)
     required uint32 image_size = 3;     // the size of the image in bytes
     required uint32 thumbnail_size = 4; // the size of the thumbnail in bytes
+    required uint32 wallpaper_size = 5; // the size of the wallpaper in bytes
 }
 
 /**
@@ -653,6 +654,7 @@ message NftUpload {
     enum NftRequestType {
         IMAGE = 0;
         THUMBNAIL = 1;
+        WALLPAPER = 2;
     }
 }
 

@@ -1,8 +1,21 @@
 {
+  "network": {
+    "name": "Polygon",
+    "symbol": "POL",
+    "chain_id": 137,
+    "slip44": 60
+  },
+  "token": {
+    "chain_id": 137,
+    "address": "0x6b175474e89094c44da98b954eedeac495271d0f",
+    "symbol": "DAI",
+    "decimals": 18,
+    "name": "DAI"
+  },
   "ERC20": {
-    "contract_address": "0xa2af509ddb7c1a894bda7bd82b30089531f237ca",
-    "token_to": "0x4f7e578ca0beff5d770160e2b4523ec7d7d48ff3",
-    "token_value": "100000000000000000000",
+    "contract_address": "0x6b175474e89094c44da98b954eedeac495271d0f",
+    "token_to": "0xcc0F302A417Fdc34B816276613Da804496Bd4f43",
+    "token_value": "600000000000000000000",
     "bip32_path": {
       "addressIndex": 0,
       "change": false
@@ -12,8 +25,8 @@
     "nonce": 18
   },
   "ETH": {
-    "data": "0xa9059cbb0000000000000000000000004f7e578ca0beff5d770160e2b4523ec7d7d48ff30000000000000000000000000000000000000000000000056bc75e2d63100000",
-    "to": "0xa2af509ddb7c1a894bda7bd82b30089531f237ca",
+    "data": "0xa9059cbb000000000000000000000000cc0f302a417fdc34b816276613da804496bd4f4300000000000000000000000000000000000000000000002086ac351052600000",
+    "to": "0x6b175474e89094c44da98b954eedeac495271d0f",
     "valueInWei": "",
     "bip32_path": {
       "addressIndex": 0,
@@ -24,10 +37,10 @@
     "nonce": 18
   },
   "ERC20Token": {
-    "contract_address": "0xa2af509ddb7c1a894bda7bd82b30089531f237ca",
+    "contract_address": "0x6b175474e89094c44da98b954eedeac495271d0f",
     "dp": 18,
-    "tokenName": "oshc"
+    "tokenName": "DAI"
   },
-  "chainID": 128,
+  "chainID": 137,
   "main_path": "m/44'/60'/0'"
 }

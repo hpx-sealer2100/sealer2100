@@ -19,6 +19,7 @@ import sys
 import re
 import time
 import json
+import pathlib
 from typing import TYPE_CHECKING, Optional, Sequence
 
 import click
@@ -366,49 +367,93 @@ def se_sign_message(obj: "TrezorConnection", message: str) -> dict:
 
 @cli.command()
 # fmt: off
-@click.option("-i", "--image", help="The full path of the image to upload", type=click.File('rb'))
-@click.option("-t", "--thumbnail", help="The thumbnail file of the image to upload", type=click.File('rb'))
-@click.option("-m", "--metadata", help="the metadata of the nft, a json string include id, name, token, network and owner fields", type = click.File())
+@click.option("-d", "--dir", help="The full path of the nft dir to upload", type=click.Path(exists=True))
 # fmt: on
 @with_client
 def upload_nft(
     client: "TrezorClient",
-    image: click.File,
-    thumbnail: click.File,
-    metadata: click.File,
+    dir: click.Path,
 ) -> None:
     """Upload nft to device."""
+    dir_structure = """
+    NFT dir structure is as follows:
+    # ├── {nft}
+    #   ├── desc/
+    #   │   ├── {id}.json
+    #   ├── thumbnail
+    #   │   ├── {id}.png
+    #   ├── image/
+    #   │   ├── {id}.png
+    #   ├── wallpaper/
+    #   │   ├── {id}.png
+    """
 
-    ext1 = image.name.split(".")[-1]
-    ext2 = thumbnail.name.split(".")[-1]
-    if ext1 != ext2:
-        click.echo(f"Image and thumbnail must have the same extension, but got {ext1} and {ext2}")
+    # check dir structure
+    d = pathlib.Path(dir)
+    if not (d / "desc").exists():
+        click.echo(f"Dir {dir} does not contain desc dir")
+        click.echo(dir_structure)
+        sys.exit(3)
+    if not (d / "thumbnail").exists():
+        click.echo(f"Dir {dir} does not contain thumbnail dir")
+        click.echo(dir_structure)
+        sys.exit(3)
+    if not (d / "image").exists():
+        click.echo(f"Dir {dir} does not contain image dir")
+        click.echo(dir_structure)
+        sys.exit(3)
+    if not (d / "wallpaper").exists():
+        click.echo(f"Dir {dir} does not contain wallpaper dir")
+        click.echo(dir_structure)
         sys.exit(3)
 
-    image_data = image.read()
-    thumbnail_data = thumbnail.read()
-    meta = json.load(metadata)
-    try:
-        click.echo("Please confirm the action on your Trezor device")
+    descs = [f for f in (d / "desc").iterdir() if f.suffix == ".json"]
+    for desc in descs:
+        # get id from desc file
+        id1 = desc.stem
+        meta = json.load(desc.open(mode="rb"))
+        id2 = meta["id"]
+        if id1 != id2:
+            # check if id in desc file and meta are the same
+            click.echo(f"Desc file {desc} has id {id1}, but meta has id {id2}")
+            sys.exit(3)
+        ext = meta["extension"]
+        # check files exist
+        if not (d / "thumbnail" / f"{id1}.{ext}").exists():
+            click.echo(f"Thumbnail file {id1}.{ext} does not exist")
+            click.echo(dir_structure)
+            sys.exit(3)
+        if not (d / "image" / f"{id1}.{ext}").exists():
+            click.echo(f"Image file {id1}.{ext} does not exist")
+            click.echo(dir_structure)
+            sys.exit(3)
+        if not (d / "wallpaper" / f"{id1}.{ext}").exists():
+            click.echo(f"Wallpaper file {id1}.{ext} does not exist")
+            click.echo(dir_structure)
+            sys.exit(3)
+        image = (d / "image" / f"{id1}.{ext}").read_bytes()
+        thumbnail = (d / "thumbnail" / f"{id1}.{ext}").read_bytes()
+        wallpaper = (d / "wallpaper" / f"{id1}.{ext}").read_bytes()
+        try:
+            click.echo("Please confirm the action on your Trezor device")
 
-        click.echo("Uploading...\r", nl=False)
-        bar = click.progressbar(
-            label="Uploading", length=len(image_data) + len(thumbnail_data), show_eta=False
-        )
-        device.upload_nft(
-            client,
-            meta,
-            image=image_data,
-            thumbnail=thumbnail_data,
-            progress=bar.update,
-            extension=ext1,
-        )
-    except exceptions.Cancelled:
-        click.echo("Upload aborted on device.")
-    except exceptions.TrezorException as e:
-        click.echo(f"Upload failed: {e}")
-        sys.exit(3)
-
+            click.echo("Uploading...\r", nl=False)
+            bar = click.progressbar(
+                label="Uploading", length=len(image) + len(thumbnail) + len(wallpaper), show_eta=False
+            )
+            device.upload_nft(
+                client,
+                meta,
+                image=image,
+                thumbnail=thumbnail,
+                wallpaper=wallpaper,
+                progress=bar.update,
+            )
+        except exceptions.Cancelled:
+            click.echo("Upload aborted on device.")
+        except exceptions.TrezorException as e:
+            click.echo(f"Upload failed: {e}")
+            sys.exit(3)
 
 @cli.command()
 # fmt: off

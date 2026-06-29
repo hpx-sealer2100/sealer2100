@@ -82,7 +82,7 @@ sendPassphraseToNative(JNIEnv *env, jclass clazz, jstring passphrase, jboolean o
         // 使用 std::lock_guard 确保对 sPassphraseData 和 g_passphrase_ready 的访问是线程安全的
 //        std::lock_guard<std::mutex> lock(g_passphrase_mutex);
         // 给 sPassphraseData 赋值
-        sPassphraseData.passphrase = newPassphrase;
+        sPassphraseData.passphrase = std::move(newPassphrase);
         sPassphraseData.onDevice = onDevice;
 
 //        g_passphrase_ready = true;
@@ -295,11 +295,16 @@ void notifyJavaWithMessage(JNIEnv *env, int messageType) {
 
 void setPassphraseWrapper(JUB_BYTE_PTR pData, JUB_ULONG_PTR pDataLen, bool *on_device) {
     LOG_INF("[C++] setPassphraseWrapper called");
-
+    auto clear = [](std::string& s) {
+        if (s.empty()) return;
+        s.assign(s.size(), 0x00);
+    };
     JNIEnv *env = nullptr;
     if (g_vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_6) != JNI_OK) {
         if (g_vm->AttachCurrentThread(&env, nullptr) != JNI_OK) {
             LOG_ERR("Failed to attach current thread");
+            // clear
+            clear(sPassphraseData.passphrase);
             return;
         }
     }
@@ -311,11 +316,16 @@ void setPassphraseWrapper(JUB_BYTE_PTR pData, JUB_ULONG_PTR pDataLen, bool *on_d
     // 将 sPassphraseData 中的数据赋值给 pData 和 pDataLen
     if (*pDataLen < sPassphraseData.passphrase.size()) {
         LOG_ERR("Buffer is too small to hold the passphrase");
+        // clear
+        clear(sPassphraseData.passphrase);
         return;
     }
     std::memcpy(pData, sPassphraseData.passphrase.data(), sPassphraseData.passphrase.size());
     *pDataLen = sPassphraseData.passphrase.size();
     *on_device = sPassphraseData.onDevice;
+
+    // have consumed, clear cached passphrase
+    clear(sPassphraseData.passphrase);
 }
 
 /**

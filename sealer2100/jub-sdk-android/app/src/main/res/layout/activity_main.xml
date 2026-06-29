@@ -154,7 +154,11 @@
                 style="@style/button"
                 android:onClick="onClick"
                 android:text="eth_transaction_test" />
-
+            <Button
+                android:id="@+id/btn_eth_custom"
+                style="@style/button"
+                android:onClick="onClick"
+                android:text="eth_transaction_custom_test" />
             <Button
                 android:id="@+id/btn_eth_showAddress"
                 style="@style/button"
@@ -192,6 +196,12 @@
                 android:text="ETH erc20" />
 
             <Button
+                android:id="@+id/btn_eth_erc20_custom"
+                style="@style/button"
+                android:onClick="onClick"
+                android:text="ETH erc20 custom" />
+
+            <Button
                 android:id="@+id/btn_eth_TypedData"
                 style="@style/button"
                 android:onClick="onClick"
@@ -215,6 +225,11 @@
                 android:onClick="onClick"
                 android:text="eth_SignTypedData" />
 
+            <Button
+                android:id="@+id/btn_eth_upload_nft"
+                style="@style/button"
+                android:onClick="onClick"
+                android:text="Upload NFT" />
             <Button
                 android:id="@+id/btn_enum_support_coins"
                 style="@style/button"

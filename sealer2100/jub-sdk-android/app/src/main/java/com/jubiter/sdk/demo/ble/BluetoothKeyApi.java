@@ -32,6 +32,7 @@ public class BluetoothKeyApi {
     private InnerDiscCallback callback = new InnerDiscCallback() {
         @Override
         public void onDisconnect(String name) {
+            Log.d("BluetoothKeyApi", "蓝牙断开: " + name);
             if (mConnectCallback != null) {
                 mConnectCallback.disConnected();
             }

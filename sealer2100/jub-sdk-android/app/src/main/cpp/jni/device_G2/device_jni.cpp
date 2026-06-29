@@ -59,18 +59,23 @@ JNIEXPORT jint JNICALL native_CancelVirtualPwd(JNIEnv *env, jclass obj, jlong co
 
 JNIEXPORT jint JNICALL
 native_verifyPIN(JNIEnv *env, jclass obj, jlong contextID, jbyteArray jPin) {
-    JUB_CHAR_PTR pPin = (JUB_CHAR_PTR) (env->GetByteArrayElements(jPin, NULL));
     int length = env->GetArrayLength(jPin);
+    // device have limitation of PIN length, 32 is enough
+    if (length > 32) {
+        return JUBR_ARGUMENTS_BAD;
+    }
+    JUB_CHAR pin[32+1] = {0};
 
-    // java数组没有结束符，jni层需补充
-    *(pPin + length) = '\0';
+    JUB_CHAR_PTR pPin = (JUB_CHAR_PTR) (env->GetByteArrayElements(jPin, NULL));
+    memcpy(pin, pPin, length);
+    env->ReleaseByteArrayElements(jPin, (jbyte *) pPin, JNI_ABORT);
 
     JUB_ULONG retry;
-    JUB_RV ret = JUB_VerifyPIN(static_cast<JUB_UINT16>(contextID), pPin, &retry);
+    JUB_RV ret = JUB_VerifyPIN(static_cast<JUB_UINT16>(contextID), pin, &retry);
+    std::fill(pin, pin + sizeof(pin), 0);
     if (ret != JUBR_OK) {
         LOG_ERR("JUB_VerifyPIN: %08x", ret);
     }
-    env->ReleaseByteArrayElements(jPin, (jbyte *) pPin, JNI_ABORT);
     return ret;
 }
 

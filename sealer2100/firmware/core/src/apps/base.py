@@ -404,6 +404,10 @@ async def unlock_device(ctx: wire.GenericContext = wire.DUMMY_CONTEXT) -> None:
     from apps.common.request_pin import verify_protection
 
     if not config.is_unlocked():
+
+        from trezor.ui.screen import manager
+        await manager.try_close_iris_matching()
+
         # verify_user_pin will raise if the PIN was invalid
         await verify_protection(ctx)
         from trezor.ui.screen.popup import Popup

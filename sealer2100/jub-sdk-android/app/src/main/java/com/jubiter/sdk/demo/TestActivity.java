@@ -3,6 +3,7 @@ package com.jubiter.sdk.demo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ScrollView;
@@ -46,22 +47,35 @@ public class TestActivity extends AppCompatActivity {
         mTxtTime = findViewById(R.id.time_tv);
         mTxtBv = findViewById(R.id.bv_tv);
         mScrollView = findViewById(R.id.scrollView);
+
+        // 注册按钮点击事件
+        initScanButton();
+        initTestButton();
     }
 
-    public void onClick(View view) {
-        mTxtInfo.setText(null);
-        switch (view.getId()) {
-            case R.id.btn_scan:
-                switchBt();
-                break;
-            case R.id.btn_test:
-                //selectApplet();
-                connectTest();
-                break;
-            default:
-                break;
-        }
+    // 扫描连接按钮初始化
+    private void initScanButton() {
+        findViewById(R.id.btn_scan, v -> switchBt());
     }
+
+    // 测试按钮初始化
+    private void initTestButton() {
+        findViewById(R.id.btn_test, v -> {
+            mTxtInfo.setText(null);
+            connectTest();
+        });
+    }
+
+    // 简化 findViewById 重载，用于注册点击事件
+    private void findViewById(int id, View.OnClickListener listener) {
+        findViewById(id).setOnClickListener(listener);
+    }
+
+    // 原 onClick 方法保留空实现（避免布局 onClick 回调冲突）
+    public void onClick(View view) {
+        // 按钮事件已通过独立 init 方法注册，此处留空
+    }
+
     private void connectTest(){
         new Thread(new Runnable() {
             @Override
@@ -83,7 +97,7 @@ public class TestActivity extends AppCompatActivity {
                                     int i = NativeApi.nativeConnectDevice(name, uuid, 1, hld, 30 * 1000 , new InnerDiscCallback() {
                                         @Override
                                         public void onDisconnect(String name) {
-
+                                            Log.d("TestActivity", "onDisconnect: " + name);
                                         }
                                     });
                                     if(i == 0){

@@ -294,3 +294,12 @@ def monitor_task_exit():
         s.delete()
         __screens.remove(s)
         del s
+
+async def try_close_iris_matching():
+    screen = first_alive_screen()
+    from trezor.ui.screen.iris import IrisMatch
+    if not isinstance(screen, IrisMatch):
+        return
+    screen.close(None)
+    await screen.sync_chan.take()
+    await loop.sleep(100)

@@ -1,0 +1,39 @@
+{
+    "network": {
+        "name": "China Mobile",
+        "symbol": "CMCC",
+        "chain_id": 10086,
+        "slip44": 10086
+    },
+    "token": {
+        "chain_id": 10086,
+        "address": "0xaD326983bc8444A6Bf15BC1B0BBdE8A62a098a72",
+        "symbol": "GoTone",
+        "decimals": 18,
+        "name": "Gobal Tone"
+    },
+    "ERC20": {
+        "contract_address": "0xaD326983bc8444A6Bf15BC1B0BBdE8A62a098a72",
+        "token_to": "0x4f7e578ca0beff5d770160e2b4523ec7d7d48ff3",
+        "token_value": "100000000000000000000",
+        "bip32_path": {
+            "addressIndex": 0,
+            "change": false
+        },
+        "gasLimit": 64720,
+        "gasPriceInWei": "5000000000",
+        "nonce": 18
+    },
+    "ETH": {
+        "data": "0xa9059cbb0000000000000000000000004f7e578ca0beff5d770160e2b4523ec7d7d48ff30000000000000000000000000000000000000000000000056bc75e2d63100000",
+        "to": "0xaD326983bc8444A6Bf15BC1B0BBdE8A62a098a72",
+        "valueInWei": "",
+        "bip32_path": {
+            "addressIndex": 0,
+            "change": false
+        },
+        "gasLimit": 64720,
+        "gasPriceInWei": "5000000000",
+        "nonce": 18
+    }
+}

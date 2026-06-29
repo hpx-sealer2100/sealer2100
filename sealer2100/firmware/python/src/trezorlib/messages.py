@@ -606,6 +606,7 @@ class WordRequestType(IntEnum):
 class NftRequestType(IntEnum):
     IMAGE = 0
     THUMBNAIL = 1
+    WALLPAPER = 2
 
 
 class DebugSwipeDirection(IntEnum):
@@ -4616,6 +4617,7 @@ class NftUpload(protobuf.MessageType):
         2: protobuf.Field("extension", "string", repeated=False, required=True),
         3: protobuf.Field("image_size", "uint32", repeated=False, required=True),
         4: protobuf.Field("thumbnail_size", "uint32", repeated=False, required=True),
+        5: protobuf.Field("wallpaper_size", "uint32", repeated=False, required=True),
     }
 
     def __init__(
@@ -4625,11 +4627,13 @@ class NftUpload(protobuf.MessageType):
         extension: "str",
         image_size: "int",
         thumbnail_size: "int",
+        wallpaper_size: "int",
     ) -> None:
         self.metadata = metadata
         self.extension = extension
         self.image_size = image_size
         self.thumbnail_size = thumbnail_size
+        self.wallpaper_size = wallpaper_size
 
 
 class NftRequest(protobuf.MessageType):

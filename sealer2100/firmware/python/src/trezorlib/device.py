@@ -264,7 +264,7 @@ def upload_nft(
     meta: dict[str: str],
     image: bytes,
     thumbnail: bytes,
-    extension: str,
+    wallpaper: bytes,
     progress: Callable[[int], Any] = lambda _: None,
 ):
     req = messages.NftUpload(
@@ -277,7 +277,8 @@ def upload_nft(
         ),
         image_size=len(image),
         thumbnail_size=len(thumbnail),
-        extension=extension,
+        wallpaper_size=len(wallpaper),
+        extension=meta["extension"],
     )
 
     resp = client.call(req)
@@ -288,6 +289,8 @@ def upload_nft(
             data = image
         elif resp.type == messages.NftRequestType.THUMBNAIL:
             data = thumbnail
+        elif resp.type == messages.NftRequestType.WALLPAPER:
+            data = wallpaper
         else:
             raise RuntimeError(f"Unexpected message {resp}")
 

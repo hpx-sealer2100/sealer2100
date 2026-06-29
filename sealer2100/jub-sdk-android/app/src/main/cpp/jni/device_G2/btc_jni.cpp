@@ -240,7 +240,6 @@ JNIEXPORT jstring JNICALL native_QRC20Transaction(JNIEnv *env, jclass obj,
 #define TOKEN_TO "QRC20_to"
 #define TOKEN_VALUE "QRC20_amount"
 
-
     JUB_CHAR_PTR pJSON = const_cast<JUB_CHAR_PTR>(env->GetStringUTFChars(jJSON, NULL));
     Json::Reader reader;
     Json::Value root;
@@ -516,10 +515,23 @@ native_BTCTransaction(JNIEnv *env, jclass obj, jlong contextID, jboolean useLega
 #define INDEX        "addressIndex"
 #define AMOUNT       "amount"
 #define MULTISIG     "multisig"
+#define TYPE         "type"
 
 #define OUTPUTS      "outputs"
 #define ADDRESS      "address"
 #define CHANGE_ADDRESS "change_address"
+
+    // typedef enum
+    // {
+    //     P2PKH = 0x00,
+    //     RETURN0 = 0x01,
+    //     P2SH_MULTISIG = 0x02,
+    //     QRC20 = 0x03,
+    //     P2WSH_MULTISIG = 0x04,
+    //     P2SH_P2WPKH = 0x05,
+    //     P2WPKH = 0x06,
+    //     TAPROOT = 0x07
+    // } SCRIPT_BTC_TYPE;
 
     JUB_CHAR_PTR pJSON = const_cast<JUB_CHAR_PTR>(env->GetStringUTFChars(jJSON, NULL));
     Json::Reader reader;
@@ -533,7 +545,12 @@ native_BTCTransaction(JNIEnv *env, jclass obj, jlong contextID, jboolean useLega
     for (int i = 0; i < input_number; i++) {
         INPUT_BTC input;
         // 根据全局变量赋值
-        input.type = globalMultiSig ? P2SH_MULTISIG : P2PKH;
+        // input.type = globalMultiSig ? P2SH_MULTISIG : P2PKH;
+        if (root[INPUTS][i].isMember(TYPE)) {
+            input.type = SCRIPT_BTC_TYPE(root[INPUTS][i][TYPE].asInt());
+        } else {
+            input.type = P2PKH;
+        }
 //        input.type = SCRIPT_BTC_TYPE(root[INPUTS][i][MULTISIG].asInt());
         input.preHash = (char *) root[INPUTS][i][PREHASH].asCString();
         input.preIndex = static_cast<JUB_UINT16>(root[INPUTS][i][PREINDEX].asInt());
@@ -547,7 +564,13 @@ native_BTCTransaction(JNIEnv *env, jclass obj, jlong contextID, jboolean useLega
     for (int i = 0; i < output_number; i++) {
         OUTPUT_BTC output;
         // 根据全局变量赋值
-        output.type = globalMultiSig ? P2SH_MULTISIG : P2PKH;
+        //output.type = globalMultiSig ? P2SH_MULTISIG : P2PKH;
+        if (root[OUTPUTS][i].isMember(TYPE))
+        {
+            output.type = SCRIPT_BTC_TYPE(root[OUTPUTS][i][TYPE].asInt());
+        }else{
+            output.type = P2PKH;
+        }
 //        output.type = SCRIPT_BTC_TYPE(root[OUTPUTS][i][MULTISIG].asInt());
         output.stdOutput.address = (char *) root[OUTPUTS][i][ADDRESS].asCString();
         output.stdOutput.amount = static_cast<JUB_UINT64>(root[OUTPUTS][i][AMOUNT].asUInt64());

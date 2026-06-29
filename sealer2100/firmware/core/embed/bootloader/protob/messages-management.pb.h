@@ -60,10 +60,11 @@ typedef enum _WordRequestType {
     WordRequestType_WordRequestType_Matrix6 = 2
 } WordRequestType;
 
-typedef enum _ResourceType {
-    ResourceType_WallPaper = 0,
-    ResourceType_Nft = 1
-} ResourceType;
+typedef enum _NftRequestType {
+    NftRequestType_IMAGE = 0,
+    NftRequestType_THUMBNAIL = 1,
+    NftRequestType_WALLPAPER = 2
+} NftRequestType;
 
 /* Struct definitions */
 typedef PB_BYTES_ARRAY_T(32) Initialize_session_id_t;
@@ -479,38 +480,32 @@ typedef struct _SEWipeUserStorage {
     char dummy_field;
 } SEWipeUserStorage;
 
-typedef struct _ResourceUpload {
+typedef struct _NftMetadata {
+    pb_callback_t id;
+    pb_callback_t token;
+    pb_callback_t name;
+    pb_callback_t network;
+    pb_callback_t owner;
+} NftMetadata;
+
+typedef struct _NftUpload {
+    NftMetadata metadata;
     pb_callback_t extension;
-    uint32_t data_length;
-    ResourceType res_type;
-    pb_callback_t nft_meta_data;
-    uint32_t zoom_data_length;
-    pb_callback_t file_name_no_ext;
-} ResourceUpload;
+    uint32_t image_size;
+    uint32_t thumbnail_size;
+    uint32_t wallpaper_size;
+} NftUpload;
 
-typedef struct _ZoomRequest {
-    bool has_offset;
+typedef struct _NftRequest {
     uint32_t offset;
     uint32_t data_length;
-} ZoomRequest;
+    NftRequestType type;
+} NftRequest;
 
-typedef struct _ResourceRequest {
-    bool has_offset;
-    uint32_t offset;
-    uint32_t data_length;
-} ResourceRequest;
-
-typedef struct _ResourceAck {
-    pb_callback_t data_chunk;
+typedef struct _NftAck {
+    pb_callback_t chunk;
     pb_callback_t hash;
-} ResourceAck;
-
-typedef struct _ResourceUpdate {
-    pb_callback_t file_name;
-    uint32_t data_length;
-    pb_callback_t initial_data_chunk;
-    pb_callback_t hash;
-} ResourceUpdate;
+} NftAck;
 
 typedef struct _ListResDir {
     pb_callback_t path;
@@ -564,9 +559,9 @@ extern "C" {
 #define _WordRequestType_MAX WordRequestType_WordRequestType_Matrix6
 #define _WordRequestType_ARRAYSIZE ((WordRequestType)(WordRequestType_WordRequestType_Matrix6+1))
 
-#define _ResourceType_MIN ResourceType_WallPaper
-#define _ResourceType_MAX ResourceType_Nft
-#define _ResourceType_ARRAYSIZE ((ResourceType)(ResourceType_Nft+1))
+#define _NftRequestType_MIN NftRequestType_IMAGE
+#define _NftRequestType_MAX NftRequestType_WALLPAPER
+#define _NftRequestType_ARRAYSIZE ((NftRequestType)(NftRequestType_WALLPAPER+1))
 
 
 
@@ -627,10 +622,9 @@ extern "C" {
 
 
 
-#define ResourceUpload_res_type_ENUMTYPE ResourceType
 
 
-
+#define NftRequest_type_ENUMTYPE NftRequestType
 
 
 
@@ -691,11 +685,10 @@ extern "C" {
 #define SEInitializeDone_init_default            {0}
 #define SEBackToRomBoot_init_default             {0}
 #define SEWipeUserStorage_init_default           {0}
-#define ResourceUpload_init_default              {{{NULL}, NULL}, 0, _ResourceType_MIN, {{NULL}, NULL}, 0, {{NULL}, NULL}}
-#define ZoomRequest_init_default                 {false, 0, 0}
-#define ResourceRequest_init_default             {false, 0, 0}
-#define ResourceAck_init_default                 {{{NULL}, NULL}, {{NULL}, NULL}}
-#define ResourceUpdate_init_default              {{{NULL}, NULL}, 0, {{NULL}, NULL}, {{NULL}, NULL}}
+#define NftMetadata_init_default                 {{{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}}
+#define NftUpload_init_default                   {NftMetadata_init_default, {{NULL}, NULL}, 0, 0, 0}
+#define NftRequest_init_default                  {0, 0, _NftRequestType_MIN}
+#define NftAck_init_default                      {{{NULL}, NULL}, {{NULL}, NULL}}
 #define ListResDir_init_default                  {{{NULL}, NULL}}
 #define FileInfoList_init_default                {{{NULL}, NULL}}
 #define FileInfo_init_default                    {{{NULL}, NULL}, 0}
@@ -752,11 +745,10 @@ extern "C" {
 #define SEInitializeDone_init_zero               {0}
 #define SEBackToRomBoot_init_zero                {0}
 #define SEWipeUserStorage_init_zero              {0}
-#define ResourceUpload_init_zero                 {{{NULL}, NULL}, 0, _ResourceType_MIN, {{NULL}, NULL}, 0, {{NULL}, NULL}}
-#define ZoomRequest_init_zero                    {false, 0, 0}
-#define ResourceRequest_init_zero                {false, 0, 0}
-#define ResourceAck_init_zero                    {{{NULL}, NULL}, {{NULL}, NULL}}
-#define ResourceUpdate_init_zero                 {{{NULL}, NULL}, 0, {{NULL}, NULL}, {{NULL}, NULL}}
+#define NftMetadata_init_zero                    {{{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}}
+#define NftUpload_init_zero                      {NftMetadata_init_zero, {{NULL}, NULL}, 0, 0, 0}
+#define NftRequest_init_zero                     {0, 0, _NftRequestType_MIN}
+#define NftAck_init_zero                         {{{NULL}, NULL}, {{NULL}, NULL}}
 #define ListResDir_init_zero                     {{{NULL}, NULL}}
 #define FileInfoList_init_zero                   {{{NULL}, NULL}}
 #define FileInfo_init_zero                       {{{NULL}, NULL}, 0}
@@ -896,22 +888,21 @@ extern "C" {
 #define SEPublicCert_public_cert_tag             1
 #define SESignMessage_message_tag                1
 #define SEMessageSignature_signature_tag         1
-#define ResourceUpload_extension_tag             1
-#define ResourceUpload_data_length_tag           2
-#define ResourceUpload_res_type_tag              3
-#define ResourceUpload_nft_meta_data_tag         4
-#define ResourceUpload_zoom_data_length_tag      5
-#define ResourceUpload_file_name_no_ext_tag      6
-#define ZoomRequest_offset_tag                   1
-#define ZoomRequest_data_length_tag              2
-#define ResourceRequest_offset_tag               1
-#define ResourceRequest_data_length_tag          2
-#define ResourceAck_data_chunk_tag               1
-#define ResourceAck_hash_tag                     2
-#define ResourceUpdate_file_name_tag             1
-#define ResourceUpdate_data_length_tag           2
-#define ResourceUpdate_initial_data_chunk_tag    3
-#define ResourceUpdate_hash_tag                  4
+#define NftMetadata_id_tag                       1
+#define NftMetadata_token_tag                    2
+#define NftMetadata_name_tag                     3
+#define NftMetadata_network_tag                  4
+#define NftMetadata_owner_tag                    5
+#define NftUpload_metadata_tag                   1
+#define NftUpload_extension_tag                  2
+#define NftUpload_image_size_tag                 3
+#define NftUpload_thumbnail_size_tag             4
+#define NftUpload_wallpaper_size_tag             5
+#define NftRequest_offset_tag                    1
+#define NftRequest_data_length_tag               2
+#define NftRequest_type_tag                      3
+#define NftAck_chunk_tag                         1
+#define NftAck_hash_tag                          2
 #define ListResDir_path_tag                      1
 #define FileInfoList_files_tag                   1
 #define FileInfo_name_tag                        1
@@ -1279,41 +1270,37 @@ X(a, STATIC,   REQUIRED, BYTES,    signature,         1)
 #define SEWipeUserStorage_CALLBACK NULL
 #define SEWipeUserStorage_DEFAULT NULL
 
-#define ResourceUpload_FIELDLIST(X, a) \
-X(a, CALLBACK, REQUIRED, STRING,   extension,         1) \
+#define NftMetadata_FIELDLIST(X, a) \
+X(a, CALLBACK, REQUIRED, STRING,   id,                1) \
+X(a, CALLBACK, REQUIRED, STRING,   token,             2) \
+X(a, CALLBACK, REQUIRED, STRING,   name,              3) \
+X(a, CALLBACK, REQUIRED, STRING,   network,           4) \
+X(a, CALLBACK, REQUIRED, STRING,   owner,             5)
+#define NftMetadata_CALLBACK pb_default_field_callback
+#define NftMetadata_DEFAULT NULL
+
+#define NftUpload_FIELDLIST(X, a) \
+X(a, STATIC,   REQUIRED, MESSAGE,  metadata,          1) \
+X(a, CALLBACK, REQUIRED, STRING,   extension,         2) \
+X(a, STATIC,   REQUIRED, UINT32,   image_size,        3) \
+X(a, STATIC,   REQUIRED, UINT32,   thumbnail_size,    4) \
+X(a, STATIC,   REQUIRED, UINT32,   wallpaper_size,    5)
+#define NftUpload_CALLBACK pb_default_field_callback
+#define NftUpload_DEFAULT NULL
+#define NftUpload_metadata_MSGTYPE NftMetadata
+
+#define NftRequest_FIELDLIST(X, a) \
+X(a, STATIC,   REQUIRED, UINT32,   offset,            1) \
 X(a, STATIC,   REQUIRED, UINT32,   data_length,       2) \
-X(a, STATIC,   REQUIRED, UENUM,    res_type,          3) \
-X(a, CALLBACK, OPTIONAL, BYTES,    nft_meta_data,     4) \
-X(a, STATIC,   REQUIRED, UINT32,   zoom_data_length,   5) \
-X(a, CALLBACK, OPTIONAL, STRING,   file_name_no_ext,   6)
-#define ResourceUpload_CALLBACK pb_default_field_callback
-#define ResourceUpload_DEFAULT NULL
+X(a, STATIC,   REQUIRED, UENUM,    type,              3)
+#define NftRequest_CALLBACK NULL
+#define NftRequest_DEFAULT NULL
 
-#define ZoomRequest_FIELDLIST(X, a) \
-X(a, STATIC,   OPTIONAL, UINT32,   offset,            1) \
-X(a, STATIC,   REQUIRED, UINT32,   data_length,       2)
-#define ZoomRequest_CALLBACK NULL
-#define ZoomRequest_DEFAULT NULL
-
-#define ResourceRequest_FIELDLIST(X, a) \
-X(a, STATIC,   OPTIONAL, UINT32,   offset,            1) \
-X(a, STATIC,   REQUIRED, UINT32,   data_length,       2)
-#define ResourceRequest_CALLBACK NULL
-#define ResourceRequest_DEFAULT NULL
-
-#define ResourceAck_FIELDLIST(X, a) \
-X(a, CALLBACK, REQUIRED, BYTES,    data_chunk,        1) \
+#define NftAck_FIELDLIST(X, a) \
+X(a, CALLBACK, REQUIRED, BYTES,    chunk,             1) \
 X(a, CALLBACK, OPTIONAL, BYTES,    hash,              2)
-#define ResourceAck_CALLBACK pb_default_field_callback
-#define ResourceAck_DEFAULT NULL
-
-#define ResourceUpdate_FIELDLIST(X, a) \
-X(a, CALLBACK, REQUIRED, STRING,   file_name,         1) \
-X(a, STATIC,   REQUIRED, UINT32,   data_length,       2) \
-X(a, CALLBACK, REQUIRED, BYTES,    initial_data_chunk,   3) \
-X(a, CALLBACK, OPTIONAL, BYTES,    hash,              4)
-#define ResourceUpdate_CALLBACK pb_default_field_callback
-#define ResourceUpdate_DEFAULT NULL
+#define NftAck_CALLBACK pb_default_field_callback
+#define NftAck_DEFAULT NULL
 
 #define ListResDir_FIELDLIST(X, a) \
 X(a, CALLBACK, REQUIRED, STRING,   path,              1)
@@ -1394,11 +1381,10 @@ extern const pb_msgdesc_t SEInitialize_msg;
 extern const pb_msgdesc_t SEInitializeDone_msg;
 extern const pb_msgdesc_t SEBackToRomBoot_msg;
 extern const pb_msgdesc_t SEWipeUserStorage_msg;
-extern const pb_msgdesc_t ResourceUpload_msg;
-extern const pb_msgdesc_t ZoomRequest_msg;
-extern const pb_msgdesc_t ResourceRequest_msg;
-extern const pb_msgdesc_t ResourceAck_msg;
-extern const pb_msgdesc_t ResourceUpdate_msg;
+extern const pb_msgdesc_t NftMetadata_msg;
+extern const pb_msgdesc_t NftUpload_msg;
+extern const pb_msgdesc_t NftRequest_msg;
+extern const pb_msgdesc_t NftAck_msg;
 extern const pb_msgdesc_t ListResDir_msg;
 extern const pb_msgdesc_t FileInfoList_msg;
 extern const pb_msgdesc_t FileInfo_msg;
@@ -1457,11 +1443,10 @@ extern const pb_msgdesc_t UnlockedPathRequest_msg;
 #define SEInitializeDone_fields &SEInitializeDone_msg
 #define SEBackToRomBoot_fields &SEBackToRomBoot_msg
 #define SEWipeUserStorage_fields &SEWipeUserStorage_msg
-#define ResourceUpload_fields &ResourceUpload_msg
-#define ZoomRequest_fields &ZoomRequest_msg
-#define ResourceRequest_fields &ResourceRequest_msg
-#define ResourceAck_fields &ResourceAck_msg
-#define ResourceUpdate_fields &ResourceUpdate_msg
+#define NftMetadata_fields &NftMetadata_msg
+#define NftUpload_fields &NftUpload_msg
+#define NftRequest_fields &NftRequest_msg
+#define NftAck_fields &NftAck_msg
 #define ListResDir_fields &ListResDir_msg
 #define FileInfoList_fields &FileInfoList_msg
 #define FileInfo_fields &FileInfo_msg
@@ -1480,9 +1465,9 @@ extern const pb_msgdesc_t UnlockedPathRequest_msg;
 /* WordAck_size depends on runtime parameters */
 /* Nonce_size depends on runtime parameters */
 /* DeviceInfo_size depends on runtime parameters */
-/* ResourceUpload_size depends on runtime parameters */
-/* ResourceAck_size depends on runtime parameters */
-/* ResourceUpdate_size depends on runtime parameters */
+/* NftMetadata_size depends on runtime parameters */
+/* NftUpload_size depends on runtime parameters */
+/* NftAck_size depends on runtime parameters */
 /* ListResDir_size depends on runtime parameters */
 /* FileInfoList_size depends on runtime parameters */
 /* FileInfo_size depends on runtime parameters */
@@ -1509,13 +1494,13 @@ extern const pb_msgdesc_t UnlockedPathRequest_msg;
 #define Initialize_size                          38
 #define LockDevice_size                          0
 #define NextU2FCounter_size                      6
+#define NftRequest_size                          14
 #define Ping_size                                260
 #define PreauthorizedRequest_size                0
 #define ReadSEPublicCert_size                    0
 #define ReadSEPublicKey_size                     0
 #define RebootToBoardloader_size                 0
 #define RebootToBootloader_size                  0
-#define ResourceRequest_size                     12
 #define SEBackToRomBoot_size                     0
 #define SEInitializeDone_size                    0
 #define SEInitialize_size                        0
@@ -1530,7 +1515,6 @@ extern const pb_msgdesc_t UnlockedPathRequest_msg;
 #define WipeDevice_size                          0
 #define WordRequest_size                         2
 #define WriteSEPublicCert_size                   1027
-#define ZoomRequest_size                         12
 
 /* Mapping from canonical names (mangle_names or overridden package name) */
 #define hw_trezor_messages_management_BackupType BackupType
@@ -1590,12 +1574,11 @@ extern const pb_msgdesc_t UnlockedPathRequest_msg;
 #define hw_trezor_messages_management_SEInitializeDone SEInitializeDone
 #define hw_trezor_messages_management_SEBackToRomBoot SEBackToRomBoot
 #define hw_trezor_messages_management_SEWipeUserStorage SEWipeUserStorage
-#define hw_trezor_messages_management_ResourceUpload ResourceUpload
-#define hw_trezor_messages_management_ResourceUpload_ResourceType ResourceType
-#define hw_trezor_messages_management_ZoomRequest ZoomRequest
-#define hw_trezor_messages_management_ResourceRequest ResourceRequest
-#define hw_trezor_messages_management_ResourceAck ResourceAck
-#define hw_trezor_messages_management_ResourceUpdate ResourceUpdate
+#define hw_trezor_messages_management_NftMetadata NftMetadata
+#define hw_trezor_messages_management_NftUpload NftUpload
+#define hw_trezor_messages_management_NftRequest NftRequest
+#define hw_trezor_messages_management_NftRequest_NftRequestType NftRequestType
+#define hw_trezor_messages_management_NftAck NftAck
 #define hw_trezor_messages_management_ListResDir ListResDir
 #define hw_trezor_messages_management_FileInfoList FileInfoList
 #define hw_trezor_messages_management_FileInfo FileInfo
@@ -1619,9 +1602,9 @@ extern const pb_msgdesc_t UnlockedPathRequest_msg;
 #define _hw_trezor_messages_management_WordRequest_WordRequestType_MIN _WordRequestType_MIN
 #define _hw_trezor_messages_management_WordRequest_WordRequestType_MAX _WordRequestType_MAX
 #define _hw_trezor_messages_management_WordRequest_WordRequestType_ARRAYSIZE _WordRequestType_ARRAYSIZE
-#define _hw_trezor_messages_management_ResourceUpload_ResourceType_MIN _ResourceType_MIN
-#define _hw_trezor_messages_management_ResourceUpload_ResourceType_MAX _ResourceType_MAX
-#define _hw_trezor_messages_management_ResourceUpload_ResourceType_ARRAYSIZE _ResourceType_ARRAYSIZE
+#define _hw_trezor_messages_management_NftRequest_NftRequestType_MIN _NftRequestType_MIN
+#define _hw_trezor_messages_management_NftRequest_NftRequestType_MAX _NftRequestType_MAX
+#define _hw_trezor_messages_management_NftRequest_NftRequestType_ARRAYSIZE _NftRequestType_ARRAYSIZE
 #define hw_trezor_messages_management_Initialize_init_default Initialize_init_default
 #define hw_trezor_messages_management_GetFeatures_init_default GetFeatures_init_default
 #define hw_trezor_messages_management_Features_init_default Features_init_default
@@ -1673,11 +1656,10 @@ extern const pb_msgdesc_t UnlockedPathRequest_msg;
 #define hw_trezor_messages_management_SEInitializeDone_init_default SEInitializeDone_init_default
 #define hw_trezor_messages_management_SEBackToRomBoot_init_default SEBackToRomBoot_init_default
 #define hw_trezor_messages_management_SEWipeUserStorage_init_default SEWipeUserStorage_init_default
-#define hw_trezor_messages_management_ResourceUpload_init_default ResourceUpload_init_default
-#define hw_trezor_messages_management_ZoomRequest_init_default ZoomRequest_init_default
-#define hw_trezor_messages_management_ResourceRequest_init_default ResourceRequest_init_default
-#define hw_trezor_messages_management_ResourceAck_init_default ResourceAck_init_default
-#define hw_trezor_messages_management_ResourceUpdate_init_default ResourceUpdate_init_default
+#define hw_trezor_messages_management_NftMetadata_init_default NftMetadata_init_default
+#define hw_trezor_messages_management_NftUpload_init_default NftUpload_init_default
+#define hw_trezor_messages_management_NftRequest_init_default NftRequest_init_default
+#define hw_trezor_messages_management_NftAck_init_default NftAck_init_default
 #define hw_trezor_messages_management_ListResDir_init_default ListResDir_init_default
 #define hw_trezor_messages_management_FileInfoList_init_default FileInfoList_init_default
 #define hw_trezor_messages_management_FileInfo_init_default FileInfo_init_default
@@ -1734,11 +1716,10 @@ extern const pb_msgdesc_t UnlockedPathRequest_msg;
 #define hw_trezor_messages_management_SEInitializeDone_init_zero SEInitializeDone_init_zero
 #define hw_trezor_messages_management_SEBackToRomBoot_init_zero SEBackToRomBoot_init_zero
 #define hw_trezor_messages_management_SEWipeUserStorage_init_zero SEWipeUserStorage_init_zero
-#define hw_trezor_messages_management_ResourceUpload_init_zero ResourceUpload_init_zero
-#define hw_trezor_messages_management_ZoomRequest_init_zero ZoomRequest_init_zero
-#define hw_trezor_messages_management_ResourceRequest_init_zero ResourceRequest_init_zero
-#define hw_trezor_messages_management_ResourceAck_init_zero ResourceAck_init_zero
-#define hw_trezor_messages_management_ResourceUpdate_init_zero ResourceUpdate_init_zero
+#define hw_trezor_messages_management_NftMetadata_init_zero NftMetadata_init_zero
+#define hw_trezor_messages_management_NftUpload_init_zero NftUpload_init_zero
+#define hw_trezor_messages_management_NftRequest_init_zero NftRequest_init_zero
+#define hw_trezor_messages_management_NftAck_init_zero NftAck_init_zero
 #define hw_trezor_messages_management_ListResDir_init_zero ListResDir_init_zero
 #define hw_trezor_messages_management_FileInfoList_init_zero FileInfoList_init_zero
 #define hw_trezor_messages_management_FileInfo_init_zero FileInfo_init_zero

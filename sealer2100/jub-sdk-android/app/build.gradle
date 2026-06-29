@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdk 33
+    compileSdk 34
     ndkVersion "25.1.8937393"
 //    ndkVersion "20.1.5948944"
 
@@ -22,7 +22,7 @@ android {
                         "-std=c++11",
                         "-frtti",
                         "-fexceptions",
-                        "-DDEBUG",
+//                        "-DDEBUG",
                         "-DHC",   // 启用HC代码
 //                        "-DJSON_HAS_INT64",  // JsonCpp
                         "-DHAVE_ENDIAN_H"
@@ -32,7 +32,7 @@ android {
                         "-DANDROID_STL=c++_static",      // 使用库: gnustl_static、stlport_static等，详见Android NDK官网。CMake默认使用 gnustl_static
                         "-DANDROID_ARM_MODE=arm",            // 如果不添加，在编译 polarssl 库里 bignum 中的汇编时会报错 (*)
                         "-DANDROID_PLATFORM=android-19",
-                        "-DCMAKE_BUILD_TYPE=Debug"        // 编译类型，Release、Debug、RelWithDebInfo、MinSizeRel，不指定时默认值是 RelWithDebInfo
+                        "-DCMAKE_BUILD_TYPE=Release"        // 编译类型，Release、Debug、RelWithDebInfo、MinSizeRel，不指定时默认值是 RelWithDebInfo
             }
 
             ndk {
@@ -80,7 +80,7 @@ dependencies {
     implementation 'javax.annotation:javax.annotation-api:1.2'
     implementation 'pub.devrel:easypermissions:2.0.1'
     implementation 'com.squareup.okio:okio:2.4.0'
-    implementation 'com.github.CubeFeng:MultiPlatformBleAdapter:0.2.3'
+    implementation 'com.github.CubeFeng:MultiPlatformBleAdapter:0.3.1'
 
     implementation files('libs/BTSDK_0615.jar')
 }

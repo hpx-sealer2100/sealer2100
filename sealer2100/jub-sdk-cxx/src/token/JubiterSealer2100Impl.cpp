@@ -377,7 +377,9 @@ JUB_RV JubiterSealer2100Impl::filterButtonRequest(uint16_t recvType,const std::s
         
         std::string passphrase{(char*)pTmpData};
         // zero passphrase memory
-        memset(pTmpData, 0x00, sizeof(pTmpData));
+        // see: https://cppreference.com/cpp/string/byte/memset, use `std::fill`
+        std::fill(pTmpData, pTmpData+sizeof(pTmpData), 0);
+        // memset(pTmpData, 0x00, sizeof(pTmpData));
         try {
             PassphraseAck msgToBeEncode;
             if (on_device) {

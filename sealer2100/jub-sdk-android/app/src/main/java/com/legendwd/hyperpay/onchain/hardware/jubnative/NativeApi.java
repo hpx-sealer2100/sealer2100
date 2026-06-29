@@ -63,7 +63,7 @@ public class NativeApi {
         if (devName.startsWith(HyperMateAdapter.SCAN_FILTER_MAX) ||
                 devName.startsWith(HyperMateAdapter.SCAN_FILTER_SEALER)) {
             deviceType = DeviceType.HyperMateMax;
-            return HyperMateAdapter.getInstance().connectDevice(address, handle);
+            return HyperMateAdapter.getInstance().connectDevice(address, handle, timeout, discCallback);
         }
         deviceType = DeviceType.HyperMateG2;
         return NativeApiG2.nativeConnectDevice(devName, address, devType, handle, timeout, discCallback);
@@ -325,8 +325,8 @@ public class NativeApi {
         return NativeApiG2.nativeETHTransaction(contextID, json);
     }
 
-    public static String nativeETHTypedData(long contextID, String json,String json_TypedData) {
-        return NativeApiG2.nativeETHTypedData(contextID, json,json_TypedData);
+    public static String nativeETHTypedData(long contextID, String json) {
+        return NativeApiG2.nativeETHTypedData(contextID, json);
     }
 
     public static int nativeETHSetERC20Tokens(long contextID, String json) {
@@ -336,6 +336,15 @@ public class NativeApi {
     public static int nativeETHSetERC20Token(long contextID, String json) {
         return NativeApiG2.nativeETHSetERC20Token(contextID, json);
     }
+
+    public static int nativeETHSetERC20TokenV2(long contextID, String json) {
+        return NativeApiG2.nativeETHSetERC20TokenV2(contextID, json);
+    }
+
+    public static int nativeETHSetNetworkV2(long contextID, String json) {
+        return NativeApiG2.nativeETHSetNetworkV2(contextID, json);
+    }
+
 
     public static String nativeETHBuildERC20TransferAbi(long contextID, String json) {
         return NativeApiG2.nativeETHBuildERC20TransferAbi(contextID, json);
@@ -348,7 +357,9 @@ public class NativeApi {
     public static String nativeETHSignTypedData(long contextID, String json) {
         return NativeApiG2.nativeETHSignTypedData(contextID, json);
     }
-
+    public static int nativeETHUploadNFT(long contextId, String meta, byte[] image, byte[] thumbnail, byte[] wallpaper) {
+        return NativeApiG2.nativeETHUploadNFT(contextId, meta, image, thumbnail, wallpaper);
+    }
     //********************************* ETH multi sign ************************************
 
     public static String nativeETHSignContract(long contextID, String json) {

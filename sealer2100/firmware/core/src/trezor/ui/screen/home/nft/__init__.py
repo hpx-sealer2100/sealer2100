@@ -26,6 +26,10 @@ NFT_DIR = "/user/nfts"
 #   │   ├── {id}.png
 #   ├── image/
 #   │   ├── {id}.png
+#   ├── wallpaper/
+#   │   ├── {id}.png
+
+
 
 _DESC_KEYS = ['id', 'name', 'network', 'owner', 'token', 'ext']
 
@@ -92,13 +96,20 @@ class NftSource:
             return f"A:{path}"
         return path
 
+    def wallpaper(self, pt: PathType) -> str:
+        path = f"{NFT_DIR}/{self.desc.token()}/wallpaper/{self.desc.id()}.{self.desc.ext()}"
+        if pt == 'LV':
+            return f"A:{path}"
+        return path
+
     def valid(self) -> bool:
         if not self.desc.valided:
             return False
-        # check source and thumbnail exist
+        # check thumbnail, image, and wallpaper exist
         try:
             io.fs.stat(self.thumbnail('FS'))
             io.fs.stat(self.source('FS'))
+            io.fs.stat(self.wallpaper('FS'))
         except Exception as e:
             log.exception(__name__, f'{e}')
             return False
@@ -137,9 +148,10 @@ def delete_nft(nft: NftSource):
     try:
         io.fs.remove(nft.thumbnail('FS'))
         io.fs.remove(nft.source('FS'))
+        io.fs.remove(nft.wallpaper('FS'))
         io.fs.remove(desc.file)
         home_screen = device.get_homescreen()
-        if home_screen == nft.source('LV'):
+        if home_screen == nft.wallpaper('LV'):
             device.set_homescreen('')
     except Exception as e:
         log.exception(__name__, f'{e}')
@@ -280,7 +292,7 @@ class NftDetail(Navigation):
         if not await screen:
             return
 
-        device.set_homescreen(self.nft.source('LV'))
+        device.set_homescreen(self.nft.wallpaper('LV'))
 
     async def do_delete_nft(self, nft: NftSource):
         screen = SimpleConfirm(i18n.Text.delete_nft_desc)

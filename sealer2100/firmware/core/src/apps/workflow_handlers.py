@@ -204,7 +204,7 @@ def find_message_handler_module(msg_type: int) -> str:
     raise ValueError
 
 
-def find_registered_handler(iface: WireInterface, msg_type: int) -> Handler | None:
+def _find_registered_handler(iface: WireInterface, msg_type: int) -> Handler | None:
     if msg_type in workflow_handlers:
         # Message has a handler available, return it directly.
         return workflow_handlers[msg_type]
@@ -217,3 +217,16 @@ def find_registered_handler(iface: WireInterface, msg_type: int) -> Handler | No
     except (ValueError, ImportError) as e:
         log.error(__name__,f"Failed to find handler for message type {msg_type}: {e}")
         return None
+
+def find_registered_handler(iface: WireInterface, msg_type: int) -> Handler | None:
+    handler = _find_registered_handler(iface, msg_type)
+    if not handler:
+        return
+
+    async def wrapper(ctx: "Context", msg: Msg) -> 'HandlerTask':
+        from trezor.ui.screen import manager
+        await manager.try_close_iris_matching()
+        return await handler(ctx, msg)
+
+
+    return wrapper

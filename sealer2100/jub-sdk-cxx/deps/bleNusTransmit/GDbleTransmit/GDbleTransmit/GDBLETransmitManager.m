@@ -718,7 +718,9 @@ static GDBLETransmitManager *_instance = nil;
     NSLog(@"recvnew------->%@----->%lu",self.recvnewDat,self.recvnewDat.length);
     
 //    recvData = (unsigned char*)[self.recvnewDat bytes];
-    
+    if ([self.recvnewDat length] > *recvlen) {
+        return CKR_BUFFER_TOO_SMALL;
+    }
     
     [self.recvnewDat getBytes:recvData length:self.recvnewDat.length];
     *recvlen = (unsigned int)[self.recvnewDat length];

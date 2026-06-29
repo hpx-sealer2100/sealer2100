@@ -1,0 +1,8 @@
+{
+    "network": {
+        "name": "China Unicom",
+        "symbol": "CUCC",
+        "chain_id": 10010,
+        "slip44": 10010
+    }
+}

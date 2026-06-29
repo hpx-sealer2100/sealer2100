@@ -7,6 +7,7 @@
 #include "JUB_SDK_COMM.h"
 #include "utils/logUtils.h"
 #include "json/reader.h"
+#include "json/writer.h"
 #include "common_jni.h"
 #include "jni_registry.h"
 #include <JUB_SDK.h>
@@ -34,7 +35,7 @@ native_ETHCreateContext(JNIEnv *env, jclass obj, jintArray jContextId, jstring j
 
     CONTEXT_CONFIG_ETH cfg;
     cfg.mainPath = (char *) root[MAIN_PATH].asCString();
-    cfg.chainID = root[CHAIN_ID].asInt();
+    cfg.chainID = root[CHAIN_ID].asUInt64();
     int rv = JUB_CreateContextETH(cfg, static_cast<JUB_UINT16>(deviceInfo), pContextID);
     if (rv != JUBR_OK) {
         LOG_ERR("JUB_CreateContextETH: %08x", rv);
@@ -80,26 +81,28 @@ JNIEXPORT jstring JNICALL native_ETH_Transaction(JNIEnv *env, jclass obj, jlong 
     return rawString;
 }
 JNIEXPORT jstring JNICALL native_ETH_SignTypedDataMAX(JNIEnv *env, jclass obj, jlong contextID,
-                                                   jstring jJSON_Path,jstring jJSON_TypedData) {
-
-    JUB_CHAR_PTR pJSON = const_cast<JUB_CHAR_PTR>(env->GetStringUTFChars(jJSON_Path, NULL));
-    JUB_CHAR_PTR pTypedData = const_cast<JUB_CHAR_PTR>(env->GetStringUTFChars(jJSON_TypedData, NULL));
-
-    if(nullptr == pJSON || nullptr == pTypedData) {
-        errorCode = JUBR_ARGUMENTS_BAD;
-        return NULL;
-    }
+                                                   jstring jJSON) {
+    auto pJSON = const_cast<JUB_CHAR_PTR>(env->GetStringUTFChars(jJSON, nullptr));
 
     Json::Reader reader;
     Json::Value root;
     reader.parse(pJSON, root);
 
+    if(nullptr == pJSON) {
+        errorCode = JUBR_ARGUMENTS_BAD;
+        return NULL;
+    }
+
     BIP32_Path path;
     path.change = (JUB_ENUM_BOOL) root["ETH"]["bip32_path"]["change"].asBool();
     path.addressIndex = root["ETH"]["bip32_path"]["addressIndex"].asUInt();
 
+    const Json::Value& eip712 = root["EIP712"];
+    Json::StreamWriterBuilder builder;
+    std::string eip712_json = Json::writeString(builder, eip712);
+
     char *raw = nullptr;
-    JUB_RV rv = JUB_SignTypedDataETH_MAX(contextID, path,pTypedData, &raw);
+    JUB_RV rv = JUB_SignTypedDataETH_MAX(contextID, path, (JUB_CHAR_PTR )eip712_json.data(), &raw);
 
     if (rv != JUBR_OK) {
         errorCode = static_cast<int>(rv);
@@ -148,13 +151,88 @@ JNIEXPORT jint JNICALL native_ETH_SetERC20Token(JNIEnv *env, jclass obj, jlong c
 
 
     char *tokenName = (char *) root["ERC20Token"]["tokenName"].asCString();
-    uint16_t unitDP = root["ERC20Token"]["dp"].asDouble();
+    uint16_t unitDP = root["ERC20Token"]["dp"].asInt();
     char *contractAddress = (char *) root["ERC20Token"]["contract_address"].asCString();
 
 
     JUB_RV rv = JUB_SetERC20TokenETH(contextID, tokenName, unitDP, contractAddress);
     if (rv != JUBR_OK) {
         LOG_ERR("JUB_SetERC20TokenETH: %08x", rv);
+    }
+    env->ReleaseStringUTFChars(jJSON, pJSON);
+    return rv;
+}
+
+JNIEXPORT jint JNICALL native_ETH_SetERC20TokenV2(JNIEnv *env, jclass obj, jlong contextID,
+                                                  jstring jJSON) {
+    JUB_CHAR_PTR pJSON = const_cast<JUB_CHAR_PTR>(env->GetStringUTFChars(jJSON, NULL));
+    Json::Reader reader;
+    Json::Value root;
+    reader.parse(pJSON, root);
+    const auto& jNetwork = root["network"];
+
+    // network
+    const auto* name = jNetwork["name"].asCString();
+    const auto* symbol = jNetwork["symbol"].asCString();
+    auto chain_id = jNetwork["chain_id"].asUInt64();
+    auto slip44 = jNetwork["slip44"].asUInt64();
+    const auto network = JUB_ETH_NETWORK_INFO{
+            .name = name,
+            .symbol = symbol,
+            .chainID = chain_id,
+            .slip44ID = slip44,
+    };
+
+    // token
+    const auto& jToken = root["token"];
+    if (chain_id != jToken["chain_id"].asUInt64()) {
+        env->ReleaseStringUTFChars(jJSON, pJSON);
+        return JUBR_ARGUMENTS_BAD;
+    }
+    const auto* token_name = jToken["name"].asCString();
+    const auto* token_symbol = jToken["symbol"].asCString();
+    auto decimals = jToken["decimals"].asUInt();
+    const auto* address = jToken["address"].asCString();
+    const auto token = JUB_ERC20_TOKEN_INFO{
+        .chainID = chain_id,
+        .name = token_name,
+        .symbol = token_symbol,
+        .address = address,
+        .decimals = decimals,
+    };
+
+    auto rv = JUB_SetERC20TokenETHV2(contextID, network, token);
+    if (rv != JUBR_OK) {
+        LOG_ERR("JUB_SetERC20TokenETHV2: %08x", rv);
+    }
+    env->ReleaseStringUTFChars(jJSON, pJSON);
+    return rv;
+}
+
+
+JNIEXPORT jint JNICALL native_ETH_SetNetworkV2(JNIEnv *env, jclass obj, jlong contextID,
+                                               jstring jJSON) {
+    JUB_CHAR_PTR pJSON = const_cast<JUB_CHAR_PTR>(env->GetStringUTFChars(jJSON, NULL));
+    Json::Reader reader;
+    Json::Value root;
+    reader.parse(pJSON, root);
+    const auto& jNetwork = root["network"];
+
+    // network
+    const auto* name = jNetwork["name"].asCString();
+    const auto* symbol = jNetwork["symbol"].asCString();
+    auto chain_id = jNetwork["chain_id"].asUInt64();
+    auto slip44 = jNetwork["slip44"].asUInt64();
+    const auto network = JUB_ETH_NETWORK_INFO{
+        .name = name,
+        .symbol = symbol,
+        .chainID = chain_id,
+        .slip44ID = slip44,
+    };
+
+    auto rv = JUB_SetNetworkETHV2(contextID, network);
+    if (rv != JUBR_OK) {
+        LOG_ERR("JUB_SetNetworkETHV2: %08x", rv);
     }
     env->ReleaseStringUTFChars(jJSON, pJSON);
     return rv;
@@ -527,6 +605,55 @@ JNIEXPORT jstring JNICALL native_ETH_SignTypedData(JNIEnv *env, jclass obj, jlon
     return rawString;
 }
 
+JNIEXPORT jint JNICALL
+native_ETH_UploadNFT(JNIEnv *env, jclass obj, jlong contextID, jstring jMeta, jbyteArray image,
+                     jbyteArray thumbnail, jbyteArray wallpaper) {
+    auto pJSON = const_cast<JUB_CHAR_CPTR>(env->GetStringUTFChars(jMeta, JNI_FALSE));
+    Json::Reader reader;
+    Json::Value root;
+    reader.parse(pJSON, root);
+
+    const auto* id = root["id"].asCString();
+    const auto* name = root["name"].asCString();
+    const auto* token = root["token"].asCString();
+    const auto* network = root["network"].asCString();
+    const auto* owner = root["owner"].asCString();
+    const auto* ext = root["extension"].asCString();
+    auto* image_payload = (JUB_BYTE_CPTR )(env->GetByteArrayElements(image, JNI_FALSE));
+    JUB_UINT32 image_payload_size = env->GetArrayLength(image);
+    auto* thumbnail_payload = (JUB_BYTE_CPTR )(env->GetByteArrayElements(thumbnail, JNI_FALSE));
+    JUB_UINT32 thumbnail_size = env->GetArrayLength(thumbnail);
+    auto* wallpaper_payload = (JUB_BYTE_CPTR )(env->GetByteArrayElements(wallpaper, JNI_FALSE));
+    JUB_UINT32 wallpaper_payload_size = env->GetArrayLength(wallpaper);
+
+    auto nft = JUB_ETH_NFT_INFO {
+        .id = id,
+        .name = name,
+        .token = token,
+        .network = network,
+        .owner = owner,
+        .extension = ext,
+        .image = {
+                .payload = image_payload,
+                .size = image_payload_size,
+        },
+        .thumbnail = {
+                .payload = thumbnail_payload,
+                .size = thumbnail_size,
+        },
+        .wallpaper = {
+                .payload = wallpaper_payload,
+                .size = wallpaper_payload_size
+        }
+    };
+
+    auto rv = JUB_UploadNFT(contextID, nft);
+    if (rv != JUBR_OK) {
+        LOG_ERR("JUB_SetERC20TokenETHV2: %08x", rv);
+    }
+    env->ReleaseStringUTFChars(jMeta, pJSON);
+    return JUBR_OK;
+}
 
 
 #ifdef __cplusplus
@@ -556,6 +683,16 @@ static JNINativeMethod g2EthMethods[] = {
                 "nativeETHSetERC20Token",
                 "(JLjava/lang/String;)I",
                 (void *) native_ETH_SetERC20Token
+        },
+        {
+                "nativeETHSetERC20TokenV2",
+                "(JLjava/lang/String;)I",
+                (void *) native_ETH_SetERC20TokenV2
+        },
+        {
+                "nativeETHSetNetworkV2",
+                "(JLjava/lang/String;)I",
+                (void *) native_ETH_SetNetworkV2
         },
         {
                 "nativeETHBuildERC20TransferAbi",
@@ -609,7 +746,7 @@ static JNINativeMethod g2EthMethods[] = {
         },
         {
                 "nativeETHTypeDataMAX",
-                "(JLjava/lang/String;Ljava/lang/String;)Ljava/lang/String;",
+                "(JLjava/lang/String;)Ljava/lang/String;",
                 (void *) native_ETH_SignTypedDataMAX
         },
         //        {
@@ -627,7 +764,11 @@ static JNINativeMethod g2EthMethods[] = {
                 "(JLjava/lang/String;)Ljava/lang/String;",
                 (void *) native_ETH_SignTypedData
         },
-
+        {
+            "nativeETHUploadNFT",
+            "(JLjava/lang/String;[B[B[B)I",
+            (void*) native_ETH_UploadNFT,
+        }
 };
 
 

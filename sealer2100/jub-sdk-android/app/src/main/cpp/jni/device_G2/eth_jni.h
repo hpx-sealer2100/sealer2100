@@ -22,6 +22,12 @@ native_ETH_SetERC20Tokens(JNIEnv *env, jclass obj, jlong contextID, jstring jJSO
 JNIEXPORT jint JNICALL
 native_ETH_SetERC20Token(JNIEnv *env, jclass obj, jlong contextID, jstring jJSON);
 
+JNIEXPORT jint JNICALL
+native_ETH_SetERC20TokenV2(JNIEnv *env, jclass obj, jlong contextID, jstring jJSON);
+
+JNIEXPORT jint JNICALL
+native_ETH_SetNetworkV2(JNIEnv *env, jclass obj, jlong contextID, jstring jJSON);
+
 JNIEXPORT jstring JNICALL
 native_ETH_BuildERC20TransferAbi(JNIEnv *env, jclass obj, jlong contextID, jstring jJSON);
 
@@ -51,6 +57,9 @@ native_SetMyAddressETH(JNIEnv *env, jclass obj, jlong contextID, jint change, ji
 
 JNIEXPORT jstring JNICALL native_ETHGetMainHDNode(JNIEnv *env, jclass obj, jlong contextID);
 
+JNIEXPORT jint JNICALL
+native_ETH_UploadNFT(JNIEnv *env, jclass obj, jlong contextID, jstring jMeta, jbyteArray image,
+                     jbyteArray thumbnail, jbyteArray wallpaper);
 
 #ifdef __cplusplus
 }

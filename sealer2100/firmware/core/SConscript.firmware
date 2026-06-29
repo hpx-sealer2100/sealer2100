@@ -601,7 +601,7 @@ env.Replace(
     CCFLAGS='$COPT '
     '-g0 '
     '-nostdlib '
-    '-std=gnu99 -Wall -Werror -Wno-double-promotion -Wpointer-arith -Wno-missing-braces -fno-common -Wno-format '
+    '-std=gnu99 -Wall -Werror -Wno-double-promotion -Wpointer-arith -Wno-missing-braces -fno-common -Wno-format -Wno-unused-but-set-variable '
     '-fsingle-precision-constant -fdata-sections -ffunction-sections '
     '-ffreestanding '
     '-fstack-protector-all '

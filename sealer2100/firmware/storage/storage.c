@@ -234,15 +234,15 @@ static secbool storage_set_edek_pvc_key(uint8_t *key, uint16_t key_len) {
   memcpy(key_buf, key, key_len);
   aes_encrypt_key256(enc_key, &ctxe);
   // clear the memory
-  memset(enc_key, 0, sizeof(enc_key));
+  memzero(enc_key, sizeof(enc_key));
 
   aes_ecb_encrypt(key_buf, key_buf, sizeof(key_buf), &ctxe);
   // clear the aes context
-  memset(&ctxe, 0, sizeof(ctxe));
+  memzero(&ctxe, sizeof(ctxe));
 
   secbool r = norcow_set(EDEK_PVC_KEY, key_buf, sizeof(key_buf));
   // clear the memory
-  memset(key_buf, 0, sizeof(key_buf));
+  memzero(key_buf, sizeof(key_buf));
   return r;
 }
 static secbool storage_get_edek_pvc_key(uint8_t key[64]) {
@@ -266,11 +266,11 @@ static secbool storage_get_edek_pvc_key(uint8_t key[64]) {
 #endif
   aes_decrypt_key256(enc_key, &ctxe);
   // clear the memory
-  memset(enc_key, 0, sizeof(enc_key));
+  memzero(enc_key, sizeof(enc_key));
 
   aes_ecb_decrypt((uint8_t *)val, key, len, &ctxe);
   // clear the aes context
-  memset(&ctxe, 0, sizeof(ctxe));
+  memzero(&ctxe, sizeof(ctxe));
 
   return sectrue;
 }

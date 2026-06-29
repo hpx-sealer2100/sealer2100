@@ -1,0 +1,10 @@
+[submodule "app/src/main/cpp/deps/protobuf"]
+	path = app/src/main/cpp/deps/protobuf
+	url = https://github.com/protocolbuffers/protobuf.git
+[submodule "app/src/main/cpp/deps/uint256_t"]
+	path = app/src/main/cpp/deps/uint256_t
+	url = https://github.com/calccrypto/uint256_t.git
+[submodule "app/src/main/cpp/cppsdk"]
+	path = app/src/main/cpp/cppsdk
+	url = https://github.com/ziancube/HyperPay-Jub_SDK_CXX.git
+	branch = dev_iris

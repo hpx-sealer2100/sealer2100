@@ -12,19 +12,41 @@ public class IntroActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
+
+        // 注册所有按钮点击事件
+        initMainButton();
+        initEleButton();
+        initApduButton();
     }
 
+    // 主界面按钮初始化
+    private void initMainButton() {
+        findViewById(R.id.btn_main, v ->
+                startActivity(new Intent(IntroActivity.this, MainActivity.class))
+        );
+    }
+
+    // 测试界面按钮初始化
+    private void initEleButton() {
+        findViewById(R.id.btn_ele, v ->
+                startActivity(new Intent(IntroActivity.this, TestActivity.class))
+        );
+    }
+
+    // APDU测试按钮初始化
+    private void initApduButton() {
+        findViewById(R.id.btn_apdu, v ->
+                startActivity(new Intent(IntroActivity.this, FidoTestActivity.class))
+        );
+    }
+
+    // 简化的findViewById重载，用于注册点击事件
+    private void findViewById(int id, View.OnClickListener listener) {
+        findViewById(id).setOnClickListener(listener);
+    }
+
+    // 原onClick方法保留空实现（避免布局onClick回调冲突）
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btn_main:
-                startActivity(new Intent(this, MainActivity.class));
-                break;
-            case R.id.btn_ele:
-                startActivity(new Intent(this, TestActivity.class));
-                break;
-            case R.id.btn_apdu:
-                startActivity(new Intent(this, FidoTestActivity.class));
-                break;
-        }
+        // 按钮事件已通过独立init方法注册，此处留空
     }
 }

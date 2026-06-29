@@ -1,0 +1,52 @@
+{
+  "EIP712": {
+    "domain": {
+      "name": "Permit2",
+      "chainId": 56,
+      "verifyingContract": "0x31c2f6fcff4f8759b3bd5bf0e1084a055615c768"
+    },
+    "message": {
+      "details": {
+        "token": "0x55d398326f99059fF775485246999027B3197955",
+        "amount": "1461501637330902918203684832716283019655932542975",
+        "expiration": "1776844612",
+        "nonce": "0"
+      },
+      "spender": "0xd9c500dff816a1da21a48a732d3498bf09dc9aeb",
+      "sigDeadline": "1774254412"
+    },
+    "primaryType": "PermitSingle",
+    "types": {
+      "EIP712Domain": [
+        { "name": "name", "type": "string" },
+        { "name": "chainId", "type": "uint256" },
+        { "name": "verifyingContract", "type": "address" }
+      ],
+      "PermitSingle": [
+        { "name": "details", "type": "PermitDetails" },
+        { "name": "spender", "type": "address" },
+        { "name": "sigDeadline", "type": "uint256" }
+      ],
+      "PermitDetails": [
+        { "name": "token", "type": "address" },
+        { "name": "amount", "type": "uint160" },
+        { "name": "expiration", "type": "uint48" },
+        { "name": "nonce", "type": "uint48" }
+      ]
+    }
+  },
+  "ETH": {
+    "data": "0xa9059cbb0000000000000000000000004f7e578ca0beff5d770160e2b4523ec7d7d48ff30000000000000000000000000000000000000000000000056bc75e2d63100000",
+    "to": "0xa2af509ddb7c1a894bda7bd82b30089531f237ca",
+    "valueInWei": "",
+    "bip32_path": {
+      "addressIndex": 0,
+      "change": false
+    },
+    "gasLimit": 64720,
+    "gasPriceInWei": "5000000000",
+    "nonce": 18
+  },
+  "chainID": 1,
+  "main_path": "m/44'/60'/0'"
+}

@@ -3,6 +3,7 @@ package com.jubiter.sdk.demo.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
@@ -89,6 +90,31 @@ public class FileUtils {
         return byteBuffer.toByteArray();
     }
 
+    public static byte[] readFileFromAsset(Context context, String name) {
+        AssetManager assets = context.getAssets();
+        InputStream is = null;
+        try {
+            is = assets.open(name);             // name 如 "config.json" / "dir/file.bin"
+            java.io.ByteArrayOutputStream bos = new java.io.ByteArrayOutputStream();
+
+            byte[] buffer = new byte[4096];
+            int len;
+            while ((len = is.read(buffer)) != -1) {
+                bos.write(buffer, 0, len);
+            }
+
+            return bos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;                        // 或者抛异常由上层处理
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException ignored) {}
+            }
+        }
+    }
 
     /**
      * 根据 Uri 获取文件大小

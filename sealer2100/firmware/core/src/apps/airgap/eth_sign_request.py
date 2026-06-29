@@ -161,7 +161,7 @@ async def eth_sign_tx(ctx: "GenericContext", parsed_raw: ur_parser.EthParsedRaw,
         gas_limit=gas_limit,
         nonce=nonce,
         to=to,
-        value=value,
+        value= b'' if value == b'\x00' else value,
         data_initial_chunk=data,
         data_length=len(data),
     )
@@ -205,7 +205,7 @@ async def eth_sign_tx_eip1559(ctx: "GenericContext", parsed_raw: ur_parser.EthPa
         data_length=len(data),
         data_initial_chunk=data,
         to=to,
-        value=value,
+        value= b'' if value == b'\x00' else value,
         access_list=access_list,
     )
     return await sign_tx_eip1559(ctx, msg)
